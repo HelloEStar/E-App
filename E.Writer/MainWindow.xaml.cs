@@ -23,6 +23,8 @@ using MessageBox = System.Windows.MessageBox;
 using ContextMenu = System.Windows.Controls.ContextMenu;
 using MenuItem = System.Windows.Controls.MenuItem;
 
+using E.Class;
+
 namespace E.Writer
 {
     /// <summary>
@@ -30,40 +32,7 @@ namespace E.Writer
     /// </summary>
     public partial class MainWindow : Window
     {
-        #region 获取软件信息
-        /// <summary>
-        /// 名称
-        /// </summary>
-        public static string ThisName { get; } = Application.ProductName;
-        /// <summary>
-        /// 描述
-        /// </summary>
-        public static string ThisDescription { get; } = "小说编辑器";
-        /// <summary>
-        /// 开发者
-        /// </summary>
-        public static string ThisCompany { get;  } = Application.CompanyName;
-        /// <summary>
-        /// 作者
-        /// </summary>
-        public static string ThisDeveloper { get; } = "E Star";
-        /// <summary>
-        /// 当前版本
-        /// </summary>
-        public Version ThisVer { get; } = new Version(Application.ProductVersion);
-        /// <summary>
-        /// 新版本
-        /// </summary>
-        public Version NewVer { get; private set; }
-        /// <summary>
-        /// 新版信息获取连接
-        /// </summary>
-        public static string NewVerInfoLink { get; } = "http://estar.zone/wp-content/E_Updater_info.txt";
-        /// <summary>
-        /// 新版下载连接
-        /// </summary>
-        public static string NewVerDownloadLink { get; } = "http://estar.zone/introduction/e-writer/";
-        #endregion 
+        public AppInfo AppInfo { get; private set; }
 
         #region 运行中的信息
         /// <summary>
@@ -126,7 +95,6 @@ namespace E.Writer
         Separator separator1, separator2, separator3, separator4, separator5, separator6, separator7, separator8, separator9, separator10;
         #endregion
 
-
         #region 窗口
         //事件
         /// <summary>
@@ -134,6 +102,17 @@ namespace E.Writer
         /// </summary>
         public MainWindow()
         {
+            string name = Application.ProductName;
+            string description = "小说编辑器";
+            string company = Application.CompanyName;
+            string developer = "E Star";
+            string infoLink = "http://estar.zone/wp-content/E_Updater_info.txt";
+            string downloadLink = "http://estar.zone/introduction/e-writer/";
+            Version cVer = new Version(Application.ProductVersion);
+            Version lVer = new Version(Application.ProductVersion);
+            AppInfo.UpdateNote[] updateNote = new AppInfo.UpdateNote[0];
+            AppInfo = new AppInfo(name, description, company, developer, infoLink, downloadLink, cVer, lVer, updateNote);
+
             InitializeComponent();
         }
         /// <summary>
@@ -172,7 +151,7 @@ namespace E.Writer
             //初始化字号
             FileContent.FontSize = Properties.User.Default.fontSize;
             //初始化提示消息
-            Main.Title = ThisName + " " + ThisVer;
+            Main.Title = AppInfo.Name + " " + AppInfo.CurrentVersion;
             FilesTree.ToolTip =FindResource("创建或打开以开始");
             NodePath.Text = FindResource("未打开任何书籍").ToString();
             HelpMessage.Content = FindResource("创建或打开以开始");
@@ -1039,7 +1018,7 @@ namespace E.Writer
             //备份
             Backup();
             //刷新显示信息
-            EssayName.Text = FindResource("欢迎使用") + " " + ThisName;
+            EssayName.Text = FindResource("欢迎使用") + " " + AppInfo.Name;
             EssayName.ToolTip = null;
             FileContent.Text = FindResource("创建或打开以开始") + Environment.NewLine +
                                FindResource("单击右键获取命令");
@@ -2380,7 +2359,7 @@ namespace E.Writer
         {
             if (SelectedBook == null)
             {
-                Main.Title = ThisName;
+                Main.Title = AppInfo.Name;
             }
             else
             {
@@ -2388,22 +2367,22 @@ namespace E.Writer
                 {
                     if (SelectedEssay == null)
                     {
-                        Main.Title = ThisName + " - " + SelectedBook;
+                        Main.Title = AppInfo.Name + " - " + SelectedBook;
                     }
                     else
                     {
-                        Main.Title = ThisName + " - " + SelectedBook + @"\" + SelectedEssay;
+                        Main.Title = AppInfo.Name + " - " + SelectedBook + @"\" + SelectedEssay;
                     }
                 }
                 else
                 {
                     if (SelectedEssay == null)
                     {
-                        Main.Title = ThisName + " - " + SelectedBook + @"\" + SelectedChapterPath.Replace(SelectedBookPath + @"\", "");
+                        Main.Title = AppInfo.Name + " - " + SelectedBook + @"\" + SelectedChapterPath.Replace(SelectedBookPath + @"\", "");
                     }
                     else
                     {
-                        Main.Title = ThisName + " - " + SelectedBook + @"\" + SelectedEssayPath.Replace(SelectedBookPath + @"\", "");
+                        Main.Title = AppInfo.Name + " - " + SelectedBook + @"\" + SelectedEssayPath.Replace(SelectedBookPath + @"\", "");
                     }
                 }
             }
@@ -2416,7 +2395,7 @@ namespace E.Writer
             string[] _mySkins = Directory.GetFiles(Properties.User.Default.ThemesDir);
             foreach (string s in _mySkins)
             {
-                string tmp = System.IO.Path.GetExtension(s);
+                string tmp = Path.GetExtension(s);
                 if (tmp == ".ini" || tmp == ".INI")
                 {
                     string tmp2 = ReadIniKeys("info", "type", s);
@@ -2425,12 +2404,12 @@ namespace E.Writer
                     {
                         string tmp3 = ReadIniKeys("info", "version", s);
                         //若与当前版本匹配
-                        if (tmp3 == ThisVer.ToString())
+                        if (tmp3 == AppInfo.CurrentVersion.ToString())
                         {
                             //添加选项
                             TextBlock theme = new TextBlock
                             {
-                                Text = System.IO.Path.GetFileNameWithoutExtension(s),
+                                Text = Path.GetFileNameWithoutExtension(s),
                                 ToolTip = s
                             };
                             themes.Add(theme);
@@ -2819,7 +2798,7 @@ namespace E.Writer
             //若第一次运行软件，提示消息
             if (Properties.Settings.Default.runTimes == 1)
             {
-                EssayName.Text = FindResource("欢迎使用") + " " + ThisName;
+                EssayName.Text = FindResource("欢迎使用") + " " + AppInfo.Name;
                 //显示运行记录
                 FileContent.Text = FindResource("启动次数") + "：" + Properties.Settings.Default.runTimes + Environment.NewLine +
                                    FindResource("启动时间") + "：" + Properties.Settings.Default.thisStartTime + Environment.NewLine +
@@ -2828,7 +2807,7 @@ namespace E.Writer
             }
             else
             {
-                EssayName.Text = FindResource("欢迎使用") + " " + ThisName;
+                EssayName.Text = FindResource("欢迎使用") + " " + AppInfo.Name;
                 int d = Properties.Settings.Default.totalTime.Days;
                 int h = Properties.Settings.Default.totalTime.Hours;
                 int m = Properties.Settings.Default.totalTime.Minutes;
@@ -3265,6 +3244,7 @@ namespace E.Writer
         }
         #endregion
     }
+
 
     /// <summary>
     /// 书籍的节点

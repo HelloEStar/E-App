@@ -7,31 +7,31 @@ namespace E.Class
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name { get;}
+        public string Name { get; }
         /// <summary>
         /// 描述
         /// </summary>
-        public string Description { get;}
+        public string Description { get; }
         /// <summary>
         /// 组织
         /// </summary>
-        public string Company { get;}
+        public string Company { get; }
         /// <summary>
         /// 作者
         /// </summary>
-        public string Developer { get;}
+        public string Developer { get; }
         /// <summary>
         /// 信息链接
         /// </summary>
-        public string InfoLink { get;}
+        public string InfoLink { get; }
         /// <summary>
         /// 下载链接
         /// </summary>
-        public string DownloadLink { get;}
+        public string DownloadLink { get; }
         /// <summary>
         /// 当前版本
         /// </summary>
-        public Version CurrentVersion { get; set; }
+        public Version CurrentVersion { get; }
         /// <summary>
         /// 最新版本
         /// </summary>
@@ -39,9 +39,9 @@ namespace E.Class
         /// <summary>
         /// 更新日志
         /// </summary>
-        public UpdateNote[] UpdateNotes { get; set; }
+        public UpdateNote[] UpdateNotes { get; }
 
-        public AppInfo(string name, string description, string company, string developer, string infoLink, string downloadLink, Version currentVersion, Version latestVersion)
+        public AppInfo(string name, string description, string company, string developer, string infoLink, string downloadLink, Version currentVersion, Version latestVersion, UpdateNote[] updateNotes)
         {
             Name = name;
             Description = description;
@@ -51,6 +51,7 @@ namespace E.Class
             DownloadLink = downloadLink;
             CurrentVersion = currentVersion;
             LatestVersion = latestVersion;
+            UpdateNotes = updateNotes;
         }
 
         public struct UpdateNote

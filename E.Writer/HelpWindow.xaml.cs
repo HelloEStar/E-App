@@ -38,10 +38,10 @@ namespace E.Writer
             //创建计时器
             CreateTimer();
             //获取软件信息
-            ThisName.Content = MainWindow.ThisName;
-            Description.Content = MainWindow.ThisDescription;
-            Developer.Content = MainWindow.ThisDeveloper + "@" + MainWindow.ThisCompany;
-            Version.Content = Ow.ThisVer;
+            ThisName.Content = Ow.AppInfo.Name;
+            Description.Content = Ow.AppInfo.Description;
+            Developer.Content = Ow.AppInfo.Developer + "@" + Ow.AppInfo.Company;
+            Version.Content = Ow.AppInfo.CurrentVersion;
             //载入更新日志
             Stream src = Application.GetResourceStream(new Uri("/Documents/更新日志.txt", UriKind.Relative)).Stream;
             string str = new StreamReader(src, Encoding.UTF8).ReadToEnd();

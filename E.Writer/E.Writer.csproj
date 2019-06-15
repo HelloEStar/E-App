@@ -214,6 +214,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\E.Class\E.Class.csproj">
+      <Project>{b60def26-a70f-412b-99a9-3daf1e156c16}</Project>
+      <Name>E.Class</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
