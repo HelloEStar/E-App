@@ -135,7 +135,7 @@
     <sys:String x:Key="名称">Name</sys:String>
     <sys:String x:Key="说明">Description</sys:String>
     <sys:String x:Key="版本">Version</sys:String>
-    <sys:String x:Key="开发者">Developer</sys:String>
+    <sys:String x:Key="作者">Developer</sys:String>
     <sys:String x:Key="更新日志">Update Log</sys:String>
     <sys:String x:Key="检查更新">Check Update</sys:String>
     <sys:String x:Key="清空运行信息">Clear Run Info</sys:String>

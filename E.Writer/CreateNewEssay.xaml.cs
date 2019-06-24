@@ -112,7 +112,7 @@ namespace E.Writer
                 MessageBox.Show("请输入文章名");
             }
             //若输入中含有 \ | / < > " ? * :
-            else if (!MainWindow.IsRightName(EssayName.Text))
+            else if (!MainWindow.CheckIsRightName(EssayName.Text))
             {
                 MessageBox.Show("名称中不能含有以下字符 \\ | / < > \" ? * : ");
             }
@@ -141,9 +141,9 @@ namespace E.Writer
                     //打开文章
                     Ow.OpenEssay(EssayPath.Text);
                     //改变主窗口控件状态
-                    Ow.ChangeElementState(3);
+                    Ow.SetElementState(3);
                     //改变标题
-                    Ow.ChangeTitle();
+                    Ow.RefreshTitle();
 
                     //
                     //创建节点
@@ -159,9 +159,9 @@ namespace E.Writer
                         fatherNote.Items.Add(newFileNode);
                     }
                     //选择节点
-                    Ow.selectedNode = newFileNode;
+                    Ow.SelectedNode = newFileNode;
                     //打开节点
-                    Ow.openedNode = newFileNode;
+                    Ow.OpenedNode = newFileNode;
                     //刷新目录
                     Ow.FilesTree.Items.Refresh();
 

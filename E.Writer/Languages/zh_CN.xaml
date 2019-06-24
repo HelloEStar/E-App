@@ -135,7 +135,7 @@
     <sys:String x:Key="名称">名称</sys:String>
     <sys:String x:Key="说明">说明</sys:String>
     <sys:String x:Key="版本">版本</sys:String>
-    <sys:String x:Key="开发者">开发者</sys:String>
+    <sys:String x:Key="作者">作者</sys:String>
     <sys:String x:Key="更新日志">更新日志</sys:String>
     <sys:String x:Key="检查更新">检查更新</sys:String>
     <sys:String x:Key="清空运行信息">清空运行信息</sys:String>

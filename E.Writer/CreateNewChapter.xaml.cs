@@ -108,7 +108,7 @@ namespace E.Writer
                 MessageBox.Show("请输入卷册名");
             }
             //若输入中含有 \ | / < > " ? * :
-            else if (!MainWindow.IsRightName(ChapterName.Text))
+            else if (!MainWindow.CheckIsRightName(ChapterName.Text))
             {
                 MessageBox.Show("名称中不能含有以下字符 \\ | / < > \" ? * : ");
             }
@@ -132,9 +132,9 @@ namespace E.Writer
                     //打开
                     Ow.OpenChapter(ChapterPath.Text);
                     //改变主窗口控件状态
-                    Ow.ChangeElementState(2);
+                    Ow.SetElementState(2);
                     //改变标题
-                    Ow.ChangeTitle();
+                    Ow.RefreshTitle();
 
                     //
                     string tmp = ChapterPath.Text;
@@ -152,9 +152,9 @@ namespace E.Writer
                         fatherNote.Items.Add(newfolderNode);
                     }
                     //选择节点
-                    Ow.selectedNode = newfolderNode;
+                    Ow.SelectedNode = newfolderNode;
                     //打开节点
-                    Ow.openedNode = newfolderNode;
+                    Ow.OpenedNode = newfolderNode;
                     //刷新目录
                     Ow.FilesTree.Items.Refresh();
 

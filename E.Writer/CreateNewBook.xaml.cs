@@ -134,7 +134,7 @@ namespace E.Writer
                     MessageBox.Show("请输入书籍名称");
                 }
                 //若输入中含有 \ | / < > " ? * :
-                else if (!MainWindow.IsRightName(BookName.Text))
+                else if (!MainWindow.CheckIsRightName(BookName.Text))
                 {
                     MessageBox.Show("名称中不能含有以下字符 \\ | / < > \" ? * : ");
                 }
@@ -165,7 +165,7 @@ namespace E.Writer
                         //记录
                         Ow.SelectedBookPath = BookPath.Text;
                         Properties.Settings.Default._lastBook = BookPath.Text;
-                        Properties.Settings.Default.Save();
+                        Ow.SaveAppSettings();
                         //刷新根目录
                         //Properties.User.Default.BooksDir = FatherPath.Text;
                         //打开

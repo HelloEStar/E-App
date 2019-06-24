@@ -58,16 +58,16 @@
             <TabItem x:Name="About" Header="{DynamicResource 软件信息}" >
                 <Grid Background="#FFE5E5E5">
                     <Label Content="{DynamicResource 名称}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                    <Label x:Name="ThisName" Content="" HorizontalAlignment="Left" Margin="100,10,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="ThisName" Content="?" HorizontalAlignment="Left" Margin="100,10,0,0" VerticalAlignment="Top"/>
                     <Label Content="{DynamicResource 说明}" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top"/>
-                    <Label x:Name="Description" Content="" HorizontalAlignment="Left" Margin="100,40,0,0" VerticalAlignment="Top"/>
-                    <Label Content="{DynamicResource 开发者}" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top"/>
-                    <Label x:Name="Developer" Content="" HorizontalAlignment="Left" Margin="100,70,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="Description" Content="?" HorizontalAlignment="Left" Margin="100,40,0,0" VerticalAlignment="Top"/>
+                    <Label Content="{DynamicResource 作者}" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="Developer" Content="?" HorizontalAlignment="Left" Margin="100,70,0,0" VerticalAlignment="Top"/>
                     <Label Content="{DynamicResource 版本}" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top"/>
-                    <Label x:Name="Version" Content="0.0.0.0" Margin="100,100,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                    <Label x:Name="Version" Content="?" Margin="100,100,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                     <Label Content="{DynamicResource 更新日志}" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top"/>
                     <ScrollViewer Margin="100,130,10,10" VerticalScrollBarVisibility="Auto">
-                        <TextBlock x:Name="UpdateLog" Text="日志内容"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Width="378" Background="White" Padding="5,5,5,8" MinHeight="304" />
+                        <TextBlock x:Name="UpdateNote" Text="?"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Width="378" Background="White" Padding="5,5,5,8" MinHeight="304" />
                     </ScrollViewer>
                     <Button x:Name="CheckNew" Content="{DynamicResource 检查更新}" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Height="30" Click="CheckNew_Click" Width="90"/>
                     <Button x:Name="ClearRunInfo" Content="{DynamicResource 清空运行信息}" HorizontalAlignment="Right" Margin="0,45,10,0" VerticalAlignment="Top" Height="30" Click="ClearRunInfo_Click" Width="90"/>
@@ -87,12 +87,12 @@
                         <Label Content="{DynamicResource 赞助开发者}" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
                     </StackPanel>
                     <StackPanel HorizontalAlignment="Left" Height="424" Margin="115,10,0,0" VerticalAlignment="Top" Width="363">
-                        <TextBlock x:Name="HomeSite" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="http://estar.zone" VerticalAlignment="Top" MouseLeftButtonUp="HomeSite_MouseLeftButtonUp" Cursor="Hand" Height="25" Padding="0,5,0,0"/>
-                        <TextBlock x:Name="DownloadSite" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="http://estar.zone/introduction/e-writer/" VerticalAlignment="Top" MouseLeftButtonUp="DownloadSite_MouseLeftButtonUp" Cursor="Hand" Height="25" Padding="0,5,0,0"/>
-                        <TextBlock x:Name="FeedbackSite" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="https://github.com/HelloEStar/E-Writer" VerticalAlignment="Top" MouseLeftButtonUp="FeedbackSite_MouseLeftButtonUp" Cursor="Hand" Height="25" Padding="0,5,0,0"/>
-                        <TextBlock x:Name="ForumSite" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="https://github.com/HelloEStar/E-Writer/issues" VerticalAlignment="Top" MouseLeftButtonUp="ForumSite_MouseLeftButtonUp" Cursor="Hand" Height="25" Padding="0,5,0,0"/>
-                        <TextBlock x:Name="QQGroup" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="279807070" VerticalAlignment="Top" MouseLeftButtonUp="QQGroup_MouseLeftButtonUp" Cursor="Hand" Height="25" Padding="0,5,0,0"/>
-                        <TextBox x:Name="SupportMe" HorizontalAlignment="Left" Margin="0,0,0,0" BorderThickness="0"  TextWrapping="Wrap" IsReadOnly="True" Text="19LHHVQzWJo8DemsanJhSZ4VNRtknyzR1q" VerticalAlignment="Top" Cursor="IBeam" Height="25" Padding="0,5,0,0" Background="{x:Null}" BorderBrush="{x:Null}" IsTabStop="False" AllowDrop="False"/>
+                        <TextBlock x:Name="HomePage" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="?" VerticalAlignment="Top" MouseLeftButtonUp="HomePage_MouseLeftButtonUp" Cursor="Hand" Height="25" Padding="0,5,0,0"/>
+                        <TextBlock x:Name="DownloadPage" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="?" VerticalAlignment="Top" MouseLeftButtonUp="DownloadPage_MouseLeftButtonUp" Cursor="Hand" Height="25" Padding="0,5,0,0"/>
+                        <TextBlock x:Name="InfoPage" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="?" VerticalAlignment="Top" MouseLeftButtonUp="InfoPage_MouseLeftButtonUp" Cursor="Hand" Height="25" Padding="0,5,0,0"/>
+                        <TextBlock x:Name="GitHubPage" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="?" VerticalAlignment="Top" MouseLeftButtonUp="GitHubPage_MouseLeftButtonUp" Cursor="Hand" Height="25" Padding="0,5,0,0"/>
+                        <TextBlock x:Name="QQGroup" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="?" VerticalAlignment="Top" MouseLeftButtonUp="QQGroup_MouseLeftButtonUp" Cursor="Hand" Height="25" Padding="0,5,0,0"/>
+                        <TextBox x:Name="BitCoinAddress" HorizontalAlignment="Left" Margin="0,0,0,0" BorderThickness="0"  TextWrapping="Wrap" IsReadOnly="True" Text="?" VerticalAlignment="Top" Cursor="IBeam" Height="25" Padding="0,5,0,0" Background="{x:Null}" BorderBrush="{x:Null}" IsTabStop="False" AllowDrop="False"/>
                     </StackPanel>
                 </Grid>
             </TabItem>

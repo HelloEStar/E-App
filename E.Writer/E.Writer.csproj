@@ -112,6 +112,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>User.settings</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
     <Page Include="CreateNewBook.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
