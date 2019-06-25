@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:E.Player"
         mc:Ignorable="d"
-        Title="{DynamicResource 帮助}" Height="500" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Loaded="Help_Loaded" Icon="images/E Player.ico">
+        Title="{DynamicResource 帮助}" Height="500" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Loaded="Help_Loaded" Icon="图片/E Player.ico">
     <Grid>
         <TabControl x:Name="MainTab">
             <TabItem x:Name="Preference" Header="{DynamicResource 偏好设置}" >

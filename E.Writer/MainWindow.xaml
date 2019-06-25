@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:E.Writer"
         mc:Ignorable="d"
-        Title="E Writer" Height="600" Width="900" AllowDrop="True" MinWidth="500" MinHeight="500" SizeChanged="Main_SizeChanged" WindowStartupLocation="CenterScreen" StateChanged="Main_StateChanged" KeyUp="Main_KeyUp" Loaded="Main_Loaded" Closing="Main_Closing" Foreground="Black" Icon="Images/E Writer.ico" Background="Black">
+        Title="E Writer" Height="600" Width="900" AllowDrop="True" MinWidth="500" MinHeight="500" SizeChanged="Main_SizeChanged" WindowStartupLocation="CenterScreen" StateChanged="Main_StateChanged" KeyUp="Main_KeyUp" Loaded="Main_Loaded" Closing="Main_Closing" Foreground="Black" Icon="图片/E Writer.ico" Background="Black">
+
     <Grid x:Name="MainGrid"  >
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="LeftArea" Width="243"/>
@@ -40,6 +41,25 @@
                  LostFocus="FileContent_LostFocus" CaretBrush="Black" PreviewTextInput="FileContent_PreviewTextInput" />
             <Label x:Name="HelpMessage" Content="帮助消息" Margin="10,0,10,10" Height="25" VerticalAlignment="Bottom"/>
 
+            <Frame x:Name="Frame" Source="AboutPage.xaml" Template="{StaticResource FrameTemplate}" HorizontalAlignment="Left" Height="169" Margin="56,87,0,0" VerticalAlignment="Top" Width="304"/>
+            <Frame Margin="197,289,119,109" Source="AboutPage.xaml" Template="{StaticResource FrameTemplate}"></Frame>
         </Grid>
     </Grid>
+    
+    <Window.Resources>
+        <!--声明模板样式-->
+        <ControlTemplate x:Key="FrameTemplate" TargetType="{x:Type Frame}">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                    <Button Content="后退" Margin="4" Command="{x:Static NavigationCommands.BrowseBack}" />
+                    <Button Content="前进" Margin="4" Command="{x:Static NavigationCommands.BrowseForward}" />
+                    <Button Content="刷新" Margin="4" Command="{x:Static NavigationCommands.Refresh}" />
+                </StackPanel>
+                <Border BorderBrush="Orange"  BorderThickness="2"  Padding="5">
+                    <ContentPresenter />
+                </Border>
+            </DockPanel>
+        </ControlTemplate>
+    </Window.Resources>
+
 </Window>

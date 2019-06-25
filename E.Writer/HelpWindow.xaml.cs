@@ -502,11 +502,11 @@ namespace E.Writer
                     //根据名字载入语言文件
                     if (langName == "zh_CN")
                     {
-                        langRd = Application.LoadComponent(new Uri(@"languages/zh_CN.xaml", UriKind.Relative)) as ResourceDictionary;
+                        langRd = Application.LoadComponent(new Uri(@"语言/zh_CN.xaml", UriKind.Relative)) as ResourceDictionary;
                     }
                     else
                     {
-                        langRd = Application.LoadComponent(new Uri(@"languages/" + langName + ".xaml", UriKind.Relative)) as ResourceDictionary;
+                        langRd = Application.LoadComponent(new Uri(@"语言/" + langName + ".xaml", UriKind.Relative)) as ResourceDictionary;
                     }
                 }
                 catch (Exception e2)

@@ -99,7 +99,10 @@ namespace E.Writer
         #endregion 
 
         #region 方法
-        //构造器
+        //构造
+        /// <summary>
+        /// 默认构造器
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -115,7 +118,7 @@ namespace E.Writer
             AssemblyDescriptionAttribute description = (AssemblyDescriptionAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyDescriptionAttribute));
             AssemblyCompanyAttribute company = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyCompanyAttribute));
             AssemblyCopyrightAttribute copyright = (AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyCopyrightAttribute));
-            Stream src = System.Windows.Application.GetResourceStream(new Uri("/Documents/更新日志.txt", UriKind.Relative)).Stream;
+            Stream src = System.Windows.Application.GetResourceStream(new Uri("/文档/更新日志.txt", UriKind.Relative)).Stream;
             string updateNote = new StreamReader(src, Encoding.UTF8).ReadToEnd();
             string homePage = Properties.Settings.Default.HomePage;
             string infoPage = Properties.Settings.Default.InfoPage;
@@ -335,7 +338,7 @@ namespace E.Writer
             try
             {
                 //根据名字载入语言文件
-                ResourceDictionary langRd = System.Windows.Application.LoadComponent(new Uri(@"languages\" + lang + ".xaml", UriKind.Relative)) as ResourceDictionary;
+                ResourceDictionary langRd = System.Windows.Application.LoadComponent(new Uri(@"语言\" + lang + ".xaml", UriKind.Relative)) as ResourceDictionary;
                 //主窗口更改语言
                 if (Resources.MergedDictionaries.Count > 0)
                 {
