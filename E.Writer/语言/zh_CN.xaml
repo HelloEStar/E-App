@@ -2,10 +2,79 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <!--适用E Writer 0.16.0.0-->
 
-    <!--主窗口-->
-    <!--主窗口，界面-->
+    <!--左侧区域-->
+    <sys:String x:Key="文件">文件</sys:String>
+    <sys:String x:Key="编辑">编辑</sys:String>
+    <sys:String x:Key="视图">视图</sys:String>
+    <sys:String x:Key="设置">设置</sys:String>
+    <sys:String x:Key="关于">关于</sys:String>
+    <sys:String x:Key="打开书籍">打开书籍 Ctrl+O</sys:String>
+    <sys:String x:Key="创建书籍">创建书籍 Ctrl+B</sys:String>
+    <sys:String x:Key="创建卷册">创建卷册 Ctrl+Alt+B</sys:String>
+    <sys:String x:Key="创建文章">创建文章 Ctrl+Shift+B</sys:String>
+
+    <sys:String x:Key="保存文章">保存文章</sys:String>
+    <sys:String x:Key="另存为文章">另存为文章</sys:String>
+    <sys:String x:Key="导出全书">导出全书</sys:String>
+    <sys:String x:Key="关闭书籍">关闭书籍</sys:String>
+    <sys:String x:Key="关闭卷册">关闭卷册</sys:String>
+    <sys:String x:Key="关闭文章">关闭文章</sys:String>
+    <sys:String x:Key="书籍信息">书籍信息</sys:String>
+    <sys:String x:Key="卷册信息">卷册信息</sys:String>
+    <sys:String x:Key="退出">退出E Writer</sys:String>
+    <sys:String x:Key="查找替换">查找替换</sys:String>
+    <sys:String x:Key="删除选中">删除选中卷册或文章</sys:String>
+
+    <sys:String x:Key="显示目录">显示目录</sys:String>
+    <sys:String x:Key="隐藏目录">隐藏目录</sys:String>
+    <sys:String x:Key="展开目录">展开目录</sys:String>
+    <sys:String x:Key="收起目录">收起目录</sys:String>
+    <sys:String x:Key="刷新目录">刷新目录</sys:String>
+    
+    <sys:String x:Key="重置">重置</sys:String>
+    <sys:String x:Key="应用">应用</sys:String>
+    
+    <sys:String x:Key="检查更新">检查更新</sys:String>
+    <sys:String x:Key="清空运行信息">清空运行信息</sys:String>
+    <sys:String x:Key="个人站点">个人站点</sys:String>
+    <sys:String x:Key="软件主页">软件主页</sys:String>
+    <sys:String x:Key="提交反馈">提交反馈</sys:String>
+    <sys:String x:Key="GitHub">GitHub</sys:String>
+    <sys:String x:Key="QQ交流群">QQ交流群</sys:String>
+    <sys:String x:Key="赞助比特币">赞助比特币</sys:String>
+
+    <!--中间区域-->
+    <!--目录页-->
+    <!--设置页-->
+    <sys:String x:Key="语言">语言</sys:String>
+    <sys:String x:Key="主题">主题</sys:String>
+    <sys:String x:Key="字体">字体</sys:String>
+    <sys:String x:Key="字号">字号</sys:String>
+    <sys:String x:Key="界面">界面</sys:String>
+    <sys:String x:Key="启动">启动</sys:String>
+    <sys:String x:Key="补全">补全</sys:String>
+    <sys:String x:Key="缩进">缩进</sys:String>
+    <sys:String x:Key="保存">保存</sys:String>
+    <sys:String x:Key="备份">备份</sys:String>
+    <sys:String x:Key="显示滚动条">显示滚动条</sys:String>
+    <sys:String x:Key="显示运行信息">显示运行信息</sys:String>
+    <sys:String x:Key="自动检查更新">检查更新</sys:String>
+    <sys:String x:Key="自动打开书籍">打开上次关闭的书籍</sys:String>
+    <sys:String x:Key="补全书名号">创建书籍时补全书名号</sys:String>
+    <sys:String x:Key="自动补全">输入时补全引号、括号</sys:String>
+    <sys:String x:Key="自动缩进">换行时补全缩进</sys:String>
+    <sys:String x:Key="间隔时间自动保存">间隔时间自动保存</sys:String>
+    <sys:String x:Key="文章切换时自动保存">文章切换时自动保存</sys:String>
+    <sys:String x:Key="间隔时间自动备份">间隔时间自动备份</sys:String>
+    <!--信息页-->
+    <sys:String x:Key="名称">应用名称</sys:String>
+    <sys:String x:Key="说明">应用说明</sys:String>
+    <sys:String x:Key="作者">应用作者</sys:String>
+    <sys:String x:Key="版本">当前版本</sys:String>
+    <sys:String x:Key="更新日志">更新日志</sys:String>
+    
+    <!--右侧区域-->
     <sys:String x:Key="欢迎使用">欢迎使用</sys:String>
     <sys:String x:Key="启动次数">启动次数</sys:String>
     <sys:String x:Key="启动时间">启动时间</sys:String>
@@ -18,39 +87,7 @@
     <sys:String x:Key="字数">字数</sys:String>
     <sys:String x:Key="全书字数">全书字数</sys:String>
 
-    <!--主窗口，右键菜单-->
-    <sys:String x:Key="文件">文件</sys:String>
-    <sys:String x:Key="编辑">编辑</sys:String>
-    <sys:String x:Key="窗口">窗口</sys:String>
-    <sys:String x:Key="帮助">帮助</sys:String>
-    
-    <sys:String x:Key="打开书籍">打开书籍</sys:String>
-    <sys:String x:Key="创建书籍">创建书籍</sys:String>
-    <sys:String x:Key="创建卷册">创建卷册</sys:String>
-    <sys:String x:Key="创建文章">创建文章</sys:String>
-    <sys:String x:Key="保存文章">保存文章</sys:String>
-    <sys:String x:Key="另存为文章">另存为文章</sys:String>
-    <sys:String x:Key="导出全书">导出全书</sys:String>
-    <sys:String x:Key="关闭书籍">关闭书籍</sys:String>
-    <sys:String x:Key="关闭卷册">关闭卷册</sys:String>
-    <sys:String x:Key="关闭文章">关闭文章</sys:String>
-    <sys:String x:Key="书籍信息">书籍信息</sys:String>
-    <sys:String x:Key="卷册信息">卷册信息</sys:String>
-    <sys:String x:Key="退出">退出E Writer</sys:String>
-    <sys:String x:Key="查找替换">查找替换</sys:String>
-    <sys:String x:Key="删除选中">删除选中卷册或文章</sys:String>
-    
-    <sys:String x:Key="显示目录">显示目录</sys:String>
-    <sys:String x:Key="隐藏目录">隐藏目录</sys:String>
-    <sys:String x:Key="展开目录">展开目录</sys:String>
-    <sys:String x:Key="收起目录">收起目录</sys:String>
-    <sys:String x:Key="刷新目录">刷新目录</sys:String>
-    
-    <sys:String x:Key="偏好设置">偏好设置</sys:String>
-    <sys:String x:Key="软件信息">软件信息</sys:String>
-    <sys:String x:Key="相关链接">相关链接</sys:String>
-
-    <!--主窗口，提示消息-->
+    <!--提示消息-->
     <sys:String x:Key="提示">提示</sys:String>
     <sys:String x:Key="创建或打开以开始">创建或打开一本书籍以开始</sys:String>
     <sys:String x:Key="未打开任何书籍">当前没有打开任何书籍</sys:String>
@@ -103,49 +140,16 @@
     <sys:String x:Key="正在导出txt">正在导出txt文件，请稍候......</sys:String>
     <sys:String x:Key="导出成功">导出成功，已打开导出文件所在目录，共计字数</sys:String>
     <sys:String x:Key="已取消导出">已取消导出</sys:String>
-    
+
     <sys:String x:Key="下一个主题的配置文件不存在">下一个主题的配置文件不存在</sys:String>
     <sys:String x:Key="偏好主题的不存在">偏好主题的不存在，已载入默认主题</sys:String>
     <sys:String x:Key="已清空运行信息">已清空运行信息，你需要重新启动软件</sys:String>
-    <!--创建窗口-->
     
-    <!--帮助窗口-->
-    <!--帮助窗口，偏好设置-->
-    <sys:String x:Key="语言">语言</sys:String>
-    <sys:String x:Key="主题">主题</sys:String>
-    <sys:String x:Key="重置">重置</sys:String>
     <sys:String x:Key="已重置">偏好设置已重置</sys:String>
     <sys:String x:Key="已更改">偏好设置已更改</sys:String>
     <sys:String x:Key="已载入">偏好设置已载入</sys:String>
-    <sys:String x:Key="显示运行信息">显示运行信息</sys:String>
-    <sys:String x:Key="自动检查更新">检查更新</sys:String>
-    <sys:String x:Key="自动打开书籍">打开上次关闭的书籍</sys:String>
-    <sys:String x:Key="补全书名号">创建书籍时补全书名号</sys:String>
-    <sys:String x:Key="自动补全">输入时补全引号、括号</sys:String>
-    <sys:String x:Key="自动缩进">换行时补全缩进</sys:String>
-    <sys:String x:Key="间隔时间自动保存">间隔时间自动保存</sys:String>
-    <sys:String x:Key="文章切换时自动保存">文章切换时自动保存</sys:String>
-    <sys:String x:Key="间隔时间自动备份">间隔时间自动备份</sys:String>
-    <sys:String x:Key="显示滚动条">显示滚动条</sys:String>
-    <sys:String x:Key="字号">字号</sys:String>
-    <sys:String x:Key="字体">字体</sys:String>
     <sys:String x:Key="输入1~999整数">请输入1~999整数</sys:String>
     <sys:String x:Key="输入整数">请输入整数</sys:String>
-    <!--帮助窗口，软件信息-->
-    <sys:String x:Key="名称">应用名称</sys:String>
-    <sys:String x:Key="说明">应用说明</sys:String>
-    <sys:String x:Key="作者">应用作者</sys:String>
-    <sys:String x:Key="版本">当前版本</sys:String>
-    <sys:String x:Key="更新日志">更新日志</sys:String>
-    <sys:String x:Key="检查更新">检查更新</sys:String>
-    <sys:String x:Key="清空运行信息">清空运行信息</sys:String>
-    <!--帮助窗口，相关链接-->
-    <sys:String x:Key="个人站点">个人站点</sys:String>
-    <sys:String x:Key="软件主页">软件主页</sys:String>
-    <sys:String x:Key="提交反馈">提交反馈</sys:String>
-    <sys:String x:Key="开源地址">开源地址</sys:String>
-    <sys:String x:Key="交流QQ群">交流QQ群</sys:String>
-    <sys:String x:Key="赞助开发者">比特币赞助</sys:String>
-    
-    
+
+
 </ResourceDictionary>

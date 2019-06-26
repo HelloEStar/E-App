@@ -22,116 +22,210 @@
             </DockPanel>
         </ControlTemplate>
 
+        <Style x:Key="MyMenuButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Gainsboro"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                            <TextBlock Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FF00C5FF"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FF006496"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="MyToolButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="#FFF0F0F0"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                            <TextBlock Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FF00C5FF"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FF006496"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style x:Key="MyLabelStyle" TargetType="Label">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        
+        <Style x:Key="MyCheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="Padding" Value="5,0,0,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        
+        <Style x:Key="MyComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="Padding" Value="5,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        
+        <Style x:Key="MyTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="Padding" Value="5,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Background" Value="{x:Null}"/>
+        </Style>
     </Window.Resources>
-
+    
     <Grid x:Name="MainGrid">
-        <DockPanel Margin="0">
-            <StackPanel x:Name="LeftArea" Margin="0" Background="#FFF0F0F0">
-                <Button x:Name="DirectoryButton" Content="目录" Width="40" Height="40" BorderThickness="0" Background="#FFE6E6E6" Click="DirectoryButton_Click"/>
-                <Button x:Name="SettingButton" Content="设置" Width="40" Height="40" BorderThickness="0" Background="#FFE6E6E6" Click="SettingButton_Click"/>
-                <Button x:Name="AboutButton" Content="关于" Width="40" Height="40" BorderThickness="0" Background="#FFE6E6E6" Click="AboutButton_Click"/>
-            </StackPanel>
-
-            <Grid x:Name="CenterArea" Background="Gainsboro" Width="210">
+        <DockPanel>
+            <DockPanel x:Name="PanLeft" Background="#FFF0F0F0" >
+                <StackPanel DockPanel.Dock="Top">
+                    <Button x:Name="BtnFile" Content="{DynamicResource 文件}" Style="{StaticResource MyMenuButtonStyle}" Click="BtnFile_Click"/>
+                    <Button x:Name="BtnEdit" Content="{DynamicResource 编辑}" Style="{StaticResource MyMenuButtonStyle}" Click="BtnEdit_Click"/>
+                    <Button x:Name="BtnView" Content="{DynamicResource 视图}" Style="{StaticResource MyMenuButtonStyle}" Click="BtnView_Click"/>
+                    <Button x:Name="BtnSetting" Content="{DynamicResource 设置}" Style="{StaticResource MyMenuButtonStyle}" Click="BtnSetting_Click"/>
+                    <Button x:Name="BtnAbout" Content="{DynamicResource 关于}" Style="{StaticResource MyMenuButtonStyle}" Click="BtnAbout_Click"/>
+                </StackPanel>
+                <WrapPanel Orientation="Vertical">
+                    <WrapPanel  x:Name="BtnsFile" Orientation="Vertical">
+                        <Button x:Name="BtnOpenBook" ToolTip="{DynamicResource 打开书籍}" Style="{StaticResource MyToolButtonStyle}" Click="MenuOpen_Click"/>
+                        <Button x:Name="BtnCreateBook" ToolTip="{DynamicResource 创建书籍}" Style="{StaticResource MyToolButtonStyle}" Click="MenuCreateBook_Click"/>
+                        <Button x:Name="BtnCreateChapter" ToolTip="{DynamicResource 创建卷册}" Style="{StaticResource MyToolButtonStyle}" Click="MenuCreateChapter_Click"/>
+                        <Button x:Name="BtnCreateEssay" ToolTip="{DynamicResource 创建文章}" Style="{StaticResource MyToolButtonStyle}" Click="MenuCreateEssay_Click"/>
+                    </WrapPanel>
+                    <WrapPanel  x:Name="BtnsEdit" Orientation="Vertical" Visibility="Collapsed">
+                        
+                    </WrapPanel>
+                    <WrapPanel  x:Name="BtnsView" Orientation="Vertical" Visibility="Collapsed">
+                        
+                    </WrapPanel>
+                    <WrapPanel  x:Name="BtnsSetting" Orientation="Vertical" Visibility="Collapsed">
+                        <Button x:Name="BtnReset" ToolTip="{DynamicResource 重置}" Style="{StaticResource MyToolButtonStyle}" Click="BtnReset_Click"/>
+                        <Button x:Name="BtnApply" ToolTip="{DynamicResource 应用}" Style="{StaticResource MyToolButtonStyle}" Click="BtnApply_Click"/>
+                    </WrapPanel>
+                    <WrapPanel  x:Name="BtnsAbout" Orientation="Vertical" Visibility="Collapsed">
+                        <Button x:Name="BtnCheckNew" ToolTip="{DynamicResource 检查更新}" Style="{StaticResource MyToolButtonStyle}" Click="BtnCheckNew_Click"/>
+                        <Button x:Name="BtnClearRunInfo" ToolTip="{DynamicResource 清空运行信息}" Style="{StaticResource MyToolButtonStyle}" Click="BtnClearRunInfo_Click"/>
+                        <Button x:Name="BtnHomePage" ToolTip="{DynamicResource 个人站点}" Style="{StaticResource MyToolButtonStyle}" Click="BtnHomePage_Click"/>
+                        <Button x:Name="BtnInfoPage" ToolTip="{DynamicResource 软件主页}" Style="{StaticResource MyToolButtonStyle}" Click="BtnInfoPage_Click" />
+                        <Button x:Name="BtnDownloadPage" ToolTip="{DynamicResource 提交反馈}" Style="{StaticResource MyToolButtonStyle}" Click="BtnDownloadPage_Click"/>
+                        <Button x:Name="BtnGitHubPage" ToolTip="{DynamicResource GitHub}" Style="{StaticResource MyToolButtonStyle}" Click="BtnGitHubPage_Click"/>
+                        <Button x:Name="BtnQQGroup" ToolTip="{DynamicResource QQ交流群}" Style="{StaticResource MyToolButtonStyle}" Click="BtnQQGroup_Click"/>
+                        <Button x:Name="BtnBitCoinAddress" ToolTip="{DynamicResource 赞助比特币}" Style="{StaticResource MyToolButtonStyle}" Click="BtnBitCoinAddress_Click"/>
+                    </WrapPanel>
+                </WrapPanel>
+            </DockPanel>
+            <Grid x:Name="PanCenter" Background="#FFF0F0F0" Width="210">
                 <DockPanel x:Name="CenterDirectoryPage">
                     <ComboBox x:Name="Books" BorderBrush="{x:Null}" VerticalAlignment="Top" Height="30" ToolTip="最近打开过的书籍列表" SelectionChanged="Books_SelectionChanged" Background="White" Padding="0" FontSize="14" VerticalContentAlignment="Center" BorderThickness="0" Cursor="Hand" SizeChanged="Books_SizeChanged" DockPanel.Dock="Top" />
-                    <WrapPanel Margin="0" Orientation="Horizontal" VerticalAlignment="Top" Background="#FFD2D2D2" DockPanel.Dock="Bottom">
-                        <Button x:Name="BtnOpenBook" Content="{DynamicResource 打开书籍}" HorizontalAlignment="Left" Width="105" Height="30" BorderBrush="{x:Null}" Background="{x:Null}" Cursor="Hand" Click="MenuOpen_Click"/>
-                        <Button x:Name="BtnCreateBook" Content="{DynamicResource 创建书籍}" HorizontalAlignment="Left" Width="105" Height="30" BorderBrush="{x:Null}" Background="{x:Null}" Cursor="Hand" Click="MenuCreateBook_Click"/>
-                        <Button x:Name="BtnCreateChapter" Content="{DynamicResource 创建卷册}" HorizontalAlignment="Left" Width="105" Height="30" BorderBrush="{x:Null}" Background="{x:Null}" Cursor="Hand" Click="MenuCreateChapter_Click"/>
-                        <Button x:Name="BtnCreateEssay" Content="{DynamicResource 创建文章}"  HorizontalAlignment="Left" Width="105" Height="30" BorderBrush="{x:Null}" Background="{x:Null}" Cursor="Hand" Click="MenuCreateEssay_Click"/>
-                    </WrapPanel>
                     <TreeView x:Name="FilesTree" Margin="0" SelectedItemChanged="FilesTree_SelectedItemChanged" MouseDoubleClick="FilesTree_MouseDoubleClick" KeyUp="FilesTree_KeyUp" BorderBrush="{x:Null}" Padding="0,5" Background="#00000000"/>
                 </DockPanel>
 
                 <DockPanel  x:Name="CenterSettingPage" Visibility="Collapsed">
-                    <Button x:Name="BtnReset" Content="{DynamicResource 重置}" Margin="0" VerticalAlignment="Bottom" Click="BtnReset_Click" Height="30" DockPanel.Dock="Top" Background="Gainsboro" BorderBrush="{x:Null}"/>
                     <ScrollViewer>
                         <StackPanel DockPanel.Dock="Top">
-                            <Label Content="{DynamicResource 语言}" Height="30" FontWeight="Bold" FontSize="14"/>
-                            <ComboBox x:Name="CBSelectedLanguage" Height="30" SelectionChanged="CBSelectedLanguage_SelectionChanged" VerticalContentAlignment="Center"/>
+                            <Label Content="{DynamicResource 语言}" Style="{StaticResource MyLabelStyle}"/>
+                            <ComboBox x:Name="CBSelectedLanguage" Style="{StaticResource MyComboBoxStyle}" SelectionChanged="CBSelectedLanguage_SelectionChanged"/>
 
-                            <Label Content="{DynamicResource 主题}" Height="30" FontWeight="Bold" FontSize="14"/>
-                            <ComboBox x:Name="Skins" Height="30" SelectionChanged="Skins_SelectionChanged" VerticalContentAlignment="Center"/>
-                            
-                            <Label Content="{DynamicResource 字体}" Height="30" FontWeight="Bold" FontSize="14"/>
-                            <ComboBox x:Name="CBFonts" Height="30" SelectionChanged="CBFonts_SelectionChanged" Padding="5,0" AllowDrop="False" VerticalContentAlignment="Center" Cursor="Hand" Margin="0,2">
-                                <ComboBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <VirtualizingStackPanel />
-                                    </ItemsPanelTemplate>
-                                </ComboBox.ItemsPanel>
-                            </ComboBox>
-                            
-                            <Label Content="{DynamicResource 字号}" Height="30" FontWeight="Bold" FontSize="14"/>
-                            <TextBox x:Name="TextSize" TextWrapping="Wrap" Height="30" AllowDrop="False" VerticalContentAlignment="Center" RenderTransformOrigin="0.475,0.92" Background="White" CaretBrush="Black" MinWidth="30" Margin="0" KeyUp="TextSize_KeyUp"/>
-                            
-                            <Label Content="界面" Height="30" FontWeight="Bold" FontSize="14"/>
-                            <CheckBox x:Name="ShowScrollBar" Content="{DynamicResource 显示滚动条}" Checked="ShowScrollBar_Checked" Unchecked="ShowScrollBar_Unchecked" VerticalContentAlignment="Center" Padding="5,0,0,0" Height="30" HorizontalAlignment="Left"/>
-                            
-                            <Label Content="启动" Height="30" FontWeight="Bold" FontSize="14"/>
-                            <CheckBox x:Name="ShowRunInfoCheckBox" Content="{DynamicResource 显示运行信息}" Checked="ShowRunInfo_Checked" Unchecked="ShowRunInfo_Unchecked" Padding="5,0,0,0" VerticalContentAlignment="Center" Height="30" HorizontalAlignment="Left"/>
-                            <CheckBox x:Name="AutoOpenBookCheckBox" Content="{DynamicResource 自动打开书籍}" Checked="AutoOpenBook_Checked" Unchecked="AutoOpenBook_Unchecked" Padding="5,0,0,0" VerticalContentAlignment="Center" Height="30" HorizontalAlignment="Left"/>
+                            <Label Content="{DynamicResource 主题}" Style="{StaticResource MyLabelStyle}"/>
+                            <ComboBox x:Name="Skins" Style="{StaticResource MyComboBoxStyle}" SelectionChanged="Skins_SelectionChanged"/>
 
-                            <Label Content="补全" Height="30" FontWeight="Bold" FontSize="14"/>
-                            <CheckBox x:Name="AutoBrackets" Content="{DynamicResource 补全书名号}" Checked="AutoBrackets_Checked" Unchecked="AutoBrackets_Unchecked" Padding="5,0,0,0" VerticalContentAlignment="Center" Height="30" HorizontalAlignment="Left"/>
-                            <CheckBox x:Name="AutoCompletion" Content="{DynamicResource 自动补全}" Checked="AutoCompletion_Checked" Unchecked="AutoCompletion_Unchecked" Padding="5,0,0,0" VerticalContentAlignment="Center" Height="30" HorizontalAlignment="Left"/>
+                            <Label Content="{DynamicResource 字体}" Style="{StaticResource MyLabelStyle}"/>
+                            <ComboBox x:Name="CBFonts" Style="{StaticResource MyComboBoxStyle}" SelectionChanged="CBFonts_SelectionChanged"/>
 
-                            <Label Content="缩进" Height="30" FontWeight="Bold" FontSize="14"/>
-                            <CheckBox x:Name="AutoIndentation" Content="{DynamicResource 自动缩进}" HorizontalAlignment="Left" VerticalAlignment="Center" Checked="AutoIndentation_Checked" Unchecked="AutoIndentation_Unchecked" VerticalContentAlignment="Center" Padding="5,0,0,0" Height="30"/>
-                            <TextBox x:Name="AutoIndentations" Height="30"  TextWrapping="Wrap" Text="4" RenderTransformOrigin="0.818,0.427" ToolTip="按回车键保存更改" KeyUp="AutoIndentations_KeyUp" AllowDrop="False" VerticalContentAlignment="Center" MinWidth="30" Margin="0"/>
+                            <Label Content="{DynamicResource 字号}" Style="{StaticResource MyLabelStyle}"/>
+                            <TextBox x:Name="TextSize" Style="{StaticResource MyTextBoxStyle}" KeyUp="TextSize_KeyUp"/>
 
-                            <Label Content="保存" Height="30" FontWeight="Bold" FontSize="14"/>
-                            <CheckBox x:Name="AutoSaveWhenSwitch" Content="{DynamicResource 文章切换时自动保存}" Checked="AutoSaveWhenSwitch_Checked" Unchecked="AutoSaveWhenSwitch_Unchecked" VerticalContentAlignment="Center" Padding="5,0,0,0" Height="30" HorizontalAlignment="Left"/>
-                            <CheckBox x:Name="AutoSaveEvery" Content="{DynamicResource 间隔时间自动保存}" HorizontalAlignment="Left" VerticalAlignment="Center" Checked="AutoSaveEvery_Checked" Unchecked="AutoSaveEvery_Unchecked" Padding="5,0,0,0" VerticalContentAlignment="Center" Height="30"/>
-                            <TextBox x:Name="AutoSaveTime" Height="30" TextWrapping="Wrap" Text="5" RenderTransformOrigin="0.818,0.427" KeyUp="AutoSaveTime_KeyUp" ToolTip="按回车键保存更改" AllowDrop="False" VerticalContentAlignment="Center" Margin="0" MinWidth="30"/>
+                            <Label Content="{DynamicResource 界面}"  Style="{StaticResource MyLabelStyle}"/>
+                            <CheckBox x:Name="ShowScrollBar" Content="{DynamicResource 显示滚动条}" Style="{StaticResource MyCheckBoxStyle}" Checked="ShowScrollBar_Checked" Unchecked="ShowScrollBar_Unchecked"/>
 
-                            <Label Content="备份" Height="30" FontWeight="Bold" FontSize="14"/>
-                            <CheckBox x:Name="AutoBackup" Content="{DynamicResource 间隔时间自动备份}" HorizontalAlignment="Left" VerticalAlignment="Center" Unchecked="AutoBackup_Unchecked" VerticalContentAlignment="Center" Padding="5,0,0,0" Checked="AutoBackup_Checked" Height="30"/>
-                            <TextBox x:Name="AutoBackupTime" Height="30" TextWrapping="Wrap" Text="10" KeyUp="AutoBackupTime_KeyUp" ToolTip="按回车键保存更改" AllowDrop="False" VerticalContentAlignment="Center" Margin="0" MinWidth="30"/>
+                            <Label Content="{DynamicResource 启动}"  Style="{StaticResource MyLabelStyle}"/>
+                            <CheckBox x:Name="ShowRunInfoCheckBox" Content="{DynamicResource 显示运行信息}" Style="{StaticResource MyCheckBoxStyle}" Checked="ShowRunInfo_Checked" Unchecked="ShowRunInfo_Unchecked"/>
+                            <CheckBox x:Name="AutoOpenBookCheckBox" Content="{DynamicResource 自动打开书籍}" Style="{StaticResource MyCheckBoxStyle}" Checked="AutoOpenBook_Checked" Unchecked="AutoOpenBook_Unchecked"/>
+
+                            <Label Content="{DynamicResource 补全}" Style="{StaticResource MyLabelStyle}"/>
+                            <CheckBox x:Name="AutoBrackets" Content="{DynamicResource 补全书名号}" Style="{StaticResource MyCheckBoxStyle}" Checked="AutoBrackets_Checked" Unchecked="AutoBrackets_Unchecked"/>
+                            <CheckBox x:Name="AutoCompletion" Content="{DynamicResource 自动补全}" Style="{StaticResource MyCheckBoxStyle}" Checked="AutoCompletion_Checked" Unchecked="AutoCompletion_Unchecked"/>
+
+                            <Label Content="{DynamicResource 缩进}" Style="{StaticResource MyLabelStyle}"/>
+                            <CheckBox x:Name="AutoIndentation" Content="{DynamicResource 自动缩进}" Style="{StaticResource MyCheckBoxStyle}" Checked="AutoIndentation_Checked" Unchecked="AutoIndentation_Unchecked"/>
+                            <TextBox x:Name="AutoIndentations" Style="{StaticResource MyTextBoxStyle}" Text="4" ToolTip="按回车键保存更改" KeyUp="AutoIndentations_KeyUp"/>
+
+                            <Label Content="{DynamicResource 保存}" Style="{StaticResource MyLabelStyle}"/>
+                            <CheckBox x:Name="AutoSaveWhenSwitch" Content="{DynamicResource 文章切换时自动保存}" Style="{StaticResource MyCheckBoxStyle}" Checked="AutoSaveWhenSwitch_Checked" Unchecked="AutoSaveWhenSwitch_Unchecked"/>
+                            <CheckBox x:Name="AutoSaveEvery" Content="{DynamicResource 间隔时间自动保存}" Style="{StaticResource MyCheckBoxStyle}" Checked="AutoSaveEvery_Checked" Unchecked="AutoSaveEvery_Unchecked"/>
+                            <TextBox x:Name="AutoSaveTime" Style="{StaticResource MyTextBoxStyle}" KeyUp="AutoSaveTime_KeyUp" ToolTip="按回车键保存更改"/>
+
+                            <Label Content="{DynamicResource 备份}" Style="{StaticResource MyLabelStyle}"/>
+                            <CheckBox x:Name="AutoBackup" Content="{DynamicResource 间隔时间自动备份}" Style="{StaticResource MyCheckBoxStyle}" Unchecked="AutoBackup_Unchecked"/>
+                            <TextBox x:Name="AutoBackupTime" Style="{StaticResource MyTextBoxStyle}" Text="10" KeyUp="AutoBackupTime_KeyUp" ToolTip="按回车键保存更改" Margin="5,0,5,5"/>
                         </StackPanel>
                     </ScrollViewer>
                 </DockPanel>
 
                 <DockPanel x:Name="CenterAboutPage" Visibility="Collapsed">
                     <StackPanel DockPanel.Dock="Top">
-                        <Label Content="{DynamicResource 名称}" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
+                        <Label Content="{DynamicResource 名称}" Style="{StaticResource MyLabelStyle}"/>
                         <Label x:Name="ThisName" Content="?" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top"/>
-                        <Label Content="{DynamicResource 说明}" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
+                        <Label Content="{DynamicResource 说明}" Style="{StaticResource MyLabelStyle}"/>
                         <Label x:Name="Description" Content="?" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top"/>
-                        <Label Content="{DynamicResource 作者}" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
+                        <Label Content="{DynamicResource 作者}" Style="{StaticResource MyLabelStyle}"/>
                         <Label x:Name="Developer" Content="?" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top"/>
-                        <Label Content="{DynamicResource 版本}" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
+                        <Label Content="{DynamicResource 版本}"  Style="{StaticResource MyLabelStyle}"/>
                         <Label x:Name="Version" Content="?" Margin="0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                        <Label Content="{DynamicResource 更新日志}" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14"/>
+                        <Label Content="{DynamicResource 更新日志}" Style="{StaticResource MyLabelStyle}"/>
                     </StackPanel>
-                    <WrapPanel DockPanel.Dock="Bottom" Background="#FFD2D2D2"  Height="90">
-                        <Button x:Name="CheckNewButton" Content="{DynamicResource 检查更新}" HorizontalAlignment="Left" Width="105" Height="30" BorderBrush="{x:Null}" Background="{x:Null}" Cursor="Hand" Click="CheckNewButton_Click"/>
-                        <Button x:Name="ClearRunInfoButton" Content="{DynamicResource 清空运行信息}" HorizontalAlignment="Left" Width="105" Height="30" BorderBrush="{x:Null}" Background="{x:Null}" Cursor="Hand" Click="ClearRunInfoButton_Click"/>
-                        <Button x:Name="HomePageButton" Content="{DynamicResource 个人站点}" HorizontalAlignment="Left" Width="70" Height="30" BorderBrush="{x:Null}" Background="{x:Null}" Cursor="Hand" Click="HomePageButton_Click"/>
-                        <Button x:Name="InfoPageButton" Content="{DynamicResource 软件主页}" HorizontalAlignment="Left" Width="70" Height="30" BorderBrush="{x:Null}" Background="{x:Null}" Cursor="Hand" Click="InfoPageButton_Click" />
-                        <Button x:Name="DownloadPage" Content="{DynamicResource 提交反馈}" HorizontalAlignment="Left" Width="70" Height="30" BorderBrush="{x:Null}" Background="{x:Null}" Cursor="Hand" Click="DownloadPage_Click"/>
-                        <Button x:Name="GitHubPage" Content="{DynamicResource 开源地址}" HorizontalAlignment="Left" Width="70" Height="30" BorderBrush="{x:Null}" Background="{x:Null}" Cursor="Hand" Click="GitHubPage_Click"/>
-                        <Button x:Name="QQGroup" Content="{DynamicResource 交流QQ群}" HorizontalAlignment="Left" Width="70" Height="30" BorderBrush="{x:Null}" Background="{x:Null}" Cursor="Hand" Click="QQGroup_Click"/>
-                        <Button x:Name="BitCoinAddress" Content="{DynamicResource 赞助开发者}" HorizontalAlignment="Left" Width="70" Height="30" BorderBrush="{x:Null}" Background="{x:Null}" Cursor="Hand" Click="BitCoinAddress_Click"/>
-                    </WrapPanel>
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <TextBlock x:Name="UpdateNote" Text="?" TextWrapping="Wrap" Padding="5" />
                     </ScrollViewer>
                 </DockPanel>
             </Grid>
 
-            <DockPanel x:Name="RightArea" Background="#FFC8C8C8" Margin="0">
-                <TextBox x:Name="EssayName" Height="30" VerticalAlignment="Top" ToolTip="当前未选中任何文件" VerticalContentAlignment="Center" GotFocus="EssayName_GotFocus" KeyUp="EssayName_KeyUp" BorderBrush="#FFC8C8C8" CaretBrush="Black" Background="#FFC8C8C8" DockPanel.Dock="Top" Text="标题" FontWeight="Bold" FontSize="16" Padding="5,0"/>
+            <DockPanel x:Name="PanRight" Background="#FFF0F0F0" Margin="0">
+                <TextBox x:Name="EssayName" Height="30" VerticalAlignment="Top" ToolTip="当前未选中任何文件" VerticalContentAlignment="Center" GotFocus="EssayName_GotFocus" KeyUp="EssayName_KeyUp" CaretBrush="Black" DockPanel.Dock="Top" Text="标题" FontWeight="Bold" FontSize="16" Padding="5,0" BorderBrush="{x:Null}" Background="{x:Null}"/>
                 <DockPanel DockPanel.Dock="Bottom"> 
-                    <Label x:Name="Words" Content="字数：0" Margin="0,0,5,0" Padding="5" ScrollViewer.VerticalScrollBarVisibility="Disabled" VerticalContentAlignment="Center" MaxWidth="100" Height="30" VerticalAlignment="Center" HorizontalAlignment="Center" DockPanel.Dock="Right"/>
-                    <Label x:Name="RowAndColumn" Content="行：0，列：0" Margin="0,0,5,0" VerticalAlignment="Center" Padding="5" Height="30" VerticalContentAlignment="Center" MaxWidth="150" HorizontalAlignment="Center" DockPanel.Dock="Right"/>
-                    <Label x:Name="HelpMessage" Content="帮助消息" Margin="0" Height="30" VerticalContentAlignment="Center"/>
+                    <Label x:Name="Words" Content="字数：0" Margin="0,0,5,0" Padding="5" ScrollViewer.VerticalScrollBarVisibility="Disabled" VerticalContentAlignment="Center" MaxWidth="100" Height="30" VerticalAlignment="Center" HorizontalAlignment="Center" DockPanel.Dock="Right" Background="{x:Null}"/>
+                    <Label x:Name="RowAndColumn" Content="行：0，列：0" Margin="0,0,5,0" VerticalAlignment="Center" Padding="5" Height="30" VerticalContentAlignment="Center" MaxWidth="150" HorizontalAlignment="Center" DockPanel.Dock="Right" Background="{x:Null}"/>
+                    <Label x:Name="HelpMessage" Content="帮助消息" Margin="0" Height="30" VerticalContentAlignment="Center" Background="{x:Null}"/>
                 </DockPanel>
-                <TextBox x:Name="FileContent" VerticalScrollBarVisibility="Auto" AcceptsReturn="true" TextWrapping="Wrap" 
-                 TextChanged="FileContent_TextChanged" Background="#FFB4B4B4" KeyUp="FileContent_KeyUp" 
-                 SelectionChanged="FileContent_SelectionChanged" SizeChanged="FileContent_SizeChanged" 
-                 LostFocus="FileContent_LostFocus" PreviewTextInput="FileContent_PreviewTextInput" BorderBrush="#FFB4B4B4" CaretBrush="Black" Padding="5" />
+                <TextBox x:Name="FileContent" VerticalScrollBarVisibility="Auto" AcceptsReturn="true" TextWrapping="Wrap"  TextChanged="FileContent_TextChanged" KeyUp="FileContent_KeyUp" 
+                 SelectionChanged="FileContent_SelectionChanged" SizeChanged="FileContent_SizeChanged" LostFocus="FileContent_LostFocus" PreviewTextInput="FileContent_PreviewTextInput" BorderBrush="{x:Null}" CaretBrush="Black" Padding="5" Background="White" />
                 <!--<Frame Margin="197,289,119,109" Source="AboutPage.xaml" Template="{StaticResource FrameTemplate}"></Frame>-->
             </DockPanel>
         </DockPanel>

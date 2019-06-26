@@ -86,12 +86,6 @@ namespace E.Writer
         /// 打开的节点
         /// </summary>
         public FileNode OpenedNode { get; set; }
-
-        MenuItem MenuFile, MenuEdit, MenuWindow, MenuHelp;
-        MenuItem MenuOpen, MenuCreateBook, MenuCreateChapter, MenuCreateEssay, MenuSave, MenuSaveAs, MenuExport,
-                 MenuCloseBook, MenuCloseChapter, MenuCloseEssay, MenuBookInfo, MenuChapterInfo, MenuCloseEW;
-        MenuItem MenuUndo, MenuRedo, MenuCut, MenuCopy, MenuPaste, MenuSelectAll, MenuFindAndReplace, MenuToTraditional, MenuToSimplified, MenuDelete;
-        MenuItem MenuHideDir, MenuRefresh, MenuExpand, MenuCollapse;
         #endregion 
 
         #region 方法
@@ -413,39 +407,39 @@ namespace E.Writer
         private void SetSkin(string _skin)
         {
             //左侧区域配色
-            LeftArea.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "leftBackColor", _skin)));
-            //书籍列表
-            Books.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "booksBackColor", _skin)));
-            Books.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "booksForeColor", _skin)));
-            //按钮
-            BtnOpenBook.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "btnBackColor", _skin)));
-            BtnOpenBook.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "btnForeColor", _skin)));
-            BtnCreateBook.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "btnBackColor", _skin)));
-            BtnCreateBook.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "btnForeColor", _skin)));
-            BtnCreateChapter.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "btnBackColor", _skin)));
-            BtnCreateChapter.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "btnForeColor", _skin)));
-            BtnCreateEssay.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "btnBackColor", _skin)));
-            BtnCreateEssay.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "btnForeColor", _skin)));
-            //文件树
-            FilesTree.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "treeBackColor", _skin)));
-            FilesTree.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "treeForeColor", _skin)));
+            //LeftArea.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "leftBackColor", _skin)));
+            ////书籍列表
+            //Books.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "booksBackColor", _skin)));
+            //Books.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "booksForeColor", _skin)));
+            ////按钮
+            //BtnOpenBook.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "btnBackColor", _skin)));
+            //BtnOpenBook.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "btnForeColor", _skin)));
+            //BtnCreateBook.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "btnBackColor", _skin)));
+            //BtnCreateBook.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "btnForeColor", _skin)));
+            //BtnCreateChapter.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "btnBackColor", _skin)));
+            //BtnCreateChapter.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "btnForeColor", _skin)));
+            //BtnCreateEssay.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "btnBackColor", _skin)));
+            //BtnCreateEssay.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "btnForeColor", _skin)));
+            ////文件树
+            //FilesTree.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "treeBackColor", _skin)));
+            //FilesTree.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "treeForeColor", _skin)));
 
-            //中侧区域配色
-            CenterArea.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "midBackColor", _skin)));
+            ////中侧区域配色
+            //CenterArea.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "midBackColor", _skin)));
 
-            //右侧区域配色
-            RightArea.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "rightBackColor", _skin)));
-            //文章名与文章内容
-            EssayName.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "nameBackColor", _skin)));
-            EssayName.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "nameForeColor", _skin)));
-            EssayName.CaretBrush = EssayName.Foreground;
-            FileContent.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "textBackColor", _skin)));
-            FileContent.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "textForeColor", _skin)));
-            FileContent.CaretBrush = FileContent.Foreground;
-            //信息显示
-            RowAndColumn.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "infoForeColor", _skin)));
-            Words.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "infoForeColor", _skin)));
-            HelpMessage.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "infoForeColor", _skin)));
+            ////右侧区域配色
+            //RightArea.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "rightBackColor", _skin)));
+            ////文章名与文章内容
+            //EssayName.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "nameBackColor", _skin)));
+            //EssayName.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "nameForeColor", _skin)));
+            //EssayName.CaretBrush = EssayName.Foreground;
+            //FileContent.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "textBackColor", _skin)));
+            //FileContent.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "textForeColor", _skin)));
+            //FileContent.CaretBrush = FileContent.Foreground;
+            ////信息显示
+            //RowAndColumn.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "infoForeColor", _skin)));
+            //Words.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "infoForeColor", _skin)));
+            //HelpMessage.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "infoForeColor", _skin)));
         }
         /// <summary>
         /// 更改主窗口右键菜单和窗口控件状态
@@ -453,107 +447,107 @@ namespace E.Writer
         /// <param name="state">0未打开，1书打开，2卷册打开，3文章打开</param>
         public void SetElementState(int state)
         {
-            //未打开书籍，未打开卷册，未打开文章
-            if (state == 0)
-            {
-                //按钮可用性
-                MenuCreateChapter.IsEnabled = false;
-                MenuCreateEssay.IsEnabled = false;
-                MenuSave.IsEnabled = false;
-                MenuSaveAs.IsEnabled = false;
-                MenuCloseBook.IsEnabled = false;
-                MenuCloseChapter.IsEnabled = false;
-                MenuCloseEssay.IsEnabled = false;
-                MenuBookInfo.IsEnabled = false;
-                MenuChapterInfo.IsEnabled = false;
-                MenuExport.IsEnabled = false;
-                MenuExpand.IsEnabled = false;
-                MenuCollapse.IsEnabled = false;
-                MenuDelete.IsEnabled = false;
-                MenuRefresh.IsEnabled = false;
-                MenuFindAndReplace.IsEnabled = false;
-                BtnCreateChapter.IsEnabled = false;
-                BtnCreateEssay.IsEnabled = false;
-                //文本编辑可用性
-                FileContent.IsEnabled = false;
-                EssayName.IsEnabled = false;
+            ////未打开书籍，未打开卷册，未打开文章
+            //if (state == 0)
+            //{
+            //    //按钮可用性
+            //    MenuCreateChapter.IsEnabled = false;
+            //    MenuCreateEssay.IsEnabled = false;
+            //    MenuSave.IsEnabled = false;
+            //    MenuSaveAs.IsEnabled = false;
+            //    MenuCloseBook.IsEnabled = false;
+            //    MenuCloseChapter.IsEnabled = false;
+            //    MenuCloseEssay.IsEnabled = false;
+            //    MenuBookInfo.IsEnabled = false;
+            //    MenuChapterInfo.IsEnabled = false;
+            //    MenuExport.IsEnabled = false;
+            //    MenuExpand.IsEnabled = false;
+            //    MenuCollapse.IsEnabled = false;
+            //    MenuDelete.IsEnabled = false;
+            //    MenuRefresh.IsEnabled = false;
+            //    MenuFindAndReplace.IsEnabled = false;
+            //    BtnCreateChapter.IsEnabled = false;
+            //    BtnCreateEssay.IsEnabled = false;
+            //    //文本编辑可用性
+            //    FileContent.IsEnabled = false;
+            //    EssayName.IsEnabled = false;
 
-            }
-            //打开了书籍，未打开卷册，未打开文章
-            else if (state == 1)
-            {
-                //按钮可用性
-                MenuCreateChapter.IsEnabled = true;
-                MenuCreateEssay.IsEnabled = true;
-                MenuSave.IsEnabled = false;
-                MenuSaveAs.IsEnabled = false;
-                MenuCloseBook.IsEnabled = true;
-                MenuCloseChapter.IsEnabled = false;
-                MenuCloseEssay.IsEnabled = false;
-                MenuBookInfo.IsEnabled = true;
-                MenuChapterInfo.IsEnabled = false;
-                MenuExport.IsEnabled = true;
-                MenuExpand.IsEnabled = true;
-                MenuCollapse.IsEnabled = true;
-                MenuDelete.IsEnabled = true;
-                MenuRefresh.IsEnabled = true;
-                MenuFindAndReplace.IsEnabled = false;
-                BtnCreateChapter.IsEnabled = true;
-                BtnCreateEssay.IsEnabled = true;
-                //文本编辑可用性
-                FileContent.IsEnabled = false;
-                EssayName.IsEnabled = false;
-            }
-            //打开了书籍，打开了卷册，未打开文章
-            else if (state == 2)
-            {
-                //按钮可用性
-                MenuCreateChapter.IsEnabled = true;
-                MenuCreateEssay.IsEnabled = true;
-                MenuSave.IsEnabled = false;
-                MenuSaveAs.IsEnabled = false;
-                MenuCloseBook.IsEnabled = true;
-                MenuCloseChapter.IsEnabled = true;
-                MenuCloseEssay.IsEnabled = false;
-                MenuBookInfo.IsEnabled = true;
-                MenuChapterInfo.IsEnabled = true;
-                MenuExport.IsEnabled = true;
-                MenuExpand.IsEnabled = true;
-                MenuCollapse.IsEnabled = true;
-                MenuDelete.IsEnabled = true;
-                MenuRefresh.IsEnabled = true;
-                MenuFindAndReplace.IsEnabled = false;
-                BtnCreateChapter.IsEnabled = true;
-                BtnCreateEssay.IsEnabled = true;
-                //文本编辑可用性
-                FileContent.IsEnabled = false;
-                EssayName.IsEnabled = true;
-            }
-            //打开了书籍，打开了卷册，打开了文章
-            else if (state == 3)
-            {
-                //按钮可用性
-                MenuCreateChapter.IsEnabled = true;
-                MenuCreateEssay.IsEnabled = true;
-                MenuSave.IsEnabled = true;
-                MenuSaveAs.IsEnabled = true;
-                MenuCloseBook.IsEnabled = true;
-                MenuCloseChapter.IsEnabled = true;
-                MenuCloseEssay.IsEnabled = true;
-                MenuBookInfo.IsEnabled = true;
-                MenuChapterInfo.IsEnabled = true;
-                MenuExport.IsEnabled = true;
-                MenuExpand.IsEnabled = true;
-                MenuCollapse.IsEnabled = true;
-                MenuDelete.IsEnabled = true;
-                MenuRefresh.IsEnabled = true;
-                MenuFindAndReplace.IsEnabled = true;
-                BtnCreateChapter.IsEnabled = true;
-                BtnCreateEssay.IsEnabled = true;
-                //文本编辑可用性
-                FileContent.IsEnabled = true;
-                EssayName.IsEnabled = true;
-            }
+            //}
+            ////打开了书籍，未打开卷册，未打开文章
+            //else if (state == 1)
+            //{
+            //    //按钮可用性
+            //    MenuCreateChapter.IsEnabled = true;
+            //    MenuCreateEssay.IsEnabled = true;
+            //    MenuSave.IsEnabled = false;
+            //    MenuSaveAs.IsEnabled = false;
+            //    MenuCloseBook.IsEnabled = true;
+            //    MenuCloseChapter.IsEnabled = false;
+            //    MenuCloseEssay.IsEnabled = false;
+            //    MenuBookInfo.IsEnabled = true;
+            //    MenuChapterInfo.IsEnabled = false;
+            //    MenuExport.IsEnabled = true;
+            //    MenuExpand.IsEnabled = true;
+            //    MenuCollapse.IsEnabled = true;
+            //    MenuDelete.IsEnabled = true;
+            //    MenuRefresh.IsEnabled = true;
+            //    MenuFindAndReplace.IsEnabled = false;
+            //    BtnCreateChapter.IsEnabled = true;
+            //    BtnCreateEssay.IsEnabled = true;
+            //    //文本编辑可用性
+            //    FileContent.IsEnabled = false;
+            //    EssayName.IsEnabled = false;
+            //}
+            ////打开了书籍，打开了卷册，未打开文章
+            //else if (state == 2)
+            //{
+            //    //按钮可用性
+            //    MenuCreateChapter.IsEnabled = true;
+            //    MenuCreateEssay.IsEnabled = true;
+            //    MenuSave.IsEnabled = false;
+            //    MenuSaveAs.IsEnabled = false;
+            //    MenuCloseBook.IsEnabled = true;
+            //    MenuCloseChapter.IsEnabled = true;
+            //    MenuCloseEssay.IsEnabled = false;
+            //    MenuBookInfo.IsEnabled = true;
+            //    MenuChapterInfo.IsEnabled = true;
+            //    MenuExport.IsEnabled = true;
+            //    MenuExpand.IsEnabled = true;
+            //    MenuCollapse.IsEnabled = true;
+            //    MenuDelete.IsEnabled = true;
+            //    MenuRefresh.IsEnabled = true;
+            //    MenuFindAndReplace.IsEnabled = false;
+            //    BtnCreateChapter.IsEnabled = true;
+            //    BtnCreateEssay.IsEnabled = true;
+            //    //文本编辑可用性
+            //    FileContent.IsEnabled = false;
+            //    EssayName.IsEnabled = true;
+            //}
+            ////打开了书籍，打开了卷册，打开了文章
+            //else if (state == 3)
+            //{
+            //    //按钮可用性
+            //    MenuCreateChapter.IsEnabled = true;
+            //    MenuCreateEssay.IsEnabled = true;
+            //    MenuSave.IsEnabled = true;
+            //    MenuSaveAs.IsEnabled = true;
+            //    MenuCloseBook.IsEnabled = true;
+            //    MenuCloseChapter.IsEnabled = true;
+            //    MenuCloseEssay.IsEnabled = true;
+            //    MenuBookInfo.IsEnabled = true;
+            //    MenuChapterInfo.IsEnabled = true;
+            //    MenuExport.IsEnabled = true;
+            //    MenuExpand.IsEnabled = true;
+            //    MenuCollapse.IsEnabled = true;
+            //    MenuDelete.IsEnabled = true;
+            //    MenuRefresh.IsEnabled = true;
+            //    MenuFindAndReplace.IsEnabled = true;
+            //    BtnCreateChapter.IsEnabled = true;
+            //    BtnCreateEssay.IsEnabled = true;
+            //    //文本编辑可用性
+            //    FileContent.IsEnabled = true;
+            //    EssayName.IsEnabled = true;
+            //}
         }
         /// <summary>
         /// 设置内部展开状态
@@ -810,276 +804,167 @@ namespace E.Writer
         /// </summary>
         private void CreateContextMenu()
         {
-            #region 实例化
-            ContextMenu CM = new ContextMenu();
-            Separator[] separators = new Separator[10];
-            for (int i = 0; i < separators.Length; i++)
-            {
-                separators[i] = new Separator();
-            }
+        //    MenuSave = new MenuItem
+        //    {
+        //        Header = FindResource("保存文章"),
+        //        InputGestureText = "Ctrl+S",
+        //        IsEnabled = true
+        //    };
+        //    MenuSave.Click += new RoutedEventHandler(MenuSave_Click);
+        //    MenuSaveAs = new MenuItem
+        //    {
+        //        Header = FindResource("另存为文章"),
+        //        InputGestureText = "Ctrl+Shift+S",
+        //        IsEnabled = true
+        //    };
+        //    MenuSaveAs.Click += new RoutedEventHandler(MenuSaveAs_Click);
+        //    MenuExport = new MenuItem
+        //    {
+        //        Header = FindResource("导出全书"),
+        //        InputGestureText = "Ctrl+E",
+        //        IsEnabled = true
+        //    };
+        //    MenuExport.Click += new RoutedEventHandler(MenuExport_Click);
+        //    MenuCloseBook = new MenuItem
+        //    {
+        //        Header = FindResource("关闭书籍"),
+        //        InputGestureText = "Ctrl+Q",
+        //        IsEnabled = true
+        //    };
+        //    MenuCloseBook.Click += new RoutedEventHandler(MenuCloseBook_Click);
+        //    MenuCloseChapter = new MenuItem
+        //    {
+        //        Header = FindResource("关闭卷册"),
+        //        InputGestureText = "Ctrl+Alt+Q",
+        //        IsEnabled = true
+        //    };
+        //    MenuCloseChapter.Click += new RoutedEventHandler(MenuCloseChapter_Click);
+        //    MenuCloseEssay = new MenuItem
+        //    {
+        //        Header = FindResource("关闭文章"),
+        //        InputGestureText = "Ctrl+Shift+Q",
+        //        IsEnabled = true
+        //    };
+        //    MenuCloseEssay.Click += new RoutedEventHandler(MenuCloseEssay_Click);
+        //    MenuBookInfo = new MenuItem
+        //    {
+        //        Header = FindResource("书籍信息"),
+        //        InputGestureText = "Ctrl+M",
+        //        IsEnabled = true
+        //    };
+        //    MenuBookInfo.Click += new RoutedEventHandler(MenuBookInfo_Click);
+        //    MenuChapterInfo = new MenuItem
+        //    {
+        //        Header = FindResource("卷册信息"),
+        //        InputGestureText = "Ctrl+Alt+M",
+        //        IsEnabled = true
+        //    };
+        //    MenuChapterInfo.Click += new RoutedEventHandler(MenuChapterInfo_Click);
+        //    MenuCloseEW = new MenuItem
+        //    {
+        //        Header = FindResource("退出"),
+        //        InputGestureText = "Alt+F4",
+        //        IsEnabled = true
+        //    };
+        //    MenuCloseEW.Click += new RoutedEventHandler(MenuCloseEW_Click);
 
-            //一级菜单实例化
-            MenuFile = new MenuItem
-            {
-                Header = FindResource("文件")
-            };
-            MenuEdit = new MenuItem
-            {
-                Header = FindResource("编辑")
-            };
-            MenuWindow = new MenuItem
-            {
-                Header = FindResource("窗口")
-            };
-            MenuHelp = new MenuItem
-            {
-                Header = FindResource("帮助"),
-                InputGestureText = "F1"
-            };
+        //    //二级菜单实例化 MenuEdit
+        //    MenuUndo = new MenuItem
+        //    {
+        //        Header = "撤销",
+        //        InputGestureText = "Ctrl+Z"
+        //    };
+        //    MenuUndo.Click += new RoutedEventHandler(MenuUndo_Click);
+        //    MenuRedo = new MenuItem
+        //    {
+        //        Header = "重做",
+        //        InputGestureText = "Ctrl+Y"
+        //    };
+        //    MenuRedo.Click += new RoutedEventHandler(MenuRedo_Click);
+        //    MenuCut = new MenuItem
+        //    {
+        //        Header = "剪切",
+        //        InputGestureText = "Ctrl+X",
+        //        IsEnabled = true
+        //    };
+        //    MenuCut.Click += new RoutedEventHandler(MenuCut_Click);
+        //    MenuCopy = new MenuItem
+        //    {
+        //        Header = "复制",
+        //        InputGestureText = "Ctrl+C",
+        //        IsEnabled = true
+        //    };
+        //    MenuCopy.Click += new RoutedEventHandler(MenuCopy_Click);
+        //    MenuPaste = new MenuItem
+        //    {
+        //        Header = "粘贴",
+        //        InputGestureText = "Ctrl+V"
+        //    };
+        //    MenuPaste.Click += new RoutedEventHandler(MenuPaste_Click);
+        //    MenuSelectAll = new MenuItem
+        //    {
+        //        Header = "全选",
+        //        InputGestureText = "Ctrl+A"
+        //    };
+        //    MenuSelectAll.Click += new RoutedEventHandler(MenuSelectAll_Click);
+        //    MenuFindAndReplace = new MenuItem
+        //    {
+        //        Header = FindResource("查找替换"),
+        //        InputGestureText = "Ctrl+F",
+        //        IsEnabled = true
+        //    };
+        //    MenuFindAndReplace.Click += new RoutedEventHandler(MenuFindAndReplace_Click);
+        //    MenuToTraditional = new MenuItem
+        //    {
+        //        Header = "转换为繁体",
+        //        IsEnabled = true
+        //    };
+        //    MenuToTraditional.Click += new RoutedEventHandler(MenuToTraditional_Click);
+        //    MenuToSimplified = new MenuItem
+        //    {
+        //        Header = "转换为简体",
+        //        IsEnabled = true
+        //    };
+        //    MenuToSimplified.Click += new RoutedEventHandler(MenuToSimplified_Click);
+        //    MenuDelete = new MenuItem
+        //    {
+        //        Header = FindResource("删除选中"),
+        //        InputGestureText = "Delete",
+        //        IsEnabled = true
+        //    };
+        //    MenuDelete.Click += new RoutedEventHandler(MenuDelete_Click);
 
-            //二级菜单实例化 MenuFile
-            MenuOpen = new MenuItem
-            {
-                Header = FindResource("打开书籍"),
-                InputGestureText = "Ctrl+O",
-                IsEnabled = true
-            };
-            MenuOpen.Click += new RoutedEventHandler(MenuOpen_Click);
-            MenuCreateBook = new MenuItem
-            {
-                Header = FindResource("创建书籍"),
-                InputGestureText = "Ctrl+B",
-                IsEnabled = true
-            };
-            MenuCreateBook.Click += new RoutedEventHandler(MenuCreateBook_Click);
-            MenuCreateChapter = new MenuItem
-            {
-                Header = FindResource("创建卷册"),
-                InputGestureText = "Ctrl+Alt+B",
-                IsEnabled = true
-            };
-            MenuCreateChapter.Click += new RoutedEventHandler(MenuCreateChapter_Click);
-            MenuCreateEssay = new MenuItem
-            {
-                Header = FindResource("创建文章"),
-                InputGestureText = "Ctrl+Shift+B",
-                IsEnabled = true
-            };
-            MenuCreateEssay.Click += new RoutedEventHandler(MenuCreateEssay_Click);
-            MenuSave = new MenuItem
-            {
-                Header = FindResource("保存文章"),
-                InputGestureText = "Ctrl+S",
-                IsEnabled = true
-            };
-            MenuSave.Click += new RoutedEventHandler(MenuSave_Click);
-            MenuSaveAs = new MenuItem
-            {
-                Header = FindResource("另存为文章"),
-                InputGestureText = "Ctrl+Shift+S",
-                IsEnabled = true
-            };
-            MenuSaveAs.Click += new RoutedEventHandler(MenuSaveAs_Click);
-            MenuExport = new MenuItem
-            {
-                Header = FindResource("导出全书"),
-                InputGestureText = "Ctrl+E",
-                IsEnabled = true
-            };
-            MenuExport.Click += new RoutedEventHandler(MenuExport_Click);
-            MenuCloseBook = new MenuItem
-            {
-                Header = FindResource("关闭书籍"),
-                InputGestureText = "Ctrl+Q",
-                IsEnabled = true
-            };
-            MenuCloseBook.Click += new RoutedEventHandler(MenuCloseBook_Click);
-            MenuCloseChapter = new MenuItem
-            {
-                Header = FindResource("关闭卷册"),
-                InputGestureText = "Ctrl+Alt+Q",
-                IsEnabled = true
-            };
-            MenuCloseChapter.Click += new RoutedEventHandler(MenuCloseChapter_Click);
-            MenuCloseEssay = new MenuItem
-            {
-                Header = FindResource("关闭文章"),
-                InputGestureText = "Ctrl+Shift+Q",
-                IsEnabled = true
-            };
-            MenuCloseEssay.Click += new RoutedEventHandler(MenuCloseEssay_Click);
-            MenuBookInfo = new MenuItem
-            {
-                Header = FindResource("书籍信息"),
-                InputGestureText = "Ctrl+M",
-                IsEnabled = true
-            };
-            MenuBookInfo.Click += new RoutedEventHandler(MenuBookInfo_Click);
-            MenuChapterInfo = new MenuItem
-            {
-                Header = FindResource("卷册信息"),
-                InputGestureText = "Ctrl+Alt+M",
-                IsEnabled = true
-            };
-            MenuChapterInfo.Click += new RoutedEventHandler(MenuChapterInfo_Click);
-            MenuCloseEW = new MenuItem
-            {
-                Header = FindResource("退出"),
-                InputGestureText = "Alt+F4",
-                IsEnabled = true
-            };
-            MenuCloseEW.Click += new RoutedEventHandler(MenuCloseEW_Click);
-
-            //二级菜单实例化 MenuEdit
-            MenuUndo = new MenuItem
-            {
-                Header = "撤销",
-                InputGestureText = "Ctrl+Z"
-            };
-            MenuUndo.Click += new RoutedEventHandler(MenuUndo_Click);
-            MenuRedo = new MenuItem
-            {
-                Header = "重做",
-                InputGestureText = "Ctrl+Y"
-            };
-            MenuRedo.Click += new RoutedEventHandler(MenuRedo_Click);
-            MenuCut = new MenuItem
-            {
-                Header = "剪切",
-                InputGestureText = "Ctrl+X",
-                IsEnabled = true
-            };
-            MenuCut.Click += new RoutedEventHandler(MenuCut_Click);
-            MenuCopy = new MenuItem
-            {
-                Header = "复制",
-                InputGestureText = "Ctrl+C",
-                IsEnabled = true
-            };
-            MenuCopy.Click += new RoutedEventHandler(MenuCopy_Click);
-            MenuPaste = new MenuItem
-            {
-                Header = "粘贴",
-                InputGestureText = "Ctrl+V"
-            };
-            MenuPaste.Click += new RoutedEventHandler(MenuPaste_Click);
-            MenuSelectAll = new MenuItem
-            {
-                Header = "全选",
-                InputGestureText = "Ctrl+A"
-            };
-            MenuSelectAll.Click += new RoutedEventHandler(MenuSelectAll_Click);
-            MenuFindAndReplace = new MenuItem
-            {
-                Header = FindResource("查找替换"),
-                InputGestureText = "Ctrl+F",
-                IsEnabled = true
-            };
-            MenuFindAndReplace.Click += new RoutedEventHandler(MenuFindAndReplace_Click);
-            MenuToTraditional = new MenuItem
-            {
-                Header = "转换为繁体",
-                IsEnabled = true
-            };
-            MenuToTraditional.Click += new RoutedEventHandler(MenuToTraditional_Click);
-            MenuToSimplified = new MenuItem
-            {
-                Header = "转换为简体",
-                IsEnabled = true
-            };
-            MenuToSimplified.Click += new RoutedEventHandler(MenuToSimplified_Click);
-            MenuDelete = new MenuItem
-            {
-                Header = FindResource("删除选中"),
-                InputGestureText = "Delete",
-                IsEnabled = true
-            };
-            MenuDelete.Click += new RoutedEventHandler(MenuDelete_Click);
-
-            //二级菜单实例化 MenuWindow
-            MenuHideDir = new MenuItem
-            {
-                Header = FindResource("隐藏目录"),
-                InputGestureText = "Shift+H",
-                IsEnabled = true
-            };
-            MenuHideDir.Click += new RoutedEventHandler(MenuHideDir_Click);
-            MenuRefresh = new MenuItem
-            {
-                Header = FindResource("刷新目录"),
-                InputGestureText = "Ctrl+R",
-                IsEnabled = true
-            };
-            MenuRefresh.Click += new RoutedEventHandler(MenuRefresh_Click);
-            MenuExpand = new MenuItem
-            {
-                Header = FindResource("展开目录"),
-                InputGestureText = "Ctrl+I",
-                IsEnabled = true
-            };
-            MenuExpand.Click += new RoutedEventHandler(MenuExpand_Click);
-            MenuCollapse = new MenuItem
-            {
-                Header = FindResource("收起目录"),
-                InputGestureText = "Ctrl+U",
-                IsEnabled = true
-            };
-            MenuCollapse.Click += new RoutedEventHandler(MenuCollapse_Click);
+        //    //二级菜单实例化 MenuWindow
+        //    MenuHideDir = new MenuItem
+        //    {
+        //        Header = FindResource("隐藏目录"),
+        //        InputGestureText = "Shift+H",
+        //        IsEnabled = true
+        //    };
+        //    MenuHideDir.Click += new RoutedEventHandler(MenuHideDir_Click);
+        //    MenuRefresh = new MenuItem
+        //    {
+        //        Header = FindResource("刷新目录"),
+        //        InputGestureText = "Ctrl+R",
+        //        IsEnabled = true
+        //    };
+        //    MenuRefresh.Click += new RoutedEventHandler(MenuRefresh_Click);
+        //    MenuExpand = new MenuItem
+        //    {
+        //        Header = FindResource("展开目录"),
+        //        InputGestureText = "Ctrl+I",
+        //        IsEnabled = true
+        //    };
+        //    MenuExpand.Click += new RoutedEventHandler(MenuExpand_Click);
+        //    MenuCollapse = new MenuItem
+        //    {
+        //        Header = FindResource("收起目录"),
+        //        InputGestureText = "Ctrl+U",
+        //        IsEnabled = true
+        //    };
+        //    MenuCollapse.Click += new RoutedEventHandler(MenuCollapse_Click);
             #endregion
 
-            #region 绑定
-            //一级菜单绑定
-            CM.Items.Add(MenuFile);
-            CM.Items.Add(MenuEdit);
-            CM.Items.Add(MenuWindow);
-            CM.Items.Add(MenuHelp);
-            //二级菜单绑定 MenuFile
-            MenuFile.Items.Add(MenuOpen);
-            MenuFile.Items.Add(separators[0]); //
-            MenuFile.Items.Add(MenuCreateBook);
-            MenuFile.Items.Add(MenuCreateChapter);
-            MenuFile.Items.Add(MenuCreateEssay);
-            MenuFile.Items.Add(separators[1]); //
-            MenuFile.Items.Add(MenuSave);
-            MenuFile.Items.Add(MenuSaveAs);
-            MenuFile.Items.Add(MenuExport);
-            MenuFile.Items.Add(separators[2]); //
-            MenuFile.Items.Add(MenuCloseBook);
-            MenuFile.Items.Add(MenuCloseChapter);
-            MenuFile.Items.Add(MenuCloseEssay);
-            MenuFile.Items.Add(separators[3]); //
-            MenuFile.Items.Add(MenuBookInfo);
-            MenuFile.Items.Add(MenuChapterInfo);
-            MenuFile.Items.Add(separators[4]); //
-            MenuFile.Items.Add(MenuCloseEW);
-            //二级菜单绑定 MenuEdit
-            MenuEdit.Items.Add(MenuUndo);
-            MenuEdit.Items.Add(MenuRedo);
-            MenuEdit.Items.Add(separators[5]); //
-            MenuEdit.Items.Add(MenuCut);
-            MenuEdit.Items.Add(MenuCopy);
-            MenuEdit.Items.Add(MenuPaste); //
-            MenuEdit.Items.Add(separators[6]);
-            MenuEdit.Items.Add(MenuSelectAll);
-            MenuEdit.Items.Add(MenuFindAndReplace);
-            MenuEdit.Items.Add(separators[7]); //
-            MenuEdit.Items.Add(MenuToTraditional);
-            MenuEdit.Items.Add(MenuToSimplified);
-            MenuEdit.Items.Add(separators[8]); //
-            MenuEdit.Items.Add(MenuDelete);
-            //二级菜单绑定 MenuWindow
-            MenuWindow.Items.Add(MenuHideDir);
-            MenuWindow.Items.Add(MenuRefresh);
-            MenuWindow.Items.Add(separators[9]); //
-            MenuWindow.Items.Add(MenuExpand);
-            MenuWindow.Items.Add(MenuCollapse);
-            //绑定右键菜单
-            MainGrid.ContextMenu = CM;
-            EssayName.ContextMenu = CM;
-            FileContent.ContextMenu = CM;
-            #endregion
-
-            CM.Placement = System.Windows.Controls.Primitives.PlacementMode.Left;
         }
         /// <summary>
         /// 创建计时器
@@ -1154,17 +1039,17 @@ namespace E.Writer
         {
             if (FileContent.SelectedText == "" || FileContent.SelectedText == null)
             {
-                MenuCut.IsEnabled = false;
-                MenuCopy.IsEnabled = false;
-                MenuToSimplified.IsEnabled = false;
-                MenuToTraditional.IsEnabled = false;
+                //MenuCut.IsEnabled = false;
+                //MenuCopy.IsEnabled = false;
+                //MenuToSimplified.IsEnabled = false;
+                //MenuToTraditional.IsEnabled = false;
             }
             else
             {
-                MenuCut.IsEnabled = true;
-                MenuCopy.IsEnabled = true;
-                MenuToSimplified.IsEnabled = true;
-                MenuToTraditional.IsEnabled = true;
+                //MenuCut.IsEnabled = true;
+                //MenuCopy.IsEnabled = true;
+                //MenuToSimplified.IsEnabled = true;
+                //MenuToTraditional.IsEnabled = true;
             }
         }
         /// <summary>
@@ -2286,20 +2171,13 @@ namespace E.Writer
         /// <summary>
         /// 隐藏目录区
         /// </summary>
-        public void HideCenterArea()
+        public void HidePanCenter()
         {
-            if (CenterArea.Visibility == Visibility.Visible)
+            if (PanCenter.Visibility == Visibility.Visible)
             {
-                CenterArea.Visibility = Visibility.Collapsed;
+                PanCenter.Visibility = Visibility.Collapsed;
             }
         }
-        /// <summary>
-        /// 切换目录区
-        /// </summary>
-        public void SwichCenterArea()
-        {
-        }
-        #endregion
 
         #region 事件
         //窗口事件
@@ -2324,6 +2202,13 @@ namespace E.Writer
             RefreshTitle();
 
             SetElementState(0);
+
+
+            LoadLanguage();
+            LoadThemeItem();
+            LoadFontsItem();
+            RefreshPreferences();
+            ShowMessage("已载入");
         }
         /// <summary>
         /// 主窗口关闭事件
@@ -2372,7 +2257,7 @@ namespace E.Writer
         /// <summary>
         /// EssayName回车 重命名
         /// </summary>
-        private void EssayName_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        private void EssayName_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
@@ -2506,7 +2391,7 @@ namespace E.Writer
         /// <summary>
         /// FileContent回车 自动缩进
         /// </summary>
-        private void FileContent_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        private void FileContent_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
@@ -2636,7 +2521,7 @@ namespace E.Writer
         /// </summary>
         private void BtnHideDir_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            HideCenterArea();
+            HidePanCenter();
         }
 
         //其它事件
@@ -2663,7 +2548,7 @@ namespace E.Writer
         /// <summary>
         /// 主窗口快捷键
         /// </summary>
-        private void Main_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        private void Main_KeyUp(object sender, KeyEventArgs e)
         {
             //若打开了书
             if (SelectedBook != null)
@@ -2753,7 +2638,7 @@ namespace E.Writer
             { CreateBook(); }
             //Shift+H 隐藏目录
             if (e.Key == Key.H && (e.KeyboardDevice.IsKeyDown(Key.LeftShift) || e.KeyboardDevice.IsKeyDown(Key.RightShift)))
-            { HideCenterArea(); }
+            { HidePanCenter(); }
             //FT 切换下个主题
             if (e.Key == Key.T && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
             { SetNextTheme(); }
@@ -2761,7 +2646,7 @@ namespace E.Writer
         /// <summary>
         /// 目录区快捷键
         /// </summary>
-        private void FilesTree_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        private void FilesTree_KeyUp(object sender, KeyEventArgs e)
         {
             //Enter选择节点
             if (e.Key == Key.Enter)
@@ -2788,14 +2673,14 @@ namespace E.Writer
             }
         }
 
-
-        private void DirectoryButton_Click(object sender, RoutedEventArgs e)
+        //界面按钮事件
+        private void BtnFile_Click(object sender, RoutedEventArgs e)
         {
-            if (CenterArea.Visibility == Visibility.Visible)
+            if (PanCenter.Visibility == Visibility.Visible)
             {
                 if (CenterDirectoryPage.Visibility == Visibility.Visible)
                 {
-                    CenterArea.Visibility = Visibility.Collapsed;
+                    PanCenter.Visibility = Visibility.Collapsed;
                 }
                 else
                 {
@@ -2806,19 +2691,27 @@ namespace E.Writer
             }
             else
             {
-                CenterArea.Visibility = Visibility.Visible;
+                PanCenter.Visibility = Visibility.Visible;
                 CenterDirectoryPage.Visibility = Visibility.Visible;
                 CenterSettingPage.Visibility = Visibility.Collapsed;
                 CenterAboutPage.Visibility = Visibility.Collapsed;
             }
         }
-        private void SettingButton_Click(object sender, RoutedEventArgs e)
+        private void BtnEdit_Click(object sender, RoutedEventArgs e)
         {
-            if (CenterArea.Visibility == Visibility.Visible)
+
+        }
+        private void BtnView_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void BtnSetting_Click(object sender, RoutedEventArgs e)
+        {
+            if (PanCenter.Visibility == Visibility.Visible)
             {
                 if (CenterSettingPage.Visibility == Visibility.Visible)
                 {
-                    CenterArea.Visibility = Visibility.Collapsed;
+                    PanCenter.Visibility = Visibility.Collapsed;
                 }
                 else
                 {
@@ -2829,19 +2722,19 @@ namespace E.Writer
             }
             else
             {
-                CenterArea.Visibility = Visibility.Visible;
+                PanCenter.Visibility = Visibility.Visible;
                 CenterDirectoryPage.Visibility = Visibility.Collapsed;
                 CenterSettingPage.Visibility = Visibility.Visible;
                 CenterAboutPage.Visibility = Visibility.Collapsed;
             }
         }
-        private void AboutButton_Click(object sender, RoutedEventArgs e)
+        private void BtnAbout_Click(object sender, RoutedEventArgs e)
         {
-            if (CenterArea.Visibility == Visibility.Visible)
+            if (PanCenter.Visibility == Visibility.Visible)
             {
                 if (CenterAboutPage.Visibility == Visibility.Visible)
                 {
-                    CenterArea.Visibility = Visibility.Collapsed;
+                    PanCenter.Visibility = Visibility.Collapsed;
                 }
                 else
                 {
@@ -2852,46 +2745,46 @@ namespace E.Writer
             }
             else
             {
-                CenterArea.Visibility = Visibility.Visible;
+                PanCenter.Visibility = Visibility.Visible;
                 CenterDirectoryPage.Visibility = Visibility.Collapsed;
                 CenterSettingPage.Visibility = Visibility.Collapsed;
                 CenterAboutPage.Visibility = Visibility.Visible;
             }
         }
-        private void CheckNewButton_Click(object sender, RoutedEventArgs e)
+        private void BtnCheckNew_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("explorer.exe", AppInfo.InfoPage);
         }
-        private void ClearRunInfoButton_Click(object sender, RoutedEventArgs e)
+        private void BtnClearRunInfo_Click(object sender, RoutedEventArgs e)
         {
             ClearRunInfo();
         }
-        private void HomePageButton_Click(object sender, RoutedEventArgs e)
+        private void BtnHomePage_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("explorer.exe", AppInfo.HomePage);
         }
-        private void InfoPageButton_Click(object sender, RoutedEventArgs e)
+        private void BtnInfoPage_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("explorer.exe", AppInfo.InfoPage);
         }
-        private void DownloadPage_Click(object sender, RoutedEventArgs e)
+        private void BtnDownloadPage_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("explorer.exe", AppInfo.DownloadPage);
         }
-        private void GitHubPage_Click(object sender, RoutedEventArgs e)
+        private void BtnGitHubPage_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("explorer.exe", AppInfo.GitHubPage);
         }
-        private void QQGroup_Click(object sender, RoutedEventArgs e)
+        private void BtnQQGroup_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("explorer.exe", AppInfo.QQGroup);
         }
-        private void BitCoinAddress_Click(object sender, RoutedEventArgs e)
+        private void BtnBitCoinAddress_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("explorer.exe", AppInfo.BitCoinAddress);
         }
 
-        //菜单事件
+        //菜单按钮事件
         /// <summary>
         /// 点击 文件-创建文章
         /// </summary>
@@ -2906,10 +2799,6 @@ namespace E.Writer
         {
             CreateChapter();
         }
-
-
-
-
         /// <summary>
         /// 点击 文件-创建书籍
         /// </summary>
@@ -3111,7 +3000,7 @@ namespace E.Writer
         /// </summary>
         private void MenuHideDir_Click(object sender, RoutedEventArgs e)
         {
-            HideCenterArea();
+            HidePanCenter();
         }
         #endregion
 
@@ -3284,15 +3173,6 @@ namespace E.Writer
             //Message.Content = FindResource(resourceName);
         }
 
-        //窗口事件
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            LoadLanguage();
-            LoadThemeItem();
-            LoadFontsItem();
-            RefreshPreferences();
-            ShowMessage("已载入");
-        }
 
         //偏好设置页事件
         private void ShowRunInfo_Checked(object sender, RoutedEventArgs e)
@@ -3309,6 +3189,8 @@ namespace E.Writer
             //显示消息
             ShowMessage("已更改");
         }
+
+
         private void AutoOpenBook_Checked(object sender, RoutedEventArgs e)
         {
             Properties.User.Default.isAutoOpenBook = true;
@@ -3619,6 +3501,10 @@ namespace E.Writer
         {
             ResetPreferences();
             ShowMessage("已重置");
+        }
+        private void BtnApply_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
 
