@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E.Number", "E.Number\E.Numb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E.Linker", "E.Linker\E.Linker.csproj", "{3ABAE54A-6BEC-48DF-8661-EFF05AE1B347}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "E.Class", "E.Class\E.Class.csproj", "{B60DEF26-A70F-412B-99A9-3DAF1E156C16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "E.Utility", "E.Utility\E.Utility.csproj", "{B60DEF26-A70F-412B-99A9-3DAF1E156C16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

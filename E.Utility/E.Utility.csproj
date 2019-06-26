@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>E.Class</RootNamespace>
-    <AssemblyName>E.Class</AssemblyName>
+    <RootNamespace>E.Utility</RootNamespace>
+    <AssemblyName>E.Utility</AssemblyName>
     <Authors>E</Authors>
   </PropertyGroup>
 

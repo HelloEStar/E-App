@@ -23,7 +23,8 @@ using MessageBox = System.Windows.MessageBox;
 using ContextMenu = System.Windows.Controls.ContextMenu;
 using MenuItem = System.Windows.Controls.MenuItem;
 
-using E.Class;
+using E.Utility;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace E.Writer
 {
@@ -66,10 +67,6 @@ namespace E.Writer
         /// </summary>
         public bool IsSaved { get; private set; } = true;
         /// <summary>
-        /// 是否隐藏左侧目录
-        /// </summary>
-        public bool IsHideDir { get; private set; } = false;
-        /// <summary>
         /// 主题集合
         /// </summary>
         public List<TextBlock> Themes { get; set; } = new List<TextBlock>();     
@@ -95,7 +92,6 @@ namespace E.Writer
                  MenuCloseBook, MenuCloseChapter, MenuCloseEssay, MenuBookInfo, MenuChapterInfo, MenuCloseEW;
         MenuItem MenuUndo, MenuRedo, MenuCut, MenuCopy, MenuPaste, MenuSelectAll, MenuFindAndReplace, MenuToTraditional, MenuToSimplified, MenuDelete;
         MenuItem MenuHideDir, MenuRefresh, MenuExpand, MenuCollapse;
-        MenuItem MenuPreference, MenuAbout, MenuLink;
         #endregion 
 
         #region 方法
@@ -174,7 +170,6 @@ namespace E.Writer
             FileContent.FontSize = Properties.User.Default.fontSize;
             //初始化提示消息
             FilesTree.ToolTip = FindResource("创建或打开以开始");
-            NodePath.Text = FindResource("未打开任何书籍").ToString();
             HelpMessage.Content = FindResource("创建或打开以开始");
 
             //检测是否自动打开书
@@ -417,8 +412,8 @@ namespace E.Writer
         /// <param name="_skin">主题文件路径</param>
         private void SetSkin(string _skin)
         {
-            //目录区背景
-            LGrid.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "leftBackColor", _skin)));
+            //左侧区域配色
+            LeftArea.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "leftBackColor", _skin)));
             //书籍列表
             Books.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "booksBackColor", _skin)));
             Books.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "booksForeColor", _skin)));
@@ -431,16 +426,15 @@ namespace E.Writer
             BtnCreateChapter.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "btnForeColor", _skin)));
             BtnCreateEssay.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "btnBackColor", _skin)));
             BtnCreateEssay.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "btnForeColor", _skin)));
-            //路径提示
-            NodePath.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "booksForeColor", _skin)));
             //文件树
             FilesTree.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "treeBackColor", _skin)));
             FilesTree.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "treeForeColor", _skin)));
-            //中间背景
-            GridSplitter.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "midBackColor", _skin)));
-            BtnHideDir.Background = GridSplitter.Background;
-            //编辑区背景
-            RGrid.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "rightBackColor", _skin)));
+
+            //中侧区域配色
+            CenterArea.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "midBackColor", _skin)));
+
+            //右侧区域配色
+            RightArea.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "rightBackColor", _skin)));
             //文章名与文章内容
             EssayName.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "nameBackColor", _skin)));
             EssayName.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "nameForeColor", _skin)));
@@ -449,15 +443,9 @@ namespace E.Writer
             FileContent.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "textForeColor", _skin)));
             FileContent.CaretBrush = FileContent.Foreground;
             //信息显示
-            //LabelFont.Foreground = new SolidColorBrush(SetColor(ReadIniKeys("mainWindow", "infoForeColor", _skin)));
-            //LabelTextSize.Foreground = new SolidColorBrush(SetColor(ReadIniKeys("mainWindow", "infoForeColor", _skin)));
-            //TextSize.Foreground = new SolidColorBrush(SetColor(ReadIniKeys("mainWindow", "infoForeColor", _skin)));
-            //TextSize.CaretBrush = TextSize.Foreground;
             RowAndColumn.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "infoForeColor", _skin)));
             Words.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "infoForeColor", _skin)));
             HelpMessage.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("mainWindow", "infoForeColor", _skin)));
-            //CBFonts.Background = new SolidColorBrush(SetColor(ReadIniKeys("mainWindow", "infoBackColor", _skin)));
-            //CBFonts.Foreground = new SolidColorBrush(SetColor(ReadIniKeys("mainWindow", "infoForeColor", _skin)));
         }
         /// <summary>
         /// 更改主窗口右键菜单和窗口控件状态
@@ -615,8 +603,6 @@ namespace E.Writer
             SelectedNode = (FileNode)FilesTree.SelectedItem;
             if (SelectedNode != null)
             {
-                NodePath.Text = SelectedNode.Path;
-                NodePath.ToolTip = SelectedNode.Path;
                 //如果选中的节点是文件，且双击
                 if (SelectedNode.IsFile)
                 {
@@ -1039,26 +1025,6 @@ namespace E.Writer
                 IsEnabled = true
             };
             MenuCollapse.Click += new RoutedEventHandler(MenuCollapse_Click);
-
-            //二级菜单实例化 MenuHelp
-            MenuPreference = new MenuItem
-            {
-                Header = FindResource("偏好设置"),
-                InputGestureText = "F1"
-            };
-            MenuPreference.Click += new RoutedEventHandler(MenuPreference_Click);
-            MenuAbout = new MenuItem
-            {
-                Header = FindResource("软件信息"),
-                InputGestureText = "F2"
-            };
-            MenuAbout.Click += new RoutedEventHandler(MenuAbout_Click);
-            MenuLink = new MenuItem
-            {
-                Header = FindResource("相关链接"),
-                InputGestureText = "F3"
-            };
-            MenuLink.Click += new RoutedEventHandler(MenuLink_Click);
             #endregion
 
             #region 绑定
@@ -1107,17 +1073,12 @@ namespace E.Writer
             MenuWindow.Items.Add(separators[9]); //
             MenuWindow.Items.Add(MenuExpand);
             MenuWindow.Items.Add(MenuCollapse);
-            //二级菜单绑定 MenuHelp
-            MenuHelp.Items.Add(MenuPreference);
-            MenuHelp.Items.Add(MenuAbout);
-            MenuHelp.Items.Add(MenuLink);
             //绑定右键菜单
             MainGrid.ContextMenu = CM;
             EssayName.ContextMenu = CM;
             FileContent.ContextMenu = CM;
             #endregion
 
-            //CM.Width = 600;
             CM.Placement = System.Windows.Controls.Primitives.PlacementMode.Left;
         }
         /// <summary>
@@ -1610,8 +1571,6 @@ namespace E.Writer
                 ChangeBook();
                 //显示书籍信息
                 GetBookInfo();
-                NodePath.Text = FindResource("选择一个项目显示路径").ToString();
-                NodePath.ToolTip = SelectedBookPath;
                 FilesTree.ToolTip = FindResource("当前书籍") + "：" + SelectedBook + Environment.NewLine + FindResource("书籍位置") + "：" + SelectedBookPath;
                 //改变标题
                 RefreshTitle();
@@ -1648,8 +1607,6 @@ namespace E.Writer
                 ChangeBook();
                 //显示书籍信息
                 GetBookInfo();
-                NodePath.Text = FindResource("选择一个项目显示路径").ToString();
-                NodePath.ToolTip = SelectedBookPath;
                 FilesTree.ToolTip = FindResource("当前书籍") + "：" + SelectedBook + Environment.NewLine + FindResource("书籍位置") + "：" + SelectedBookPath;
                 //刷新标题
                 RefreshTitle();
@@ -1680,8 +1637,6 @@ namespace E.Writer
                 SelectedEssay = null;
                 //获取卷册信息
                 GetChapterInfo();
-                NodePath.Text = SelectedChapterPath;
-                NodePath.ToolTip = SelectedChapterPath;
                 //刷新标题
                 RefreshTitle();
                 //更改主窗口控件状态
@@ -1732,8 +1687,6 @@ namespace E.Writer
                 EssayName.Text = System.IO.Path.GetFileNameWithoutExtension(SelectedEssayPath);
                 //改变控件状态
                 SetElementState(3);
-                NodePath.Text = SelectedEssayPath;
-                NodePath.ToolTip = SelectedEssayPath;
                 RefreshTitle();
                 //光标到最后
                 FileContent.Focus();
@@ -2007,8 +1960,6 @@ namespace E.Writer
             Words.ToolTip = null;
             Words.Content = FindResource("字数") + "：0";
             FilesTree.ToolTip = FindResource("创建或打开以开始");
-            NodePath.Text = FindResource("未打开任何书籍").ToString();
-            NodePath.ToolTip = null;
             //清空
             SelectedBook = null;
             SelectedBookPath = null;
@@ -2058,8 +2009,6 @@ namespace E.Writer
                 FileContent.Text = null;
                 Words.Content = FindResource("字数") + "：0";
                 Words.ToolTip = null;
-                NodePath.Text = FindResource("选择一个项目显示路径").ToString();
-                NodePath.ToolTip = null;
                 //清空
                 SelectedEssay = null;
                 SelectedEssayPath = null;
@@ -2108,8 +2057,6 @@ namespace E.Writer
                     //改变标题
                     RefreshTitle();
                 }
-                //提示消息
-                NodePath.Text = FindResource("选择一个项目显示路径").ToString();
                 //显示消息
                 ShowMessage("已删除文章", " " + name, false);
             }
@@ -2148,8 +2095,6 @@ namespace E.Writer
                     //改变标题
                     RefreshTitle();
                 }
-                //提示消息
-                NodePath.Text = FindResource("选择一个项目显示路径").ToString();
                 //显示消息
                 ShowMessage("已删除卷册", " " + name, false);
             }
@@ -2341,34 +2286,18 @@ namespace E.Writer
         /// <summary>
         /// 隐藏目录区
         /// </summary>
-        public void HideDir()
+        public void HideCenterArea()
         {
-            if (IsHideDir == false)
+            if (CenterArea.Visibility == Visibility.Visible)
             {
-                LeftArea.Width = new GridLength(0);
-                IsHideDir = true;
-                BtnHideDir.Content = ">";
-                MenuHideDir.Header = FindResource("显示目录");
-            }
-            else
-            {
-                LeftArea.Width = new GridLength(Properties.User.Default.DirWidth);
-                IsHideDir = false;
-                BtnHideDir.Content = "<";
-                MenuHideDir.Header = FindResource("隐藏目录");
+                CenterArea.Visibility = Visibility.Collapsed;
             }
         }
-
-        //菜单：帮助
         /// <summary>
-        /// 实例化帮助窗口，载入设置信息
+        /// 切换目录区
         /// </summary>
-        /// <param name="tab">选择打开的标签</param>
-        public void OpenHelp(int tab)
+        public void SwichCenterArea()
         {
-            HelpWindow Help = new HelpWindow(this);
-            Help.Show();
-            Help.MainTab.SelectedIndex = tab - 1;
         }
         #endregion
 
@@ -2432,27 +2361,6 @@ namespace E.Writer
                 SetAppSettingsOnQuit();
             }
         }
-        /// <summary>
-        /// 改变窗口尺寸时
-        /// </summary>
-        private void Main_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            if (Main.WindowState == WindowState.Maximized)
-            {
-                LeftArea.MaxWidth = Main.ActualWidth - 25;
-            }
-            if (Main.WindowState == WindowState.Normal)
-            {
-                LeftArea.MaxWidth = Main.Width - 25;
-            }
-        }
-        /// <summary>
-        /// 窗口状态改变时
-        /// </summary>
-        private void Main_StateChanged(object sender, EventArgs e)
-        {
-        }
-
         //UI交互事件
         /// <summary>
         /// EssayName获得焦点
@@ -2707,54 +2615,6 @@ namespace E.Writer
             SetSelectedNode(2);
         }
         /// <summary>
-        /// 目录区尺寸改变时
-        /// </summary>
-        private void LGrid_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            if (LGrid.ActualWidth < 230)
-            {
-                Thickness tk1 = new Thickness
-                {
-                    Left = 10,
-                    Top = 90,
-                    Right = 10,
-                    Bottom = 40
-                };
-                Thickness tk2 = new Thickness
-                {
-                    Left = 10,
-                    Top = 60,
-                };
-                Thickness tk3 = new Thickness
-                {
-                    Left = 67,
-                    Top = 60,
-                };
-                FilesTree.Margin = tk1;
-            }
-            else
-            {
-                Thickness tk1 = new Thickness
-                {
-                    Left = 10,
-                    Top = 60,
-                    Right = 10,
-                    Bottom = 40
-                };
-                Thickness tk2 = new Thickness
-                {
-                    Left = 124,
-                    Top = 30,
-                };
-                Thickness tk3 = new Thickness
-                {
-                    Left = 181,
-                    Top = 30,
-                };
-                FilesTree.Margin = tk1;
-            }
-        }
-        /// <summary>
         /// 书籍列表尺寸改变时
         /// </summary>
         private void Books_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -2772,34 +2632,11 @@ namespace E.Writer
             }
         }
         /// <summary>
-        /// 拖动中间分界
-        /// </summary>
-        private void GridSplitter_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            Properties.User.Default.DirWidth = (int)LeftArea.Width.Value;
-            if (LeftArea.Width == new GridLength(0))
-            {
-                IsHideDir = true;
-                BtnHideDir.Content = ">";
-                MenuHideDir.Header = FindResource("显示目录");
-            }
-            else if (LeftArea.Width != new GridLength(0))
-            {
-                IsHideDir = false;
-                BtnHideDir.Content = "<";
-                MenuHideDir.Header = FindResource("隐藏目录");
-            }
-            if (Properties.User.Default.DirWidth == 0)
-            {
-                Properties.User.Default.DirWidth = 243;
-            }
-        }
-        /// <summary>
         /// 隐藏目录按钮
         /// </summary>
         private void BtnHideDir_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            HideDir();
+            HideCenterArea();
         }
 
         //其它事件
@@ -2916,28 +2753,7 @@ namespace E.Writer
             { CreateBook(); }
             //Shift+H 隐藏目录
             if (e.Key == Key.H && (e.KeyboardDevice.IsKeyDown(Key.LeftShift) || e.KeyboardDevice.IsKeyDown(Key.RightShift)))
-            { HideDir(); }
-            //F1 帮助
-            if (e.Key == Key.F1)
-            {
-                OpenHelp(1);
-                e.Handled = true;
-            }
-            //F1 偏好设置
-            else if (e.Key == Key.F1)
-            {
-                OpenHelp(1);
-            }
-            //F2 软件信息
-            else if (e.Key == Key.F2)
-            {
-                OpenHelp(2);
-            }
-            //F3 相关链接
-            else if (e.Key == Key.F3)
-            {
-                OpenHelp(3);
-            }
+            { HideCenterArea(); }
             //FT 切换下个主题
             if (e.Key == Key.T && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
             { SetNextTheme(); }
@@ -2972,6 +2788,109 @@ namespace E.Writer
             }
         }
 
+
+        private void DirectoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (CenterArea.Visibility == Visibility.Visible)
+            {
+                if (CenterDirectoryPage.Visibility == Visibility.Visible)
+                {
+                    CenterArea.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    CenterDirectoryPage.Visibility = Visibility.Visible;
+                    CenterSettingPage.Visibility = Visibility.Collapsed;
+                    CenterAboutPage.Visibility = Visibility.Collapsed;
+                }
+            }
+            else
+            {
+                CenterArea.Visibility = Visibility.Visible;
+                CenterDirectoryPage.Visibility = Visibility.Visible;
+                CenterSettingPage.Visibility = Visibility.Collapsed;
+                CenterAboutPage.Visibility = Visibility.Collapsed;
+            }
+        }
+        private void SettingButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (CenterArea.Visibility == Visibility.Visible)
+            {
+                if (CenterSettingPage.Visibility == Visibility.Visible)
+                {
+                    CenterArea.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    CenterDirectoryPage.Visibility = Visibility.Collapsed;
+                    CenterSettingPage.Visibility = Visibility.Visible;
+                    CenterAboutPage.Visibility = Visibility.Collapsed;
+                }
+            }
+            else
+            {
+                CenterArea.Visibility = Visibility.Visible;
+                CenterDirectoryPage.Visibility = Visibility.Collapsed;
+                CenterSettingPage.Visibility = Visibility.Visible;
+                CenterAboutPage.Visibility = Visibility.Collapsed;
+            }
+        }
+        private void AboutButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (CenterArea.Visibility == Visibility.Visible)
+            {
+                if (CenterAboutPage.Visibility == Visibility.Visible)
+                {
+                    CenterArea.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    CenterDirectoryPage.Visibility = Visibility.Collapsed;
+                    CenterSettingPage.Visibility = Visibility.Collapsed;
+                    CenterAboutPage.Visibility = Visibility.Visible;
+                }
+            }
+            else
+            {
+                CenterArea.Visibility = Visibility.Visible;
+                CenterDirectoryPage.Visibility = Visibility.Collapsed;
+                CenterSettingPage.Visibility = Visibility.Collapsed;
+                CenterAboutPage.Visibility = Visibility.Visible;
+            }
+        }
+        private void CheckNewButton_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("explorer.exe", AppInfo.InfoPage);
+        }
+        private void ClearRunInfoButton_Click(object sender, RoutedEventArgs e)
+        {
+            ClearRunInfo();
+        }
+        private void HomePageButton_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("explorer.exe", AppInfo.HomePage);
+        }
+        private void InfoPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("explorer.exe", AppInfo.InfoPage);
+        }
+        private void DownloadPage_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("explorer.exe", AppInfo.DownloadPage);
+        }
+        private void GitHubPage_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("explorer.exe", AppInfo.GitHubPage);
+        }
+        private void QQGroup_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("explorer.exe", AppInfo.QQGroup);
+        }
+        private void BitCoinAddress_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("explorer.exe", AppInfo.BitCoinAddress);
+        }
+
         //菜单事件
         /// <summary>
         /// 点击 文件-创建文章
@@ -2987,6 +2906,10 @@ namespace E.Writer
         {
             CreateChapter();
         }
+
+
+
+
         /// <summary>
         /// 点击 文件-创建书籍
         /// </summary>
@@ -3188,37 +3111,525 @@ namespace E.Writer
         /// </summary>
         private void MenuHideDir_Click(object sender, RoutedEventArgs e)
         {
-            HideDir();
-        }
-        /// <summary>
-        /// 点击 打开帮助
-        /// </summary>
-        private void MenuHelp_Click(object sender, RoutedEventArgs e)
-        {
-            OpenHelp(1);
-        }
-        /// <summary>
-        /// 点击 偏好设置
-        /// </summary>
-        private void MenuPreference_Click(object sender, RoutedEventArgs e)
-        {
-            OpenHelp(1);
-        }
-        /// <summary>
-        /// 点击 软件信息
-        /// </summary>
-        private void MenuAbout_Click(object sender, RoutedEventArgs e)
-        {
-            OpenHelp(2);
-        }
-        /// <summary>
-        /// 点击 相关链接
-        /// </summary>
-        private void MenuLink_Click(object sender, RoutedEventArgs e)
-        {
-            OpenHelp(3);
+            HideCenterArea();
         }
         #endregion
+
+
+
+
+
+
+        /// <summary>
+        /// 语言列表
+        /// </summary>
+        private List<CategoryInfo> LanguageCategorys { get; set; } = new List<CategoryInfo>();
+
+        /// <summary>
+        /// 刷新偏好设置
+        /// </summary>
+        private void RefreshPreferences()
+        {
+            //启动时显示运行信息
+            ShowRunInfoCheckBox.IsChecked = Properties.User.Default.isShowRunInfo;
+            //自动开书
+            AutoOpenBookCheckBox.IsChecked = Properties.User.Default.isAutoOpenBook;
+            //自动书名号
+            AutoBrackets.IsChecked = Properties.User.Default.isAutoBrackets;
+            //自动补全
+            AutoCompletion.IsChecked = Properties.User.Default.isAutoCompletion;
+            //自动缩进
+            AutoIndentation.IsChecked = Properties.User.Default.isAutoIndentation;
+            //缩进数
+            AutoIndentations.Text = Properties.User.Default.autoIndentations.ToString();
+            //缩进数可编辑性
+            if ((bool)AutoIndentation.IsChecked) { AutoIndentations.IsEnabled = true; }
+            else { AutoIndentations.IsEnabled = false; }
+            //定时自动保存
+            AutoSaveEvery.IsChecked = Properties.User.Default.isAutoSaveEvery;
+            //定时自动保存时间间隔
+            AutoSaveTime.Text = Properties.User.Default.autoSaveMinute.ToString();
+            //时间间隔可编辑性
+            if ((bool)AutoSaveEvery.IsChecked) { AutoSaveTime.IsEnabled = true; }
+            else { AutoSaveTime.IsEnabled = false; }
+            //切换自动保存
+            AutoSaveWhenSwitch.IsChecked = Properties.User.Default.isAutoSaveWhenSwitch;
+            //定时自动备份
+            AutoBackup.IsChecked = Properties.User.Default.isAutoBackup;
+            //自动备份时间间隔
+            AutoBackupTime.Text = Properties.User.Default.autoBackupMinute.ToString();
+            //自动备份可编辑性
+            if ((bool)AutoBackup.IsChecked) { AutoBackupTime.IsEnabled = true; }
+            else { AutoBackupTime.IsEnabled = false; }
+            AutoBackup.ToolTip = "备份位置：" + System.Windows.Forms.Application.StartupPath + @"\" + Properties.User.Default.BackupDir;
+            //滚动条
+            ShowScrollBar.IsChecked = Properties.User.Default.isShowScrollBar;
+
+            //创建语言选项
+            SetLanguage(Properties.User.Default.language);
+            //获取、设置主题选项
+            SetThemeItem(Properties.User.Default.ThemePath);
+            //获取文章字体信息
+            TextSize.Text = Properties.User.Default.fontSize.ToString();
+            SetFontsItem(Properties.User.Default.fontName);
+        }
+
+        //载入
+        /// <summary>
+        /// 获取主题选项
+        /// </summary>
+        private void LoadThemeItem()
+        {
+            Skins.Items.Clear();
+            foreach (TextBlock item in Themes)
+            {
+                TextBlock theme = new TextBlock()
+                {
+                    Text = item.Text,
+                    ToolTip = item.ToolTip
+                };
+                Skins.Items.Add(theme);
+            }
+        }
+        /// <summary>
+        /// 创建语言选项
+        /// </summary>
+        private void LoadLanguage()
+        {
+            LanguageCategorys.Clear();
+            CategoryInfo zh_CN = new CategoryInfo() { Name = "中文（默认）", Value = "zh_CN" };
+            LanguageCategorys.Add(zh_CN);
+            CategoryInfo en_US = new CategoryInfo() { Name = "English", Value = "en_US" };
+            LanguageCategorys.Add(en_US);
+            //绑定数据，真正的赋值
+            CBSelectedLanguage.ItemsSource = LanguageCategorys;
+            //指定显示的内容
+            CBSelectedLanguage.DisplayMemberPath = "Name";
+            //指定选中后的能够获取到的内容
+            CBSelectedLanguage.SelectedValuePath = "Value";
+        }
+        /// <summary>
+        /// 获取字体选项
+        /// </summary>
+        private void LoadFontsItem()
+        {
+            CBFonts.Items.Clear();
+            foreach (FontFamily font in Fonts.SystemFontFamilies)
+            {
+                //动态的添加一个ListViewItem项
+                TextBlock label = new TextBlock
+                {
+                    Text = font.Source,
+                    FontFamily = font
+                };
+                CBFonts.Items.Add(label);
+            }
+        }
+
+        //设置
+        /// <summary>
+        /// 设置主题选项
+        /// </summary>
+        /// <param name="_theme">主题路径</param>
+        private void SetThemeItem(string _theme)
+        {
+            foreach (TextBlock item in Skins.Items)
+            {
+                if (item.ToolTip.ToString() == _theme)
+                {
+                    Skins.SelectedItem = item;
+                    break;
+                }
+            }
+        }
+        /// <summary>
+        /// 设置语言选项
+        /// </summary>
+        /// <param name="language">语言简拼</param>
+        private void SelectLanguage(string language)
+        {
+            foreach (CategoryInfo ci in LanguageCategorys)
+            {
+                if (ci.Value == language)
+                {
+                    CBSelectedLanguage.SelectedItem = ci;
+                    break;
+                }
+            }
+        }
+        /// <summary>
+        /// 设置字体选项
+        /// </summary>
+        private void SetFontsItem(string fontName)
+        {
+            foreach (TextBlock item in CBFonts.Items)
+            {
+                if (item.Text == fontName)
+                {
+                    CBFonts.SelectedItem = item;
+                    break;
+                }
+            }
+        }
+
+        //创建
+
+        /// <summary>
+        /// 显示消息
+        /// </summary>
+        /// <param name="resourceName">资源名</param>
+        private void ShowMessage(string resourceName)
+        {
+            //Message.Opacity = 1;
+            //Message.Content = FindResource(resourceName);
+        }
+
+        //窗口事件
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadLanguage();
+            LoadThemeItem();
+            LoadFontsItem();
+            RefreshPreferences();
+            ShowMessage("已载入");
+        }
+
+        //偏好设置页事件
+        private void ShowRunInfo_Checked(object sender, RoutedEventArgs e)
+        {
+            Properties.User.Default.isShowRunInfo = true;
+            SavePreferences();
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void ShowRunInfo_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Properties.User.Default.isShowRunInfo = false;
+            SavePreferences();
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoOpenBook_Checked(object sender, RoutedEventArgs e)
+        {
+            Properties.User.Default.isAutoOpenBook = true;
+            SavePreferences();
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoOpenBook_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Properties.User.Default.isAutoOpenBook = false;
+            SavePreferences();
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoBrackets_Checked(object sender, RoutedEventArgs e)
+        {
+            Properties.User.Default.isAutoBrackets = true;
+            SavePreferences();
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoBrackets_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Properties.User.Default.isAutoBrackets = false;
+            SavePreferences();
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoCompletion_Checked(object sender, RoutedEventArgs e)
+        {
+            Properties.User.Default.isAutoCompletion = true;
+            SavePreferences();
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoCompletion_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Properties.User.Default.isAutoCompletion = false;
+            SavePreferences();
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoIndentation_Checked(object sender, RoutedEventArgs e)
+        {
+            Properties.User.Default.isAutoIndentation = true;
+            SavePreferences();
+            AutoIndentations.IsEnabled = true;
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoIndentation_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Properties.User.Default.isAutoIndentation = false;
+            SavePreferences();
+            AutoIndentations.IsEnabled = false;
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoIndentations_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (AutoIndentations.Text != "")
+            {
+                try
+                {
+                    int t = int.Parse(AutoIndentations.Text);
+                    if (t > 0 && t < 1000)
+                    {
+                        Properties.User.Default.autoIndentations = t;
+                        SavePreferences();
+                        //显示消息
+                        ShowMessage("已更改");
+                    }
+                    else
+                    {
+                        AutoIndentations.Text = Properties.User.Default.autoIndentations.ToString();
+                        ShowMessage("输入1~999整数");
+                    }
+                }
+                catch (Exception)
+                {
+                    AutoIndentations.Text = Properties.User.Default.autoIndentations.ToString();
+                    ShowMessage("输入整数");
+                }
+            }
+        }
+        private void AutoSaveWhenSwitch_Checked(object sender, RoutedEventArgs e)
+        {
+            Properties.User.Default.isAutoSaveWhenSwitch = true;
+            SavePreferences();
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoSaveWhenSwitch_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Properties.User.Default.isAutoSaveWhenSwitch = false;
+            SavePreferences();
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoSaveEvery_Checked(object sender, RoutedEventArgs e)
+        {
+            Properties.User.Default.isAutoSaveEvery = true;
+            SavePreferences();
+            AutoSaveTime.IsEnabled = true;
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoSaveEvery_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Properties.User.Default.isAutoSaveEvery = false;
+            SavePreferences();
+            AutoSaveTime.IsEnabled = false;
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoSaveTime_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (AutoSaveTime.Text != "")
+            {
+                try
+                {
+                    int t = int.Parse(AutoSaveTime.Text);
+                    if (t > 0 && t < 1000)
+                    {
+                        TimeSpan ts = TimeSpan.FromMinutes(t);
+                        Properties.User.Default.autoSaveMinute = t;
+                        SavePreferences();
+                        AutoSaveTimer.Interval = ts;
+                        //显示消息
+                        ShowMessage("已更改");
+                    }
+                    else
+                    {
+                        AutoSaveTime.Text = Properties.User.Default.autoSaveMinute.ToString();
+                        ShowMessage("输入1~999整数");
+                    }
+                }
+                catch (Exception)
+                {
+                    AutoSaveTime.Text = Properties.User.Default.autoSaveMinute.ToString();
+                    ShowMessage("输入整数");
+                }
+            }
+        }
+        private void AutoBackup_Checked(object sender, RoutedEventArgs e)
+        {
+            Properties.User.Default.isAutoBackup = true;
+            SavePreferences();
+            AutoBackupTime.IsEnabled = true;
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoBackup_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Properties.User.Default.isAutoBackup = false;
+            SavePreferences();
+            AutoBackupTime.IsEnabled = false;
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoBackupTime_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (AutoBackupTime.Text != "")
+            {
+                try
+                {
+                    int t = int.Parse(AutoBackupTime.Text);
+                    if (t > 0 && t < 1000)
+                    {
+                        TimeSpan ts = TimeSpan.FromMinutes(t);
+                        Properties.User.Default.autoBackupMinute = t;
+                        SavePreferences();
+                        AutoBackupTimer.Interval = ts;
+                        //显示消息
+                        ShowMessage("已更改");
+                    }
+                    else
+                    {
+                        AutoBackupTime.Text = Properties.User.Default.autoBackupMinute.ToString();
+                        ShowMessage("输入1~999整数");
+                    }
+                }
+                catch (Exception)
+                {
+                    AutoBackupTime.Text = Properties.User.Default.autoBackupMinute.ToString();
+                    ShowMessage("输入整数");
+                }
+            }
+        }
+        private void ShowScrollBar_Checked(object sender, RoutedEventArgs e)
+        {
+            Properties.User.Default.isShowScrollBar = true;
+            SavePreferences();
+            FileContent.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void ShowScrollBar_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Properties.User.Default.isShowScrollBar = false;
+            SavePreferences();
+            FileContent.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void Skins_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Skins.SelectedItem != null)
+            {
+                TextBlock item = Skins.SelectedItem as TextBlock;
+                string tmp = item.ToolTip.ToString();
+                if (File.Exists(tmp))
+                {
+                    //调用方法
+                    SetTheme(tmp);
+                    //储存更改
+                    Properties.User.Default.ThemePath = tmp;
+                    SavePreferences();
+                    //显示消息
+                    ShowMessage("已更改");
+                }
+                else
+                {
+                    Skins.Items.Remove(Skins.SelectedItem);
+                    MessageBox.Show("该主题的配置文件不存在");
+                }
+            }
+        }
+        private void CBSelectedLanguage_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            object selectedName = CBSelectedLanguage.SelectedValue;
+            if (selectedName != null)
+            {
+                string langName = selectedName.ToString();
+                //根据本地语言来进行本地化,不过这里上不到
+                //CultureInfo currentCultureInfo = CultureInfo.CurrentCulture;
+                ResourceDictionary langRd = null;
+                try
+                {
+                    //根据名字载入语言文件
+                    if (langName == "zh_CN")
+                    {
+                        langRd = System.Windows.Application.LoadComponent(new Uri(@"语言/zh_CN.xaml", UriKind.Relative)) as ResourceDictionary;
+                    }
+                    else
+                    {
+                        langRd = System.Windows.Application.LoadComponent(new Uri(@"语言/" + langName + ".xaml", UriKind.Relative)) as ResourceDictionary;
+                    }
+                }
+                catch (Exception e2)
+                { MessageBox.Show(e2.Message); }
+
+                if (langRd != null)
+                {
+                    //本窗口更改语言，如果已使用其他语言,先清空
+                    if (Resources.MergedDictionaries.Count > 0)
+                    { Resources.MergedDictionaries.Clear(); }
+                    Resources.MergedDictionaries.Add(langRd);
+                    //主窗口更改语言
+                    if (Resources.MergedDictionaries.Count > 0)
+                    { Resources.MergedDictionaries.Clear(); }
+                    Resources.MergedDictionaries.Add(langRd);
+                    //保存设置
+                    Properties.User.Default.language = langName;
+                    SavePreferences();
+                }
+            }
+        }
+        private void TextSize_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (TextSize.Text != "")
+            {
+                try
+                {
+                    int i = int.Parse(TextSize.Text);
+                    if (i > 0 && i < 1000)
+                    {
+                        Properties.User.Default.fontSize = i;
+                        SavePreferences();
+                        FileContent.FontSize = i;
+                        ShowMessage("已更改");
+                    }
+                    else
+                    {
+                        TextSize.Text = Properties.User.Default.fontSize.ToString();
+                        ShowMessage("输入1~999整数");
+                    }
+                }
+                catch (Exception)
+                {
+                    TextSize.Text = Properties.User.Default.fontSize.ToString();
+                    ShowMessage("输入整数");
+                }
+            }
+        }
+        private void CBFonts_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TextBlock item = CBFonts.SelectedItem as TextBlock;
+            //调用方法
+            SetFont(item.Text);
+            //储存更改
+            Properties.User.Default.fontName = item.Text;
+            SavePreferences();
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void BtnReset_Click(object sender, RoutedEventArgs e)
+        {
+            ResetPreferences();
+            ShowMessage("已重置");
+        }
+
+
+        //其它事件
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            //if (Message.Opacity > 0)
+            //{
+            //    Message.Opacity -= 0.01;
+            //}
+        }
     }
 
 

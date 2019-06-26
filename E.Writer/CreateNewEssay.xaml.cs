@@ -165,8 +165,6 @@ namespace E.Writer
                     //刷新目录
                     Ow.FilesTree.Items.Refresh();
 
-                    //提示消息
-                    Ow.NodePath.Text = newFileNode.Path;
                     //提示信息
                     Ow.HelpMessage.Content = "已创建并打开文章 " + Ow.SelectedEssay;
                     //关闭窗口

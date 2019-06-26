@@ -158,8 +158,6 @@ namespace E.Writer
                     //刷新目录
                     Ow.FilesTree.Items.Refresh();
 
-                    //提示消息
-                    Ow.NodePath.Text = newfolderNode.Path;
                     //提示信息
                     Ow.HelpMessage.Content = "已创建并打开卷册 " + ChapterName.Text;
                     //关闭窗口
