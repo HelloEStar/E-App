@@ -5,44 +5,49 @@
     <!--左侧区域-->
     <sys:String x:Key="文件">File</sys:String>
     <sys:String x:Key="编辑">Edit</sys:String>
-    <sys:String x:Key="视图">视图</sys:String>
+    <sys:String x:Key="视图">View</sys:String>
     <sys:String x:Key="设置">Setting</sys:String>
     <sys:String x:Key="关于">About</sys:String>
 
     <sys:String x:Key="打开书籍">Open Book</sys:String>
-    <sys:String x:Key="创建书籍">Create Book</sys:String>
-    <sys:String x:Key="创建卷册">Create Chapter</sys:String>
-    <sys:String x:Key="创建文章">Create Essay</sys:String>
-
-    <sys:String x:Key="保存文章">Save Essay</sys:String>
-    <sys:String x:Key="另存为文章">Save Essay As</sys:String>
-    <sys:String x:Key="导出全书">Export Book</sys:String>
     <sys:String x:Key="关闭书籍">Close Book</sys:String>
     <sys:String x:Key="关闭卷册">Close Chapter</sys:String>
     <sys:String x:Key="关闭文章">Close Essay</sys:String>
+    <sys:String x:Key="创建书籍">Create Book</sys:String>
+    <sys:String x:Key="创建卷册">Create Chapter</sys:String>
+    <sys:String x:Key="创建文章">Create Essay</sys:String>
+    <sys:String x:Key="保存文章">Save Essay</sys:String>
+    <sys:String x:Key="另存文章">Save Essay As</sys:String>
+    <sys:String x:Key="导出全文">Export Book</sys:String>
+    <sys:String x:Key="删除选中">Delete Target</sys:String>
     <sys:String x:Key="书籍信息">Book Info</sys:String>
     <sys:String x:Key="卷册信息">Chapter Info</sys:String>
-    <sys:String x:Key="退出">Exit E Writer</sys:String>
-    <sys:String x:Key="查找替换">Find and Replace</sys:String>
-    <sys:String x:Key="删除选中">Delete Selected Chapter or Essay</sys:String>
 
-    <sys:String x:Key="显示目录">Show List</sys:String>
-    <sys:String x:Key="隐藏目录">Hide List</sys:String>
-    <sys:String x:Key="展开目录">Expand List</sys:String>
-    <sys:String x:Key="收起目录">Collapse List</sys:String>
-    <sys:String x:Key="刷新目录">Refresh List</sys:String>
+    <sys:String x:Key="撤销">Undo</sys:String>
+    <sys:String x:Key="重做">Redo</sys:String>
+    <sys:String x:Key="复制">Copy</sys:String>
+    <sys:String x:Key="剪切">Cut</sys:String>
+    <sys:String x:Key="粘贴">Paste</sys:String>
+    <sys:String x:Key="转繁">To Traditional</sys:String>
+    <sys:String x:Key="转简">To Simplified</sys:String>
+    <sys:String x:Key="查换">Find and Replace</sys:String>
+
+    <sys:String x:Key="折叠">折叠 Ctrl+Shift+F</sys:String>
+    <sys:String x:Key="展开">Expand List</sys:String>
+    <sys:String x:Key="收起">Collapse List</sys:String>
+    <sys:String x:Key="刷新">Refresh List</sys:String>
 
     <sys:String x:Key="重置">Reset</sys:String>
     <sys:String x:Key="应用">Apply</sys:String>
-
-    <sys:String x:Key="检查更新">Check Update</sys:String>
     <sys:String x:Key="清空运行信息">Clear Run Info</sys:String>
-    <sys:String x:Key="个人站点">Homepage</sys:String>
-    <sys:String x:Key="软件主页">APP Info</sys:String>
+    
+    <sys:String x:Key="官方网站">Official Website</sys:String>
+    <sys:String x:Key="应用主页">APP Page</sys:String>
+    <sys:String x:Key="检查更新">Check Update</sys:String>
     <sys:String x:Key="提交反馈">Report Bugs</sys:String>
     <sys:String x:Key="GitHub">GitHub</sys:String>
     <sys:String x:Key="QQ交流群">QQ Group</sys:String>
-    <sys:String x:Key="赞助比特币">BitCoin Support</sys:String>
+    <sys:String x:Key="赞助">BitCoin Support</sys:String>
     
     <!--中间区域-->
     <!--目录页-->

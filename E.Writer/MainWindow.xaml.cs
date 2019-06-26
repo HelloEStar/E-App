@@ -86,6 +86,10 @@ namespace E.Writer
         /// 打开的节点
         /// </summary>
         public FileNode OpenedNode { get; set; }
+        /// <summary>
+        /// 语言列表
+        /// </summary>
+        private List<CategoryInfo> LanguageCategorys { get; set; } = new List<CategoryInfo>();
         #endregion 
 
         #region 方法
@@ -122,7 +126,7 @@ namespace E.Writer
         /// <summary>
         /// 载入应用设置
         /// </summary>
-        private void LoadAppSettings()
+        private void LoadBookHistory()
         {
             //验证上次关闭的书籍路径是否存在，若不存在，重置为根目录
             if (!Directory.Exists(Properties.Settings.Default._lastBook))
@@ -219,6 +223,56 @@ namespace E.Writer
                         }
                     }
                 }
+            }
+        }
+        /// <summary>
+        /// 获取主题选项
+        /// </summary>
+        private void LoadThemeItem()
+        {
+            Skins.Items.Clear();
+            foreach (TextBlock item in Themes)
+            {
+                TextBlock theme = new TextBlock()
+                {
+                    Text = item.Text,
+                    ToolTip = item.ToolTip
+                };
+                Skins.Items.Add(theme);
+            }
+        }
+        /// <summary>
+        /// 创建语言选项
+        /// </summary>
+        private void LoadLanguage()
+        {
+            LanguageCategorys.Clear();
+            CategoryInfo zh_CN = new CategoryInfo() { Name = "中文（默认）", Value = "zh_CN" };
+            LanguageCategorys.Add(zh_CN);
+            CategoryInfo en_US = new CategoryInfo() { Name = "English", Value = "en_US" };
+            LanguageCategorys.Add(en_US);
+            //绑定数据，真正的赋值
+            CBSelectedLanguage.ItemsSource = LanguageCategorys;
+            //指定显示的内容
+            CBSelectedLanguage.DisplayMemberPath = "Name";
+            //指定选中后的能够获取到的内容
+            CBSelectedLanguage.SelectedValuePath = "Value";
+        }
+        /// <summary>
+        /// 获取字体选项
+        /// </summary>
+        private void LoadFontsItem()
+        {
+            CBFonts.Items.Clear();
+            foreach (FontFamily font in Fonts.SystemFontFamilies)
+            {
+                //动态的添加一个ListViewItem项
+                TextBlock label = new TextBlock
+                {
+                    Text = font.Source,
+                    FontFamily = font
+                };
+                CBFonts.Items.Add(label);
             }
         }
 
@@ -661,6 +715,50 @@ namespace E.Writer
             sw.Write(encoding.GetString(flieByte));
             sw.Close();
         }
+        /// <summary>
+        /// 设置主题选项
+        /// </summary>
+        /// <param name="_theme">主题路径</param>
+        private void SetThemeItem(string _theme)
+        {
+            foreach (TextBlock item in Skins.Items)
+            {
+                if (item.ToolTip.ToString() == _theme)
+                {
+                    Skins.SelectedItem = item;
+                    break;
+                }
+            }
+        }
+        /// <summary>
+        /// 设置语言选项
+        /// </summary>
+        /// <param name="language">语言简拼</param>
+        private void SelectLanguage(string language)
+        {
+            foreach (CategoryInfo ci in LanguageCategorys)
+            {
+                if (ci.Value == language)
+                {
+                    CBSelectedLanguage.SelectedItem = ci;
+                    break;
+                }
+            }
+        }
+        /// <summary>
+        /// 设置字体选项
+        /// </summary>
+        private void SetFontsItem(string fontName)
+        {
+            foreach (TextBlock item in CBFonts.Items)
+            {
+                if (item.Text == fontName)
+                {
+                    CBFonts.SelectedItem = item;
+                    break;
+                }
+            }
+        }
 
         //重设
         /// <summary>
@@ -974,13 +1072,13 @@ namespace E.Writer
             //设置计时器1，默认每1分钟触发一次
             AutoSaveTimer = new DispatcherTimer
             { Interval = TimeSpan.FromMinutes(Properties.User.Default.autoSaveMinute) };
-            AutoSaveTimer.Tick += new EventHandler(Timer1_Tick);
+            AutoSaveTimer.Tick += new EventHandler(TimerAutoSave_Tick);
             AutoSaveTimer.Start();
 
             //设置计时器2
             AutoBackupTimer = new DispatcherTimer
             { Interval = TimeSpan.FromMinutes(Properties.User.Default.autoBackupMinute) };
-            AutoBackupTimer.Tick += new EventHandler(Timer2_Tick);
+            AutoBackupTimer.Tick += new EventHandler(TimerAutoBackup_Tick);
             AutoBackupTimer.Start();
         }
 
@@ -1102,8 +1200,67 @@ namespace E.Writer
                     ), frame);
             Dispatcher.PushFrame(frame);
         }
+        /// <summary>
+        /// 刷新偏好设置
+        /// </summary>
+        private void RefreshPreferences()
+        {
+            //启动时显示运行信息
+            ShowRunInfoCheckBox.IsChecked = Properties.User.Default.isShowRunInfo;
+            //自动开书
+            AutoOpenBookCheckBox.IsChecked = Properties.User.Default.isAutoOpenBook;
+            //自动书名号
+            AutoBrackets.IsChecked = Properties.User.Default.isAutoBrackets;
+            //自动补全
+            AutoCompletion.IsChecked = Properties.User.Default.isAutoCompletion;
+            //自动缩进
+            AutoIndentation.IsChecked = Properties.User.Default.isAutoIndentation;
+            //缩进数
+            AutoIndentations.Text = Properties.User.Default.autoIndentations.ToString();
+            //缩进数可编辑性
+            if ((bool)AutoIndentation.IsChecked) { AutoIndentations.IsEnabled = true; }
+            else { AutoIndentations.IsEnabled = false; }
+            //定时自动保存
+            AutoSaveEvery.IsChecked = Properties.User.Default.isAutoSaveEvery;
+            //定时自动保存时间间隔
+            AutoSaveTime.Text = Properties.User.Default.autoSaveMinute.ToString();
+            //时间间隔可编辑性
+            if ((bool)AutoSaveEvery.IsChecked) { AutoSaveTime.IsEnabled = true; }
+            else { AutoSaveTime.IsEnabled = false; }
+            //切换自动保存
+            AutoSaveWhenSwitch.IsChecked = Properties.User.Default.isAutoSaveWhenSwitch;
+            //定时自动备份
+            AutoBackup.IsChecked = Properties.User.Default.isAutoBackup;
+            //自动备份时间间隔
+            AutoBackupTime.Text = Properties.User.Default.autoBackupMinute.ToString();
+            //自动备份可编辑性
+            if ((bool)AutoBackup.IsChecked) { AutoBackupTime.IsEnabled = true; }
+            else { AutoBackupTime.IsEnabled = false; }
+            AutoBackup.ToolTip = "备份位置：" + System.Windows.Forms.Application.StartupPath + @"\" + Properties.User.Default.BackupDir;
+            //滚动条
+            ShowScrollBar.IsChecked = Properties.User.Default.isShowScrollBar;
+
+            //创建语言选项
+            SetLanguage(Properties.User.Default.language);
+            //获取、设置主题选项
+            SetThemeItem(Properties.User.Default.ThemePath);
+            //获取文章字体信息
+            TextSize.Text = Properties.User.Default.fontSize.ToString();
+            SetFontsItem(Properties.User.Default.fontName);
+        }
 
         //显示
+        /// <summary>
+        /// 显示软件信息
+        /// </summary>
+        private void ShowAppInfo()
+        {
+            ThisName.Content = AppInfo.Name;
+            Description.Content = AppInfo.Description;
+            Developer.Content = AppInfo.Company;
+            Version.Content = AppInfo.Version;
+            UpdateNote.Text = AppInfo.UpdateNote;
+        }
         /// <summary>
         /// 显示运行信息
         /// </summary>
@@ -1653,7 +1810,7 @@ namespace E.Writer
                     BorderBrush = null,
                     Cursor = System.Windows.Input.Cursors.Hand
                 };
-                btn.Click += new RoutedEventHandler(BtnUnrecordBook_Click);
+                btn.Click += new RoutedEventHandler(BtnRemoveBookHistory_Click);
                 grid.Children.Add(tb);
                 grid.Children.Add(btn);
                 Books.Items.Add(grid);
@@ -1990,24 +2147,38 @@ namespace E.Writer
         /// </summary>
         public void GetBookInfo()
         {
-            Words.Content = FindResource("字数") + "：0";
-            EssayName.Text = SelectedBook;
-            FileContent.Text = FindResource("创建时间") + "：" + Directory.GetCreationTime(SelectedBookPath) + Environment.NewLine +
-                               FindResource("子卷册数") + "：" + GetDirCounts(SelectedBookPath) + Environment.NewLine +
-                               FindResource("总文章数") + "：" + GetFileCounts(SelectedBookPath) + Environment.NewLine +
-                               FindResource("总字数") + "：" + GetBookWords(SelectedBookPath, "");
+            if (SelectedBookPath != null)
+            {
+                Words.Content = FindResource("字数") + "：0";
+                EssayName.Text = SelectedBook;
+                FileContent.Text = FindResource("创建时间") + "：" + Directory.GetCreationTime(SelectedBookPath) + Environment.NewLine +
+                                   FindResource("子卷册数") + "：" + GetDirCounts(SelectedBookPath) + Environment.NewLine +
+                                   FindResource("总文章数") + "：" + GetFileCounts(SelectedBookPath) + Environment.NewLine +
+                                   FindResource("总字数") + "：" + GetBookWords(SelectedBookPath, "");
+            }
+            else
+            {
+
+            }
         }
         /// <summary>
         /// 卷册信息
         /// </summary>
         public void GetChapterInfo()
         {
-            Words.Content = FindResource("字数") + "：0";
-            EssayName.Text = SelectedChapter;
-            FileContent.Text = FindResource("创建时间") + "：" + Directory.GetCreationTime(SelectedChapterPath) + Environment.NewLine +
-                               FindResource("子卷册数") + "：" + GetDirCounts(SelectedChapterPath) + Environment.NewLine +
-                               FindResource("总文章数") + "：" + GetFileCounts(SelectedChapterPath) + Environment.NewLine +
-                               FindResource("总字数") + "：" + GetBookWords(SelectedChapterPath, "");
+            if (SelectedChapterPath != null)
+            {
+                Words.Content = FindResource("字数") + "：0";
+                EssayName.Text = SelectedChapter;
+                FileContent.Text = FindResource("创建时间") + "：" + Directory.GetCreationTime(SelectedChapterPath) + Environment.NewLine +
+                                   FindResource("子卷册数") + "：" + GetDirCounts(SelectedChapterPath) + Environment.NewLine +
+                                   FindResource("总文章数") + "：" + GetFileCounts(SelectedChapterPath) + Environment.NewLine +
+                                   FindResource("总字数") + "：" + GetBookWords(SelectedChapterPath, "");
+            }
+            else
+            {
+
+            }
         }
 
         //菜单：编辑
@@ -2181,9 +2352,6 @@ namespace E.Writer
 
         #region 事件
         //窗口事件
-        /// <summary>
-        /// 主窗口载入事件
-        /// </summary>
         private void Main_Loaded(object sender, RoutedEventArgs e)
         {
             LoadAppInfo();
@@ -2196,7 +2364,7 @@ namespace E.Writer
             CreateTimer();
 
             LoadThemes();
-            LoadAppSettings();
+            LoadBookHistory();
             LoadPreferences();
 
             RefreshTitle();
@@ -2207,12 +2375,10 @@ namespace E.Writer
             LoadLanguage();
             LoadThemeItem();
             LoadFontsItem();
+            ShowAppInfo();
             RefreshPreferences();
-            ShowMessage("已载入");
+            ShowMessage("已载入", false);
         }
-        /// <summary>
-        /// 主窗口关闭事件
-        /// </summary>
         private void Main_Closing(object sender, CancelEventArgs e)
         {
             if (SelectedBook != null)
@@ -2246,17 +2412,103 @@ namespace E.Writer
                 SetAppSettingsOnQuit();
             }
         }
-        //UI交互事件
-        /// <summary>
-        /// EssayName获得焦点
-        /// </summary>
+        private void Main_KeyUp(object sender, KeyEventArgs e)
+        {
+            //若打开了书
+            if (SelectedBook != null)
+            {
+                //Ctrl+Alt+B 创建卷册
+                if (e.Key == Key.B && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                                   && (e.KeyboardDevice.IsKeyDown(Key.LeftAlt) || e.KeyboardDevice.IsKeyDown(Key.RightAlt)))
+                {
+                    CreateChapter();
+                    //e.Handled = true;
+                }
+                //Ctrl+Shift+B 创建文章
+                if (e.Key == Key.B && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                                   && (e.KeyboardDevice.IsKeyDown(Key.LeftShift) || e.KeyboardDevice.IsKeyDown(Key.RightShift)))
+                { CreateEssay(); }
+                //Ctrl+E 导出全文
+                if (e.Key == Key.E && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
+                { CheckExport(); }
+                //Ctrl+M 书籍信息
+                if (e.Key == Key.M && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                                   && !(e.KeyboardDevice.IsKeyDown(Key.LeftAlt) || e.KeyboardDevice.IsKeyDown(Key.RightAlt)))
+                { GetBookInfo(); }
+                //Ctrl+Q 关闭书籍
+                if (e.Key == Key.Q && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                                   && !(e.KeyboardDevice.IsKeyDown(Key.LeftAlt) || e.KeyboardDevice.IsKeyDown(Key.RightAlt))
+                                   && !(e.KeyboardDevice.IsKeyDown(Key.LeftShift) || e.KeyboardDevice.IsKeyDown(Key.RightShift)))
+                {
+                    CloseBook();
+                    Books.SelectedItem = null;
+                }
+                //Ctrl+I 展开目录 
+                if (e.Key == Key.I && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
+                { ExpandTree(); }
+                //Ctrl+U 收起目录
+                if (e.Key == Key.U && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
+                { CollapseTree(); }
+                //Ctrl+R 刷新目录
+                if (e.Key == Key.R && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
+                { ReloadFilesTree(); }
+
+                //若打开了章节
+                if (SelectedChapter != null)
+                {
+                    //Ctrl+Alt+Q 关闭卷册
+                    if (e.Key == Key.Q && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                                       && (e.KeyboardDevice.IsKeyDown(Key.LeftAlt) || e.KeyboardDevice.IsKeyDown(Key.RightAlt)))
+                    {
+                        CloseChapter();
+                    }
+                }
+
+                //若打开了文章
+                if (SelectedEssay != null)
+                {
+                    //Ctrl+Shift+S 另存为
+                    if (e.Key == Key.S && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                                       && (e.KeyboardDevice.IsKeyDown(Key.LeftShift) || e.KeyboardDevice.IsKeyDown(Key.RightShift)))
+                    { SaveFileAs(); }
+                    //Ctrl+S 保存
+                    if (e.Key == Key.S && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
+                    { SaveFile(); }
+                    //Ctrl+Alt+S 一键全部保存
+                    //if (e.Key == Key.S && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
+                    //{ SaveFile(); }
+                    //Ctrl+F 查找替换
+                    if (e.Key == Key.F && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
+                    { FindAndReplace(); }
+                    //Ctrl+Shift+Q 关闭文章
+                    if (e.Key == Key.Q && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                                       && (e.KeyboardDevice.IsKeyDown(Key.LeftShift) || e.KeyboardDevice.IsKeyDown(Key.RightShift)))
+                    {
+                        CloseEssay();
+                    }
+                    //Ctrl+Alt+M 卷册信息
+                    if (e.Key == Key.M && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                                       && (e.KeyboardDevice.IsKeyDown(Key.LeftAlt) || e.KeyboardDevice.IsKeyDown(Key.LeftAlt)))
+                    {
+                        CloseEssay();
+                    }
+                }
+            }
+            //Ctrl+O 打开书籍
+            if (e.Key == Key.O && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
+            { SelectBook(); }
+            //Ctrl+B 创建书籍
+            if (e.Key == Key.B && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
+            { CreateBook(); }
+            //FT 切换下个主题
+            if (e.Key == Key.T && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
+            { SetNextTheme(); }
+        }
+
         private void EssayName_GotFocus(object sender, RoutedEventArgs e)
         {
             ShowMessage("在此处重命名", false);
         }
-        /// <summary>
-        /// EssayName回车 重命名
-        /// </summary>
         private void EssayName_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -2322,9 +2574,7 @@ namespace E.Writer
                     ShowMessage("重命名不能为空", false);
             }
         }
-        /// <summary>
-        /// FileContent 文本被改变时
-        /// </summary>
+
         private void FileContent_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (SelectedEssay != null)
@@ -2345,9 +2595,6 @@ namespace E.Writer
                 }
             }
         }
-        /// <summary>
-        /// FileContent 输入字符检测，自动补全
-        /// </summary>
         private void FileContent_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             //NodePath.Text = e.Text;
@@ -2388,9 +2635,6 @@ namespace E.Writer
                 FileContent.ScrollToVerticalOffset(s);
             }
         }
-        /// <summary>
-        /// FileContent回车 自动缩进
-        /// </summary>
         private void FileContent_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -2401,59 +2645,69 @@ namespace E.Writer
                 }
             }
         }
-        /// <summary>
-        /// FileContent选择的文本改变时
-        /// </summary>
         private void FileContent_SelectionChanged(object sender, RoutedEventArgs e)
         {
             GetRowAndColumn();
             RefreshElementState();
         }
-        /// <summary>
-        /// FileContent尺寸改变时
-        /// </summary>
         private void FileContent_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             GetRowAndColumn();
         }
-        /// <summary>
-        /// FileContent失去焦点
-        /// </summary>
         private void FileContent_LostFocus(object sender, RoutedEventArgs e)
         {
             RowAndColumn.Content = FindResource("行").ToString() + "：" + 0 + "    " + FindResource("列").ToString() + "：" + 0; ;
         }
-        /// <summary>
-        /// 删除此书籍记录
-        /// </summary>
-        private void BtnUnrecordBook_Click(object sender, RoutedEventArgs e)
+
+        private void FilesTree_KeyUp(object sender, KeyEventArgs e)
         {
-            System.Windows.Controls.Button closeBtn = sender as System.Windows.Controls.Button;
+            //Enter选择节点
+            if (e.Key == Key.Enter)
+            {
+                SetSelectedNode(2);
+            }
+            //Delete 删除节点
+            if (e.Key == Key.Delete && SelectedNode != null)
+            {
+                if (SelectedNode.IsFile == true && SelectedNode.Name != null)
+                {
+                    DeleteEssay();
+                }
+                else if (SelectedNode.IsFile == false && SelectedNode.Name != null)
+                {
+                    DeleteChapter();
+                }
+                else
+                {
+                    //显示消息
+                    ShowMessage("请选择一个项目再删除", false);
+                }
+                e.Handled = true;
+            }
+        }
+        private void FilesTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            SetSelectedNode(1);
+        }
+        private void FilesTree_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            SetSelectedNode(2);
+        }
+
+        private void Books_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
             foreach (var item in Books.Items)
             {
                 Grid grid = item as Grid;
-                //System.Windows.Controls.Label tb = grid.Children[0] as System.Windows.Controls.Label;
-                System.Windows.Controls.Button btn = grid.Children[1] as System.Windows.Controls.Button;
-                if (closeBtn.Tag.ToString() == btn.Tag.ToString())
+                grid.Width = Books.ActualWidth + 18;
+                System.Windows.Controls.Label tb = grid.Children[0] as System.Windows.Controls.Label;
+                //System.Windows.Controls.Button btn = grid.Children[1] as System.Windows.Controls.Button;
+                if (grid.Width - 35 > 0)
                 {
-                    if (btn.Tag.ToString() == SelectedBookPath)
-                    {
-                        CloseBook();
-                    }
-                    Books.Items.Remove(grid);
-                    Properties.Settings.Default._books = Properties.Settings.Default._books.Replace(btn.Tag.ToString(), "");
-                    break;
+                    tb.Width = grid.Width - 35;
                 }
             }
-            //List<MyBook> MyBooks = Books.ItemsSource as List<MyBook>;
-            //System.Windows.Controls.Button closeBtn = sender as System.Windows.Controls.Button;
-            //MyBooks.RemoveAll(u => u.path == closeBtn.Tag.ToString());
-            //Books.ItemsSource = null;
-            //Books.ItemsSource = MyBooks;
         }
-        /// <summary>
-        /// 切换书籍
-        /// </summary>
         private void Books_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (Books.SelectedItem != null)
@@ -2485,176 +2739,122 @@ namespace E.Writer
                 }
             }
         }
-        /// <summary>
-        /// 在FilesTree 单击选择一个文件
-        /// </summary>
-        private void FilesTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+
+
+        //按钮点击事件
+        private void BtnFile_Click(object sender, RoutedEventArgs e)
         {
-            SetSelectedNode(1);
+            CenterDirectoryPage.Visibility = Visibility.Visible;
+            CenterSettingPage.Visibility = Visibility.Collapsed;
+            CenterAboutPage.Visibility = Visibility.Collapsed;
+
+            BtnsFile.Visibility = Visibility.Visible;
+            BtnsEdit.Visibility = Visibility.Collapsed;
+            BtnsView.Visibility = Visibility.Collapsed;
+            BtnsSetting.Visibility = Visibility.Collapsed;
+            BtnsAbout.Visibility = Visibility.Collapsed;
         }
-        /// <summary>
-        /// 在FilesTree 双击打开一个文件
-        /// </summary>
-        private void FilesTree_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void BtnEdit_Click(object sender, RoutedEventArgs e)
         {
-            SetSelectedNode(2);
+            CenterDirectoryPage.Visibility = Visibility.Visible;
+            CenterSettingPage.Visibility = Visibility.Collapsed;
+            CenterAboutPage.Visibility = Visibility.Collapsed;
+
+            BtnsFile.Visibility = Visibility.Collapsed;
+            BtnsEdit.Visibility = Visibility.Visible;
+            BtnsView.Visibility = Visibility.Collapsed;
+            BtnsSetting.Visibility = Visibility.Collapsed;
+            BtnsAbout.Visibility = Visibility.Collapsed;
         }
-        /// <summary>
-        /// 书籍列表尺寸改变时
-        /// </summary>
-        private void Books_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void BtnView_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var item in Books.Items)
-            {
-                Grid grid = item as Grid;
-                grid.Width = Books.ActualWidth + 18;
-                System.Windows.Controls.Label tb = grid.Children[0] as System.Windows.Controls.Label;
-                //System.Windows.Controls.Button btn = grid.Children[1] as System.Windows.Controls.Button;
-                if (grid.Width - 35 > 0)
-                {
-                    tb.Width = grid.Width - 35;
-                }
-            }
+            CenterDirectoryPage.Visibility = Visibility.Visible;
+            CenterSettingPage.Visibility = Visibility.Collapsed;
+            CenterAboutPage.Visibility = Visibility.Collapsed;
+
+            BtnsFile.Visibility = Visibility.Collapsed;
+            BtnsEdit.Visibility = Visibility.Collapsed;
+            BtnsView.Visibility = Visibility.Visible;
+            BtnsSetting.Visibility = Visibility.Collapsed;
+            BtnsAbout.Visibility = Visibility.Collapsed;
         }
-        /// <summary>
-        /// 隐藏目录按钮
-        /// </summary>
-        private void BtnHideDir_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void BtnSetting_Click(object sender, RoutedEventArgs e)
         {
-            HidePanCenter();
+            CenterDirectoryPage.Visibility = Visibility.Collapsed;
+            CenterSettingPage.Visibility = Visibility.Visible;
+            CenterAboutPage.Visibility = Visibility.Collapsed;
+
+            BtnsFile.Visibility = Visibility.Collapsed;
+            BtnsEdit.Visibility = Visibility.Collapsed;
+            BtnsView.Visibility = Visibility.Collapsed;
+            BtnsSetting.Visibility = Visibility.Visible;
+            BtnsAbout.Visibility = Visibility.Collapsed;
+        }
+        private void BtnAbout_Click(object sender, RoutedEventArgs e)
+        {
+            CenterDirectoryPage.Visibility = Visibility.Collapsed;
+            CenterSettingPage.Visibility = Visibility.Collapsed;
+            CenterAboutPage.Visibility = Visibility.Visible;
+
+            BtnsFile.Visibility = Visibility.Collapsed;
+            BtnsEdit.Visibility = Visibility.Collapsed;
+            BtnsView.Visibility = Visibility.Collapsed;
+            BtnsSetting.Visibility = Visibility.Collapsed;
+            BtnsAbout.Visibility = Visibility.Visible;
         }
 
-        //其它事件
-        /// <summary>
-        /// 自动保存计时器
-        /// </summary>
-        private void Timer1_Tick(object sender, EventArgs e)
+        private void BtnCreateEssay_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectedEssay != null && Properties.User.Default.isAutoSaveEvery == true)
-            {
-                SaveFile();
-                //显示消息
-                ShowMessage("已自动保存于", DateTime.Now.ToLongTimeString().ToString(), false);
-            }
+            CreateEssay();
         }
-        /// <summary>
-        /// 自动备份计时器
-        /// </summary>
-        private void Timer2_Tick(object sender, EventArgs e)
+        private void BtnCreateChapter_Click(object sender, RoutedEventArgs e)
         {
-            //timer2.Stop();
-            Backup();
+            CreateChapter();
         }
-        /// <summary>
-        /// 主窗口快捷键
-        /// </summary>
-        private void Main_KeyUp(object sender, KeyEventArgs e)
+        private void BtnCreateBook_Click(object sender, RoutedEventArgs e)
         {
-            //若打开了书
-            if (SelectedBook != null)
-            {
-                //Ctrl+Alt+B 创建卷册
-                if (e.Key == Key.B && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
-                                   && (e.KeyboardDevice.IsKeyDown(Key.LeftAlt) || e.KeyboardDevice.IsKeyDown(Key.RightAlt)))
-                {
-                    CreateChapter();
-                    //e.Handled = true;
-                }
-                //Ctrl+Shift+B 创建文章
-                if (e.Key == Key.B && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
-                                   && (e.KeyboardDevice.IsKeyDown(Key.LeftShift) || e.KeyboardDevice.IsKeyDown(Key.RightShift)))
-                { CreateEssay(); }
-                //Ctrl+E 导出全书
-                if (e.Key == Key.E && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
-                { CheckExport(); }
-                //Ctrl+M 书籍信息
-                if (e.Key == Key.M && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
-                                   && !(e.KeyboardDevice.IsKeyDown(Key.LeftAlt) || e.KeyboardDevice.IsKeyDown(Key.RightAlt)))
-                { GetBookInfo(); }
-                //Ctrl+Q 关闭书籍
-                if (e.Key == Key.Q && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
-                                   && !(e.KeyboardDevice.IsKeyDown(Key.LeftAlt) || e.KeyboardDevice.IsKeyDown(Key.RightAlt))
-                                   && !(e.KeyboardDevice.IsKeyDown(Key.LeftShift) || e.KeyboardDevice.IsKeyDown(Key.RightShift)))
-                {
-                    CloseBook();
-                    Books.SelectedItem = null;
-                }
-                //Ctrl+I 展开目录 
-                if (e.Key == Key.I && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
-                { ExpandTree(); }
-                //Ctrl+U 收起目录
-                if (e.Key == Key.U && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
-                { CollapseTree(); }
-                //Ctrl+R 重新导入书籍目录
-                if (e.Key == Key.R && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
-                { ReloadFilesTree(); }
-
-                //若打开了章节
-                if (SelectedChapter != null)
-                {
-                    //Ctrl+Alt+Q 关闭卷册
-                    if (e.Key == Key.Q && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
-                                       && (e.KeyboardDevice.IsKeyDown(Key.LeftAlt) || e.KeyboardDevice.IsKeyDown(Key.RightAlt)))
-                    {
-                        CloseChapter();
-                    }
-                }
-
-                //若打开了文章
-                if (SelectedEssay != null)
-                {
-                    //Ctrl+Shift+S 另存为
-                    if (e.Key == Key.S && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
-                                       && (e.KeyboardDevice.IsKeyDown(Key.LeftShift) || e.KeyboardDevice.IsKeyDown(Key.RightShift)))
-                    { SaveFileAs(); }
-                    //Ctrl+S 保存
-                    if (e.Key == Key.S && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
-                    { SaveFile(); }
-                    //Ctrl+Alt+S 一键全部保存
-                    //if (e.Key == Key.S && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
-                    //{ SaveFile(); }
-                    //Ctrl+F 查找替换
-                    if (e.Key == Key.F && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
-                    { FindAndReplace(); }
-                    //Ctrl+Shift+Q 关闭文章
-                    if (e.Key == Key.Q && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
-                                       && (e.KeyboardDevice.IsKeyDown(Key.LeftShift) || e.KeyboardDevice.IsKeyDown(Key.RightShift)))
-                    {
-                        CloseEssay();
-                    }
-                    //Ctrl+Alt+M 卷册信息
-                    if (e.Key == Key.M && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
-                                       && (e.KeyboardDevice.IsKeyDown(Key.LeftAlt) || e.KeyboardDevice.IsKeyDown(Key.LeftAlt)))
-                    {
-                        CloseEssay();
-                    }
-                }
-            }
-            //Ctrl+O 打开书籍
-            if (e.Key == Key.O && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
-            { SelectBook(); }
-            //Ctrl+B 创建书籍
-            if (e.Key == Key.B && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
-            { CreateBook(); }
-            //Shift+H 隐藏目录
-            if (e.Key == Key.H && (e.KeyboardDevice.IsKeyDown(Key.LeftShift) || e.KeyboardDevice.IsKeyDown(Key.RightShift)))
-            { HidePanCenter(); }
-            //FT 切换下个主题
-            if (e.Key == Key.T && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
-            { SetNextTheme(); }
+            CreateBook();
         }
-        /// <summary>
-        /// 目录区快捷键
-        /// </summary>
-        private void FilesTree_KeyUp(object sender, KeyEventArgs e)
+        private void BtnOpen_Click(object sender, RoutedEventArgs e)
         {
-            //Enter选择节点
-            if (e.Key == Key.Enter)
-            {
-                SetSelectedNode(2);
-            }
-            //Delete 删除节点
-            if (e.Key == Key.Delete && SelectedNode != null)
+            SelectBook();
+        }
+        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFile();
+        }
+        private void BtnSaveAs_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileAs();
+        }
+        private void BtnExport_Click(object sender, RoutedEventArgs e)
+        {
+            CheckExport();
+        }
+        private void BtnCloseBook_Click(object sender, RoutedEventArgs e)
+        {
+            CloseBook();
+            Books.SelectedItem = null;
+        }
+        private void BtnCloseChapter_Click(object sender, RoutedEventArgs e)
+        {
+            CloseChapter();
+        }
+        private void BtnCloseEssay_Click(object sender, RoutedEventArgs e)
+        {
+            CloseEssay();
+        }
+        private void BtnBookInfo_Click(object sender, RoutedEventArgs e)
+        {
+            GetBookInfo();
+        }
+        private void BtnChapterInfo_Click(object sender, RoutedEventArgs e)
+        {
+            GetChapterInfo();
+        }
+        private void BtnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedNode != null)
             {
                 if (SelectedNode.IsFile == true && SelectedNode.Name != null)
                 {
@@ -2669,88 +2869,78 @@ namespace E.Writer
                     //显示消息
                     ShowMessage("请选择一个项目再删除", false);
                 }
-                e.Handled = true;
+            }
+            else
+            {
+                //显示消息
+                ShowMessage("请选择一个项目再删除", false);
             }
         }
 
-        //界面按钮事件
-        private void BtnFile_Click(object sender, RoutedEventArgs e)
+        private void BtnUndo_Click(object sender, RoutedEventArgs e)
+        {
+            FileContent.Undo();
+        }
+        private void BtnRedo_Click(object sender, RoutedEventArgs e)
+        {
+            FileContent.Redo();
+        }
+        private void BtnCut_Click(object sender, RoutedEventArgs e)
+        {
+            FileContent.Cut();
+        }
+        private void BtnCopy_Click(object sender, RoutedEventArgs e)
+        {
+            FileContent.Copy();
+        }
+        private void BtnPaste_Click(object sender, RoutedEventArgs e)
+        {
+            FileContent.Paste();
+        }
+        private void BtnToTraditional_Click(object sender, RoutedEventArgs e)
+        {
+            if (FileContent.IsFocused)
+            {
+                FileContent.SelectedText = ToTraditional(FileContent.SelectedText);
+            }
+        }
+        private void BtnToSimplified_Click(object sender, RoutedEventArgs e)
+        {
+            if (FileContent.IsFocused)
+            {
+                FileContent.SelectedText = ToSimplified(FileContent.SelectedText);
+            }
+        }
+        private void BtnFindAndReplace_Click(object sender, RoutedEventArgs e)
+        {
+            FindAndReplace();
+        }
+
+        private void BtnFold_Click(object sender, RoutedEventArgs e)
         {
             if (PanCenter.Visibility == Visibility.Visible)
             {
-                if (CenterDirectoryPage.Visibility == Visibility.Visible)
-                {
-                    PanCenter.Visibility = Visibility.Collapsed;
-                }
-                else
-                {
-                    CenterDirectoryPage.Visibility = Visibility.Visible;
-                    CenterSettingPage.Visibility = Visibility.Collapsed;
-                    CenterAboutPage.Visibility = Visibility.Collapsed;
-                }
+                PanCenter.Visibility = Visibility.Collapsed;
             }
             else
             {
                 PanCenter.Visibility = Visibility.Visible;
-                CenterDirectoryPage.Visibility = Visibility.Visible;
-                CenterSettingPage.Visibility = Visibility.Collapsed;
-                CenterAboutPage.Visibility = Visibility.Collapsed;
             }
         }
-        private void BtnEdit_Click(object sender, RoutedEventArgs e)
+        private void BtnExpand_Click(object sender, RoutedEventArgs e)
         {
+            ExpandTree();
+        }
+        private void BtnCollapse_Click(object sender, RoutedEventArgs e)
+        {
+            CollapseTree();
+        }
+        private void BtnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            //重新导入目录
+            ReloadFilesTree();
+        }
 
-        }
-        private void BtnView_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void BtnSetting_Click(object sender, RoutedEventArgs e)
-        {
-            if (PanCenter.Visibility == Visibility.Visible)
-            {
-                if (CenterSettingPage.Visibility == Visibility.Visible)
-                {
-                    PanCenter.Visibility = Visibility.Collapsed;
-                }
-                else
-                {
-                    CenterDirectoryPage.Visibility = Visibility.Collapsed;
-                    CenterSettingPage.Visibility = Visibility.Visible;
-                    CenterAboutPage.Visibility = Visibility.Collapsed;
-                }
-            }
-            else
-            {
-                PanCenter.Visibility = Visibility.Visible;
-                CenterDirectoryPage.Visibility = Visibility.Collapsed;
-                CenterSettingPage.Visibility = Visibility.Visible;
-                CenterAboutPage.Visibility = Visibility.Collapsed;
-            }
-        }
-        private void BtnAbout_Click(object sender, RoutedEventArgs e)
-        {
-            if (PanCenter.Visibility == Visibility.Visible)
-            {
-                if (CenterAboutPage.Visibility == Visibility.Visible)
-                {
-                    PanCenter.Visibility = Visibility.Collapsed;
-                }
-                else
-                {
-                    CenterDirectoryPage.Visibility = Visibility.Collapsed;
-                    CenterSettingPage.Visibility = Visibility.Collapsed;
-                    CenterAboutPage.Visibility = Visibility.Visible;
-                }
-            }
-            else
-            {
-                PanCenter.Visibility = Visibility.Visible;
-                CenterDirectoryPage.Visibility = Visibility.Collapsed;
-                CenterSettingPage.Visibility = Visibility.Collapsed;
-                CenterAboutPage.Visibility = Visibility.Visible;
-            }
-        }
         private void BtnCheckNew_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("explorer.exe", AppInfo.InfoPage);
@@ -2781,457 +2971,65 @@ namespace E.Writer
         }
         private void BtnBitCoinAddress_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start("explorer.exe", AppInfo.BitCoinAddress);
+            //Process.Start("explorer.exe", AppInfo.BitCoinAddress);
         }
 
-        //菜单按钮事件
-        /// <summary>
-        /// 点击 文件-创建文章
-        /// </summary>
-        private void MenuCreateEssay_Click(object sender, RoutedEventArgs e)
-        {
-            CreateEssay();
-        }
-        /// <summary>
-        /// 点击 文件-创建卷册
-        /// </summary>
-        private void MenuCreateChapter_Click(object sender, RoutedEventArgs e)
-        {
-            CreateChapter();
-        }
-        /// <summary>
-        /// 点击 文件-创建书籍
-        /// </summary>
-        private void MenuCreateBook_Click(object sender, RoutedEventArgs e)
-        {
-            CreateBook();
-        }
-        /// <summary>
-        /// 点击 文件-打开书籍
-        /// </summary>
-        private void MenuOpen_Click(object sender, RoutedEventArgs e)
-        {
-            SelectBook();
-        }
-        /// <summary>
-        /// 点击 文件-保存
-        /// </summary>
-        private void MenuSave_Click(object sender, RoutedEventArgs e)
-        {
-            SaveFile();
-        }
-        /// <summary>
-        /// 点击 文件-另存为
-        /// </summary>
-        private void MenuSaveAs_Click(object sender, RoutedEventArgs e)
-        {
-            SaveFileAs();
-        }
-        /// <summary>
-        /// 点击 文件-导出全书
-        /// </summary>
-        private void MenuExport_Click(object sender, RoutedEventArgs e)
-        {
-            CheckExport();
-        }
-        /// <summary>
-        /// 点击 文件-关闭当前书籍
-        /// </summary>
-        private void MenuCloseBook_Click(object sender, RoutedEventArgs e)
-        {
-            CloseBook();
-            Books.SelectedItem = null;
-        }
-        /// <summary>
-        /// 点击 文件-关闭当前卷册
-        /// </summary>
-        private void MenuCloseChapter_Click(object sender, RoutedEventArgs e)
-        {
-            CloseChapter();
-        }
-        /// <summary>
-        /// 点击 文件-关闭当前文章
-        /// </summary>
-        private void MenuCloseEssay_Click(object sender, RoutedEventArgs e)
-        {
-            CloseEssay();
-        }
-        /// <summary>
-        /// 点击 文件-书籍信息
-        /// </summary>
-        private void MenuBookInfo_Click(object sender, RoutedEventArgs e)
-        {
-            CloseChapter();
-        }
-        /// <summary>
-        /// 点击 文件-卷册信息
-        /// </summary>
-        private void MenuChapterInfo_Click(object sender, RoutedEventArgs e)
-        {
-            CloseEssay();
-        }
-        /// <summary>
-        /// 点击 文件-关闭 E Writer
-        /// </summary>
-        private void MenuCloseEW_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-        /// <summary>
-        /// 点击 撤销
-        /// </summary>
-        private void MenuUndo_Click(object sender, RoutedEventArgs e)
-        {
-            FileContent.Undo();
-        }
-        /// <summary>
-        /// 点击 重做
-        /// </summary>
-        private void MenuRedo_Click(object sender, RoutedEventArgs e)
-        {
-            FileContent.Redo();
-        }
-        /// <summary>
-        /// 点击 剪切
-        /// </summary>
-        private void MenuCut_Click(object sender, RoutedEventArgs e)
-        {
-            FileContent.Cut();
-        }
-        /// <summary>
-        /// 点击 复制
-        /// </summary>
-        private void MenuCopy_Click(object sender, RoutedEventArgs e)
-        {
-            FileContent.Copy();
-        }
-        /// <summary>
-        /// 点击 粘贴
-        /// </summary>
-        private void MenuPaste_Click(object sender, RoutedEventArgs e)
-        {
-            FileContent.Paste();
-        }
-        /// <summary>
-        /// 点击 全选
-        /// </summary>
-        private void MenuSelectAll_Click(object sender, RoutedEventArgs e)
-        {
-            FileContent.SelectAll();
-        }
-        /// <summary>
-        /// 点击 转换为繁体
-        /// </summary>
-        private void MenuToTraditional_Click(object sender, RoutedEventArgs e)
-        {
-            if (FileContent.IsFocused)
-            {
-                FileContent.SelectedText = ToTraditional(FileContent.SelectedText);
-            }
-        }
-        /// <summary>
-        /// 点击 转换为简体
-        /// </summary>
-        private void MenuToSimplified_Click(object sender, RoutedEventArgs e)
-        {
-            if (FileContent.IsFocused)
-            {
-                FileContent.SelectedText = ToSimplified(FileContent.SelectedText);
-            }
-        }
-        /// <summary>
-        /// 点击 查找＆替换
-        /// </summary>
-        private void MenuFindAndReplace_Click(object sender, RoutedEventArgs e)
-        {
-            FindAndReplace();
-        }
-        /// <summary>
-        /// 点击 删除选中
-        /// </summary>
-        private void MenuDelete_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedNode != null)
-            {
-                if (SelectedNode.IsFile == true && SelectedNode.Name != null)
-                {
-                    DeleteEssay();
-                }
-                else if (SelectedNode.IsFile == false && SelectedNode.Name != null)
-                {
-                    DeleteChapter();
-                }
-                else
-                {
-                    //显示消息
-                    ShowMessage("请选择一个项目再删除", false);
-                }
-            }
-            else
-            {
-                //显示消息
-                ShowMessage("请选择一个项目再删除", false);
-            }
-        }
-        /// <summary>
-        /// 点击 展开目录
-        /// </summary>
-        private void MenuExpand_Click(object sender, RoutedEventArgs e)
-        {
-            ExpandTree();
-        }
-        /// <summary>
-        /// 点击 收起目录
-        /// </summary>
-        private void MenuCollapse_Click(object sender, RoutedEventArgs e)
-        {
-            CollapseTree();
-        }
-        /// <summary>
-        /// 点击 刷新目录
-        /// </summary>
-        private void MenuRefresh_Click(object sender, RoutedEventArgs e)
-        {
-            //重新导入目录
-            ReloadFilesTree();
-        }
-        /// <summary>
-        /// 点击 隐藏目录区
-        /// </summary>
-        private void MenuHideDir_Click(object sender, RoutedEventArgs e)
-        {
-            HidePanCenter();
-        }
-        #endregion
-
-
-
-
-
-
-        /// <summary>
-        /// 语言列表
-        /// </summary>
-        private List<CategoryInfo> LanguageCategorys { get; set; } = new List<CategoryInfo>();
-
-        /// <summary>
-        /// 刷新偏好设置
-        /// </summary>
-        private void RefreshPreferences()
-        {
-            //启动时显示运行信息
-            ShowRunInfoCheckBox.IsChecked = Properties.User.Default.isShowRunInfo;
-            //自动开书
-            AutoOpenBookCheckBox.IsChecked = Properties.User.Default.isAutoOpenBook;
-            //自动书名号
-            AutoBrackets.IsChecked = Properties.User.Default.isAutoBrackets;
-            //自动补全
-            AutoCompletion.IsChecked = Properties.User.Default.isAutoCompletion;
-            //自动缩进
-            AutoIndentation.IsChecked = Properties.User.Default.isAutoIndentation;
-            //缩进数
-            AutoIndentations.Text = Properties.User.Default.autoIndentations.ToString();
-            //缩进数可编辑性
-            if ((bool)AutoIndentation.IsChecked) { AutoIndentations.IsEnabled = true; }
-            else { AutoIndentations.IsEnabled = false; }
-            //定时自动保存
-            AutoSaveEvery.IsChecked = Properties.User.Default.isAutoSaveEvery;
-            //定时自动保存时间间隔
-            AutoSaveTime.Text = Properties.User.Default.autoSaveMinute.ToString();
-            //时间间隔可编辑性
-            if ((bool)AutoSaveEvery.IsChecked) { AutoSaveTime.IsEnabled = true; }
-            else { AutoSaveTime.IsEnabled = false; }
-            //切换自动保存
-            AutoSaveWhenSwitch.IsChecked = Properties.User.Default.isAutoSaveWhenSwitch;
-            //定时自动备份
-            AutoBackup.IsChecked = Properties.User.Default.isAutoBackup;
-            //自动备份时间间隔
-            AutoBackupTime.Text = Properties.User.Default.autoBackupMinute.ToString();
-            //自动备份可编辑性
-            if ((bool)AutoBackup.IsChecked) { AutoBackupTime.IsEnabled = true; }
-            else { AutoBackupTime.IsEnabled = false; }
-            AutoBackup.ToolTip = "备份位置：" + System.Windows.Forms.Application.StartupPath + @"\" + Properties.User.Default.BackupDir;
-            //滚动条
-            ShowScrollBar.IsChecked = Properties.User.Default.isShowScrollBar;
-
-            //创建语言选项
-            SetLanguage(Properties.User.Default.language);
-            //获取、设置主题选项
-            SetThemeItem(Properties.User.Default.ThemePath);
-            //获取文章字体信息
-            TextSize.Text = Properties.User.Default.fontSize.ToString();
-            SetFontsItem(Properties.User.Default.fontName);
-        }
-
-        //载入
-        /// <summary>
-        /// 获取主题选项
-        /// </summary>
-        private void LoadThemeItem()
-        {
-            Skins.Items.Clear();
-            foreach (TextBlock item in Themes)
-            {
-                TextBlock theme = new TextBlock()
-                {
-                    Text = item.Text,
-                    ToolTip = item.ToolTip
-                };
-                Skins.Items.Add(theme);
-            }
-        }
-        /// <summary>
-        /// 创建语言选项
-        /// </summary>
-        private void LoadLanguage()
-        {
-            LanguageCategorys.Clear();
-            CategoryInfo zh_CN = new CategoryInfo() { Name = "中文（默认）", Value = "zh_CN" };
-            LanguageCategorys.Add(zh_CN);
-            CategoryInfo en_US = new CategoryInfo() { Name = "English", Value = "en_US" };
-            LanguageCategorys.Add(en_US);
-            //绑定数据，真正的赋值
-            CBSelectedLanguage.ItemsSource = LanguageCategorys;
-            //指定显示的内容
-            CBSelectedLanguage.DisplayMemberPath = "Name";
-            //指定选中后的能够获取到的内容
-            CBSelectedLanguage.SelectedValuePath = "Value";
-        }
-        /// <summary>
-        /// 获取字体选项
-        /// </summary>
-        private void LoadFontsItem()
-        {
-            CBFonts.Items.Clear();
-            foreach (FontFamily font in Fonts.SystemFontFamilies)
-            {
-                //动态的添加一个ListViewItem项
-                TextBlock label = new TextBlock
-                {
-                    Text = font.Source,
-                    FontFamily = font
-                };
-                CBFonts.Items.Add(label);
-            }
-        }
-
-        //设置
-        /// <summary>
-        /// 设置主题选项
-        /// </summary>
-        /// <param name="_theme">主题路径</param>
-        private void SetThemeItem(string _theme)
-        {
-            foreach (TextBlock item in Skins.Items)
-            {
-                if (item.ToolTip.ToString() == _theme)
-                {
-                    Skins.SelectedItem = item;
-                    break;
-                }
-            }
-        }
-        /// <summary>
-        /// 设置语言选项
-        /// </summary>
-        /// <param name="language">语言简拼</param>
-        private void SelectLanguage(string language)
-        {
-            foreach (CategoryInfo ci in LanguageCategorys)
-            {
-                if (ci.Value == language)
-                {
-                    CBSelectedLanguage.SelectedItem = ci;
-                    break;
-                }
-            }
-        }
-        /// <summary>
-        /// 设置字体选项
-        /// </summary>
-        private void SetFontsItem(string fontName)
-        {
-            foreach (TextBlock item in CBFonts.Items)
-            {
-                if (item.Text == fontName)
-                {
-                    CBFonts.SelectedItem = item;
-                    break;
-                }
-            }
-        }
-
-        //创建
-
-        /// <summary>
-        /// 显示消息
-        /// </summary>
-        /// <param name="resourceName">资源名</param>
-        private void ShowMessage(string resourceName)
-        {
-            //Message.Opacity = 1;
-            //Message.Content = FindResource(resourceName);
-        }
-
-
-        //偏好设置页事件
+        //设置更改事件
         private void ShowRunInfo_Checked(object sender, RoutedEventArgs e)
         {
             Properties.User.Default.isShowRunInfo = true;
             SavePreferences();
             //显示消息
-            ShowMessage("已更改");
+            ShowMessage("已更改", false);
         }
         private void ShowRunInfo_Unchecked(object sender, RoutedEventArgs e)
         {
             Properties.User.Default.isShowRunInfo = false;
             SavePreferences();
             //显示消息
-            ShowMessage("已更改");
+            ShowMessage("已更改", false);
         }
-
-
         private void AutoOpenBook_Checked(object sender, RoutedEventArgs e)
         {
             Properties.User.Default.isAutoOpenBook = true;
             SavePreferences();
             //显示消息
-            ShowMessage("已更改");
+            ShowMessage("已更改", false);
         }
         private void AutoOpenBook_Unchecked(object sender, RoutedEventArgs e)
         {
             Properties.User.Default.isAutoOpenBook = false;
             SavePreferences();
             //显示消息
-            ShowMessage("已更改");
+            ShowMessage("已更改", false);
         }
         private void AutoBrackets_Checked(object sender, RoutedEventArgs e)
         {
             Properties.User.Default.isAutoBrackets = true;
             SavePreferences();
             //显示消息
-            ShowMessage("已更改");
+            ShowMessage("已更改", false);
         }
         private void AutoBrackets_Unchecked(object sender, RoutedEventArgs e)
         {
             Properties.User.Default.isAutoBrackets = false;
             SavePreferences();
             //显示消息
-            ShowMessage("已更改");
+            ShowMessage("已更改", false);
         }
         private void AutoCompletion_Checked(object sender, RoutedEventArgs e)
         {
             Properties.User.Default.isAutoCompletion = true;
             SavePreferences();
             //显示消息
-            ShowMessage("已更改");
+            ShowMessage("已更改", false);
         }
         private void AutoCompletion_Unchecked(object sender, RoutedEventArgs e)
         {
             Properties.User.Default.isAutoCompletion = false;
             SavePreferences();
             //显示消息
-            ShowMessage("已更改");
+            ShowMessage("已更改", false);
         }
         private void AutoIndentation_Checked(object sender, RoutedEventArgs e)
         {
@@ -3239,7 +3037,7 @@ namespace E.Writer
             SavePreferences();
             AutoIndentations.IsEnabled = true;
             //显示消息
-            ShowMessage("已更改");
+            ShowMessage("已更改", false);
         }
         private void AutoIndentation_Unchecked(object sender, RoutedEventArgs e)
         {
@@ -3247,7 +3045,7 @@ namespace E.Writer
             SavePreferences();
             AutoIndentations.IsEnabled = false;
             //显示消息
-            ShowMessage("已更改");
+            ShowMessage("已更改", false);
         }
         private void AutoIndentations_KeyUp(object sender, KeyEventArgs e)
         {
@@ -3261,18 +3059,18 @@ namespace E.Writer
                         Properties.User.Default.autoIndentations = t;
                         SavePreferences();
                         //显示消息
-                        ShowMessage("已更改");
+                        ShowMessage("已更改", false);
                     }
                     else
                     {
                         AutoIndentations.Text = Properties.User.Default.autoIndentations.ToString();
-                        ShowMessage("输入1~999整数");
+                        ShowMessage("输入1~999整数", false);
                     }
                 }
                 catch (Exception)
                 {
                     AutoIndentations.Text = Properties.User.Default.autoIndentations.ToString();
-                    ShowMessage("输入整数");
+                    ShowMessage("输入整数", false);
                 }
             }
         }
@@ -3281,14 +3079,14 @@ namespace E.Writer
             Properties.User.Default.isAutoSaveWhenSwitch = true;
             SavePreferences();
             //显示消息
-            ShowMessage("已更改");
+            ShowMessage("已更改", false);
         }
         private void AutoSaveWhenSwitch_Unchecked(object sender, RoutedEventArgs e)
         {
             Properties.User.Default.isAutoSaveWhenSwitch = false;
             SavePreferences();
             //显示消息
-            ShowMessage("已更改");
+            ShowMessage("已更改", false);
         }
         private void AutoSaveEvery_Checked(object sender, RoutedEventArgs e)
         {
@@ -3296,7 +3094,7 @@ namespace E.Writer
             SavePreferences();
             AutoSaveTime.IsEnabled = true;
             //显示消息
-            ShowMessage("已更改");
+            ShowMessage("已更改", false);
         }
         private void AutoSaveEvery_Unchecked(object sender, RoutedEventArgs e)
         {
@@ -3304,7 +3102,7 @@ namespace E.Writer
             SavePreferences();
             AutoSaveTime.IsEnabled = false;
             //显示消息
-            ShowMessage("已更改");
+            ShowMessage("已更改", false);
         }
         private void AutoSaveTime_KeyUp(object sender, KeyEventArgs e)
         {
@@ -3320,18 +3118,18 @@ namespace E.Writer
                         SavePreferences();
                         AutoSaveTimer.Interval = ts;
                         //显示消息
-                        ShowMessage("已更改");
+                        ShowMessage("已更改", false);
                     }
                     else
                     {
                         AutoSaveTime.Text = Properties.User.Default.autoSaveMinute.ToString();
-                        ShowMessage("输入1~999整数");
+                        ShowMessage("输入1~999整数", false);
                     }
                 }
                 catch (Exception)
                 {
                     AutoSaveTime.Text = Properties.User.Default.autoSaveMinute.ToString();
-                    ShowMessage("输入整数");
+                    ShowMessage("输入整数", false);
                 }
             }
         }
@@ -3341,7 +3139,7 @@ namespace E.Writer
             SavePreferences();
             AutoBackupTime.IsEnabled = true;
             //显示消息
-            ShowMessage("已更改");
+            ShowMessage("已更改", false);
         }
         private void AutoBackup_Unchecked(object sender, RoutedEventArgs e)
         {
@@ -3349,7 +3147,7 @@ namespace E.Writer
             SavePreferences();
             AutoBackupTime.IsEnabled = false;
             //显示消息
-            ShowMessage("已更改");
+            ShowMessage("已更改", false);
         }
         private void AutoBackupTime_KeyUp(object sender, KeyEventArgs e)
         {
@@ -3365,18 +3163,18 @@ namespace E.Writer
                         SavePreferences();
                         AutoBackupTimer.Interval = ts;
                         //显示消息
-                        ShowMessage("已更改");
+                        ShowMessage("已更改", false);
                     }
                     else
                     {
                         AutoBackupTime.Text = Properties.User.Default.autoBackupMinute.ToString();
-                        ShowMessage("输入1~999整数");
+                        ShowMessage("输入1~999整数", false);
                     }
                 }
                 catch (Exception)
                 {
                     AutoBackupTime.Text = Properties.User.Default.autoBackupMinute.ToString();
-                    ShowMessage("输入整数");
+                    ShowMessage("输入整数", false);
                 }
             }
         }
@@ -3386,7 +3184,7 @@ namespace E.Writer
             SavePreferences();
             FileContent.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
             //显示消息
-            ShowMessage("已更改");
+            ShowMessage("已更改", false);
         }
         private void ShowScrollBar_Unchecked(object sender, RoutedEventArgs e)
         {
@@ -3394,7 +3192,7 @@ namespace E.Writer
             SavePreferences();
             FileContent.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
             //显示消息
-            ShowMessage("已更改");
+            ShowMessage("已更改", false);
         }
         private void Skins_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -3410,12 +3208,12 @@ namespace E.Writer
                     Properties.User.Default.ThemePath = tmp;
                     SavePreferences();
                     //显示消息
-                    ShowMessage("已更改");
+                    ShowMessage("已更改", false);
                 }
                 else
                 {
                     Skins.Items.Remove(Skins.SelectedItem);
-                    MessageBox.Show("该主题的配置文件不存在");
+                    ShowMessage("该主题的配置文件不存在", false);
                 }
             }
         }
@@ -3471,18 +3269,18 @@ namespace E.Writer
                         Properties.User.Default.fontSize = i;
                         SavePreferences();
                         FileContent.FontSize = i;
-                        ShowMessage("已更改");
+                        ShowMessage("已更改", false);
                     }
                     else
                     {
                         TextSize.Text = Properties.User.Default.fontSize.ToString();
-                        ShowMessage("输入1~999整数");
+                        ShowMessage("输入1~999整数", false);
                     }
                 }
                 catch (Exception)
                 {
                     TextSize.Text = Properties.User.Default.fontSize.ToString();
-                    ShowMessage("输入整数");
+                    ShowMessage("输入整数", false);
                 }
             }
         }
@@ -3495,27 +3293,54 @@ namespace E.Writer
             Properties.User.Default.fontName = item.Text;
             SavePreferences();
             //显示消息
-            ShowMessage("已更改");
+            ShowMessage("已更改", false);
         }
         private void BtnReset_Click(object sender, RoutedEventArgs e)
         {
             ResetPreferences();
-            ShowMessage("已重置");
+            RefreshPreferences();
+            ShowMessage("已重置", false);
         }
         private void BtnApply_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-
         //其它事件
-        private void Timer_Tick(object sender, EventArgs e)
+        private void TimerAutoSave_Tick(object sender, EventArgs e)
         {
-            //if (Message.Opacity > 0)
-            //{
-            //    Message.Opacity -= 0.01;
-            //}
+            if (SelectedEssay != null && Properties.User.Default.isAutoSaveEvery == true)
+            {
+                SaveFile();
+                //显示消息
+                ShowMessage("已自动保存于", DateTime.Now.ToLongTimeString().ToString(), false);
+            }
         }
+        private void TimerAutoBackup_Tick(object sender, EventArgs e)
+        {
+            //timer2.Stop();
+            Backup();
+        }
+        private void BtnRemoveBookHistory_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Controls.Button closeBtn = sender as System.Windows.Controls.Button;
+            foreach (var item in Books.Items)
+            {
+                Grid grid = item as Grid;
+                System.Windows.Controls.Button btn = grid.Children[1] as System.Windows.Controls.Button;
+                if (closeBtn.Tag.ToString() == btn.Tag.ToString())
+                {
+                    if (btn.Tag.ToString() == SelectedBookPath)
+                    {
+                        CloseBook();
+                    }
+                    Books.Items.Remove(grid);
+                    Properties.Settings.Default._books = Properties.Settings.Default._books.Replace(btn.Tag.ToString(), "");
+                    break;
+                }
+            }
+        }
+        #endregion
     }
 
 
@@ -3524,9 +3349,13 @@ namespace E.Writer
     /// </summary>
     public class FileNode : TreeViewItem
     {
-        //节点类型
+        /// <summary>
+        /// 节点类型
+        /// </summary>
         public bool IsFile { get; set; }
-        //路径
+        /// <summary>
+        /// 路径
+        /// </summary>
         public string Path { get; set; }
 
         /// <summary>

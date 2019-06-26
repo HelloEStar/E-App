@@ -9,40 +9,46 @@
     <sys:String x:Key="视图">视图</sys:String>
     <sys:String x:Key="设置">设置</sys:String>
     <sys:String x:Key="关于">关于</sys:String>
+    
     <sys:String x:Key="打开书籍">打开书籍 Ctrl+O</sys:String>
+    <sys:String x:Key="关闭书籍">关闭书籍 Ctrl+Q</sys:String>
+    <sys:String x:Key="关闭卷册">关闭卷册 Ctrl+Alt+Q</sys:String>
+    <sys:String x:Key="关闭文章">关闭文章 Ctrl+Shift+Q</sys:String>
     <sys:String x:Key="创建书籍">创建书籍 Ctrl+B</sys:String>
     <sys:String x:Key="创建卷册">创建卷册 Ctrl+Alt+B</sys:String>
     <sys:String x:Key="创建文章">创建文章 Ctrl+Shift+B</sys:String>
+    <sys:String x:Key="保存文章">保存文章 Ctrl+S</sys:String>
+    <sys:String x:Key="另存文章">另存文章 Ctrl+Shift+S</sys:String>
+    <sys:String x:Key="导出全文">导出全文 Ctrl+E</sys:String>
+    <sys:String x:Key="删除目标">删除目标 Delete</sys:String>
+    <sys:String x:Key="书籍信息">书籍信息 Ctrl+M</sys:String>
+    <sys:String x:Key="卷册信息">卷册信息 Ctrl+Alt+M</sys:String>
 
-    <sys:String x:Key="保存文章">保存文章</sys:String>
-    <sys:String x:Key="另存为文章">另存为文章</sys:String>
-    <sys:String x:Key="导出全书">导出全书</sys:String>
-    <sys:String x:Key="关闭书籍">关闭书籍</sys:String>
-    <sys:String x:Key="关闭卷册">关闭卷册</sys:String>
-    <sys:String x:Key="关闭文章">关闭文章</sys:String>
-    <sys:String x:Key="书籍信息">书籍信息</sys:String>
-    <sys:String x:Key="卷册信息">卷册信息</sys:String>
-    <sys:String x:Key="退出">退出E Writer</sys:String>
-    <sys:String x:Key="查找替换">查找替换</sys:String>
-    <sys:String x:Key="删除选中">删除选中卷册或文章</sys:String>
+    <sys:String x:Key="撤销">撤销 Ctrl+Z</sys:String>
+    <sys:String x:Key="重做">重做 Ctrl+Y</sys:String>
+    <sys:String x:Key="复制">复制 Ctrl+C</sys:String>
+    <sys:String x:Key="剪切">剪切 Ctrl+X</sys:String>
+    <sys:String x:Key="粘贴">粘贴 Ctrl+V</sys:String>
+    <sys:String x:Key="转繁">转为繁体 Shift+F</sys:String>
+    <sys:String x:Key="转简">转为简体 Shift+J</sys:String>
+    <sys:String x:Key="查换">查找替换 Ctrl+F</sys:String>
 
-    <sys:String x:Key="显示目录">显示目录</sys:String>
-    <sys:String x:Key="隐藏目录">隐藏目录</sys:String>
-    <sys:String x:Key="展开目录">展开目录</sys:String>
-    <sys:String x:Key="收起目录">收起目录</sys:String>
-    <sys:String x:Key="刷新目录">刷新目录</sys:String>
+    <sys:String x:Key="折叠">折叠 Ctrl+Shift+F</sys:String>
+    <sys:String x:Key="展开">展开目录 Ctrl+I</sys:String>
+    <sys:String x:Key="收起">收起目录 Ctrl+U</sys:String>
+    <sys:String x:Key="刷新">刷新目录 Ctrl+R</sys:String>
     
     <sys:String x:Key="重置">重置</sys:String>
     <sys:String x:Key="应用">应用</sys:String>
-    
-    <sys:String x:Key="检查更新">检查更新</sys:String>
     <sys:String x:Key="清空运行信息">清空运行信息</sys:String>
-    <sys:String x:Key="个人站点">个人站点</sys:String>
-    <sys:String x:Key="软件主页">软件主页</sys:String>
+    
+    <sys:String x:Key="官方网站">官方网站</sys:String>
+    <sys:String x:Key="应用主页">应用主页</sys:String>
+    <sys:String x:Key="检查更新">检查更新</sys:String>
     <sys:String x:Key="提交反馈">提交反馈</sys:String>
     <sys:String x:Key="GitHub">GitHub</sys:String>
     <sys:String x:Key="QQ交流群">QQ交流群</sys:String>
-    <sys:String x:Key="赞助比特币">赞助比特币</sys:String>
+    <sys:String x:Key="赞助">赞助比特币</sys:String>
 
     <!--中间区域-->
     <!--目录页-->
