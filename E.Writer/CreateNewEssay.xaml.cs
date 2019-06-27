@@ -141,7 +141,7 @@ namespace E.Writer
                     //打开文章
                     Ow.OpenEssay(EssayPath.Text);
                     //改变主窗口控件状态
-                    Ow.SetElementState(3);
+                    Ow.RefreshBtnsState();
                     //改变标题
                     Ow.RefreshTitle();
 

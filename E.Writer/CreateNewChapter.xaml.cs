@@ -132,7 +132,7 @@ namespace E.Writer
                     //打开
                     Ow.OpenChapter(ChapterPath.Text);
                     //改变主窗口控件状态
-                    Ow.SetElementState(2);
+                    Ow.RefreshBtnsState();
                     //改变标题
                     Ow.RefreshTitle();
 
