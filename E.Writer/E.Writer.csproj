@@ -96,12 +96,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CreateNewBook.xaml.cs">
-      <DependentUpon>CreateNewBook.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="CreateNewChapter.xaml.cs">
-      <DependentUpon>CreateNewChapter.xaml</DependentUpon>
-    </Compile>
     <Compile Include="AboutPage.xaml.cs">
       <DependentUpon>AboutPage.xaml</DependentUpon>
     </Compile>
@@ -116,22 +110,6 @@
       <DependentUpon>User.settings</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
-    <Page Include="CreateNewBook.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="CreateNewChapter.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="CreateNewEssay.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="FindAndReplace.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="语言\en_US.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -147,12 +125,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CreateNewEssay.xaml.cs">
-      <DependentUpon>CreateNewEssay.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="FindAndReplace.xaml.cs">
-      <DependentUpon>FindAndReplace.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

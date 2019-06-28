@@ -71,6 +71,29 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="MyFreeButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="#FFF0F0F0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                            <TextBlock Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FF00C5FF"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FF006496"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <!--标签样式-->
         <Style x:Key="MySettingLabelStyle" TargetType="Label">
             <Setter Property="Foreground" Value="Black"/>
@@ -81,10 +104,8 @@
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontSize" Value="14"/>
         </Style>
-        <Style x:Key="MyTipLabelStyle" TargetType="Label">
+        <Style x:Key="MyFreeLabelStyle" TargetType="Label">
             <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Padding" Value="5"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
         <!--检查框样式-->
@@ -116,12 +137,19 @@
             <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="Background" Value="{x:Null}"/>
         </Style>
+        <!--文本框样式-->
+        <Style x:Key="MyTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
     </Window.Resources>
     
     <Grid x:Name="MainGrid">
         <DockPanel>
             <DockPanel x:Name="PanLeft" Background="#FFF0F0F0" >
                 <StackPanel DockPanel.Dock="Top">
+                    <Button x:Name="BtnFold" Content="折叠" ToolTip="{DynamicResource 折叠}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnFold_Click" />
                     <Button x:Name="BtnFile" Content="{DynamicResource 文件}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnFile_Click"/>
                     <Button x:Name="BtnEdit" Content="{DynamicResource 编辑}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnEdit_Click"/>
                     <Button x:Name="BtnView" Content="{DynamicResource 视图}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnView_Click"/>
@@ -135,11 +163,7 @@
                         <Button x:Name="BtnCloseBook" Content="关书" ToolTip="{DynamicResource 关闭书籍}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnCloseBook_Click" />
                         <Button x:Name="BtnCloseChapter" Content="关卷" ToolTip="{DynamicResource 关闭卷册}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnCloseChapter_Click" />
                         <Button x:Name="BtnCloseEssay" Content="关文" ToolTip="{DynamicResource 关闭文章}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnCloseEssay_Click" />
-                        
-                        <Button x:Name="BtnCreateBook" Content="创书" ToolTip="{DynamicResource 创建书籍}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnCreateBook_Click"/>
-                        <Button x:Name="BtnCreateChapter" Content="创卷" ToolTip="{DynamicResource 创建卷册}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnCreateChapter_Click"/>
-                        <Button x:Name="BtnCreateEssay" Content="创文" ToolTip="{DynamicResource 创建文章}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnCreateEssay_Click"/>
-                        
+
                         <Button x:Name="BtnSave" Content="保存" ToolTip="{DynamicResource 保存文章}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnSave_Click" />
                         <Button x:Name="BtnSaveAs" Content="另存" ToolTip="{DynamicResource 另存文章}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnSaveAs_Click" />
                         <Button x:Name="BtnExport" Content="导出" ToolTip="{DynamicResource 导出全文}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnExport_Click" />
@@ -157,10 +181,8 @@
                         <Button x:Name="BtnPaste" Content="粘贴" ToolTip="{DynamicResource 粘贴}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnPaste_Click" />
                         <Button x:Name="BtnToTraditional" Content="转繁" ToolTip="{DynamicResource 转繁}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnToTraditional_Click" />
                         <Button x:Name="BtnToSimplified" Content="转简" ToolTip="{DynamicResource 转简}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnToSimplified_Click" />
-                        <Button x:Name="BtnFindAndReplace" Content="查换" ToolTip="{DynamicResource 查换}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnFindAndReplace_Click" />
                     </WrapPanel>
                     <WrapPanel  x:Name="BtnsView" Orientation="Vertical" Visibility="Collapsed">
-                        <Button x:Name="BtnFold" Content="折叠" ToolTip="{DynamicResource 折叠}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnFold_Click" />
                         <Button x:Name="BtnExpand" Content="展开" ToolTip="{DynamicResource 展开}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnExpand_Click" />
                         <Button x:Name="BtnCollapse" Content="收起" ToolTip="{DynamicResource 收起}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnCollapse_Click" />
                         <Button x:Name="BtnRefresh" Content="刷新" ToolTip="{DynamicResource 刷新}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnRefresh_Click" />
@@ -182,9 +204,78 @@
                 </WrapPanel>
             </DockPanel>
             <Grid x:Name="PanCenter" Background="#FFF0F0F0" Width="210">
-                <DockPanel x:Name="CenterDirectoryPage">
+                <DockPanel x:Name="CenterBookPage">
                     <ComboBox x:Name="Books" BorderBrush="{x:Null}" VerticalAlignment="Top" Height="30" ToolTip="最近打开过的书籍列表" SelectionChanged="Books_SelectionChanged" Background="White" Padding="0" FontSize="14" VerticalContentAlignment="Center" BorderThickness="0" Cursor="Hand" SizeChanged="Books_SizeChanged" DockPanel.Dock="Top" />
                     <TreeView x:Name="FilesTree" Margin="0" SelectedItemChanged="FilesTree_SelectedItemChanged" MouseDoubleClick="FilesTree_MouseDoubleClick" KeyUp="FilesTree_KeyUp" BorderBrush="{x:Null}" Padding="0,5" Background="#00000000"/>
+                </DockPanel>
+
+                <DockPanel x:Name="CenterEditPage">
+                    <!--Visibility="Collapsed"-->
+                    <StackPanel>
+                        <TabControl Padding="0" Background="{x:Null}" BorderBrush="{x:Null}">
+                            <TabItem Header="创建书籍" Height="30">
+                                <StackPanel>
+                                    <DockPanel Margin="5">
+                                        <Label Content="位置" Style="{DynamicResource MyFreeLabelStyle}"/>
+                                        <TextBox x:Name="TbxFatherPathBook" Style="{DynamicResource MyTextBoxStyle}" Margin="5,0,0,0"/>
+                                    </DockPanel>
+                                    <DockPanel Margin="5">
+                                        <Label Content="名称" Style="{DynamicResource MyFreeLabelStyle}"/>
+                                        <TextBox x:Name="TbxBookName" Style="{DynamicResource MyTextBoxStyle}" Margin="5,0,0,0" TextChanged="BookName_TextChanged"/>
+                                    </DockPanel>
+                                    <WrapPanel Margin="5" ItemHeight="30" ItemWidth="99" >
+                                        <Button x:Name="BtnBrowseBook" Content="浏览"  Style="{DynamicResource MyFreeButtonStyle}" Click="BrowseBook_Click"/>
+                                        <Button x:Name="BtnCreateBook" Content="创建书籍"  Style="{DynamicResource MyFreeButtonStyle}" Click="CreateBook_Click"/>
+                                    </WrapPanel>
+                                </StackPanel>
+                            </TabItem>
+                            <TabItem Header="创建卷册" Height="30">
+                                <StackPanel>
+                                    <DockPanel Margin="5">
+                                        <Label Content="位置" Style="{DynamicResource MyFreeLabelStyle}"/>
+                                        <TextBox x:Name="TbxFatherPathChapter" Style="{DynamicResource MyTextBoxStyle}" Margin="5,0,0,0"/>
+                                    </DockPanel>
+                                    <DockPanel Margin="5">
+                                        <Label Content="名称" Style="{DynamicResource MyFreeLabelStyle}"/>
+                                        <TextBox x:Name="TbxChapterName" Style="{DynamicResource MyTextBoxStyle}" Margin="5,0,0,0" TextChanged="ChapterName_TextChanged"/>
+                                    </DockPanel>
+                                    <WrapPanel Margin="5" ItemHeight="30" ItemWidth="99" >
+                                        <Button x:Name="BtnBrowseChapter" Content="浏览" Style="{DynamicResource MyFreeButtonStyle}" Click="BrowseChapter_Click"/>
+                                        <Button x:Name="BtnCreateChapter" Content="创建卷册" Style="{DynamicResource MyFreeButtonStyle}"  Click="CreateChapter_Click"/>
+                                    </WrapPanel>
+                                </StackPanel>
+                            </TabItem>
+                            <TabItem Header="创建文章" Height="30">
+                                <StackPanel>
+                                    <DockPanel Margin="5">
+                                        <Label Content="位置" Style="{DynamicResource MyFreeLabelStyle}"/>
+                                        <TextBox x:Name="TbxFatherPathEssay" Style="{DynamicResource MyTextBoxStyle}" Margin="5,0,0,0"/>
+                                    </DockPanel>
+                                    <DockPanel Margin="5">
+                                        <Label Content="名称" Style="{DynamicResource MyFreeLabelStyle}"/>
+                                        <TextBox x:Name="TbxEssayName" Style="{DynamicResource MyTextBoxStyle}" Margin="5,0,0,0" TextChanged="EssayName_TextChanged"/>
+                                    </DockPanel>
+                                    <WrapPanel Margin="5" ItemHeight="30" ItemWidth="99" >
+                                        <Button x:Name="BtnBrowseEssay" Content="浏览" Style="{DynamicResource MyFreeButtonStyle}" Click="BrowseEssay_Click"/>
+                                        <Button x:Name="BtnCreateEssay" Content="创建文章" Style="{DynamicResource MyFreeButtonStyle}" Click="CreateEssay_Click"/>
+                                    </WrapPanel>
+                                </StackPanel>
+                            </TabItem>
+                        </TabControl>
+
+                        <DockPanel Margin="5">
+                            <Label Content="查找替换" Style="{DynamicResource MySettingLabelStyle}"/>
+                            <TextBlock x:Name="FindAmount" Text="共计 0 处" Style="{DynamicResource MyTextBlockStyle}" Padding="5,8,5,0" DockPanel.Dock="Right"/>
+                            <Grid/>
+                        </DockPanel>
+                        <TextBox x:Name="TextFind" Style="{DynamicResource MyTextBoxStyle}"/>
+                        <TextBox x:Name="TextReplace" Style="{DynamicResource MyTextBoxStyle}" Margin="5,5,5,0"/>
+                        <WrapPanel Margin="5" ItemWidth="66" ItemHeight="30">
+                            <Button x:Name="BtnFindNext" Content="查找下一个" Style="{DynamicResource MyFreeButtonStyle}" Click="BtnFindNext_Click"/>
+                            <Button x:Name="BtnReplaceNext" Content="替换下一个"  Style="{DynamicResource MyFreeButtonStyle}" Click="BtnReplaceNext_Click"/>
+                            <Button x:Name="BtnReplaceAll" Content="替换全部"  Style="{DynamicResource MyFreeButtonStyle}" Click="BtnReplaceAll_Click"/>
+                        </WrapPanel>
+                    </StackPanel>
                 </DockPanel>
 
                 <DockPanel  x:Name="CenterSettingPage" Visibility="Collapsed">
@@ -250,9 +341,9 @@
             <DockPanel x:Name="PanRight" Background="#FFF0F0F0" Margin="0">
                 <TextBox x:Name="EssayName" Height="30" VerticalAlignment="Top" ToolTip="当前未选中任何文件" VerticalContentAlignment="Center" GotFocus="EssayName_GotFocus" KeyUp="EssayName_KeyUp" CaretBrush="Black" DockPanel.Dock="Top" Text="标题" FontWeight="Bold" FontSize="16" Padding="5,0" BorderBrush="{x:Null}" Background="{x:Null}"/>
                 <DockPanel DockPanel.Dock="Bottom">
-                    <Label x:Name="Words" Content="字数：0" Style="{DynamicResource MyTipLabelStyle}" MaxWidth="100" DockPanel.Dock="Right"/>
-                    <Label x:Name="RowAndColumn" Content="行：0，列：0" Style="{DynamicResource MyTipLabelStyle}" MaxWidth="150" Margin="5,0" DockPanel.Dock="Right"/>
-                    <Label x:Name="HelpMessage" Content="帮助消息" Style="{DynamicResource MyTipLabelStyle}"/>
+                    <TextBlock x:Name="Words" Text="字数：0" Style="{DynamicResource MyTextBlockStyle}" MaxWidth="100" DockPanel.Dock="Right"/>
+                    <TextBlock x:Name="RowAndColumn" Text="行：0，列：0" Style="{DynamicResource MyTextBlockStyle}" MaxWidth="150" Margin="5,0" DockPanel.Dock="Right"/>
+                    <TextBlock x:Name="HelpMessage" Text="帮助消息" Style="{DynamicResource MyTextBlockStyle}"/>
                 </DockPanel>
                 <TextBox x:Name="FileContent" VerticalScrollBarVisibility="Auto" AcceptsReturn="true" TextWrapping="Wrap"  TextChanged="FileContent_TextChanged" KeyUp="FileContent_KeyUp" 
                  SelectionChanged="FileContent_SelectionChanged" SizeChanged="FileContent_SizeChanged" LostFocus="FileContent_LostFocus" PreviewTextInput="FileContent_PreviewTextInput" BorderBrush="{x:Null}" CaretBrush="Black" Padding="5" Background="White" />
