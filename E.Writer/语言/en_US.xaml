@@ -3,7 +3,8 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!--左侧区域-->
-    <sys:String x:Key="文件">File</sys:String>
+    <sys:String x:Key="折叠">Fold Ctrl+Shift+F</sys:String>
+    <sys:String x:Key="书籍">Book</sys:String>
     <sys:String x:Key="编辑">Edit</sys:String>
     <sys:String x:Key="视图">View</sys:String>
     <sys:String x:Key="设置">Setting</sys:String>
@@ -32,7 +33,6 @@
     <sys:String x:Key="转简">To Simplified</sys:String>
     <sys:String x:Key="查换">Find and Replace</sys:String>
 
-    <sys:String x:Key="折叠">折叠 Ctrl+Shift+F</sys:String>
     <sys:String x:Key="展开">Expand List</sys:String>
     <sys:String x:Key="收起">Collapse List</sys:String>
     <sys:String x:Key="刷新">Refresh List</sys:String>

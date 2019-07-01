@@ -150,7 +150,7 @@
             <DockPanel x:Name="PanLeft" Background="#FFF0F0F0" >
                 <StackPanel DockPanel.Dock="Top">
                     <Button x:Name="BtnFold" Content="折叠" ToolTip="{DynamicResource 折叠}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnFold_Click" />
-                    <Button x:Name="BtnFile" Content="{DynamicResource 文件}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnFile_Click"/>
+                    <Button x:Name="BtnFile" Content="{DynamicResource 书籍}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnFile_Click"/>
                     <Button x:Name="BtnEdit" Content="{DynamicResource 编辑}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnEdit_Click"/>
                     <Button x:Name="BtnView" Content="{DynamicResource 视图}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnView_Click"/>
                     <Button x:Name="BtnSetting" Content="{DynamicResource 设置}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnSetting_Click"/>
@@ -209,7 +209,7 @@
                     <TreeView x:Name="FilesTree" Margin="0" SelectedItemChanged="FilesTree_SelectedItemChanged" MouseDoubleClick="FilesTree_MouseDoubleClick" KeyUp="FilesTree_KeyUp" BorderBrush="{x:Null}" Padding="0,5" Background="#00000000"/>
                 </DockPanel>
 
-                <DockPanel x:Name="CenterEditPage">
+                <DockPanel x:Name="CenterEditPage" Visibility="Collapsed">
                     <!--Visibility="Collapsed"-->
                     <StackPanel>
                         <TabControl Padding="0" Background="{x:Null}" BorderBrush="{x:Null}">

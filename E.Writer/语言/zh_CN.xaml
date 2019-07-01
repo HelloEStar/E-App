@@ -4,7 +4,8 @@
 
 
     <!--左侧区域-->
-    <sys:String x:Key="文件">文件</sys:String>
+    <sys:String x:Key="折叠">折叠 Ctrl+Shift+F</sys:String>
+    <sys:String x:Key="书籍">书籍</sys:String>
     <sys:String x:Key="编辑">编辑</sys:String>
     <sys:String x:Key="视图">视图</sys:String>
     <sys:String x:Key="设置">设置</sys:String>
@@ -33,7 +34,6 @@
     <sys:String x:Key="转简">转为简体 Shift+J</sys:String>
     <sys:String x:Key="查换">查找替换 Ctrl+F</sys:String>
 
-    <sys:String x:Key="折叠">折叠 Ctrl+Shift+F</sys:String>
     <sys:String x:Key="展开">展开目录 Ctrl+I</sys:String>
     <sys:String x:Key="收起">收起目录 Ctrl+U</sys:String>
     <sys:String x:Key="刷新">刷新目录 Ctrl+R</sys:String>
