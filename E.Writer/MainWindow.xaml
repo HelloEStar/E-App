@@ -28,6 +28,7 @@
             <Setter Property="Background" Value="Gainsboro"/>
             <Setter Property="Height" Value="40"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="#FF969696"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -36,7 +37,8 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#FF00C5FF"/>
+                                <!--<Setter TargetName="border" Property="Background" Value="#FF00C5FF"/>-->
+                                <Setter TargetName="border" Property="BorderThickness" Value="4,0,0,0"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="border" Property="Background" Value="#FF006496"/>
@@ -134,7 +136,6 @@
             <Setter Property="Margin" Value="5,0"/>
             <Setter Property="Padding" Value="5,0"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="Background" Value="{x:Null}"/>
         </Style>
         <!--文本框样式-->
@@ -150,9 +151,8 @@
             <DockPanel x:Name="PanLeft" Background="#FFF0F0F0" >
                 <StackPanel DockPanel.Dock="Top">
                     <Button x:Name="BtnFold" Content="折叠" ToolTip="{DynamicResource 折叠}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnFold_Click" />
-                    <Button x:Name="BtnFile" Content="{DynamicResource 书籍}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnFile_Click"/>
+                    <Button x:Name="BtnFile" Content="{DynamicResource 书籍}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnFile_Click" BorderThickness="4,0,0,0"/>
                     <Button x:Name="BtnEdit" Content="{DynamicResource 编辑}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnEdit_Click"/>
-                    <Button x:Name="BtnView" Content="{DynamicResource 视图}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnView_Click"/>
                     <Button x:Name="BtnSetting" Content="{DynamicResource 设置}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnSetting_Click"/>
                     <Button x:Name="BtnAbout" Content="{DynamicResource 关于}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnAbout_Click"/>
                 </StackPanel>
@@ -182,11 +182,6 @@
                         <Button x:Name="BtnToTraditional" Content="转繁" ToolTip="{DynamicResource 转繁}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnToTraditional_Click" />
                         <Button x:Name="BtnToSimplified" Content="转简" ToolTip="{DynamicResource 转简}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnToSimplified_Click" />
                     </WrapPanel>
-                    <WrapPanel  x:Name="BtnsView" Orientation="Vertical" Visibility="Collapsed">
-                        <Button x:Name="BtnExpand" Content="展开" ToolTip="{DynamicResource 展开}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnExpand_Click" />
-                        <Button x:Name="BtnCollapse" Content="收起" ToolTip="{DynamicResource 收起}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnCollapse_Click" />
-                        <Button x:Name="BtnRefresh" Content="刷新" ToolTip="{DynamicResource 刷新}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnRefresh_Click" />
-                    </WrapPanel>
                     <WrapPanel  x:Name="BtnsSetting" Orientation="Vertical" Visibility="Collapsed">
                         <Button x:Name="BtnReset" Content="重置" ToolTip="{DynamicResource 重置}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnReset_Click"/>
                         <Button x:Name="BtnApply" Content="应用" ToolTip="{DynamicResource 应用}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnApply_Click"/>
@@ -206,10 +201,15 @@
             <Grid x:Name="PanCenter" Background="#FFF0F0F0" Width="210">
                 <DockPanel x:Name="CenterBookPage">
                     <ComboBox x:Name="Books" BorderBrush="{x:Null}" VerticalAlignment="Top" Height="30" ToolTip="最近打开过的书籍列表" SelectionChanged="Books_SelectionChanged" Background="White" Padding="0" FontSize="14" VerticalContentAlignment="Center" BorderThickness="0" Cursor="Hand" SizeChanged="Books_SizeChanged" DockPanel.Dock="Top" />
+                    <WrapPanel Margin="5" ItemHeight="30" ItemWidth="66" DockPanel.Dock="Bottom" >
+                        <Button x:Name="BtnExpand" Content="展开" ToolTip="{DynamicResource 展开}" Style="{DynamicResource MyFreeButtonStyle}" Click="BtnExpand_Click" />
+                        <Button x:Name="BtnCollapse" Content="收起" ToolTip="{DynamicResource 收起}" Style="{DynamicResource MyFreeButtonStyle}" Click="BtnCollapse_Click" />
+                        <Button x:Name="BtnRefresh" Content="刷新" ToolTip="{DynamicResource 刷新}" Style="{DynamicResource MyFreeButtonStyle}" Click="BtnRefresh_Click" />
+                    </WrapPanel>
                     <TreeView x:Name="FilesTree" Margin="0" SelectedItemChanged="FilesTree_SelectedItemChanged" MouseDoubleClick="FilesTree_MouseDoubleClick" KeyUp="FilesTree_KeyUp" BorderBrush="{x:Null}" Padding="0,5" Background="#00000000"/>
                 </DockPanel>
 
-                <DockPanel x:Name="CenterEditPage" Visibility="Visible">
+                <DockPanel x:Name="CenterEditPage" Visibility="Collapsed">
                     <StackPanel>
                         <Label Content="{DynamicResource 创建}" Style="{DynamicResource MySettingLabelStyle}"/>
                         <TabControl Padding="0" Background="{x:Null}" BorderBrush="{x:Null}">
