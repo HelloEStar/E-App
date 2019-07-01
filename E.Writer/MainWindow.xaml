@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:E.Writer"
         mc:Ignorable="d"
-        Title="E Writer" Height="800" Width="1000" AllowDrop="True" MinWidth="600" MinHeight="550" WindowStartupLocation="CenterScreen" KeyUp="Main_KeyUp" Loaded="Main_Loaded" Closing="Main_Closing" Foreground="Black" Icon="图片/E Writer.ico" Background="Black">
+        Title="E Writer" Height="800" Width="1000" AllowDrop="True" MinWidth="600" MinHeight="700" WindowStartupLocation="CenterScreen" KeyUp="Main_KeyUp" Loaded="Main_Loaded" Closing="Main_Closing" Foreground="Black" Icon="图片/E Writer.ico" Background="Black">
 
     <!--自定义控件模板-->
     <Window.Resources>
@@ -209,11 +209,11 @@
                     <TreeView x:Name="FilesTree" Margin="0" SelectedItemChanged="FilesTree_SelectedItemChanged" MouseDoubleClick="FilesTree_MouseDoubleClick" KeyUp="FilesTree_KeyUp" BorderBrush="{x:Null}" Padding="0,5" Background="#00000000"/>
                 </DockPanel>
 
-                <DockPanel x:Name="CenterEditPage" Visibility="Collapsed">
-                    <!--Visibility="Collapsed"-->
+                <DockPanel x:Name="CenterEditPage" Visibility="Visible">
                     <StackPanel>
+                        <Label Content="{DynamicResource 创建}" Style="{DynamicResource MySettingLabelStyle}"/>
                         <TabControl Padding="0" Background="{x:Null}" BorderBrush="{x:Null}">
-                            <TabItem Header="创建书籍" Height="30">
+                            <TabItem Header="{DynamicResource 书籍}" Height="30">
                                 <StackPanel>
                                     <DockPanel Margin="5">
                                         <Label Content="位置" Style="{DynamicResource MyFreeLabelStyle}"/>
@@ -224,12 +224,12 @@
                                         <TextBox x:Name="TbxBookName" Style="{DynamicResource MyTextBoxStyle}" Margin="5,0,0,0" TextChanged="BookName_TextChanged"/>
                                     </DockPanel>
                                     <WrapPanel Margin="5" ItemHeight="30" ItemWidth="99" >
-                                        <Button x:Name="BtnBrowseBook" Content="浏览"  Style="{DynamicResource MyFreeButtonStyle}" Click="BrowseBook_Click"/>
-                                        <Button x:Name="BtnCreateBook" Content="创建书籍"  Style="{DynamicResource MyFreeButtonStyle}" Click="CreateBook_Click"/>
+                                        <Button x:Name="BtnBrowseBook" Content="{DynamicResource 浏览}"  Style="{DynamicResource MyFreeButtonStyle}" Click="BrowseBook_Click"/>
+                                        <Button x:Name="BtnCreateBook" Content="{DynamicResource 创建}"  Style="{DynamicResource MyFreeButtonStyle}" Click="CreateBook_Click"/>
                                     </WrapPanel>
                                 </StackPanel>
                             </TabItem>
-                            <TabItem Header="创建卷册" Height="30">
+                            <TabItem Header="{DynamicResource 卷册}" Height="30">
                                 <StackPanel>
                                     <DockPanel Margin="5">
                                         <Label Content="位置" Style="{DynamicResource MyFreeLabelStyle}"/>
@@ -240,12 +240,12 @@
                                         <TextBox x:Name="TbxChapterName" Style="{DynamicResource MyTextBoxStyle}" Margin="5,0,0,0" TextChanged="ChapterName_TextChanged"/>
                                     </DockPanel>
                                     <WrapPanel Margin="5" ItemHeight="30" ItemWidth="99" >
-                                        <Button x:Name="BtnBrowseChapter" Content="浏览" Style="{DynamicResource MyFreeButtonStyle}" Click="BrowseChapter_Click"/>
-                                        <Button x:Name="BtnCreateChapter" Content="创建卷册" Style="{DynamicResource MyFreeButtonStyle}"  Click="CreateChapter_Click"/>
+                                        <Button x:Name="BtnBrowseChapter" Content="{DynamicResource 浏览}" Style="{DynamicResource MyFreeButtonStyle}" Click="BrowseChapter_Click"/>
+                                        <Button x:Name="BtnCreateChapter" Content="{DynamicResource 创建}" Style="{DynamicResource MyFreeButtonStyle}"  Click="CreateChapter_Click"/>
                                     </WrapPanel>
                                 </StackPanel>
                             </TabItem>
-                            <TabItem Header="创建文章" Height="30">
+                            <TabItem Header="{DynamicResource 文章}" Height="30">
                                 <StackPanel>
                                     <DockPanel Margin="5">
                                         <Label Content="位置" Style="{DynamicResource MyFreeLabelStyle}"/>
@@ -256,8 +256,8 @@
                                         <TextBox x:Name="TbxEssayName" Style="{DynamicResource MyTextBoxStyle}" Margin="5,0,0,0" TextChanged="EssayName_TextChanged"/>
                                     </DockPanel>
                                     <WrapPanel Margin="5" ItemHeight="30" ItemWidth="99" >
-                                        <Button x:Name="BtnBrowseEssay" Content="浏览" Style="{DynamicResource MyFreeButtonStyle}" Click="BrowseEssay_Click"/>
-                                        <Button x:Name="BtnCreateEssay" Content="创建文章" Style="{DynamicResource MyFreeButtonStyle}" Click="CreateEssay_Click"/>
+                                        <Button x:Name="BtnBrowseEssay" Content="{DynamicResource 浏览}" Style="{DynamicResource MyFreeButtonStyle}" Click="BrowseEssay_Click"/>
+                                        <Button x:Name="BtnCreateEssay" Content="{DynamicResource 创建}" Style="{DynamicResource MyFreeButtonStyle}" Click="CreateEssay_Click"/>
                                     </WrapPanel>
                                 </StackPanel>
                             </TabItem>

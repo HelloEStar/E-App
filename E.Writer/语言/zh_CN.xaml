@@ -10,7 +10,10 @@
     <sys:String x:Key="视图">视图</sys:String>
     <sys:String x:Key="设置">设置</sys:String>
     <sys:String x:Key="关于">关于</sys:String>
-    
+
+    <sys:String x:Key="创建">创建</sys:String>
+    <sys:String x:Key="浏览">浏览</sys:String>
+
     <sys:String x:Key="打开书籍">打开书籍 Ctrl+O</sys:String>
     <sys:String x:Key="关闭书籍">关闭书籍 Ctrl+Q</sys:String>
     <sys:String x:Key="关闭卷册">关闭卷册 Ctrl+Alt+Q</sys:String>
@@ -51,7 +54,12 @@
     <sys:String x:Key="赞助">赞助比特币</sys:String>
 
     <!--中间区域-->
-    <!--目录页-->
+    <!--书籍页-->
+    <!--编辑页-->
+    <!--<sys:String x:Key="书籍">书籍</sys:String>-->
+    <sys:String x:Key="卷册">卷册</sys:String>
+    <sys:String x:Key="文章">文章</sys:String>
+    
     <!--设置页-->
     <sys:String x:Key="语言">语言</sys:String>
     <sys:String x:Key="主题">主题</sys:String>

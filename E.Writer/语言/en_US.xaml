@@ -10,6 +10,9 @@
     <sys:String x:Key="设置">Setting</sys:String>
     <sys:String x:Key="关于">About</sys:String>
 
+    <sys:String x:Key="创建">Create</sys:String>
+    <sys:String x:Key="浏览">Browser</sys:String>
+    
     <sys:String x:Key="打开书籍">Open Book</sys:String>
     <sys:String x:Key="关闭书籍">Close Book</sys:String>
     <sys:String x:Key="关闭卷册">Close Chapter</sys:String>
@@ -48,9 +51,14 @@
     <sys:String x:Key="GitHub">GitHub</sys:String>
     <sys:String x:Key="QQ交流群">QQ Group</sys:String>
     <sys:String x:Key="赞助">BitCoin Support</sys:String>
-    
+
     <!--中间区域-->
-    <!--目录页-->
+    <!--书籍页-->
+    <!--编辑页-->
+    <!--<sys:String x:Key="书籍">Book</sys:String>-->
+    <sys:String x:Key="卷册">Chapter</sys:String>
+    <sys:String x:Key="文章">Essay</sys:String>
+
     <!--设置页-->
     <sys:String x:Key="语言">Language</sys:String>
     <sys:String x:Key="主题">Theme</sys:String>
