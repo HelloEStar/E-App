@@ -7,7 +7,6 @@
     <sys:String x:Key="折叠">折叠 Ctrl+Shift+F</sys:String>
     <sys:String x:Key="书籍">书籍</sys:String>
     <sys:String x:Key="编辑">编辑</sys:String>
-    <sys:String x:Key="视图">视图</sys:String>
     <sys:String x:Key="设置">设置</sys:String>
     <sys:String x:Key="关于">关于</sys:String>
 
