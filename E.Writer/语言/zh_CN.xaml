@@ -4,7 +4,7 @@
 
 
     <!--左侧区域-->
-    <sys:String x:Key="折叠">折叠 Ctrl+Shift+F</sys:String>
+    <sys:String x:Key="折叠">折叠</sys:String>
     <sys:String x:Key="书籍">书籍</sys:String>
     <sys:String x:Key="编辑">编辑</sys:String>
     <sys:String x:Key="设置">设置</sys:String>
@@ -44,13 +44,13 @@
     <sys:String x:Key="应用">应用</sys:String>
     <sys:String x:Key="清空运行信息">清空运行信息</sys:String>
     
-    <sys:String x:Key="官方网站">官方网站</sys:String>
-    <sys:String x:Key="应用主页">应用主页</sys:String>
-    <sys:String x:Key="检查更新">检查更新</sys:String>
-    <sys:String x:Key="提交反馈">提交反馈</sys:String>
-    <sys:String x:Key="GitHub">GitHub</sys:String>
-    <sys:String x:Key="QQ交流群">QQ交流群</sys:String>
-    <sys:String x:Key="赞助">赞助比特币</sys:String>
+    <sys:String x:Key="官方网站">官方网站 F1</sys:String>
+    <sys:String x:Key="应用主页">应用主页 F2</sys:String>
+    <sys:String x:Key="检查更新">检查更新 F3</sys:String>
+    <sys:String x:Key="提交反馈">提交反馈 F4</sys:String>
+    <sys:String x:Key="GitHub">GitHub F5</sys:String>
+    <sys:String x:Key="QQ交流群">QQ交流群 F6</sys:String>
+    <sys:String x:Key="赞助">赞助比特币 F7</sys:String>
 
     <!--中间区域-->
     <!--书籍页-->
@@ -94,7 +94,6 @@
     <sys:String x:Key="上次启动时间">上次启动时间</sys:String>
     <sys:String x:Key="上次关闭时间">上次关闭时间</sys:String>
     <sys:String x:Key="总运行时长">总运行时长</sys:String>
-    <sys:String x:Key="单击右键获取命令">单击右键以获取更多操作命令</sys:String>
     <sys:String x:Key="行">行</sys:String>
     <sys:String x:Key="列">列</sys:String>
     <sys:String x:Key="字数">字数</sys:String>

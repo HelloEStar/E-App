@@ -431,7 +431,7 @@ namespace E.Writer
 
                 EssayName.Text = FindResource("欢迎使用") + " " + AppInfo.Name;
                 EssayName.ToolTip = null;
-                FileContent.Text = FindResource("创建或打开以开始") + Environment.NewLine + FindResource("单击右键获取命令");
+                FileContent.Text = FindResource("创建或打开以开始").ToString();
                 Words.ToolTip = null;
                 Words.Text = FindResource("字数") + "：0";
                 FilesTree.ToolTip = FindResource("创建或打开以开始");
@@ -810,10 +810,13 @@ namespace E.Writer
                     Grid grid = item as Grid;
                     System.Windows.Controls.Label tb = grid.Children[0] as System.Windows.Controls.Label;
                     System.Windows.Controls.Button btn = grid.Children[1] as System.Windows.Controls.Button;
-                    if (tb.Tag.ToString() == CurrentBook.Path)
+                    if (CurrentBook != null)
                     {
-                        hasBook = true;
-                        break;
+                        if (tb.Tag.ToString() == CurrentBook.Path)
+                        {
+                            hasBook = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1696,7 +1699,7 @@ namespace E.Writer
         public void CheckExport()
         {
             //保存文章
-            if (CurrentEssay.Name != null)
+            if (CurrentEssay != null)
             {
                 SaveFile();
             }
@@ -1705,7 +1708,7 @@ namespace E.Writer
             FolderBrowserDialog fbd = new FolderBrowserDialog
             {
                 ShowNewFolderButton = true,
-                SelectedPath = System.IO.Path.GetDirectoryName(Properties.Settings.Default._lastBook),
+                SelectedPath = Path.GetDirectoryName(Properties.Settings.Default._lastBook),
                 Description = FindResource("选择导出目录").ToString()
             };
             //按下确定选择的按钮，获取文件夹路径
@@ -1752,6 +1755,7 @@ namespace E.Writer
                 BtnExpand.IsEnabled = true;
                 BtnCollapse.IsEnabled = true;
                 BtnRefresh.IsEnabled = true;
+                BtnDelete.IsEnabled = true;
 
                 if (CurrentEssay != null)
                 {
@@ -1760,9 +1764,6 @@ namespace E.Writer
 
                     BtnUndo.IsEnabled = true;
                     BtnRedo.IsEnabled = true;
-                    BtnFindNext.IsEnabled = true;
-                    BtnReplaceNext.IsEnabled = true;
-                    BtnReplaceAll.IsEnabled = true;
 
                     if (FileContent.SelectedText != "" && FileContent.SelectedText != null)
                     {
@@ -1780,6 +1781,12 @@ namespace E.Writer
                         BtnToSimplified.IsEnabled = false;
                         BtnToTraditional.IsEnabled = false;
                     }
+
+                    BtnFindNext.IsEnabled = true;
+                    BtnReplaceNext.IsEnabled = true;
+                    BtnReplaceAll.IsEnabled = true;
+                    TextFind.IsEnabled = true;
+                    TextReplace.IsEnabled = true;
                 }
                 else
                 {
@@ -1796,6 +1803,8 @@ namespace E.Writer
                     BtnFindNext.IsEnabled = false;
                     BtnReplaceNext.IsEnabled = false;
                     BtnReplaceAll.IsEnabled = false;
+                    TextFind.IsEnabled = false;
+                    TextReplace.IsEnabled = false;
                 }
             }
             else
@@ -1805,10 +1814,26 @@ namespace E.Writer
                 BtnCreateEssay.IsEnabled = false;
                 BtnExport.IsEnabled = false;
                 BtnBookInfo.IsEnabled = false;
+                BtnSave.IsEnabled = false;
+                BtnSaveAs.IsEnabled = false;
 
                 BtnExpand.IsEnabled = false;
                 BtnCollapse.IsEnabled = false;
                 BtnRefresh.IsEnabled = false;
+                BtnDelete.IsEnabled = false;
+
+                BtnUndo.IsEnabled = false;
+                BtnRedo.IsEnabled = false;
+                BtnCut.IsEnabled = false;
+                BtnCopy.IsEnabled = false;
+                BtnPaste.IsEnabled = false;
+                BtnToSimplified.IsEnabled = false;
+                BtnToTraditional.IsEnabled = false;
+                BtnFindNext.IsEnabled = false;
+                BtnReplaceNext.IsEnabled = false;
+                BtnReplaceAll.IsEnabled = false;
+                TextFind.IsEnabled = false;
+                TextReplace.IsEnabled = false;
             }
 
         }
@@ -2002,9 +2027,7 @@ namespace E.Writer
                 EssayName.Text = FindResource("欢迎使用") + " " + AppInfo.Name;
                 //显示运行记录
                 FileContent.Text = FindResource("启动次数") + "：" + Properties.Settings.Default.runTimes + Environment.NewLine +
-                                   FindResource("启动时间") + "：" + Properties.Settings.Default.thisStartTime + Environment.NewLine +
-                                   Environment.NewLine +
-                                   FindResource("单击右键获取命令");
+                                   FindResource("启动时间") + "：" + Properties.Settings.Default.thisStartTime;
             }
             else
             {
@@ -2020,9 +2043,7 @@ namespace E.Writer
                                    Environment.NewLine +
                                    FindResource("上次启动时间") + "：" + Properties.Settings.Default.lastStartTime + Environment.NewLine +
                                    FindResource("上次关闭时间") + "：" + Properties.Settings.Default.lastEndTime + Environment.NewLine +
-                                   FindResource("总运行时长") + "：" + t + Environment.NewLine +
-                                   Environment.NewLine +
-                                   FindResource("单击右键获取命令");
+                                   FindResource("总运行时长") + "：" + t;
             }
         }
         /// <summary>
@@ -2830,6 +2851,83 @@ namespace E.Writer
         {
             SaveFileAs();
         }
+
+        private void BrowseBook_Click(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog
+            {
+                ShowNewFolderButton = true,
+                SelectedPath = TbxFatherPathBook.Text,
+                Description = "请选择此书籍的存放位置："
+            };
+            //按下确定选择的按钮，获取根目录文件夹路径
+            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                TbxFatherPathBook.Text = fbd.SelectedPath;
+                //检测
+                if (TbxBookName.Text != null && TbxBookName.Text != "")
+                {
+                    if (Properties.User.Default.isAutoBrackets)
+                    {
+                        TbxBookName.ToolTip = TbxFatherPathBook.Text + @"\" + "《" + TbxBookName.Text + "》";
+                    }
+                    else
+                    {
+                        TbxBookName.ToolTip = TbxFatherPathBook.Text + @"\" + TbxBookName.Text;
+                    }
+                }
+            }
+        }
+        private void BrowseChapter_Click(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog
+            {
+                SelectedPath = TbxFatherPathChapter.Text,
+                Description = "请选择此卷册的存放位置："
+            };
+            //按下确定选择的按钮，获取根目录文件夹路径
+            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                if (fbd.SelectedPath.Contains(CurrentBook.Path))
+                {
+                    TbxFatherPathChapter.Text = fbd.SelectedPath;
+                    //检测
+                    if (TbxChapterName.Text != null && TbxChapterName.Text != "")
+                    {
+                        TbxChapterName.ToolTip = TbxFatherPathChapter.Text + @"\" + TbxChapterName.Text;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("不可以将卷册创建在书籍外");
+                }
+            }
+        }
+        private void BrowseEssay_Click(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog
+            {
+                SelectedPath = TbxFatherPathEssay.Text,
+                Description = "请选择此文章的存放位置："
+            };
+            //按下确定选择的按钮，获取根目录文件夹路径
+            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                if (fbd.SelectedPath.Contains(CurrentBook.Path))
+                {
+                    TbxEssayName.ToolTip = fbd.SelectedPath;
+                    //检测
+                    if (TbxEssayName.Text != null && TbxEssayName.Text != "")
+                    {
+                        TbxEssayName.ToolTip = TbxEssayName.ToolTip.ToString() + @"\" + TbxEssayName.Text + ".txt";
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("不可以将文章创建在书籍外");
+                }
+            }
+        }
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedNode != null)
@@ -2853,6 +2951,18 @@ namespace E.Writer
                 //显示消息
                 ShowMessage("请选择一个项目再删除", false);
             }
+        }
+        private void CreateBook_Click(object sender, RoutedEventArgs e)
+        {
+            CreateBook();
+        }
+        private void CreateChapter_Click(object sender, RoutedEventArgs e)
+        {
+            CreateChapter();
+        }
+        private void CreateEssay_Click(object sender, RoutedEventArgs e)
+        {
+            CreateEssay();
         }
 
         private void BtnUndo_Click(object sender, RoutedEventArgs e)
@@ -3039,95 +3149,6 @@ namespace E.Writer
                 MessageBox.Show("请输入要查找的内容");
                 FindAmount.Text = "共计0处";
             }
-        }
-
-        private void BrowseBook_Click(object sender, RoutedEventArgs e)
-        {
-            FolderBrowserDialog fbd = new FolderBrowserDialog
-            {
-                ShowNewFolderButton = true,
-                SelectedPath = TbxFatherPathBook.Text,
-                Description = "请选择此书籍的存放位置："
-            };
-            //按下确定选择的按钮，获取根目录文件夹路径
-            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                TbxFatherPathBook.Text = fbd.SelectedPath;
-                //检测
-                if (TbxBookName.Text != null && TbxBookName.Text != "")
-                {
-                    if (Properties.User.Default.isAutoBrackets)
-                    {
-                        TbxBookName.ToolTip = TbxFatherPathBook.Text + @"\" + "《" + TbxBookName.Text + "》";
-                    }
-                    else
-                    {
-                        TbxBookName.ToolTip = TbxFatherPathBook.Text + @"\" + TbxBookName.Text;
-                    }
-                }
-            }
-        }
-        private void BrowseChapter_Click(object sender, RoutedEventArgs e)
-        {
-            FolderBrowserDialog fbd = new FolderBrowserDialog
-            {
-                SelectedPath = TbxFatherPathChapter.Text,
-                Description = "请选择此卷册的存放位置："
-            };
-            //按下确定选择的按钮，获取根目录文件夹路径
-            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                if (fbd.SelectedPath.Contains(CurrentBook.Path))
-                {
-                    TbxFatherPathChapter.Text = fbd.SelectedPath;
-                    //检测
-                    if (TbxChapterName.Text != null && TbxChapterName.Text != "")
-                    {
-                        TbxChapterName.ToolTip = TbxFatherPathChapter.Text + @"\" + TbxChapterName.Text;
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("不可以将卷册创建在书籍外");
-                }
-            }
-        }
-        private void BrowseEssay_Click(object sender, RoutedEventArgs e)
-        {
-            FolderBrowserDialog fbd = new FolderBrowserDialog
-            {
-                SelectedPath = TbxFatherPathEssay.Text,
-                Description = "请选择此文章的存放位置："
-            };
-            //按下确定选择的按钮，获取根目录文件夹路径
-            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                if (fbd.SelectedPath.Contains(CurrentBook.Path))
-                {
-                    TbxEssayName.ToolTip = fbd.SelectedPath;
-                    //检测
-                    if (TbxEssayName.Text != null && TbxEssayName.Text != "")
-                    {
-                        TbxEssayName.ToolTip = TbxEssayName.ToolTip.ToString() + @"\" + TbxEssayName.Text + ".txt";
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("不可以将文章创建在书籍外");
-                }
-            }
-        }
-        private void CreateBook_Click(object sender, RoutedEventArgs e)
-        {
-            CreateBook();
-        }
-        private void CreateChapter_Click(object sender, RoutedEventArgs e)
-        {
-            CreateChapter();
-        }
-        private void CreateEssay_Click(object sender, RoutedEventArgs e)
-        {
-            CreateEssay();
         }
 
         private void BtnExpand_Click(object sender, RoutedEventArgs e)

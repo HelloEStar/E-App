@@ -33,16 +33,17 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
-                            <TextBlock Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="text" Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <!--<Setter TargetName="border" Property="Background" Value="#FF00C5FF"/>-->
                                 <Setter TargetName="border" Property="BorderThickness" Value="4,0,0,0"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <!--<Setter TargetName="border" Property="Background" Value="#FF006496"/>-->
                                 <Setter TargetName="border" Property="BorderThickness" Value="6,0,0,0"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter TargetName="text" Property="Foreground" Value="#FF8C8C8C"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -60,14 +61,17 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
-                            <TextBlock Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="text" Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#FFB4B4B4"/>
+                                <Setter TargetName="border" Property="Background" Value="Gainsboro"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#FF969696"/>
+                                <Setter TargetName="border" Property="Background" Value="#FFC8C8C8"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter TargetName="text" Property="Foreground" Value="#FF8C8C8C"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -83,14 +87,17 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
-                            <TextBlock Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="text" Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#FFB4B4B4"/>
+                                <Setter TargetName="border" Property="Background" Value="Gainsboro"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#FF969696"/>
+                                <Setter TargetName="border" Property="Background" Value="#FFC8C8C8"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter TargetName="text" Property="Foreground" Value="#FF8C8C8C"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -137,8 +144,9 @@
             <Setter Property="Margin" Value="5,0"/>
             <Setter Property="Padding" Value="5,0"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Background" Value="{x:Null}"/>
+            <Setter Property="Background" Value="White"/>
         </Style>
+        
         <!--文本框样式-->
         <Style x:Key="MyTextBlockStyle" TargetType="TextBlock">
             <Setter Property="Foreground" Value="Black"/>
@@ -151,7 +159,7 @@
         <DockPanel>
             <DockPanel x:Name="PanLeft" Background="#FFF0F0F0" >
                 <StackPanel DockPanel.Dock="Top">
-                    <Button x:Name="BtnFold" Content="折叠" ToolTip="{DynamicResource 折叠}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnFold_Click" BorderThickness="4,0,0,0"/>
+                    <Button x:Name="BtnFold" Content="{DynamicResource 折叠}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnFold_Click" BorderThickness="4,0,0,0"/>
                     <Button x:Name="BtnFile" Content="{DynamicResource 书籍}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnFile_Click" BorderThickness="4,0,0,0"/>
                     <Button x:Name="BtnEdit" Content="{DynamicResource 编辑}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnEdit_Click"/>
                     <Button x:Name="BtnSetting" Content="{DynamicResource 设置}" Style="{DynamicResource MyMenuButtonStyle}" Click="BtnSetting_Click"/>
@@ -166,7 +174,6 @@
                         <Button x:Name="BtnBookInfo" Content="信息" ToolTip="{DynamicResource 书籍信息}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnBookInfo_Click" />
                         <Button x:Name="BtnSave" Content="保存" ToolTip="{DynamicResource 保存文章}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnSave_Click" />
                         <Button x:Name="BtnSaveAs" Content="另存" ToolTip="{DynamicResource 另存文章}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnSaveAs_Click" />
-                        <Button x:Name="BtnDelete" Content="删除" ToolTip="{DynamicResource 删除目标}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnDelete_Click" />
                     </WrapPanel>
                     <WrapPanel  x:Name="BtnsEdit" Orientation="Vertical" Visibility="Collapsed">
                         <Button x:Name="BtnUndo" Content="撤销" ToolTip="{DynamicResource 撤销}" Style="{DynamicResource MyToolButtonStyle}" Click="BtnUndo_Click" />
@@ -197,12 +204,12 @@
                 <DockPanel x:Name="CenterBookPage">
                     <ComboBox x:Name="Books" BorderBrush="{x:Null}" VerticalAlignment="Top" Height="30" ToolTip="最近打开过的书籍列表" SelectionChanged="Books_SelectionChanged" 
                               Background="White" Padding="0" FontSize="14" VerticalContentAlignment="Center" BorderThickness="0" Cursor="Hand" SizeChanged="Books_SizeChanged" DockPanel.Dock="Top" />
-                    <TabControl x:Name="TabCreate" Background="Gainsboro" DockPanel.Dock="Bottom" Padding="0">
+                    <TabControl x:Name="TabCreate" Background="#FFF0F0F0" DockPanel.Dock="Bottom" Padding="0">
                         <TabItem Header="创建书籍" Height="30">
                             <StackPanel>
                                 <DockPanel Margin="5">
                                     <Label Content="位置" Style="{DynamicResource MyFreeLabelStyle}"/>
-                                    <TextBox x:Name="TbxFatherPathBook" Style="{DynamicResource MyTextBoxStyle}" Margin="5,0,0,0"/>
+                                    <TextBox x:Name="TbxFatherPathBook" Style="{DynamicResource MyTextBoxStyle}" Margin="5,0,0,0" />
                                 </DockPanel>
                                 <DockPanel Margin="5">
                                     <Label Content="名称" Style="{DynamicResource MyFreeLabelStyle}"/>
@@ -247,10 +254,11 @@
                             </StackPanel>
                         </TabItem>
                     </TabControl>
-                    <WrapPanel Margin="5" ItemHeight="30" ItemWidth="66" DockPanel.Dock="Bottom" >
+                    <WrapPanel Margin="5" ItemHeight="30" ItemWidth="50" DockPanel.Dock="Bottom" >
                         <Button x:Name="BtnExpand" Content="展开" ToolTip="{DynamicResource 展开}" Style="{DynamicResource MyFreeButtonStyle}" Click="BtnExpand_Click" />
                         <Button x:Name="BtnCollapse" Content="收起" ToolTip="{DynamicResource 收起}" Style="{DynamicResource MyFreeButtonStyle}" Click="BtnCollapse_Click" />
                         <Button x:Name="BtnRefresh" Content="刷新" ToolTip="{DynamicResource 刷新}" Style="{DynamicResource MyFreeButtonStyle}" Click="BtnRefresh_Click" />
+                        <Button x:Name="BtnDelete" Content="删除" ToolTip="{DynamicResource 删除目标}" Style="{DynamicResource MyFreeButtonStyle}" Click="BtnDelete_Click" />
                     </WrapPanel>
                     <TreeView x:Name="FilesTree" Margin="0" SelectedItemChanged="FilesTree_SelectedItemChanged" MouseDoubleClick="FilesTree_MouseDoubleClick" KeyUp="FilesTree_KeyUp" BorderBrush="{x:Null}" Padding="0,5" Background="#00000000"/>
                 </DockPanel>
