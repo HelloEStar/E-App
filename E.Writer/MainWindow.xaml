@@ -9,18 +9,6 @@
 
     <!--自定义控件模板-->
     <Window.Resources>
-        <ControlTemplate x:Key="FrameTemplate" TargetType="{x:Type Frame}">
-            <DockPanel>
-                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                    <Button Content="后退" Margin="4" Command="{x:Static NavigationCommands.BrowseBack}" />
-                    <Button Content="前进" Margin="4" Command="{x:Static NavigationCommands.BrowseForward}" />
-                    <Button Content="刷新" Margin="4" Command="{x:Static NavigationCommands.Refresh}" />
-                </StackPanel>
-                <Border BorderBrush="Orange"  BorderThickness="2"  Padding="5">
-                    <ContentPresenter />
-                </Border>
-            </DockPanel>
-        </ControlTemplate>
         <!--按钮样式-->
         <Style x:Key="MyMenuButtonStyle" TargetType="Button">
             <Setter Property="Foreground" Value="Black"/>
@@ -204,7 +192,7 @@
                 <DockPanel x:Name="CenterBookPage">
                     <ComboBox x:Name="Books" BorderBrush="{x:Null}" VerticalAlignment="Top" Height="30" ToolTip="最近打开过的书籍列表" SelectionChanged="Books_SelectionChanged" 
                               Background="White" Padding="0" FontSize="14" VerticalContentAlignment="Center" BorderThickness="0" Cursor="Hand" SizeChanged="Books_SizeChanged" DockPanel.Dock="Top" />
-                    <TabControl x:Name="TabCreate" Background="#FFF0F0F0" DockPanel.Dock="Bottom" Padding="0">
+                    <TabControl x:Name="TabCreate" Background="#FFF0F0F0" DockPanel.Dock="Bottom" Padding="0" Visibility="Collapsed">
                         <TabItem Header="创建书籍" Height="30">
                             <StackPanel>
                                 <DockPanel Margin="5">
@@ -284,16 +272,16 @@
                     <ScrollViewer>
                         <StackPanel DockPanel.Dock="Top">
                             <Label Content="{DynamicResource 语言}" Style="{DynamicResource MySettingLabelStyle}"/>
-                            <ComboBox x:Name="CBSelectedLanguage" Style="{DynamicResource MyComboBoxStyle}" SelectionChanged="CBSelectedLanguage_SelectionChanged"/>
+                            <ComboBox x:Name="CbbLanguages" Style="{DynamicResource MyComboBoxStyle}" SelectionChanged="CbbLanguages_SelectionChanged"/>
 
                             <Label Content="{DynamicResource 主题}" Style="{DynamicResource MySettingLabelStyle}"/>
-                            <ComboBox x:Name="Skins" Style="{DynamicResource MyComboBoxStyle}" SelectionChanged="Skins_SelectionChanged"/>
+                            <ComboBox x:Name="CbbThemes" Style="{DynamicResource MyComboBoxStyle}" SelectionChanged="CbbThemes_SelectionChanged"/>
 
                             <Label Content="{DynamicResource 字体}" Style="{DynamicResource MySettingLabelStyle}"/>
-                            <ComboBox x:Name="CBFonts" Style="{DynamicResource MyComboBoxStyle}" SelectionChanged="CBFonts_SelectionChanged"/>
+                            <ComboBox x:Name="CbbFonts" Style="{DynamicResource MyComboBoxStyle}" SelectionChanged="CbbFonts_SelectionChanged"/>
 
                             <Label Content="{DynamicResource 字号}" Style="{DynamicResource MySettingLabelStyle}"/>
-                            <TextBox x:Name="TextSize" Style="{DynamicResource MyTextBoxStyle}" KeyUp="TextSize_KeyUp"/>
+                            <TextBox x:Name="TextSize" Style="{DynamicResource MyTextBoxStyle}" TextChanged="TextSize_TextChanged"/>
 
                             <Label Content="{DynamicResource 界面}" Style="{DynamicResource MySettingLabelStyle}"/>
                             <CheckBox x:Name="ShowScrollBar" Content="{DynamicResource 显示滚动条}" Style="{DynamicResource MyCheckBoxStyle}" Checked="ShowScrollBar_Checked" Unchecked="ShowScrollBar_Unchecked"/>

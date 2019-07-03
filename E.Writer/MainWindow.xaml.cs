@@ -42,7 +42,7 @@ namespace E.Writer
         /// <summary>
         /// 语言列表
         /// </summary>
-        private List<CategoryInfo> LanguageCategorys { get; set; } = new List<CategoryInfo>();
+        private List<ItemInfo> LanguageItems { get; set; } = new List<ItemInfo>();
         /// <summary>
         /// 主题集合
         /// </summary>
@@ -51,15 +51,15 @@ namespace E.Writer
         /// <summary>
         /// 
         /// </summary>
-        private Item CurrentBook { get; set; }
+        private FileOrFolderInfo CurrentBook { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        private Item CurrentChapter { get; set; }
+        private FileOrFolderInfo CurrentChapter { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        private Item CurrentEssay { get; set; }
+        private FileOrFolderInfo CurrentEssay { get; set; }
 
         /// <summary>
         /// 打开的文件是否已保存
@@ -130,80 +130,56 @@ namespace E.Writer
                                   homePage, infoPage, downloadPage, gitHubPage, qqGroup, bitCoinAddress);
         }
         /// <summary>
-        /// 载入应用设置
+        /// 载入偏好设置
         /// </summary>
-        private void LoadBookHistory()
+        private void LoadSettings()
         {
-            //验证上次关闭的书籍路径是否存在，若不存在，重置为根目录
-            if (!Directory.Exists(Properties.Settings.Default._lastBook))
-            {
-                Properties.Settings.Default._lastBook = Properties.User.Default.BooksDir;
-                SaveAppSettings();
-            }
-            //读取集合所有打开过的书籍路径的单字符串，并加入书籍列表
-            if (Properties.Settings.Default._books != null && Properties.Settings.Default._books != "")
-            {
-                string[] _myB = Regex.Split(Properties.Settings.Default._books, "///");
-                foreach (var b in _myB)
-                {
-                    if (Directory.Exists(b))
-                    {
-                        string temp1 = Path.GetDirectoryName(b);
-                        string temp2 = (b.Replace(temp1, "")).Replace(@"\", "");
-                        AddBooks(false, temp2, b);
-                    }
-                }
-            }
-            else
-            {
-                Books.ToolTip = FindResource("未打开任何书籍");
-            }
-        }
-        /// <summary>
-        /// 加载用户偏好设置
-        /// </summary>
-        private void LoadPreferences()
-        {
-            //载入界面语言
-            SetLanguage(Properties.User.Default.language);
-            //设置偏好主题
-            SetTheme(Properties.User.Default.ThemePath);
-            //初始化字体
-            SetFont(Properties.User.Default.fontName);
-            //初始化字号
-            FileContent.FontSize = Properties.User.Default.fontSize;
-            //初始化提示消息
-            FilesTree.ToolTip = FindResource("创建或打开以开始");
-            HelpMessage.Text = FindResource("创建或打开以开始").ToString();
+            //启动时显示运行信息
+            ShowRunInfoCheckBox.IsChecked = Properties.User.Default.isShowRunInfo;
+            //自动开书
+            AutoOpenBookCheckBox.IsChecked = Properties.User.Default.isAutoOpenBook;
+            //自动书名号
+            AutoBrackets.IsChecked = Properties.User.Default.isAutoBrackets;
+            //自动补全
+            AutoCompletion.IsChecked = Properties.User.Default.isAutoCompletion;
+            //自动缩进
+            AutoIndentation.IsChecked = Properties.User.Default.isAutoIndentation;
+            //缩进数
+            AutoIndentations.Text = Properties.User.Default.autoIndentations.ToString();
+            //缩进数可编辑性
+            if ((bool)AutoIndentation.IsChecked) { AutoIndentations.IsEnabled = true; }
+            else { AutoIndentations.IsEnabled = false; }
+            //定时自动保存
+            AutoSaveEvery.IsChecked = Properties.User.Default.isAutoSaveEvery;
+            //定时自动保存时间间隔
+            AutoSaveTime.Text = Properties.User.Default.autoSaveMinute.ToString();
+            //时间间隔可编辑性
+            if ((bool)AutoSaveEvery.IsChecked) { AutoSaveTime.IsEnabled = true; }
+            else { AutoSaveTime.IsEnabled = false; }
+            //切换自动保存
+            AutoSaveWhenSwitch.IsChecked = Properties.User.Default.isAutoSaveWhenSwitch;
+            //定时自动备份
+            AutoBackup.IsChecked = Properties.User.Default.isAutoBackup;
+            //自动备份时间间隔
+            AutoBackupTime.Text = Properties.User.Default.autoBackupMinute.ToString();
+            //自动备份可编辑性
+            if ((bool)AutoBackup.IsChecked) { AutoBackupTime.IsEnabled = true; }
+            else { AutoBackupTime.IsEnabled = false; }
+            AutoBackup.ToolTip = "备份位置：" + Application.StartupPath + @"\" + Properties.User.Default.BackupDir;
+            //滚动条
+            ShowScrollBar.IsChecked = Properties.User.Default.isShowScrollBar;
+            //字体尺寸
+            TextSize.Text = Properties.User.Default.fontSize.ToString();
 
-            //检测是否自动打开书
-            if (Properties.User.Default.isAutoOpenBook)
-            {
-                //选择上次关闭的书籍
-                foreach (var item in Books.Items)
-                {
-                    Grid grid = item as Grid;
-                    System.Windows.Controls.Label tb = grid.Children[0] as System.Windows.Controls.Label;
-                    System.Windows.Controls.Button btn = grid.Children[1] as System.Windows.Controls.Button;
-                    if (tb.Tag.ToString() == Properties.Settings.Default._lastBook)
-                    {
-                        Books.SelectedItem = item;
-                        //打开
-                        AutoOpenBook();
-                        break;
-                    }
-                }
-            }
-            //运行信息
-            if (Properties.User.Default.isShowRunInfo)
-            {
-                ShowRunInfo();
-            }
+            //刷新list item
+            SetLanguageItem(Properties.User.Default.language);
+            SetThemeItem(Properties.User.Default.ThemePath);
+            SetFontItem(Properties.User.Default.fontName);
         }
         /// <summary>
         /// 载入所有可用主题
         /// </summary>
-        private void LoadThemes()
+        private void LoadThemeItems()
         {
             string[] _mySkins = Directory.GetFiles(Properties.User.Default.ThemesDir);
             foreach (string s in _mySkins)
@@ -230,13 +206,8 @@ namespace E.Writer
                     }
                 }
             }
-        }
-        /// <summary>
-        /// 获取主题选项
-        /// </summary>
-        private void LoadThemeItem()
-        {
-            Skins.Items.Clear();
+
+            CbbThemes.Items.Clear();
             foreach (TextBlock item in Themes)
             {
                 TextBlock theme = new TextBlock()
@@ -244,32 +215,32 @@ namespace E.Writer
                     Text = item.Text,
                     ToolTip = item.ToolTip
                 };
-                Skins.Items.Add(theme);
+                CbbThemes.Items.Add(theme);
             }
         }
         /// <summary>
         /// 创建语言选项
         /// </summary>
-        private void LoadLanguage()
+        private void LoadLanguageItems()
         {
-            LanguageCategorys.Clear();
-            CategoryInfo zh_CN = new CategoryInfo() { Name = "中文（默认）", Value = "zh_CN" };
-            LanguageCategorys.Add(zh_CN);
-            CategoryInfo en_US = new CategoryInfo() { Name = "English", Value = "en_US" };
-            LanguageCategorys.Add(en_US);
+            LanguageItems.Clear();
+            ItemInfo zh_CN = new ItemInfo("中文（默认）", "zh_CN");
+            ItemInfo en_US = new ItemInfo("English", "en_US");
+            LanguageItems.Add(zh_CN);
+            LanguageItems.Add(en_US);
             //绑定数据，真正的赋值
-            CBSelectedLanguage.ItemsSource = LanguageCategorys;
+            CbbLanguages.ItemsSource = LanguageItems;
             //指定显示的内容
-            CBSelectedLanguage.DisplayMemberPath = "Name";
+            CbbLanguages.DisplayMemberPath = "Name";
             //指定选中后的能够获取到的内容
-            CBSelectedLanguage.SelectedValuePath = "Value";
+            CbbLanguages.SelectedValuePath = "Value";
         }
         /// <summary>
         /// 获取字体选项
         /// </summary>
-        private void LoadFontsItem()
+        private void LoadFontItems()
         {
-            CBFonts.Items.Clear();
+            CbbFonts.Items.Clear();
             foreach (FontFamily font in Fonts.SystemFontFamilies)
             {
                 //动态的添加一个ListViewItem项
@@ -278,13 +249,43 @@ namespace E.Writer
                     Text = font.Source,
                     FontFamily = font
                 };
-                CBFonts.Items.Add(label);
+                CbbFonts.Items.Add(label);
+            }
+        }
+        /// <summary>
+        /// 载入应用设置
+        /// </summary>
+        private void LoadBookItems()
+        {
+            //验证上次关闭的书籍路径是否存在，若不存在，重置为根目录
+            if (!Directory.Exists(Properties.Settings.Default._lastBook))
+            {
+                Properties.Settings.Default._lastBook = Properties.User.Default.BooksDir;
+                SaveAppSettings();
+            }
+            //读取集合所有打开过的书籍路径的单字符串，并加入书籍列表
+            if (Properties.Settings.Default._books != null && Properties.Settings.Default._books != "")
+            {
+                string[] _myB = Regex.Split(Properties.Settings.Default._books, "///");
+                foreach (var b in _myB)
+                {
+                    if (Directory.Exists(b))
+                    {
+                        string temp1 = Path.GetDirectoryName(b);
+                        string temp2 = (b.Replace(temp1, "")).Replace(@"\", "");
+                        AddBookItem(false, temp2, b);
+                    }
+                }
+            }
+            else
+            {
+                Books.ToolTip = FindResource("未打开任何书籍");
             }
         }
         /// <summary>
         /// 重新导入书籍目录
         /// </summary>
-        public void ReloadFilesTree()
+        private void ReloadFilesTree()
         {
             FilesTree.Items.Clear();
             ScanBookPath(CurrentBook.Path);
@@ -294,10 +295,37 @@ namespace E.Writer
 
         //打开
         /// <summary>
+        /// 打开新书籍
+        /// </summary>
+        private void OpenNewBook()
+        {
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog
+            {
+                ShowNewFolderButton = true,
+                SelectedPath = Properties.Settings.Default._lastBook,
+                Description = "请选择书籍所在的路径：" + Environment.NewLine
+                            + "注意：请确保该书籍内的txt文件都以UTF-8的格式编码，否则打开时会显示乱码。"
+            };
+            //弹出浏览文件夹对话框，获取文件夹路径
+            if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                if (CurrentBook != null)
+                {
+                    CloseBook();
+                }
+                //获取当前书籍（文件夹）的名字、路径、根目录
+                CurrentBook = new FileOrFolderInfo(folderBrowserDialog.SelectedPath);
+                Properties.Settings.Default._lastBook = CurrentBook.Path;
+                SaveAppSettings();
+                //打开
+                OpenBook(CurrentBook.Path);
+            }
+        }
+        /// <summary>
         /// 打开书籍
         /// </summary>
         /// <param name="_path">书籍文件夹路径</param>
-        public void OpenBook(string _path)
+        private void OpenBook(string _path)
         {
             if (Directory.Exists(_path))
             {
@@ -306,8 +334,8 @@ namespace E.Writer
                 SetEssayEditable(false);
                 Properties.User.Default.BooksDir = Path.GetDirectoryName(CurrentBook.Path);
                 //加入书籍列表
-                AddBooks(true, CurrentBook.Name, CurrentBook.Path);
-                ChangeBook();
+                AddBookItem(true, CurrentBook.Name, CurrentBook.Path);
+                SetBookItem();
                 GetBookInfo();
                 FilesTree.ToolTip = FindResource("当前书籍") + "：" + CurrentBook.Name + Environment.NewLine + FindResource("书籍位置") + "：" + CurrentBook.Path;
                 RefreshTitle();
@@ -325,11 +353,11 @@ namespace E.Writer
         /// 打开卷册
         /// </summary>
         /// <param name="_path">书籍文件夹路径</param>
-        public void OpenChapter(string _path)
+        private void OpenChapter(string _path)
         {
             if (Directory.Exists(_path))
             {
-                CurrentChapter = new Item(_path);
+                CurrentChapter = new FileOrFolderInfo(_path);
                 CurrentEssay = null;
                 SetEssayEditable(false);
                 GetChapterInfo();
@@ -347,13 +375,13 @@ namespace E.Writer
         /// 打开文章
         /// </summary>
         /// <param name="_path">文章路径</param>
-        public void OpenEssay(string _path)
+        private void OpenEssay(string _path)
         {
             if (File.Exists(_path))
             {
                 //刷新选择信息
-                CurrentEssay = new Item(_path);
-                CurrentChapter = new Item(Path.GetDirectoryName(CurrentEssay.Path));
+                CurrentEssay = new FileOrFolderInfo(_path);
+                CurrentChapter = new FileOrFolderInfo(Path.GetDirectoryName(CurrentEssay.Path));
                 //如果上级文件夹是书籍文件夹
                 if (CurrentChapter.Path == CurrentBook.Path)
                 {
@@ -389,6 +417,24 @@ namespace E.Writer
             }
         }
         /// <summary>
+        /// 打开上次关闭的书籍
+        /// </summary>
+        private void OpenLastBook()
+        {
+            foreach (var item in Books.Items)
+            {
+                Grid grid = item as Grid;
+                System.Windows.Controls.Label tb = grid.Children[0] as System.Windows.Controls.Label;
+                System.Windows.Controls.Button btn = grid.Children[1] as System.Windows.Controls.Button;
+                if (tb.Tag.ToString() == Properties.Settings.Default._lastBook)
+                {
+                    Books.SelectedItem = item;
+                    AutoOpenBook();
+                    break;
+                }
+            }
+        }
+        /// <summary>
         /// 自动打开书籍文件夹
         /// </summary>
         private void AutoOpenBook()
@@ -396,9 +442,9 @@ namespace E.Writer
             if (Directory.Exists(Properties.Settings.Default._lastBook))
             {
                 //获取当前书籍（文件夹）的名字、路径、根目录
-                CurrentBook = new Item(Properties.Settings.Default._lastBook);
+                CurrentBook = new FileOrFolderInfo(Properties.Settings.Default._lastBook);
                 //同步书籍列表选项
-                ChangeBook();
+                SetBookItem();
                 //显示书籍信息
                 GetBookInfo();
                 FilesTree.ToolTip = FindResource("当前书籍") + "：" + CurrentBook.Name + Environment.NewLine + FindResource("书籍位置") + "：" + CurrentBook.Path;
@@ -422,7 +468,7 @@ namespace E.Writer
         /// <summary>
         /// 关闭当前书籍
         /// </summary>
-        public void CloseBook()
+        private void CloseBook()
         {
             if (CurrentBook != null)
             {
@@ -448,7 +494,7 @@ namespace E.Writer
         /// <summary>
         /// 关闭当前卷册
         /// </summary>
-        public void CloseChapter()
+        private void CloseChapter()
         {
             if (CurrentChapter != null)
             {
@@ -462,7 +508,7 @@ namespace E.Writer
         /// <summary>
         /// 关闭当前文章
         /// </summary>
-        public void CloseEssay()
+        private void CloseEssay()
         {
             if (CurrentEssay != null)
             {
@@ -493,7 +539,7 @@ namespace E.Writer
         /// <summary>
         /// 保存文件
         /// </summary>
-        public void SaveFile()
+        private void SaveFile()
         {
             if (CurrentEssay != null)
             {
@@ -519,7 +565,7 @@ namespace E.Writer
         /// <summary>
         /// 另存为文件
         /// </summary>
-        public void SaveFileAs()
+        private void SaveFileAs()
         {
             if (CurrentEssay != null)
             {
@@ -549,16 +595,40 @@ namespace E.Writer
         /// <summary>
         /// 储存应用设置
         /// </summary>
-        public void SaveAppSettings()
+        private void SaveAppSettings()
         {
             Properties.Settings.Default.Save();
         }
         /// <summary>
         /// 保存用户偏好设置
         /// </summary>
-        public void SavePreferences()
+        private void SavePreferences()
         {
             Properties.User.Default.Save();
+        }
+        /// <summary>
+        /// 保存书籍历史
+        /// </summary>
+        private void SaveBookHistory()
+        {
+            if (Books.Items.Count > 0)
+            {
+                //记录最近打开过的书籍，将所有路径集合到一个字符串
+                Properties.Settings.Default._books = "";
+                foreach (var item in Books.Items)
+                {
+                    Grid grid = item as Grid;
+                    System.Windows.Controls.Label tb = grid.Children[0] as System.Windows.Controls.Label;
+                    Properties.Settings.Default._books += tb.Tag.ToString() + "///";
+                }
+                Properties.Settings.Default._books = Properties.Settings.Default._books.Substring(0, Properties.Settings.Default._books.Length - 3);
+            }
+            Properties.Settings.Default.thisEndTime = DateTime.Now;
+            Properties.Settings.Default.lastStartTime = Properties.Settings.Default.thisStartTime;
+            Properties.Settings.Default.lastEndTime = Properties.Settings.Default.thisEndTime;
+            Properties.Settings.Default.thisTotalTime = Properties.Settings.Default.thisEndTime - Properties.Settings.Default.thisStartTime;
+            Properties.Settings.Default.totalTime = Properties.Settings.Default.thisTotalTime + Properties.Settings.Default.totalTime;
+            SaveAppSettings();
         }
 
         //创建
@@ -608,7 +678,7 @@ namespace E.Writer
                         //{
                         //    CurrentBook.Name = TbxBookName.Text;
                         //}
-                        CurrentBook = new Item(TbxBookName.ToolTip.ToString());
+                        CurrentBook = new FileOrFolderInfo(TbxBookName.ToolTip.ToString());
                         //创建书籍文件夹
                         Directory.CreateDirectory(CurrentBook.Path);
                         //记录
@@ -717,7 +787,7 @@ namespace E.Writer
                     //创建文章
                     File.Create(TbxEssayName.ToolTip.ToString()).Close();
                     //刷新当前文章
-                    CurrentEssay = new Item(TbxEssayName.ToolTip.ToString());
+                    CurrentEssay = new FileOrFolderInfo(TbxEssayName.ToolTip.ToString());
                     //提示信息
                     HelpMessage.Text = "已创建文章 " + CurrentEssay.Name;
                     //打开文章
@@ -798,7 +868,7 @@ namespace E.Writer
         /// <param name="isAdd"></param>
         /// <param name="book">书名</param>
         /// <param name="_book">书籍路径</param>
-        public void AddBooks(bool isAdd, string book, string _book)
+        private void AddBookItem(bool isAdd, string book, string _book)
         {
             Books.ToolTip = FindResource("最近打开过的书籍列表");
             bool hasBook = false;
@@ -873,13 +943,24 @@ namespace E.Writer
                 }
             }
         }
+        /// <summary>
+        /// 增加运行次数记录
+        /// </summary>
+        private void AddRunTime()
+        {
+            //运行次数+1
+            Properties.Settings.Default.runTimes += 1;
+            //记录启动时间
+            Properties.Settings.Default.thisStartTime = DateTime.Now;
+            SaveAppSettings();
+        }
 
         //移除
         /// <summary>
         /// 深度优先移除节点
         /// </summary>
         /// <param name="Node">要删除的节点</param>
-        public void RemoveFolderNode(FileNode node)
+        private void RemoveFolderNode(FileNode node)
         {
             if (node.IsFile)
             {
@@ -915,7 +996,7 @@ namespace E.Writer
         /// <summary>
         /// 清空运行信息
         /// </summary>
-        public void ClearRunInfo()
+        private void ClearRunInfo()
         {
             Properties.Settings.Default.Reset();
             ShowMessage("已清空运行信息", true);
@@ -925,7 +1006,7 @@ namespace E.Writer
         /// <summary>
         /// 删除文章
         /// </summary>
-        public void DeleteEssay()
+        private void DeleteEssay()
         {
             MessageBoxResult result = MessageBox.Show("是否删除该文章？", "删除项目", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
@@ -955,7 +1036,7 @@ namespace E.Writer
         /// <summary>
         /// 删除卷册
         /// </summary>
-        public void DeleteChapter()
+        private void DeleteChapter()
         { 
             MessageBoxResult result = MessageBox.Show("是否删除该卷册？", "删除项目", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
@@ -988,7 +1069,7 @@ namespace E.Writer
         /// <summary>
         /// 书籍信息
         /// </summary>
-        public void GetBookInfo()
+        private void GetBookInfo()
         {
             if (CurrentBook != null)
             {
@@ -1004,7 +1085,7 @@ namespace E.Writer
         /// <summary>
         /// 卷册信息
         /// </summary>
-        public void GetChapterInfo()
+        private void GetChapterInfo()
         {
             if (CurrentChapter != null)
             {
@@ -1022,7 +1103,7 @@ namespace E.Writer
         /// </summary>
         /// <param name="_path">书籍路径</param>
         /// <returns>所有txt文件数量</returns>
-        public static int GetFileCounts(string _path)
+        private static int GetFileCounts(string _path)
         {
             int n = 0;
             string[] _files = Directory.GetFiles(_path);
@@ -1039,7 +1120,7 @@ namespace E.Writer
         /// </summary>
         /// <param name="_path">书籍路径</param>
         /// <returns>一级子目录数量</returns>
-        public static int GetDirCounts(string _path)
+        private static int GetDirCounts(string _path)
         {
             string[] _dirs = Directory.GetDirectories(_path);
             return _dirs.Count();
@@ -1050,7 +1131,7 @@ namespace E.Writer
         /// <param name="_path">书籍路径</param>
         /// <param name="_thisEssay">当前文章字数</param>
         /// <returns>全书字数</returns>
-        public int GetBookWords(string _path, string _thisEssay)
+        private int GetBookWords(string _path, string _thisEssay)
         {
             int n = 0;
             string[] _files = Directory.GetFiles(_path);
@@ -1089,7 +1170,7 @@ namespace E.Writer
         /// </summary>
         /// <param name="_file">文件路径</param>
         /// <returns>编码格式</returns>
-        public static Encoding GetFileEncodeType(string _file)
+        private static Encoding GetFileEncodeType(string _file)
         {
             FileStream fs = new FileStream(_file, FileMode.Open, FileAccess.Read);
             BinaryReader br = new BinaryReader(fs);
@@ -1223,7 +1304,7 @@ namespace E.Writer
         /// </summary>
         /// <param name="path">节点路径</param>
         /// <returns></returns>
-        public FileNode FindNote(string path)
+        private FileNode FindNote(string path)
         {
             FileNode found = null;
             foreach (FileNode item in FilesTree.Items)
@@ -1279,56 +1360,87 @@ namespace E.Writer
 
         //设置
         /// <summary>
-        /// 设置应用设置
+        /// 设置语言选项
         /// </summary>
-        private void SetAppSettingsOnStart()
+        /// <param name="language">语言简拼</param>
+        private void SetLanguageItem(string language)
         {
-            //运行次数+1
-            Properties.Settings.Default.runTimes += 1;
-            //记录启动时间
-            Properties.Settings.Default.thisStartTime = DateTime.Now;
-            SaveAppSettings();
-        }
-        /// <summary>
-        /// 设置应用设置
-        /// </summary>
-        private void SetAppSettingsOnQuit()
-        {
-            if (Books.Items.Count > 0)
+            foreach (ItemInfo ci in LanguageItems)
             {
-                //记录最近打开过的书籍，将所有路径集合到一个字符串
-                Properties.Settings.Default._books = "";
-                foreach (var item in Books.Items)
+                if (ci.Value == language)
                 {
-                    Grid grid = item as Grid;
-                    System.Windows.Controls.Label tb = grid.Children[0] as System.Windows.Controls.Label;
-                    Properties.Settings.Default._books += tb.Tag.ToString() + "///";
+                    CbbLanguages.SelectedItem = ci;
+                    break;
                 }
-                Properties.Settings.Default._books = Properties.Settings.Default._books.Substring(0, Properties.Settings.Default._books.Length - 3);
             }
-            Properties.Settings.Default.thisEndTime = DateTime.Now;
-            Properties.Settings.Default.lastStartTime = Properties.Settings.Default.thisStartTime;
-            Properties.Settings.Default.lastEndTime = Properties.Settings.Default.thisEndTime;
-            Properties.Settings.Default.thisTotalTime = Properties.Settings.Default.thisEndTime - Properties.Settings.Default.thisStartTime;
-            Properties.Settings.Default.totalTime = Properties.Settings.Default.thisTotalTime + Properties.Settings.Default.totalTime;
-            SaveAppSettings();
         }
         /// <summary>
-        /// 载入语言
+        /// 设置主题选项
         /// </summary>
-        /// <param name="lang">语言简拼</param>
-        private void SetLanguage(string lang)
+        /// <param name="themePath">主题路径</param>
+        private void SetThemeItem(string themePath)
+        {
+            foreach (TextBlock item in CbbThemes.Items)
+            {
+                if (item.ToolTip.ToString() == themePath)
+                {
+                    CbbThemes.SelectedItem = item;
+                    break;
+                }
+            }
+        }
+        /// <summary>
+        /// 设置字体选项
+        /// </summary>
+        private void SetFontItem(string fontName)
+        {
+            foreach (TextBlock item in CbbFonts.Items)
+            {
+                if (item.Text == fontName)
+                {
+                    CbbFonts.SelectedItem = item;
+                    break;
+                }
+            }
+        }
+        /// <summary>
+        /// 设置书籍选项
+        /// </summary>
+        private void SetBookItem()
+        {
+            foreach (var item in Books.Items)
+            {
+                Grid grid = item as Grid;
+                System.Windows.Controls.Label tb = grid.Children[0] as System.Windows.Controls.Label;
+                System.Windows.Controls.Button btn = grid.Children[1] as System.Windows.Controls.Button;
+                if (tb.Tag.ToString() == CurrentBook.Path)
+                {
+                    Books.SelectedItem = item;
+                    break;
+                }
+            }
+        }
+        /// <summary>
+        /// 设置语言显示
+        /// </summary>
+        /// <param name="language">语言简拼</param>
+        private void SetLanguage(string language)
         {
             try
             {
-                //根据名字载入语言文件
-                ResourceDictionary langRd = System.Windows.Application.LoadComponent(new Uri(@"语言\" + lang + ".xaml", UriKind.Relative)) as ResourceDictionary;
-                //主窗口更改语言
-                if (Resources.MergedDictionaries.Count > 0)
+                ResourceDictionary langRd;
+                langRd = System.Windows.Application.LoadComponent(new Uri(@"语言/" + language + ".xaml", UriKind.Relative)) as ResourceDictionary;
+                if (langRd != null)
                 {
-                    Resources.MergedDictionaries.Clear();
+                    //主窗口更改语言
+                    if (Resources.MergedDictionaries.Count > 0)
+                    {
+                        Resources.MergedDictionaries.Clear();
+                    }
+                    Resources.MergedDictionaries.Add(langRd);
+                    Properties.User.Default.language = language;
+                    SavePreferences();
                 }
-                Resources.MergedDictionaries.Add(langRd);
             }
             catch (Exception e2)
             {
@@ -1336,18 +1448,36 @@ namespace E.Writer
             }
         }
         /// <summary>
-        /// 切换主题
+        /// 设置字体显示
         /// </summary>
-        public void SetTheme(string _theme)
+        private void SetFont(string fontName)
+        {
+            foreach (FontFamily font in Fonts.SystemFontFamilies)
+            {
+                if (fontName == font.Source)
+                {
+                    FileContent.FontFamily = font;
+                    //储存更改
+                    Properties.User.Default.fontName = fontName;
+                    SavePreferences();
+                    //EssayName.FontFamily = font;
+                    break;
+                }
+            }
+        }
+        /// <summary>
+        /// 切换主题显示
+        /// </summary>
+        private void SetTheme(string themePath)
         {
             foreach (TextBlock theme in Themes)
             {
-                if (theme.ToolTip.ToString() == _theme)
+                if (theme.ToolTip.ToString() == themePath)
                 {
-                    if (File.Exists(_theme))
+                    if (File.Exists(themePath))
                     {
                         //设为此主题
-                        SetSkin(_theme);
+                        SetSkin(themePath);
                     }
                     else
                     {
@@ -1364,7 +1494,7 @@ namespace E.Writer
             }
         }
         /// <summary>
-        /// 切换下个主题
+        /// 切换下个主题显示
         /// </summary>
         private void SetNextTheme()
         {
@@ -1419,7 +1549,7 @@ namespace E.Writer
         /// 设置内部展开状态
         /// </summary>
         /// <param name="node">节点</param>
-        public void SetExpandedState(FileNode node)
+        private void SetExpandedState(FileNode node)
         {
             if (node.IsFile == false)
             {
@@ -1471,69 +1601,9 @@ namespace E.Writer
             sw.Close();
         }
         /// <summary>
-        /// 设置主题选项
+        /// 设置文件名和文件内容输入框的可编辑性
         /// </summary>
-        /// <param name="_theme">主题路径</param>
-        private void SetThemeItem(string _theme)
-        {
-            foreach (TextBlock item in Skins.Items)
-            {
-                if (item.ToolTip.ToString() == _theme)
-                {
-                    Skins.SelectedItem = item;
-                    break;
-                }
-            }
-        }
-        /// <summary>
-        /// 设置字体选项
-        /// </summary>
-        private void SetFontsItem(string fontName)
-        {
-            foreach (TextBlock item in CBFonts.Items)
-            {
-                if (item.Text == fontName)
-                {
-                    CBFonts.SelectedItem = item;
-                    break;
-                }
-            }
-        }
-        /// <summary>
-        /// 设置字体
-        /// </summary>
-        public void SetFont(string fontName)
-        {
-            foreach (FontFamily font in Fonts.SystemFontFamilies)
-            {
-                if (fontName == font.Source)
-                {
-                    FileContent.FontFamily = font;
-                    //储存更改
-                    Properties.User.Default.fontName = fontName;
-                    SavePreferences();
-                    //EssayName.FontFamily = font;
-                    break;
-                }
-            }
-        }
-        /// <summary>
-        /// 书籍列表选择了其他书籍
-        /// </summary>
-        public void ChangeBook()
-        {
-            foreach (var item in Books.Items)
-            {
-                Grid grid = item as Grid;
-                System.Windows.Controls.Label tb = grid.Children[0] as System.Windows.Controls.Label;
-                System.Windows.Controls.Button btn = grid.Children[1] as System.Windows.Controls.Button;
-                if (tb.Tag.ToString() == CurrentBook.Path)
-                {
-                    Books.SelectedItem = item;
-                    break;
-                }
-            }
-        }
+        /// <param name="isEditable"></param>
         private void SetEssayEditable(bool isEditable)
         {
             EssayName.IsEnabled = isEditable;
@@ -1544,59 +1614,17 @@ namespace E.Writer
         /// <summary>
         /// 重置偏好设置
         /// </summary>
-        public void ResetPreferences()
+        private void ResetPreferences()
         {
             Properties.User.Default.Reset();
         }
 
         //选择
         /// <summary>
-        /// 选择书籍
-        /// </summary>
-        private void SelectBook()
-        {
-            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog
-            {
-                ShowNewFolderButton = true,
-                SelectedPath = Properties.Settings.Default._lastBook,
-                Description = "请选择书籍所在的路径：" + Environment.NewLine
-                            + "注意：请确保该书籍内的txt文件都以UTF-8的格式编码，否则打开时会显示乱码。"
-            };
-            //弹出浏览文件夹对话框，获取文件夹路径
-            if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                if (CurrentBook != null)
-                {
-                    CloseBook();
-                }
-                //获取当前书籍（文件夹）的名字、路径、根目录
-                CurrentBook = new Item(folderBrowserDialog.SelectedPath);
-                Properties.Settings.Default._lastBook = CurrentBook.Path;
-                SaveAppSettings();
-                //打开
-                OpenBook(CurrentBook.Path);
-            }
-        }
-        /// <summary>
-        /// 设置语言选项
-        /// </summary>
-        /// <param name="language">语言简拼</param>
-        private void SelectLanguage(string language)
-        {
-            foreach (CategoryInfo ci in LanguageCategorys)
-            {
-                if (ci.Value == language)
-                {
-                    CBSelectedLanguage.SelectedItem = ci;
-                    break;
-                }
-            }
-        }
-        /// <summary>
         /// 点击一个节点
         /// </summary>
         /// <param name="clickTimes">点击次数</param>
-        public void SetSelectedNode(int clickTimes)
+        private void SelectNode(int clickTimes)
         {
             //记录选择的节点
             SelectedNode = (FileNode)FilesTree.SelectedItem;
@@ -1667,36 +1695,9 @@ namespace E.Writer
             { Directory.CreateDirectory(Properties.User.Default.ThemesDir); }
         }
         /// <summary>
-        /// 检测名字是否合法字符
-        /// </summary>
-        /// <param name="name">名字</param>
-        /// <returns>是否合法字符</returns>
-        public static bool CheckIsRightName(string name)
-        {
-            String str1 = "/";
-            String str2 = "|";
-            String str3 = "\\";
-            String str4 = "<";
-            String str5 = ">";
-            String str6 = ":";
-            String str7 = "*";
-            String str8 = "?";
-            String str9 = "\"";
-
-            if (name.Contains(str1) || name.Contains(str2) || name.Contains(str3) || name.Contains(str4) ||
-                name.Contains(str5) || name.Contains(str6) || name.Contains(str7) || name.Contains(str8) || name.Contains(str9))
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-        /// <summary>
         /// 准备导出全书
         /// </summary>
-        public void CheckExport()
+        private void CheckExport()
         {
             //保存文章
             if (CurrentEssay != null)
@@ -1733,10 +1734,37 @@ namespace E.Writer
                 }
             }
         }
+        /// <summary>
+        /// 检测名字是否合法字符
+        /// </summary>
+        /// <param name="name">名字</param>
+        /// <returns>是否合法字符</returns>
+        private static bool CheckIsRightName(string name)
+        {
+            string str1 = "/";
+            string str2 = "|";
+            string str3 = "\\";
+            string str4 = "<";
+            string str5 = ">";
+            string str6 = ":";
+            string str7 = "*";
+            string str8 = "?";
+            string str9 = "\"";
+
+            if (name.Contains(str1) || name.Contains(str2) || name.Contains(str3) || name.Contains(str4) ||
+                name.Contains(str5) || name.Contains(str6) || name.Contains(str7) || name.Contains(str8) || name.Contains(str9))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
 
         //刷新
         /// <summary>
-        /// 刷新菜单按钮状态
+        /// 刷新按钮状态
         /// </summary>
         public void RefreshBtnsState()
         {
@@ -1888,55 +1916,6 @@ namespace E.Writer
             Dispatcher.PushFrame(frame);
         }
         /// <summary>
-        /// 刷新偏好设置
-        /// </summary>
-        private void RefreshPreferences()
-        {
-            //启动时显示运行信息
-            ShowRunInfoCheckBox.IsChecked = Properties.User.Default.isShowRunInfo;
-            //自动开书
-            AutoOpenBookCheckBox.IsChecked = Properties.User.Default.isAutoOpenBook;
-            //自动书名号
-            AutoBrackets.IsChecked = Properties.User.Default.isAutoBrackets;
-            //自动补全
-            AutoCompletion.IsChecked = Properties.User.Default.isAutoCompletion;
-            //自动缩进
-            AutoIndentation.IsChecked = Properties.User.Default.isAutoIndentation;
-            //缩进数
-            AutoIndentations.Text = Properties.User.Default.autoIndentations.ToString();
-            //缩进数可编辑性
-            if ((bool)AutoIndentation.IsChecked) { AutoIndentations.IsEnabled = true; }
-            else { AutoIndentations.IsEnabled = false; }
-            //定时自动保存
-            AutoSaveEvery.IsChecked = Properties.User.Default.isAutoSaveEvery;
-            //定时自动保存时间间隔
-            AutoSaveTime.Text = Properties.User.Default.autoSaveMinute.ToString();
-            //时间间隔可编辑性
-            if ((bool)AutoSaveEvery.IsChecked) { AutoSaveTime.IsEnabled = true; }
-            else { AutoSaveTime.IsEnabled = false; }
-            //切换自动保存
-            AutoSaveWhenSwitch.IsChecked = Properties.User.Default.isAutoSaveWhenSwitch;
-            //定时自动备份
-            AutoBackup.IsChecked = Properties.User.Default.isAutoBackup;
-            //自动备份时间间隔
-            AutoBackupTime.Text = Properties.User.Default.autoBackupMinute.ToString();
-            //自动备份可编辑性
-            if ((bool)AutoBackup.IsChecked) { AutoBackupTime.IsEnabled = true; }
-            else { AutoBackupTime.IsEnabled = false; }
-            AutoBackup.ToolTip = "备份位置：" + System.Windows.Forms.Application.StartupPath + @"\" + Properties.User.Default.BackupDir;
-            //滚动条
-            ShowScrollBar.IsChecked = Properties.User.Default.isShowScrollBar;
-
-            //创建语言选项
-            SetLanguage(Properties.User.Default.language);
-            //获取、设置主题选项
-            SetThemeItem(Properties.User.Default.ThemePath);
-            //获取文章字体信息
-            TextSize.Text = Properties.User.Default.fontSize.ToString();
-            SetFontsItem(Properties.User.Default.fontName);
-        }
-
-        /// <summary>
         /// 创建窗口时获取上次路径
         /// </summary>
         private void RefreshLastPath()
@@ -2051,7 +2030,7 @@ namespace E.Writer
         /// </summary>
         /// <param name="resourceName">资源名</param>
         /// <param name="newBox">是否弹出对话框</param>
-        public void ShowMessage(string resourceName, bool newBox)
+        private void ShowMessage(string resourceName, bool newBox)
         {
             if (FindResource(resourceName) != null)
             {
@@ -2082,7 +2061,7 @@ namespace E.Writer
         /// <param name="resourceName">资源名</param>
         /// <param name="moreText">附加信息</param>
         /// <param name="newBox">是否弹出对话框</param>
-        public void ShowMessage(string resourceName, string moreText, bool newBox)
+        private void ShowMessage(string resourceName, string moreText, bool newBox)
         {
             if (newBox)
             {
@@ -2096,7 +2075,7 @@ namespace E.Writer
         /// <summary>
         /// 展开目录
         /// </summary>
-        public void ExpandTree()
+        private void ExpandTree()
         {
             foreach (FileNode item in FilesTree.Items)
             {
@@ -2110,7 +2089,7 @@ namespace E.Writer
         /// <summary>
         /// 隐藏目录区
         /// </summary>
-        public void HidePanCenter()
+        private void HidePanCenter()
         {
             if (PanCenter.Visibility == Visibility.Visible)
             {
@@ -2120,7 +2099,7 @@ namespace E.Writer
         /// <summary>
         /// 收起目录
         /// </summary>
-        public void CollapseTree()
+        private void CollapseTree()
         {
             foreach (FileNode item in FilesTree.Items)
             {
@@ -2197,7 +2176,7 @@ namespace E.Writer
         /// 导出全书
         /// </summary>
         /// <param name="_output">导出的路径</param>
-        public void Export(string _output)
+        private void Export(string _output)
         {
             //显示消息
             ShowMessage("正在导出txt", false);
@@ -2296,28 +2275,44 @@ namespace E.Writer
         //窗口事件
         private void Main_Loaded(object sender, RoutedEventArgs e)
         {
+            AddRunTime();
+
+            //载入并显示应用信息
+            LoadAppInfo();
+            ShowAppInfo();
+
+            //载入下拉菜单项
+            LoadThemeItems();
+            LoadFontItems();
+            LoadLanguageItems();
+            LoadBookItems();
+
+            //载入设置
+            LoadSettings();
+
+            //初始化
+            SetLanguageItem(Properties.User.Default.language);
+            SetTheme(Properties.User.Default.ThemePath);
+            SetFont(Properties.User.Default.fontName);
+            if (Properties.User.Default.isAutoOpenBook)
+            {
+                OpenLastBook();
+            }
+            if (Properties.User.Default.isShowRunInfo)
+            {
+                ShowRunInfo();
+            }
             CheckFolders();
             CreateTimer();
 
-            LoadAppInfo();
-            LoadThemes();
-            LoadBookHistory();
-            LoadPreferences();
-            LoadLanguage();
-            LoadThemeItem();
-            LoadFontsItem();
-
-            RefreshPreferences();
+            //刷新
             RefreshBtnsState();
             RefreshTitle();
 
-            SetAppSettingsOnStart();
-
-            ShowAppInfo();
-
+            //提示消息
+            FilesTree.ToolTip = FindResource("创建或打开以开始");
+            HelpMessage.Text = FindResource("创建或打开以开始").ToString();
             ShowMessage("已载入", false);
-
-            TabCreate.Visibility = Visibility.Collapsed;
         }
         private void Main_Closing(object sender, CancelEventArgs e)
         {
@@ -2349,7 +2344,7 @@ namespace E.Writer
 
             if (Properties.Settings.Default.runTimes > 0)
             {
-                SetAppSettingsOnQuit();
+                SaveBookHistory();
             }
         }
         private void Main_KeyUp(object sender, KeyEventArgs e)
@@ -2438,7 +2433,7 @@ namespace E.Writer
             }
             //Ctrl+O 打开书籍
             if (e.Key == Key.O && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
-            { SelectBook(); }
+            { OpenNewBook(); }
             //Ctrl+B 创建书籍
             if (e.Key == Key.B && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
             { CreateBook(); }
@@ -2475,7 +2470,7 @@ namespace E.Writer
                             {
                                 path = CurrentChapter.Path + @"\" + name;
                             }
-                            CurrentEssay = new Item(path);
+                            CurrentEssay = new FileOrFolderInfo(path);
                             //创建新文件
                             File.Create(CurrentEssay.Path).Close();
                             //创建写入文件
@@ -2493,7 +2488,7 @@ namespace E.Writer
                             string _old = CurrentChapter.Path;
                             //更新卷册名称和路径
                             string name = EssayName.Text;
-                            CurrentChapter = new Item(Path.GetDirectoryName(CurrentChapter.Path) + @"\" + name);
+                            CurrentChapter = new FileOrFolderInfo(Path.GetDirectoryName(CurrentChapter.Path) + @"\" + name);
                             //MessageBox.Show(System.IO.Path.GetDirectoryName(_CurrentChapter.Name));
                             Directory.CreateDirectory(CurrentChapter.Path);
                             if (_old != CurrentChapter.Path)
@@ -2649,7 +2644,7 @@ namespace E.Writer
             //Enter选择节点
             if (e.Key == Key.Enter)
             {
-                SetSelectedNode(2);
+                SelectNode(2);
             }
             //Delete 删除节点
             if (e.Key == Key.Delete && SelectedNode != null)
@@ -2672,11 +2667,11 @@ namespace E.Writer
         }
         private void FilesTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            SetSelectedNode(1);
+            SelectNode(1);
         }
         private void FilesTree_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            SetSelectedNode(2);
+            SelectNode(2);
         }
 
         private void Books_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -2708,7 +2703,7 @@ namespace E.Writer
                 if (Directory.Exists(path))
                 {
                     //获取当前书籍（文件夹）的名字、路径，并记录
-                    CurrentBook = new Item(path);
+                    CurrentBook = new FileOrFolderInfo(path);
                     Properties.Settings.Default._lastBook = CurrentBook.Path;
                     SaveAppSettings();
                     //打开
@@ -2807,7 +2802,7 @@ namespace E.Writer
 
         private void BtnOpenBook_Click(object sender, RoutedEventArgs e)
         {
-            SelectBook();
+            OpenNewBook();
         }
         private void BtnCrete_Click(object sender, RoutedEventArgs e)
         {
@@ -3418,70 +3413,42 @@ namespace E.Writer
             //显示消息
             ShowMessage("已更改", false);
         }
-        private void Skins_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CbbLanguages_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            if (Skins.SelectedItem != null)
+            if (CbbLanguages.SelectedValue != null)
             {
-                TextBlock item = Skins.SelectedItem as TextBlock;
+                string langName = CbbLanguages.SelectedValue.ToString();
+                SetLanguage(langName);
+            }
+        }
+        private void CbbThemes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CbbThemes.SelectedItem != null)
+            {
+                TextBlock item = CbbThemes.SelectedItem as TextBlock;
                 string tmp = item.ToolTip.ToString();
                 if (File.Exists(tmp))
                 {
-                    //调用方法
                     SetTheme(tmp);
-                    //储存更改
-                    Properties.User.Default.ThemePath = tmp;
-                    SavePreferences();
-                    //显示消息
                     ShowMessage("已更改", false);
                 }
                 else
                 {
-                    Skins.Items.Remove(Skins.SelectedItem);
+                    CbbThemes.Items.Remove(CbbThemes.SelectedItem);
                     ShowMessage("该主题的配置文件不存在", false);
                 }
             }
         }
-        private void CBSelectedLanguage_SelectionChanged(object sender, RoutedEventArgs e)
+        private void CbbFonts_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            object selectedName = CBSelectedLanguage.SelectedValue;
-            if (selectedName != null)
+            if (CbbFonts.SelectedItem != null)
             {
-                string langName = selectedName.ToString();
-                //根据本地语言来进行本地化,不过这里上不到
-                //CultureInfo currentCultureInfo = CultureInfo.CurrentCulture;
-                ResourceDictionary langRd = null;
-                try
-                {
-                    //根据名字载入语言文件
-                    if (langName == "zh_CN")
-                    {
-                        langRd = System.Windows.Application.LoadComponent(new Uri(@"语言/zh_CN.xaml", UriKind.Relative)) as ResourceDictionary;
-                    }
-                    else
-                    {
-                        langRd = System.Windows.Application.LoadComponent(new Uri(@"语言/" + langName + ".xaml", UriKind.Relative)) as ResourceDictionary;
-                    }
-                }
-                catch (Exception e2)
-                { MessageBox.Show(e2.Message); }
-
-                if (langRd != null)
-                {
-                    //本窗口更改语言，如果已使用其他语言,先清空
-                    if (Resources.MergedDictionaries.Count > 0)
-                    { Resources.MergedDictionaries.Clear(); }
-                    Resources.MergedDictionaries.Add(langRd);
-                    //主窗口更改语言
-                    if (Resources.MergedDictionaries.Count > 0)
-                    { Resources.MergedDictionaries.Clear(); }
-                    Resources.MergedDictionaries.Add(langRd);
-                    //保存设置
-                    Properties.User.Default.language = langName;
-                    SavePreferences();
-                }
+                TextBlock item = CbbFonts.SelectedItem as TextBlock;
+                SetFont(item.Text);
+                ShowMessage("已更改", false);
             }
         }
-        private void TextSize_KeyUp(object sender, KeyEventArgs e)
+        private void TextSize_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (TextSize.Text != "")
             {
@@ -3508,21 +3475,10 @@ namespace E.Writer
                 }
             }
         }
-        private void CBFonts_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            TextBlock item = CBFonts.SelectedItem as TextBlock;
-            //调用方法
-            SetFont(item.Text);
-            //储存更改
-            Properties.User.Default.fontName = item.Text;
-            SavePreferences();
-            //显示消息
-            ShowMessage("已更改", false);
-        }
         private void BtnReset_Click(object sender, RoutedEventArgs e)
         {
             ResetPreferences();
-            RefreshPreferences();
+            LoadSettings();
             ShowMessage("已重置", false);
         }
         private void BtnApply_Click(object sender, RoutedEventArgs e)
@@ -3567,7 +3523,6 @@ namespace E.Writer
             }
         }
         #endregion
-
     }
 
 
@@ -3611,18 +3566,4 @@ namespace E.Writer
         }
     }
 
-    /// <summary>
-    /// 书的信息，用于书籍列表打开记录
-    /// </summary>
-    public class Item
-    {
-        public string Name { get; private set; }
-        public string Path { get; private set; }
-
-        public Item (string path)
-        {
-            Path = path;
-            Name = System.IO.Path.GetFileName(path);
-        }
-    }
 }

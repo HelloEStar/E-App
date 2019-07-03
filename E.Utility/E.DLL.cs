@@ -204,9 +204,30 @@ namespace E.Utility
     /// <summary>
     /// 自定义ComboBox选项
     /// </summary>
-    public struct CategoryInfo
+    public struct ItemInfo
     {
         public string Name { get; set; }
         public string Value { get; set; }
+
+        public ItemInfo(string name, string value)
+        {
+            Name = name;
+            Value = value;
+        }
+    }
+
+    /// <summary>
+    /// 文件或文件夹信息
+    /// </summary>
+    public class FileOrFolderInfo
+    {
+        public string Name { get; private set; }
+        public string Path { get; private set; }
+
+        public FileOrFolderInfo(string path)
+        {
+            Path = path;
+            Name = System.IO.Path.GetFileName(path);
+        }
     }
 }
