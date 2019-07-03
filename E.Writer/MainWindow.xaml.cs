@@ -138,8 +138,6 @@ namespace E.Writer
             ShowRunInfoCheckBox.IsChecked = Properties.User.Default.isShowRunInfo;
             //自动开书
             AutoOpenBookCheckBox.IsChecked = Properties.User.Default.isAutoOpenBook;
-            //自动书名号
-            AutoBrackets.IsChecked = Properties.User.Default.isAutoBrackets;
             //自动补全
             AutoCompletion.IsChecked = Properties.User.Default.isAutoCompletion;
             //自动缩进
@@ -172,9 +170,9 @@ namespace E.Writer
             TextSize.Text = Properties.User.Default.fontSize.ToString();
 
             //刷新list item
-            SetLanguageItem(Properties.User.Default.language);
-            SetThemeItem(Properties.User.Default.ThemePath);
-            SetFontItem(Properties.User.Default.fontName);
+            SelectLanguageItem(Properties.User.Default.language);
+            SelectThemeItem(Properties.User.Default.ThemePath);
+            SelectFontItem(Properties.User.Default.fontName);
         }
         /// <summary>
         /// 载入所有可用主题
@@ -331,11 +329,12 @@ namespace E.Writer
             {
                 CurrentChapter = null;
                 CurrentEssay = null;
-                SetEssayEditable(false);
+                TbxFileName.IsEnabled = false;
+                TbxFileContent.IsEnabled = false;
                 Properties.User.Default.BooksDir = Path.GetDirectoryName(CurrentBook.Path);
                 //加入书籍列表
                 AddBookItem(true, CurrentBook.Name, CurrentBook.Path);
-                SetBookItem();
+                SelectBookItem();
                 GetBookInfo();
                 FilesTree.ToolTip = FindResource("当前书籍") + "：" + CurrentBook.Name + Environment.NewLine + FindResource("书籍位置") + "：" + CurrentBook.Path;
                 RefreshTitle();
@@ -359,7 +358,8 @@ namespace E.Writer
             {
                 CurrentChapter = new FileOrFolderInfo(_path);
                 CurrentEssay = null;
-                SetEssayEditable(false);
+                TbxFileName.IsEnabled = true;
+                TbxFileContent.IsEnabled = false;
                 GetChapterInfo();
                 RefreshTitle();
                 RefreshBtnsState();
@@ -394,18 +394,19 @@ namespace E.Writer
                 //创建读取文件
                 FileStream fs = new FileStream(_path, FileMode.Open, FileAccess.Read);
                 StreamReader sw = new StreamReader(fs);
-                FileContent.Text = sw.ReadToEnd();
+                TbxFileContent.Text = sw.ReadToEnd();
                 sw.Close();
                 fs.Close();
-                EssayName.Text = Path.GetFileNameWithoutExtension(CurrentEssay.Path);
-                SetEssayEditable(true);
+                TbxFileName.Text = Path.GetFileNameWithoutExtension(CurrentEssay.Path);
+                TbxFileName.IsEnabled = true;
+                TbxFileContent.IsEnabled = true;
 
                 RefreshBtnsState();
                 RefreshTitle();
                 //光标到最后
-                FileContent.Focus();
-                FileContent.Select(FileContent.Text.Length, 0);
-                FileContent.ScrollToEnd();
+                TbxFileContent.Focus();
+                TbxFileContent.Select(TbxFileContent.Text.Length, 0);
+                TbxFileContent.ScrollToEnd();
                 IsSaved = true;
 
                 ShowMessage("已打开文章", " " + CurrentEssay.Name, false);
@@ -444,7 +445,7 @@ namespace E.Writer
                 //获取当前书籍（文件夹）的名字、路径、根目录
                 CurrentBook = new FileOrFolderInfo(Properties.Settings.Default._lastBook);
                 //同步书籍列表选项
-                SetBookItem();
+                SelectBookItem();
                 //显示书籍信息
                 GetBookInfo();
                 FilesTree.ToolTip = FindResource("当前书籍") + "：" + CurrentBook.Name + Environment.NewLine + FindResource("书籍位置") + "：" + CurrentBook.Path;
@@ -475,9 +476,9 @@ namespace E.Writer
                 CloseChapter();
                 Backup();
 
-                EssayName.Text = FindResource("欢迎使用") + " " + AppInfo.Name;
-                EssayName.ToolTip = null;
-                FileContent.Text = FindResource("创建或打开以开始").ToString();
+                TbxFileName.Text = FindResource("欢迎使用") + " " + AppInfo.Name;
+                TbxFileName.ToolTip = null;
+                TbxFileContent.Text = FindResource("创建或打开以开始").ToString();
                 Words.ToolTip = null;
                 Words.Text = FindResource("字数") + "：0";
                 FilesTree.ToolTip = FindResource("创建或打开以开始");
@@ -515,19 +516,24 @@ namespace E.Writer
                 if (Properties.User.Default.isAutoSaveWhenSwitch == true)
                 { SaveFile(); }
 
-                EssayName.Text = null;
-                EssayName.ToolTip = null;
-                FileContent.Text = null;
-                SetEssayEditable(false);
+                TbxFileName.Text = null;
+                TbxFileName.ToolTip = null;
+                TbxFileContent.Text = null;
+                TbxFileContent.IsEnabled = false;
 
                 Words.Text = FindResource("字数") + "：0";
                 Words.ToolTip = null;
 
                 ShowMessage("已关闭文章", " " + CurrentEssay.Name, false);
                 CurrentEssay = null;
-                if (CurrentChapter.Name != null)
+                if (CurrentChapter != null)
                 {
                     GetChapterInfo();
+                    TbxFileName.IsEnabled = true;
+                }
+                else
+                {
+                    TbxFileName.IsEnabled = false;
                 }
 
                 RefreshBtnsState();
@@ -549,7 +555,7 @@ namespace E.Writer
                     FileStream fs = new FileStream(CurrentEssay.Path, FileMode.Create, FileAccess.Write);
                     StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
                     //开始写入值  
-                    sw.Write(FileContent.Text);
+                    sw.Write(TbxFileContent.Text);
                     sw.Close();
                     fs.Close();
                     IsSaved = true;
@@ -582,7 +588,7 @@ namespace E.Writer
                     {
                         using (StreamWriter sw = new StreamWriter(st, Encoding.UTF8))
                         {
-                            sw.Write(FileContent.Text);
+                            sw.Write(TbxFileContent.Text);
                             sw.Close();
                         };
                         st.Close();
@@ -633,191 +639,230 @@ namespace E.Writer
 
         //创建
         /// <summary>
+        /// 创建
+        /// </summary>
+        private void Create()
+        {
+            if (PanCenter.Visibility == Visibility.Collapsed)
+            {
+                PanCenter.Visibility = Visibility.Visible;
+                BtnFold.BorderThickness = new Thickness(4, 0, 0, 0);
+            }
+
+            if (PanCreate.Visibility == Visibility.Visible)
+            {
+                PanCreate.Visibility = Visibility.Collapsed;
+                BtnCrete.BorderThickness = new Thickness(0, 0, 0, 0);
+            }
+            else
+            {
+                PanCreate.Visibility = Visibility.Visible;
+                BtnCrete.BorderThickness = new Thickness(4, 0, 0, 0);
+            }
+
+            //获取上级目录
+            if (Properties.Settings.Default._lastBook == Properties.User.Default.BooksDir)
+            {
+                TbxCreatePath.Text = Properties.User.Default.BooksDir;
+            }
+            else
+            {
+                TbxCreatePath.Text = Path.GetDirectoryName(Properties.Settings.Default._lastBook);
+            }
+
+            if (CurrentBook != null)
+            {
+                TbxCreatePath.Text = CurrentBook.Path;
+            }
+
+            if (TbxCreatePath.Text == null || TbxCreatePath.Text == "")
+            {
+                BtnCreateBook.ToolTip = "请设置存放位置";
+                BtnCreateChapter.ToolTip = "请设置存放位置";
+                BtnCreateEssay.ToolTip = "请设置存放位置";
+            }
+            else
+            {
+                BtnCreateBook.ToolTip = TbxCreatePath.Text + @"\" + TbxCreateName.Text;
+                BtnCreateChapter.ToolTip = TbxCreatePath.Text + @"\" + TbxCreateName.Text;
+                BtnCreateEssay.ToolTip = TbxCreatePath.Text + @"\" + TbxCreateName.Text + ".txt";
+            }
+
+            TbxCreateName.Text = "未命名";
+        }
+        /// <summary>
         /// 创建书籍
         /// </summary>
         private void CreateBook()
         {
-            //检测
-            if (TbxFatherPathBook.Text == null || TbxFatherPathBook.Text == "")
+            if (TbxCreatePath.Text == null || TbxCreatePath.Text == "")
             {
-                MessageBox.Show("请设置上级目录");
+                MessageBox.Show("请设置存放位置");
+                return;
             }
-            else
+            if (TbxCreateName.Text == null || TbxCreateName.Text == "")
             {
-                //若输入为空
-                if (TbxBookName.Text == null || TbxBookName.Text == "")
+                MessageBox.Show("请输入书籍名");
+                return;
+            }
+            if (!CheckIsRightName(TbxCreateName.Text))
+            {
+                MessageBox.Show("名称中不能含有以下字符 \\ | / < > \" ? * : ");
+                return;
+            }
+
+            string path = BtnCreateBook.ToolTip.ToString();
+            if (CurrentBook != null)
+            {
+                if (path.Contains(CurrentBook.Path) && path != CurrentBook.Path)
                 {
-                    MessageBox.Show("请输入书籍名称");
-                }
-                //若输入中含有 \ | / < > " ? * :
-                else if (!MainWindow.CheckIsRightName(TbxBookName.Text))
-                {
-                    MessageBox.Show("名称中不能含有以下字符 \\ | / < > \" ? * : ");
-                }
-                else
-                {
-                    //若书籍存在
-                    if (Directory.Exists(TbxBookName.ToolTip.ToString()))
-                    {
-                        MessageBox.Show("同名书籍已存在，请换个名字");
-                    }
-                    //若书籍不存在
-                    else
-                    {
-                        //保存当前文件再创建书籍
-                        if (CurrentEssay != null && Properties.User.Default.isAutoSaveWhenSwitch == true)
-                        {
-                            SaveFile();
-                        }
-                        //是否自动书名号
-                        //if (Properties.User.Default.isAutoBrackets)
-                        //{
-                        //    CurrentBook.Name = "《" + TbxBookName.Text + "》";
-                        //}
-                        //else
-                        //{
-                        //    CurrentBook.Name = TbxBookName.Text;
-                        //}
-                        CurrentBook = new FileOrFolderInfo(TbxBookName.ToolTip.ToString());
-                        //创建书籍文件夹
-                        Directory.CreateDirectory(CurrentBook.Path);
-                        //记录
-                        Properties.Settings.Default._lastBook = CurrentBook.Path;
-                        SaveAppSettings();
-                        //打开
-                        OpenBook(CurrentBook.Path);
-                    }
+                    MessageBox.Show("请勿把新书籍创建在另一个书籍里");
+                    return;
                 }
             }
+            if (Directory.Exists(path))
+            {
+                MessageBox.Show("同名书籍已存在，请换个名字");
+                return;
+            }
+
+            //保存当前文件再创建书籍
+            if (CurrentEssay != null && Properties.User.Default.isAutoSaveWhenSwitch == true)
+            {
+                SaveFile();
+            }
+            CurrentBook = new FileOrFolderInfo(path);
+            //创建书籍文件夹
+            Directory.CreateDirectory(CurrentBook.Path);
+            //记录
+            Properties.Settings.Default._lastBook = CurrentBook.Path;
+            SaveAppSettings();
+            //打开
+            OpenBook(CurrentBook.Path);
         }
         /// <summary>
         /// 创建卷册
         /// </summary>
         private void CreateChapter()
         {
-            //若输入为空
-            if (TbxChapterName.Text == "" || TbxChapterName.Text == null)
+            if (TbxCreatePath.Text == null || TbxCreatePath.Text == "")
+            {
+                MessageBox.Show("请设置存放位置");
+                return;
+            }
+            if (TbxCreateName.Text == null || TbxCreateName.Text == "")
             {
                 MessageBox.Show("请输入卷册名");
+                return;
             }
-            //若输入中含有 \ | / < > " ? * :
-            else if (!CheckIsRightName(TbxChapterName.Text))
+            if (!CheckIsRightName(TbxCreateName.Text))
             {
                 MessageBox.Show("名称中不能含有以下字符 \\ | / < > \" ? * : ");
+                return;
+            }
+
+            string path = BtnCreateChapter.ToolTip.ToString();
+            if (!path.Contains(CurrentBook.Path) || path == CurrentBook.Path)
+            {
+                MessageBox.Show("请勿把卷册创建在书籍外");
+                return;
+            }
+            if (Directory.Exists(path))
+            {
+                MessageBox.Show("同名卷册已存在，请换个名字");
+                return;
+            }
+
+            //创建前保存文章
+            if (CurrentEssay != null)
+            {
+                SaveFile();
+            }
+            //创建卷册
+            Directory.CreateDirectory(path);
+            OpenChapter(path);
+            RefreshBtnsState();
+            RefreshTitle();
+
+            //创建节点
+            FileNode newfolderNode = new FileNode(CurrentChapter.Name, CurrentChapter.Path, false, false, null);
+            FileNode fatherNote = FindNote(TbxCreatePath.Text);
+            if (fatherNote == null)
+            {
+                FilesTree.Items.Add(newfolderNode);
             }
             else
             {
-                //若卷册存在
-                if (Directory.Exists(TbxChapterName.ToolTip.ToString()))
-                {
-                    MessageBox.Show("同名卷册已存在，请换个名字");
-                }
-                //若卷册不存在
-                else
-                {
-                    //创建前保存文章
-                    if (CurrentEssay != null)
-                    {
-                        SaveFile();
-                    }
-                    //创建卷册
-                    Directory.CreateDirectory(TbxChapterName.ToolTip.ToString());
-                    //打开
-                    OpenChapter(TbxChapterName.ToolTip.ToString());
-                    //改变主窗口控件状态
-                    RefreshBtnsState();
-                    //改变标题
-                    RefreshTitle();
-
-                    //
-                    string tmp = TbxChapterName.ToolTip.ToString();
-                    string name = tmp.Replace(TbxFatherPathChapter.Text + @"\", "");
-                    //创建节点
-                    FileNode newfolderNode = new FileNode(name, TbxChapterName.ToolTip.ToString(), false, false, null);
-                    FileNode fatherNote = FindNote(TbxFatherPathChapter.Text);
-                    if (fatherNote == null)
-                    {
-                        FilesTree.Items.Add(newfolderNode);
-                    }
-                    else
-                    {
-                        fatherNote.IsExpanded = true;
-                        fatherNote.Items.Add(newfolderNode);
-                    }
-                    //选择节点
-                    SelectedNode = newfolderNode;
-                    //打开节点
-                    OpenedNode = newfolderNode;
-                    //刷新目录
-                    FilesTree.Items.Refresh();
-
-                }
+                fatherNote.IsExpanded = true;
+                fatherNote.Items.Add(newfolderNode);
             }
+            SelectedNode = newfolderNode;
+            OpenedNode = newfolderNode;
+            FilesTree.Items.Refresh();
         }
         /// <summary>
         /// 创建文章
         /// </summary>
         private void CreateEssay()
         {
-            //若输入为空
-            if (TbxEssayName.Text == "")
+            if (TbxCreatePath.Text == null || TbxCreatePath.Text == "")
+            {
+                MessageBox.Show("请设置存放位置");
+                return;
+            }
+            if (TbxCreateName.Text == null || TbxCreateName.Text == "")
             {
                 MessageBox.Show("请输入文章名");
+                return;
             }
-            //若输入中含有 \ | / < > " ? * :
-            else if (!CheckIsRightName(TbxEssayName.Text))
+            if (!CheckIsRightName(TbxCreateName.Text))
             {
                 MessageBox.Show("名称中不能含有以下字符 \\ | / < > \" ? * : ");
+                return;
+            }
+
+            string path = BtnCreateEssay.ToolTip.ToString();
+            if (!path.Contains(CurrentBook.Path) || path.Replace(".txt", "") == CurrentBook.Path)
+            {
+                MessageBox.Show("请勿把文章创建在书籍外");
+                return;
+            }
+            if (File.Exists(path))
+            {
+                MessageBox.Show("同名文章已存在，请换个名字");
+                return;
+            }
+
+            //创建前保存文章
+            if (CurrentEssay != null)
+            {
+                SaveFile();
+            }
+            File.Create(path).Close();
+            CurrentEssay = new FileOrFolderInfo(path);
+            HelpMessage.Text = "已创建文章 " + CurrentEssay.Name;
+            OpenEssay(path);
+            RefreshBtnsState();
+            RefreshTitle();
+
+            //创建节点
+            FileNode newFileNode = new FileNode(CurrentEssay.Name, CurrentEssay.Path, true, false, null);
+            FileNode fatherNote = FindNote(TbxCreatePath.Text);
+            if (fatherNote == null)
+            {
+                FilesTree.Items.Add(newFileNode);
             }
             else
             {
-                //若文件存在
-                if (File.Exists(TbxEssayName.ToolTip.ToString()))
-                {
-                    MessageBox.Show("同名文章已存在，请换个名字");
-                }
-                //若文件不存在
-                else
-                {
-                    //创建前保存文章
-                    if (CurrentEssay != null)
-                    {
-                        SaveFile();
-                    }
-                    //创建文章
-                    File.Create(TbxEssayName.ToolTip.ToString()).Close();
-                    //刷新当前文章
-                    CurrentEssay = new FileOrFolderInfo(TbxEssayName.ToolTip.ToString());
-                    //提示信息
-                    HelpMessage.Text = "已创建文章 " + CurrentEssay.Name;
-                    //打开文章
-                    OpenEssay(TbxEssayName.ToolTip.ToString());
-                    //改变主窗口控件状态
-                    RefreshBtnsState();
-                    //改变标题
-                    RefreshTitle();
-
-                    //
-                    //创建节点
-                    FileNode newFileNode = new FileNode(TbxEssayName.Text + ".txt", TbxEssayName.ToolTip.ToString(), true, false, null);
-                    FileNode fatherNote = FindNote(TbxEssayName.ToolTip.ToString());
-                    if (fatherNote == null)
-                    {
-                        FilesTree.Items.Add(newFileNode);
-                    }
-                    else
-                    {
-                        fatherNote.IsExpanded = true;
-                        fatherNote.Items.Add(newFileNode);
-                    }
-                    //选择节点
-                    SelectedNode = newFileNode;
-                    //打开节点
-                    OpenedNode = newFileNode;
-                    //刷新目录
-                    FilesTree.Items.Refresh();
-                }
+                fatherNote.IsExpanded = true;
+                fatherNote.Items.Add(newFileNode);
             }
+            //选择节点
+            SelectedNode = newFileNode;
+            //打开节点
+            OpenedNode = newFileNode;
+            //刷新目录
+            FilesTree.Items.Refresh();
         }
         /// <summary>
         /// 创建颜色
@@ -1004,6 +1049,103 @@ namespace E.Writer
 
         //删除
         /// <summary>
+        /// 删除
+        /// </summary>
+        private void Delete()
+        {
+            if (SelectedNode != null)
+            {
+                if (SelectedNode.IsFile == true && SelectedNode.Name != null)
+                {
+                    DeleteEssay();
+                }
+                else if (SelectedNode.IsFile == false && SelectedNode.Name != null)
+                {
+                    DeleteChapter();
+                }
+                else
+                {
+                    //显示消息
+                    ShowMessage("请选择一个项目再删除", false);
+                }
+            }
+            else
+            {
+                DeleteBook();
+            }
+        }
+        /// <summary>
+        /// 删除书籍
+        /// </summary>
+        private void DeleteBook()
+        {
+            if (CurrentBook != null)
+            {
+                MessageBoxResult result = MessageBox.Show("是否删除当前书籍？", "删除项目", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    Directory.Delete(CurrentBook.Path, true);
+                    for (int i = 0; i < Books.Items.Count; i++)
+                    {
+                        Grid grid = Books.Items[i] as Grid;
+                        System.Windows.Controls.Label tb = grid.Children[0] as System.Windows.Controls.Label;
+                        System.Windows.Controls.Button btn = grid.Children[1] as System.Windows.Controls.Button;
+                        if (tb.Tag.ToString() == CurrentBook.Path)
+                        {
+                            Books.Items.RemoveAt(i);
+                            break;
+                        }
+                    }
+
+                    TbxFileName.Text = FindResource("欢迎使用") + " " + AppInfo.Name;
+                    TbxFileName.ToolTip = null;
+                    TbxFileContent.Text = FindResource("创建或打开以开始").ToString();
+                    Words.ToolTip = null;
+                    Words.Text = FindResource("字数") + "：0";
+                    FilesTree.ToolTip = FindResource("创建或打开以开始");
+
+                    ShowMessage("已删除书籍" + CurrentBook.Name, false);
+                    CurrentBook = null;
+                    CurrentChapter = null;
+                    CurrentEssay = null;
+                    RefreshBtnsState();
+                    RefreshTitle();
+                    FilesTree.Items.Clear();
+                }
+            }
+        }
+        /// <summary>
+        /// 删除卷册
+        /// </summary>
+        private void DeleteChapter()
+        { 
+            MessageBoxResult result = MessageBox.Show("是否删除该卷册？", "删除项目", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
+            {
+                //获取对应文件路径
+                string _path = SelectedNode.Path;
+                string name = SelectedNode.Header.ToString();
+                RemoveFolderNode(SelectedNode);
+                //如果选择的是正在编辑的卷册
+                if (CurrentChapter != null)
+                {
+                    if (_path == CurrentChapter.Path)
+                    {
+                        CurrentEssay = null;
+                        CurrentChapter = null;
+                        TbxFileName.Text = FindResource("当前未选中任何文章").ToString();
+                        TbxFileName.ToolTip = null;
+                        TbxFileContent.Text = null;
+                        TbxFileName.IsEnabled = false;
+                        TbxFileContent.IsEnabled = false;
+                        RefreshBtnsState();
+                        RefreshTitle();
+                    }
+                }
+                ShowMessage("已删除卷册", " " + name, false);
+            }
+        }
+        /// <summary>
         /// 删除文章
         /// </summary>
         private void DeleteEssay()
@@ -1021,47 +1163,26 @@ namespace E.Writer
                 {
                     if (_path == CurrentEssay.Path)
                     {
+                        TbxFileName.Text = FindResource("当前未选中任何文章").ToString();
+                        TbxFileName.ToolTip = null;
+                        TbxFileContent.Text = null;
+                        TbxFileName.IsEnabled = false;
+                        TbxFileContent.IsEnabled = true;
                         CurrentEssay = null;
-                        EssayName.Text = FindResource("当前未选中任何文章").ToString();
-                        EssayName.ToolTip = null;
-                        FileContent.Text = null;
+                        if (CurrentChapter != null)
+                        {
+                            GetChapterInfo();
+                            TbxFileName.IsEnabled = true;
+                        }
+                        else
+                        {
+                            TbxFileName.IsEnabled = false;
+                        }
                         RefreshBtnsState();
                         RefreshTitle();
-                        SetEssayEditable(false);
                     }
                 }
                 ShowMessage("已删除文章", " " + name, false);
-            }
-        }
-        /// <summary>
-        /// 删除卷册
-        /// </summary>
-        private void DeleteChapter()
-        { 
-            MessageBoxResult result = MessageBox.Show("是否删除该卷册？", "删除项目", MessageBoxButton.YesNo);
-            if (result == MessageBoxResult.Yes)
-            {
-                //获取对应文件路径
-                string _path = SelectedNode.Path;
-                string name = SelectedNode.Header.ToString();
-                RemoveFolderNode(SelectedNode);
-                Directory.Delete(_path, true);
-                //如果选择的是正在编辑的卷册
-                if (CurrentChapter != null)
-                {
-                    if (_path == CurrentChapter.Path)
-                    {
-                        CurrentEssay = null;
-                        CurrentChapter = null;
-                        EssayName.Text = FindResource("当前未选中任何文章").ToString();
-                        EssayName.ToolTip = null;
-                        FileContent.Text = null;
-                        RefreshBtnsState();
-                        RefreshTitle();
-                        SetEssayEditable(false);
-                    }
-                }
-                ShowMessage("已删除卷册", " " + name, false);
             }
         }
 
@@ -1074,8 +1195,8 @@ namespace E.Writer
             if (CurrentBook != null)
             {
                 Words.Text = FindResource("字数") + "：0";
-                EssayName.Text = CurrentBook.Name;
-                FileContent.Text = FindResource("创建时间") + "：" + Directory.GetCreationTime(CurrentBook.Path) + Environment.NewLine +
+                TbxFileName.Text = CurrentBook.Name;
+                TbxFileContent.Text = FindResource("创建时间") + "：" + Directory.GetCreationTime(CurrentBook.Path) + Environment.NewLine +
                                    FindResource("子卷册数") + "：" + GetDirCounts(CurrentBook.Path) + Environment.NewLine +
                                    FindResource("总文章数") + "：" + GetFileCounts(CurrentBook.Path) + Environment.NewLine +
                                    FindResource("总字数") + "：" + GetBookWords(CurrentBook.Path, "");
@@ -1090,8 +1211,8 @@ namespace E.Writer
             if (CurrentChapter != null)
             {
                 Words.Text = FindResource("字数") + "：0";
-                EssayName.Text = CurrentChapter.Name;
-                FileContent.Text = FindResource("创建时间") + "：" + Directory.GetCreationTime(CurrentChapter.Path) + Environment.NewLine +
+                TbxFileName.Text = CurrentChapter.Name;
+                TbxFileContent.Text = FindResource("创建时间") + "：" + Directory.GetCreationTime(CurrentChapter.Path) + Environment.NewLine +
                                    FindResource("子卷册数") + "：" + GetDirCounts(CurrentChapter.Path) + Environment.NewLine +
                                    FindResource("总文章数") + "：" + GetFileCounts(CurrentChapter.Path) + Environment.NewLine +
                                    FindResource("总字数") + "：" + GetBookWords(CurrentChapter.Path, "");
@@ -1140,9 +1261,9 @@ namespace E.Writer
                 if (_file == _thisEssay)
                 {
                     //获取当前文章字符数
-                    MatchCollection space = Regex.Matches(FileContent.Text, @"\s");
-                    int w = FileContent.Text.Length - space.Count;
-                    n += FileContent.Text.Length - space.Count;
+                    MatchCollection space = Regex.Matches(TbxFileContent.Text, @"\s");
+                    int w = TbxFileContent.Text.Length - space.Count;
+                    n += TbxFileContent.Text.Length - space.Count;
                 }
                 else
                 {
@@ -1209,11 +1330,11 @@ namespace E.Writer
                 //得到总行数。该行数会随着文本框的大小改变而改变；若只认回车符为一行(不考虑排版变化)请用 总行数=textBox1.Lines.Length;(记事本2是这种方式)
                 //int totalline = FileContent.GetLineFromCharIndex(FileContent.Text.Length) + 1;
                 //得到当前行的行号,从0开始，习惯是从1开始，所以+1.
-                int line = FileContent.GetLineIndexFromCharacterIndex(FileContent.SelectionStart) + 1;
+                int line = TbxFileContent.GetLineIndexFromCharacterIndex(TbxFileContent.SelectionStart) + 1;
                 //得到当前行第一个字符的索引
-                int index = FileContent.GetCharacterIndexFromLineIndex(line - 1);
+                int index = TbxFileContent.GetCharacterIndexFromLineIndex(line - 1);
                 //.SelectionStart得到光标所在位置的索引 减去 当前行第一个字符的索引 = 光标所在的列数（从0开始)
-                int column = FileContent.SelectionStart - index + 1;
+                int column = TbxFileContent.SelectionStart - index + 1;
                 string rac = FindResource("行").ToString() + "：" + line + "    " + FindResource("列").ToString() + "：" + column;
                 RowAndColumn.Text = rac;
             }
@@ -1360,67 +1481,6 @@ namespace E.Writer
 
         //设置
         /// <summary>
-        /// 设置语言选项
-        /// </summary>
-        /// <param name="language">语言简拼</param>
-        private void SetLanguageItem(string language)
-        {
-            foreach (ItemInfo ci in LanguageItems)
-            {
-                if (ci.Value == language)
-                {
-                    CbbLanguages.SelectedItem = ci;
-                    break;
-                }
-            }
-        }
-        /// <summary>
-        /// 设置主题选项
-        /// </summary>
-        /// <param name="themePath">主题路径</param>
-        private void SetThemeItem(string themePath)
-        {
-            foreach (TextBlock item in CbbThemes.Items)
-            {
-                if (item.ToolTip.ToString() == themePath)
-                {
-                    CbbThemes.SelectedItem = item;
-                    break;
-                }
-            }
-        }
-        /// <summary>
-        /// 设置字体选项
-        /// </summary>
-        private void SetFontItem(string fontName)
-        {
-            foreach (TextBlock item in CbbFonts.Items)
-            {
-                if (item.Text == fontName)
-                {
-                    CbbFonts.SelectedItem = item;
-                    break;
-                }
-            }
-        }
-        /// <summary>
-        /// 设置书籍选项
-        /// </summary>
-        private void SetBookItem()
-        {
-            foreach (var item in Books.Items)
-            {
-                Grid grid = item as Grid;
-                System.Windows.Controls.Label tb = grid.Children[0] as System.Windows.Controls.Label;
-                System.Windows.Controls.Button btn = grid.Children[1] as System.Windows.Controls.Button;
-                if (tb.Tag.ToString() == CurrentBook.Path)
-                {
-                    Books.SelectedItem = item;
-                    break;
-                }
-            }
-        }
-        /// <summary>
         /// 设置语言显示
         /// </summary>
         /// <param name="language">语言简拼</param>
@@ -1456,7 +1516,7 @@ namespace E.Writer
             {
                 if (fontName == font.Source)
                 {
-                    FileContent.FontFamily = font;
+                    TbxFileContent.FontFamily = font;
                     //储存更改
                     Properties.User.Default.fontName = fontName;
                     SavePreferences();
@@ -1541,9 +1601,9 @@ namespace E.Writer
 
             //右配色
             PanRight.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("右", "背景", _skin)));
-            FileContent.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("右", "文件内容背景", _skin)));
-            FileContent.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("右", "文件内容前景", _skin)));
-            FileContent.CaretBrush = FileContent.Foreground;
+            TbxFileContent.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("右", "文件内容背景", _skin)));
+            TbxFileContent.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("右", "文件内容前景", _skin)));
+            TbxFileContent.CaretBrush = TbxFileContent.Foreground;
         }
         /// <summary>
         /// 设置内部展开状态
@@ -1573,14 +1633,6 @@ namespace E.Writer
                         ((TreeViewItem)DPObj).IsExpanded = false;
                     }
                 }
-                //if (node.Nodes.Count != 0 && !node.IsFile)
-                //{
-                //    foreach (var no in node.Nodes)
-                //    {
-                //        GetExpandedState(no);
-                //    }
-                //}
-
             }
         }
         /// <summary>
@@ -1600,15 +1652,6 @@ namespace E.Writer
             sw.Write(encoding.GetString(flieByte));
             sw.Close();
         }
-        /// <summary>
-        /// 设置文件名和文件内容输入框的可编辑性
-        /// </summary>
-        /// <param name="isEditable"></param>
-        private void SetEssayEditable(bool isEditable)
-        {
-            EssayName.IsEnabled = isEditable;
-            FileContent.IsEnabled = isEditable;
-        }
 
         //重设
         /// <summary>
@@ -1620,6 +1663,67 @@ namespace E.Writer
         }
 
         //选择
+        /// <summary>
+        /// 设置语言选项
+        /// </summary>
+        /// <param name="language">语言简拼</param>
+        private void SelectLanguageItem(string language)
+        {
+            foreach (ItemInfo ci in LanguageItems)
+            {
+                if (ci.Value == language)
+                {
+                    CbbLanguages.SelectedItem = ci;
+                    break;
+                }
+            }
+        }
+        /// <summary>
+        /// 设置主题选项
+        /// </summary>
+        /// <param name="themePath">主题路径</param>
+        private void SelectThemeItem(string themePath)
+        {
+            foreach (TextBlock item in CbbThemes.Items)
+            {
+                if (item.ToolTip.ToString() == themePath)
+                {
+                    CbbThemes.SelectedItem = item;
+                    break;
+                }
+            }
+        }
+        /// <summary>
+        /// 设置字体选项
+        /// </summary>
+        private void SelectFontItem(string fontName)
+        {
+            foreach (TextBlock item in CbbFonts.Items)
+            {
+                if (item.Text == fontName)
+                {
+                    CbbFonts.SelectedItem = item;
+                    break;
+                }
+            }
+        }
+        /// <summary>
+        /// 设置书籍选项
+        /// </summary>
+        private void SelectBookItem()
+        {
+            foreach (var item in Books.Items)
+            {
+                Grid grid = item as Grid;
+                System.Windows.Controls.Label tb = grid.Children[0] as System.Windows.Controls.Label;
+                System.Windows.Controls.Button btn = grid.Children[1] as System.Windows.Controls.Button;
+                if (tb.Tag.ToString() == CurrentBook.Path)
+                {
+                    Books.SelectedItem = item;
+                    break;
+                }
+            }
+        }
         /// <summary>
         /// 点击一个节点
         /// </summary>
@@ -1793,7 +1897,7 @@ namespace E.Writer
                     BtnUndo.IsEnabled = true;
                     BtnRedo.IsEnabled = true;
 
-                    if (FileContent.SelectedText != "" && FileContent.SelectedText != null)
+                    if (TbxFileContent.SelectedText != "" && TbxFileContent.SelectedText != null)
                     {
                         BtnCut.IsEnabled = true;
                         BtnCopy.IsEnabled = true;
@@ -1915,73 +2019,6 @@ namespace E.Writer
                     ), frame);
             Dispatcher.PushFrame(frame);
         }
-        /// <summary>
-        /// 创建窗口时获取上次路径
-        /// </summary>
-        private void RefreshLastPath()
-        {
-            //获取上级目录
-            if (Properties.Settings.Default._lastBook == Properties.User.Default.BooksDir)
-            {
-                TbxFatherPathBook.Text = Properties.User.Default.BooksDir;
-            }
-            else
-            {
-                TbxFatherPathBook.Text = Path.GetDirectoryName(Properties.Settings.Default._lastBook);
-            }
-            if (CurrentBook != null)
-            {
-                if (CurrentChapter != null)
-                {
-                    TbxFatherPathChapter.Text = CurrentChapter.Path;
-                    TbxFatherPathEssay.Text = CurrentChapter.Path;
-                }
-                else
-                {
-                    TbxFatherPathChapter.Text = CurrentBook.Path;
-                    TbxFatherPathEssay.Text = CurrentBook.Path;
-                }
-            }
-
-            //检测
-            if (TbxFatherPathBook.Text == null || TbxFatherPathBook.Text == "")
-            {
-                TbxBookName.ToolTip = "请设置上级目录";
-            }
-            else
-            {
-                TbxBookName.Text = "未命名书籍";
-                TbxBookName.Select(5, 0);
-                if (Properties.User.Default.isAutoBrackets)
-                {
-                    TbxBookName.ToolTip = TbxFatherPathBook.Text + @"\" + "《" + TbxBookName.Text + "》";
-                }
-                else
-                {
-                    TbxBookName.ToolTip = TbxFatherPathBook.Text + @"\" + TbxBookName.Text;
-                }
-            }
-            if (TbxFatherPathChapter.Text == null || TbxFatherPathChapter.Text == "")
-            {
-                TbxChapterName.ToolTip = "请设置上级目录";
-            }
-            else
-            {
-                TbxChapterName.Text = "未命名卷册";
-                TbxChapterName.Select(5, 0);
-                TbxChapterName.ToolTip = TbxFatherPathChapter.Text + @"\" + TbxChapterName.Text;
-            }
-            if (TbxFatherPathEssay.Text == null || TbxFatherPathEssay.Text == "")
-            {
-                EssayName.ToolTip = "请设置上级目录。";
-            }
-            else
-            {
-                EssayName.Text = "未命名文章";
-                EssayName.Select(5, 0);
-                EssayName.ToolTip = TbxFatherPathEssay.Text + @"\" + EssayName.Text + ".txt";
-            }
-        }
 
         //显示
         /// <summary>
@@ -2003,21 +2040,21 @@ namespace E.Writer
             //若第一次运行软件，提示消息
             if (Properties.Settings.Default.runTimes == 1)
             {
-                EssayName.Text = FindResource("欢迎使用") + " " + AppInfo.Name;
+                TbxFileName.Text = FindResource("欢迎使用") + " " + AppInfo.Name;
                 //显示运行记录
-                FileContent.Text = FindResource("启动次数") + "：" + Properties.Settings.Default.runTimes + Environment.NewLine +
+                TbxFileContent.Text = FindResource("启动次数") + "：" + Properties.Settings.Default.runTimes + Environment.NewLine +
                                    FindResource("启动时间") + "：" + Properties.Settings.Default.thisStartTime;
             }
             else
             {
-                EssayName.Text = FindResource("欢迎使用") + " " + AppInfo.Name;
+                TbxFileName.Text = FindResource("欢迎使用") + " " + AppInfo.Name;
                 int d = Properties.Settings.Default.totalTime.Days;
                 int h = Properties.Settings.Default.totalTime.Hours;
                 int m = Properties.Settings.Default.totalTime.Minutes;
                 int s = Properties.Settings.Default.totalTime.Seconds;
                 string t = d + "天" + h + "时" + m + "分" + s + "秒";
                 //显示运行记录
-                FileContent.Text = FindResource("启动次数") + "：" + Properties.Settings.Default.runTimes + Environment.NewLine +
+                TbxFileContent.Text = FindResource("启动次数") + "：" + Properties.Settings.Default.runTimes + Environment.NewLine +
                                    FindResource("启动时间") + "：" + Properties.Settings.Default.thisStartTime + Environment.NewLine +
                                    Environment.NewLine +
                                    FindResource("上次启动时间") + "：" + Properties.Settings.Default.lastStartTime + Environment.NewLine +
@@ -2030,29 +2067,20 @@ namespace E.Writer
         /// </summary>
         /// <param name="resourceName">资源名</param>
         /// <param name="newBox">是否弹出对话框</param>
-        private void ShowMessage(string resourceName, bool newBox)
+        private void ShowMessage(string message, bool newBox)
         {
-            if (FindResource(resourceName) != null)
+            if (HelpMessage == null)
             {
-                if (newBox)
-                {
-                    MessageBox.Show(FindResource(resourceName).ToString());
-                }
-                else
-                {
-                    HelpMessage.Text = FindResource(resourceName).ToString();
-                }
+                return;
+            }
+
+            if (newBox)
+            {
+                MessageBox.Show(message);
             }
             else
             {
-                if (newBox)
-                {
-                    MessageBox.Show(resourceName);
-                }
-                else
-                {
-                    HelpMessage.Text = resourceName;
-                }
+                HelpMessage.Text = message;
             }
         }
         /// <summary>
@@ -2233,14 +2261,14 @@ namespace E.Writer
         /// </summary>
         private void Indentation()
         {
-            int start = FileContent.SelectionStart;
+            int start = TbxFileContent.SelectionStart;
             string spaces = "";
             for (int i = 0; i < Properties.User.Default.autoIndentations; i++)
             {
                 spaces += " ";
             }
-            FileContent.Text = FileContent.Text.Insert(start, spaces);
-            FileContent.Select(start + spaces.Length, 0);
+            TbxFileContent.Text = TbxFileContent.Text.Insert(start, spaces);
+            TbxFileContent.Select(start + spaces.Length, 0);
         }
         /// <summary>
         /// 自动备份
@@ -2291,7 +2319,7 @@ namespace E.Writer
             LoadSettings();
 
             //初始化
-            SetLanguageItem(Properties.User.Default.language);
+            SelectLanguageItem(Properties.User.Default.language);
             SetTheme(Properties.User.Default.ThemePath);
             SetFont(Properties.User.Default.fontName);
             if (Properties.User.Default.isAutoOpenBook)
@@ -2352,17 +2380,6 @@ namespace E.Writer
             //若打开了书
             if (CurrentBook != null)
             {
-                //Ctrl+Alt+B 创建卷册
-                if (e.Key == Key.B && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
-                                   && (e.KeyboardDevice.IsKeyDown(Key.LeftAlt) || e.KeyboardDevice.IsKeyDown(Key.RightAlt)))
-                {
-                    CreateChapter();
-                    //e.Handled = true;
-                }
-                //Ctrl+Shift+B 创建文章
-                if (e.Key == Key.B && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
-                                   && (e.KeyboardDevice.IsKeyDown(Key.LeftShift) || e.KeyboardDevice.IsKeyDown(Key.RightShift)))
-                { CreateEssay(); }
                 //Ctrl+E 导出全文
                 if (e.Key == Key.E && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
                 { CheckExport(); }
@@ -2434,35 +2451,35 @@ namespace E.Writer
             //Ctrl+O 打开书籍
             if (e.Key == Key.O && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
             { OpenNewBook(); }
-            //Ctrl+B 创建书籍
+            //Ctrl+B 创建
             if (e.Key == Key.B && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
-            { CreateBook(); }
+            { Create(); }
             //FT 切换下个主题
             if (e.Key == Key.T && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
             { SetNextTheme(); }
         }
 
-        private void EssayName_GotFocus(object sender, RoutedEventArgs e)
+        private void TbxFileName_GotFocus(object sender, RoutedEventArgs e)
         {
             ShowMessage("在此处重命名", false);
         }
-        private void EssayName_KeyUp(object sender, KeyEventArgs e)
+        private void TbxFileName_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                if (EssayName.Text != null && EssayName.Text != "")
+                if (TbxFileName.Text != null && TbxFileName.Text != "")
                 {
                     //检测格式是否正确
-                    if (CheckIsRightName(EssayName.Text))
+                    if (CheckIsRightName(TbxFileName.Text))
                     {
                         if (CurrentEssay != null)
                         {
                             //删除原文件
                             File.Delete(CurrentEssay.Path);
                             //获取新名字
-                            string name = EssayName.Text + ".txt";
+                            string name = TbxFileName.Text + ".txt";
                             string path;
-                            if (CurrentChapter.Name == null)
+                            if (CurrentChapter == null)
                             {
                                 path = CurrentBook.Path + @"\" + name;
                             }
@@ -2487,7 +2504,7 @@ namespace E.Writer
                             //获取旧卷册路径
                             string _old = CurrentChapter.Path;
                             //更新卷册名称和路径
-                            string name = EssayName.Text;
+                            string name = TbxFileName.Text;
                             CurrentChapter = new FileOrFolderInfo(Path.GetDirectoryName(CurrentChapter.Path) + @"\" + name);
                             //MessageBox.Show(System.IO.Path.GetDirectoryName(_CurrentChapter.Name));
                             Directory.CreateDirectory(CurrentChapter.Path);
@@ -2514,55 +2531,45 @@ namespace E.Writer
             }
         }
 
-        private void BookName_TextChanged(object sender, TextChangedEventArgs e)
+        private void TbxCreatePath_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (TbxBookName.Text == null || TbxBookName.Text == "")
+            if (TbxCreatePath.Text == null || TbxCreatePath.Text == "")
             {
-                TbxBookName.ToolTip = "请输入书籍名";
+                BtnCreateBook.ToolTip = "请设置存放位置";
+                BtnCreateChapter.ToolTip = "请设置存放位置";
+                BtnCreateEssay.ToolTip = "请设置存放位置";
             }
             else
             {
-                if (Properties.User.Default.isAutoBrackets)
-                {
-                    TbxBookName.ToolTip = TbxFatherPathBook.Text + @"\" + "《" + TbxBookName.Text + "》";
-                }
-                else
-                {
-                    TbxBookName.ToolTip = TbxFatherPathBook.Text + @"\" + TbxBookName.Text;
-                }
+                BtnCreateBook.ToolTip = TbxCreatePath.Text + @"\" + TbxCreateName.Text;
+                BtnCreateChapter.ToolTip = TbxCreatePath.Text + @"\" + TbxCreateName.Text;
+                BtnCreateEssay.ToolTip = TbxCreatePath.Text + @"\" + TbxCreateName.Text + ".txt";
             }
         }
-        private void ChapterName_TextChanged(object sender, TextChangedEventArgs e)
+        private void TbxCreateName_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (TbxChapterName.Text == null || TbxChapterName.Text == "")
+            if (TbxCreateName.Text == null || TbxCreateName.Text == "")
             {
-                TbxChapterName.ToolTip = "请输入卷册名";
+                BtnCreateBook.ToolTip = "请输入书籍名称";
+                BtnCreateChapter.ToolTip = "请输入卷册名称";
+                BtnCreateEssay.ToolTip = "请输入文章名称";
             }
             else
             {
-                TbxChapterName.ToolTip = TbxFatherPathChapter.Text + @"\" + TbxChapterName.Text;
-            }
-        }
-        private void EssayName_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (TbxEssayName.Text == "" || TbxEssayName.Text == null)
-            {
-                TbxEssayName.ToolTip = "请输入文章名";
-            }
-            else
-            {
-                TbxEssayName.ToolTip = TbxFatherPathEssay.Text + @"\" + TbxEssayName.Text + ".txt";
+                BtnCreateBook.ToolTip = TbxCreatePath.Text + @"\" + TbxCreateName.Text;
+                BtnCreateChapter.ToolTip = TbxCreatePath.Text + @"\" + TbxCreateName.Text;
+                BtnCreateEssay.ToolTip = TbxCreatePath.Text + @"\" + TbxCreateName.Text + ".txt";
             }
         }
 
-        private void FileContent_TextChanged(object sender, TextChangedEventArgs e)
+        private void TbxFileContent_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (CurrentEssay != null)
             {
                 //过滤无效字符
-                MatchCollection space = Regex.Matches(FileContent.Text, @"\s");
+                MatchCollection space = Regex.Matches(TbxFileContent.Text, @"\s");
                 //MatchCollection newLine = Regex.Matches(FileContent.Text, @"\r");
-                int w = FileContent.Text.Length - space.Count;
+                int w = TbxFileContent.Text.Length - space.Count;
                 //刷新字数
                 Words.Text = FindResource("字数").ToString() + "：" + w;
                 Words.ToolTip = FindResource("全书字数").ToString() + "：" + GetBookWords(CurrentBook.Path, CurrentEssay.Path);
@@ -2575,47 +2582,47 @@ namespace E.Writer
                 }
             }
         }
-        private void FileContent_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        private void TbxFileContent_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             //NodePath.Text = e.Text;
             //自动补全
             if (Properties.User.Default.isAutoCompletion)
             {
                 //记录光标位置
-                int position = FileContent.SelectionStart;
+                int position = TbxFileContent.SelectionStart;
                 //记录滚动条位置
-                double s = FileContent.VerticalOffset;
+                double s = TbxFileContent.VerticalOffset;
                 if (e.Text.Equals("("))
-                { FileContent.Text = FileContent.Text.Insert(FileContent.SelectionStart, ")"); FileContent.Select(position, 0); }
+                { TbxFileContent.Text = TbxFileContent.Text.Insert(TbxFileContent.SelectionStart, ")"); TbxFileContent.Select(position, 0); }
                 else if (e.Text.Equals("（"))
-                { FileContent.Text = FileContent.Text.Insert(FileContent.SelectionStart, "）"); FileContent.Select(position, 0); }
+                { TbxFileContent.Text = TbxFileContent.Text.Insert(TbxFileContent.SelectionStart, "）"); TbxFileContent.Select(position, 0); }
                 else if (e.Text.Equals("["))
-                { FileContent.Text = FileContent.Text.Insert(FileContent.SelectionStart, "]"); FileContent.Select(position, 0); }
+                { TbxFileContent.Text = TbxFileContent.Text.Insert(TbxFileContent.SelectionStart, "]"); TbxFileContent.Select(position, 0); }
                 else if (e.Text.Equals("【"))
-                { FileContent.Text = FileContent.Text.Insert(FileContent.SelectionStart, "】"); FileContent.Select(position, 0); }
+                { TbxFileContent.Text = TbxFileContent.Text.Insert(TbxFileContent.SelectionStart, "】"); TbxFileContent.Select(position, 0); }
                 else if (e.Text.Equals("{"))
-                { FileContent.Text = FileContent.Text.Insert(FileContent.SelectionStart, "}"); FileContent.Select(position, 0); }
+                { TbxFileContent.Text = TbxFileContent.Text.Insert(TbxFileContent.SelectionStart, "}"); TbxFileContent.Select(position, 0); }
                 else if (e.Text.Equals("'"))
-                { FileContent.Text = FileContent.Text.Insert(FileContent.SelectionStart, "'"); FileContent.Select(position, 0); }
+                { TbxFileContent.Text = TbxFileContent.Text.Insert(TbxFileContent.SelectionStart, "'"); TbxFileContent.Select(position, 0); }
                 else if (e.Text.Equals("‘"))
-                { FileContent.Text = FileContent.Text.Insert(FileContent.SelectionStart, "’"); FileContent.Select(position, 0); }
+                { TbxFileContent.Text = TbxFileContent.Text.Insert(TbxFileContent.SelectionStart, "’"); TbxFileContent.Select(position, 0); }
                 else if (e.Text.Equals("’"))
-                { FileContent.Text = FileContent.Text.Insert(FileContent.SelectionStart - 1, "‘"); FileContent.Select(position, 0); }
+                { TbxFileContent.Text = TbxFileContent.Text.Insert(TbxFileContent.SelectionStart - 1, "‘"); TbxFileContent.Select(position, 0); }
                 else if (e.Text.Equals("\""))
-                { FileContent.Text = FileContent.Text.Insert(FileContent.SelectionStart, "\""); FileContent.Select(position, 0); }
+                { TbxFileContent.Text = TbxFileContent.Text.Insert(TbxFileContent.SelectionStart, "\""); TbxFileContent.Select(position, 0); }
                 else if (e.Text.Equals("“"))
-                { FileContent.Text = FileContent.Text.Insert(FileContent.SelectionStart, "”"); FileContent.Select(position, 0); }
+                { TbxFileContent.Text = TbxFileContent.Text.Insert(TbxFileContent.SelectionStart, "”"); TbxFileContent.Select(position, 0); }
                 else if (e.Text.Equals("”"))
-                { FileContent.Text = FileContent.Text.Insert(FileContent.SelectionStart - 1, "“"); FileContent.Select(position, 0); }
+                { TbxFileContent.Text = TbxFileContent.Text.Insert(TbxFileContent.SelectionStart - 1, "“"); TbxFileContent.Select(position, 0); }
                 else if (e.Text.Equals("<"))
-                { FileContent.Text = FileContent.Text.Insert(FileContent.SelectionStart, ">"); FileContent.Select(position, 0); }
+                { TbxFileContent.Text = TbxFileContent.Text.Insert(TbxFileContent.SelectionStart, ">"); TbxFileContent.Select(position, 0); }
                 else if (e.Text.Equals("《"))
-                { FileContent.Text = FileContent.Text.Insert(FileContent.SelectionStart, "》"); FileContent.Select(position, 0); }
+                { TbxFileContent.Text = TbxFileContent.Text.Insert(TbxFileContent.SelectionStart, "》"); TbxFileContent.Select(position, 0); }
                 //FileContent.Select(position, 0);
-                FileContent.ScrollToVerticalOffset(s);
+                TbxFileContent.ScrollToVerticalOffset(s);
             }
         }
-        private void FileContent_KeyUp(object sender, KeyEventArgs e)
+        private void TbxFileContent_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
@@ -2625,16 +2632,16 @@ namespace E.Writer
                 }
             }
         }
-        private void FileContent_SelectionChanged(object sender, RoutedEventArgs e)
+        private void TbxFileContent_SelectionChanged(object sender, RoutedEventArgs e)
         {
             GetRowAndColumn();
             RefreshBtnsState();
         }
-        private void FileContent_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void TbxFileContent_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             GetRowAndColumn();
         }
-        private void FileContent_LostFocus(object sender, RoutedEventArgs e)
+        private void TbxFileContent_LostFocus(object sender, RoutedEventArgs e)
         {
             RowAndColumn.Text = FindResource("行").ToString() + "：" + 0 + "    " + FindResource("列").ToString() + "：" + 0; ;
         }
@@ -2647,21 +2654,9 @@ namespace E.Writer
                 SelectNode(2);
             }
             //Delete 删除节点
-            if (e.Key == Key.Delete && SelectedNode != null)
+            if (e.Key == Key.Delete)
             {
-                if (SelectedNode.IsFile == true && SelectedNode.Name != null)
-                {
-                    DeleteEssay();
-                }
-                else if (SelectedNode.IsFile == false && SelectedNode.Name != null)
-                {
-                    DeleteChapter();
-                }
-                else
-                {
-                    //显示消息
-                    ShowMessage("请选择一个项目再删除", false);
-                }
+                Delete();
                 e.Handled = true;
             }
         }
@@ -2804,26 +2799,9 @@ namespace E.Writer
         {
             OpenNewBook();
         }
-        private void BtnCrete_Click(object sender, RoutedEventArgs e)
+        private void BtnCreate_Click(object sender, RoutedEventArgs e)
         {
-            RefreshLastPath();
-
-            if (PanCenter.Visibility == Visibility.Collapsed)
-            {
-                PanCenter.Visibility = Visibility.Visible;
-                BtnFold.BorderThickness = new Thickness(4, 0, 0, 0);
-            }
-
-            if (TabCreate.Visibility == Visibility.Visible)
-            {
-                TabCreate.Visibility = Visibility.Collapsed;
-                BtnCrete.BorderThickness = new Thickness(0, 0, 0, 0);
-            }
-            else
-            {
-                TabCreate.Visibility = Visibility.Visible;
-                BtnCrete.BorderThickness = new Thickness(4, 0, 0, 0);
-            }
+            Create();
         }
         private void BtnExport_Click(object sender, RoutedEventArgs e)
         {
@@ -2847,151 +2825,83 @@ namespace E.Writer
             SaveFileAs();
         }
 
-        private void BrowseBook_Click(object sender, RoutedEventArgs e)
+        private void BtnExpand_Click(object sender, RoutedEventArgs e)
+        {
+            ExpandTree();
+        }
+        private void BtnCollapse_Click(object sender, RoutedEventArgs e)
+        {
+            CollapseTree();
+        }
+        private void BtnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            //重新导入目录
+            ReloadFilesTree();
+        }
+
+        private void BtnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            Delete();
+        }
+        private void BtnBrowse_Click(object sender, RoutedEventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog
             {
                 ShowNewFolderButton = true,
-                SelectedPath = TbxFatherPathBook.Text,
-                Description = "请选择此书籍的存放位置："
+                SelectedPath = TbxCreatePath.Text,
+                Description = "请选择目标存放位置："
             };
-            //按下确定选择的按钮，获取根目录文件夹路径
+            //按下确定选择的按钮，获取存放路径
             if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                TbxFatherPathBook.Text = fbd.SelectedPath;
-                //检测
-                if (TbxBookName.Text != null && TbxBookName.Text != "")
-                {
-                    if (Properties.User.Default.isAutoBrackets)
-                    {
-                        TbxBookName.ToolTip = TbxFatherPathBook.Text + @"\" + "《" + TbxBookName.Text + "》";
-                    }
-                    else
-                    {
-                        TbxBookName.ToolTip = TbxFatherPathBook.Text + @"\" + TbxBookName.Text;
-                    }
-                }
+                TbxCreatePath.Text = fbd.SelectedPath;
             }
         }
-        private void BrowseChapter_Click(object sender, RoutedEventArgs e)
-        {
-            FolderBrowserDialog fbd = new FolderBrowserDialog
-            {
-                SelectedPath = TbxFatherPathChapter.Text,
-                Description = "请选择此卷册的存放位置："
-            };
-            //按下确定选择的按钮，获取根目录文件夹路径
-            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                if (fbd.SelectedPath.Contains(CurrentBook.Path))
-                {
-                    TbxFatherPathChapter.Text = fbd.SelectedPath;
-                    //检测
-                    if (TbxChapterName.Text != null && TbxChapterName.Text != "")
-                    {
-                        TbxChapterName.ToolTip = TbxFatherPathChapter.Text + @"\" + TbxChapterName.Text;
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("不可以将卷册创建在书籍外");
-                }
-            }
-        }
-        private void BrowseEssay_Click(object sender, RoutedEventArgs e)
-        {
-            FolderBrowserDialog fbd = new FolderBrowserDialog
-            {
-                SelectedPath = TbxFatherPathEssay.Text,
-                Description = "请选择此文章的存放位置："
-            };
-            //按下确定选择的按钮，获取根目录文件夹路径
-            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                if (fbd.SelectedPath.Contains(CurrentBook.Path))
-                {
-                    TbxEssayName.ToolTip = fbd.SelectedPath;
-                    //检测
-                    if (TbxEssayName.Text != null && TbxEssayName.Text != "")
-                    {
-                        TbxEssayName.ToolTip = TbxEssayName.ToolTip.ToString() + @"\" + TbxEssayName.Text + ".txt";
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("不可以将文章创建在书籍外");
-                }
-            }
-        }
-        private void BtnDelete_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedNode != null)
-            {
-                if (SelectedNode.IsFile == true && SelectedNode.Name != null)
-                {
-                    DeleteEssay();
-                }
-                else if (SelectedNode.IsFile == false && SelectedNode.Name != null)
-                {
-                    DeleteChapter();
-                }
-                else
-                {
-                    //显示消息
-                    ShowMessage("请选择一个项目再删除", false);
-                }
-            }
-            else
-            {
-                //显示消息
-                ShowMessage("请选择一个项目再删除", false);
-            }
-        }
-        private void CreateBook_Click(object sender, RoutedEventArgs e)
+        private void BtnCreateBook_Click(object sender, RoutedEventArgs e)
         {
             CreateBook();
         }
-        private void CreateChapter_Click(object sender, RoutedEventArgs e)
+        private void BtnCreateChapter_Click(object sender, RoutedEventArgs e)
         {
             CreateChapter();
         }
-        private void CreateEssay_Click(object sender, RoutedEventArgs e)
+        private void BtnCreateEssay_Click(object sender, RoutedEventArgs e)
         {
             CreateEssay();
         }
 
         private void BtnUndo_Click(object sender, RoutedEventArgs e)
         {
-            FileContent.Undo();
+            TbxFileContent.Undo();
         }
         private void BtnRedo_Click(object sender, RoutedEventArgs e)
         {
-            FileContent.Redo();
+            TbxFileContent.Redo();
         }
         private void BtnCut_Click(object sender, RoutedEventArgs e)
         {
-            FileContent.Cut();
+            TbxFileContent.Cut();
         }
         private void BtnCopy_Click(object sender, RoutedEventArgs e)
         {
-            FileContent.Copy();
+            TbxFileContent.Copy();
         }
         private void BtnPaste_Click(object sender, RoutedEventArgs e)
         {
-            FileContent.Paste();
+            TbxFileContent.Paste();
         }
         private void BtnToTraditional_Click(object sender, RoutedEventArgs e)
         {
-            if (FileContent.IsFocused)
+            if (TbxFileContent.IsFocused)
             {
-                FileContent.SelectedText = GetTraditional(FileContent.SelectedText);
+                TbxFileContent.SelectedText = GetTraditional(TbxFileContent.SelectedText);
             }
         }
         private void BtnToSimplified_Click(object sender, RoutedEventArgs e)
         {
-            if (FileContent.IsFocused)
+            if (TbxFileContent.IsFocused)
             {
-                FileContent.SelectedText = GetSimplified(FileContent.SelectedText);
+                TbxFileContent.SelectedText = GetSimplified(TbxFileContent.SelectedText);
             }
         }
         private void BtnFindNext_Click(object sender, RoutedEventArgs e)
@@ -3000,33 +2910,33 @@ namespace E.Writer
             if (TextFind.Text != null && TextFind.Text != "")
             {
                 //检测是否存在
-                if (FileContent.Text.Contains(TextFind.Text))
+                if (TbxFileContent.Text.Contains(TextFind.Text))
                 {
                     //获取总个数
-                    FindAmount.Text = "共计" + Regex.Matches(FileContent.Text, TextFind.Text).Count.ToString() + "处";
+                    FindAmount.Text = "共计" + Regex.Matches(TbxFileContent.Text, TextFind.Text).Count.ToString() + "处";
                     int j = TextFind.Text.Length;
                     //检测是否同个内容第一次按下
                     if (CurrentFindText != TextFind.Text)
                     {
                         CurrentFindText = TextFind.Text;
                         //获取这个的索引
-                        NextStartIndex = FileContent.Text.IndexOf(CurrentFindText, 0);
+                        NextStartIndex = TbxFileContent.Text.IndexOf(CurrentFindText, 0);
                         //高亮
-                        FileContent.Focus();
-                        FileContent.Select(NextStartIndex, j);
+                        TbxFileContent.Focus();
+                        TbxFileContent.Select(NextStartIndex, j);
                         //记录下一个开始寻找的地方
                         NextStartIndex += j;
                     }
                     else
                     {
                         //获取这个的索引
-                        NextStartIndex = FileContent.Text.IndexOf(CurrentFindText, NextStartIndex);
+                        NextStartIndex = TbxFileContent.Text.IndexOf(CurrentFindText, NextStartIndex);
                         //检测是否存在
                         if (NextStartIndex >= 0)
                         {
                             //高亮
-                            FileContent.Focus();
-                            FileContent.Select(NextStartIndex, j);
+                            TbxFileContent.Focus();
+                            TbxFileContent.Select(NextStartIndex, j);
                             //记录下一个开始寻找的地方
                             NextStartIndex += j;
                         }
@@ -3057,7 +2967,7 @@ namespace E.Writer
             if (TextFind.Text != null && TextFind.Text != "")
             {
                 //检测是否存在
-                if (FileContent.Text.Contains(TextFind.Text))
+                if (TbxFileContent.Text.Contains(TextFind.Text))
                 {
                     int j = TextFind.Text.Length;
                     int k = TextReplace.Text.Length;
@@ -3067,27 +2977,27 @@ namespace E.Writer
                     {
                         CurrentFindText = TextFind.Text;
                         //获取这个的索引
-                        NextStartIndex = FileContent.Text.IndexOf(CurrentFindText, 0);
+                        NextStartIndex = TbxFileContent.Text.IndexOf(CurrentFindText, 0);
                         //移除、插入、高亮
-                        FileContent.Focus();
-                        FileContent.Text = FileContent.Text.Remove(NextStartIndex, j);
-                        FileContent.Text = FileContent.Text.Insert(NextStartIndex, ReplaceText);
-                        FileContent.Select(NextStartIndex, k);
+                        TbxFileContent.Focus();
+                        TbxFileContent.Text = TbxFileContent.Text.Remove(NextStartIndex, j);
+                        TbxFileContent.Text = TbxFileContent.Text.Insert(NextStartIndex, ReplaceText);
+                        TbxFileContent.Select(NextStartIndex, k);
                         //记录下一个开始寻找的地方
                         NextStartIndex += k;
                     }
                     else
                     {
                         //获取这个的索引
-                        NextStartIndex = FileContent.Text.IndexOf(CurrentFindText, NextStartIndex);
+                        NextStartIndex = TbxFileContent.Text.IndexOf(CurrentFindText, NextStartIndex);
                         //检测是否存在
                         if (NextStartIndex >= 0)
                         {
                             //移除、插入、高亮
-                            FileContent.Focus();
-                            FileContent.Text = FileContent.Text.Remove(NextStartIndex, j);
-                            FileContent.Text = FileContent.Text.Insert(NextStartIndex, ReplaceText);
-                            FileContent.Select(NextStartIndex, k);
+                            TbxFileContent.Focus();
+                            TbxFileContent.Text = TbxFileContent.Text.Remove(NextStartIndex, j);
+                            TbxFileContent.Text = TbxFileContent.Text.Insert(NextStartIndex, ReplaceText);
+                            TbxFileContent.Select(NextStartIndex, k);
                             //记录下一个开始寻找的地方
                             NextStartIndex += k;
                         }
@@ -3098,7 +3008,7 @@ namespace E.Writer
                         }
                     }
                     //获取总个数
-                    FindAmount.Text = "还有" + Regex.Matches(FileContent.Text, TextFind.Text).Count.ToString() + "处";
+                    FindAmount.Text = "还有" + Regex.Matches(TbxFileContent.Text, TextFind.Text).Count.ToString() + "处";
                 }
                 else
                 {
@@ -3120,16 +3030,16 @@ namespace E.Writer
             if (TextFind.Text != null && TextFind.Text != "")
             {
                 //检测是否存在
-                if (FileContent.Text.Contains(TextFind.Text))
+                if (TbxFileContent.Text.Contains(TextFind.Text))
                 {
-                    int i = Regex.Matches(FileContent.Text, TextFind.Text).Count;
+                    int i = Regex.Matches(TbxFileContent.Text, TextFind.Text).Count;
                     int j = TextFind.Text.Length;
                     int k = TextReplace.Text.Length;
                     ReplaceText = TextReplace.Text;
                     CurrentFindText = TextFind.Text;
                     //移除、插入、高亮
-                    FileContent.Focus();
-                    FileContent.Text = FileContent.Text.Replace(CurrentFindText, ReplaceText);
+                    TbxFileContent.Focus();
+                    TbxFileContent.Text = TbxFileContent.Text.Replace(CurrentFindText, ReplaceText);
                     MessageBox.Show("全部内容已替换完毕，共计" + i + "处");
                     FindAmount.Text = "共计0处";
                 }
@@ -3146,18 +3056,15 @@ namespace E.Writer
             }
         }
 
-        private void BtnExpand_Click(object sender, RoutedEventArgs e)
+        private void BtnReset_Click(object sender, RoutedEventArgs e)
         {
-            ExpandTree();
+            ResetPreferences();
+            LoadSettings();
+            ShowMessage("已重置", false);
         }
-        private void BtnCollapse_Click(object sender, RoutedEventArgs e)
+        private void BtnApply_Click(object sender, RoutedEventArgs e)
         {
-            CollapseTree();
-        }
-        private void BtnRefresh_Click(object sender, RoutedEventArgs e)
-        {
-            //重新导入目录
-            ReloadFilesTree();
+
         }
 
         private void BtnCheckNew_Click(object sender, RoutedEventArgs e)
@@ -3222,20 +3129,6 @@ namespace E.Writer
             //显示消息
             ShowMessage("已更改", false);
         }
-        private void AutoBrackets_Checked(object sender, RoutedEventArgs e)
-        {
-            Properties.User.Default.isAutoBrackets = true;
-            SavePreferences();
-            //显示消息
-            ShowMessage("已更改", false);
-        }
-        private void AutoBrackets_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Properties.User.Default.isAutoBrackets = false;
-            SavePreferences();
-            //显示消息
-            ShowMessage("已更改", false);
-        }
         private void AutoCompletion_Checked(object sender, RoutedEventArgs e)
         {
             Properties.User.Default.isAutoCompletion = true;
@@ -3266,9 +3159,9 @@ namespace E.Writer
             //显示消息
             ShowMessage("已更改", false);
         }
-        private void AutoIndentations_KeyUp(object sender, KeyEventArgs e)
+        private void AutoIndentations_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (AutoIndentations.Text != "")
+            if (AutoIndentations.Text != "" && AutoIndentations.Text != null)
             {
                 try
                 {
@@ -3323,9 +3216,9 @@ namespace E.Writer
             //显示消息
             ShowMessage("已更改", false);
         }
-        private void AutoSaveTime_KeyUp(object sender, KeyEventArgs e)
+        private void AutoSaveTime_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (AutoSaveTime.Text != "")
+            if (AutoSaveTime.Text != "" && AutoSaveTime.Text != null)
             {
                 try
                 {
@@ -3370,7 +3263,7 @@ namespace E.Writer
         }
         private void AutoBackupTime_KeyUp(object sender, KeyEventArgs e)
         {
-            if (AutoBackupTime.Text != "")
+            if (AutoBackupTime.Text != "" && AutoBackupTime.Text != null)
             {
                 try
                 {
@@ -3401,7 +3294,7 @@ namespace E.Writer
         {
             Properties.User.Default.isShowScrollBar = true;
             SavePreferences();
-            FileContent.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+            TbxFileContent.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
             //显示消息
             ShowMessage("已更改", false);
         }
@@ -3409,7 +3302,7 @@ namespace E.Writer
         {
             Properties.User.Default.isShowScrollBar = false;
             SavePreferences();
-            FileContent.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            TbxFileContent.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
             //显示消息
             ShowMessage("已更改", false);
         }
@@ -3450,7 +3343,7 @@ namespace E.Writer
         }
         private void TextSize_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (TextSize.Text != "")
+            if (TextSize.Text != "" && TextSize.Text != null)
             {
                 try
                 {
@@ -3459,7 +3352,7 @@ namespace E.Writer
                     {
                         Properties.User.Default.fontSize = i;
                         SavePreferences();
-                        FileContent.FontSize = i;
+                        TbxFileContent.FontSize = i;
                         ShowMessage("已更改", false);
                     }
                     else
@@ -3474,16 +3367,6 @@ namespace E.Writer
                     ShowMessage("输入整数", false);
                 }
             }
-        }
-        private void BtnReset_Click(object sender, RoutedEventArgs e)
-        {
-            ResetPreferences();
-            LoadSettings();
-            ShowMessage("已重置", false);
-        }
-        private void BtnApply_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         //计时器事件

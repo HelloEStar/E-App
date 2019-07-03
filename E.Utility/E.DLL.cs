@@ -228,6 +228,7 @@ namespace E.Utility
         {
             Path = path;
             Name = System.IO.Path.GetFileName(path);
+            //Name = System.IO.Path.GetDirectoryName(path);
         }
     }
 }

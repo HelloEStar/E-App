@@ -38,18 +38,6 @@ namespace E.Writer.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool isAutoBrackets {
-            get {
-                return ((bool)(this["isAutoBrackets"]));
-            }
-            set {
-                this["isAutoBrackets"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool isAutoSaveWhenSwitch {
             get {
                 return ((bool)(this["isAutoSaveWhenSwitch"]));
