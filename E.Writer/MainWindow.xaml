@@ -107,8 +107,8 @@
         <Style x:Key="标题标签样式" TargetType="Label">
             <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
             <Setter Property="Height" Value="30"/>
-            <Setter Property="Margin" Value="0,5,0,0"/>
-            <Setter Property="Padding" Value="5,0"/>
+            <Setter Property="Margin" Value="5,5,5,0"/>
+            <Setter Property="Padding" Value="0"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontSize" Value="14"/>
@@ -121,9 +121,8 @@
         <!--检查框样式-->
         <Style x:Key="检查框样式" TargetType="CheckBox">
             <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Margin" Value="0,5,0,0"/>
-            <Setter Property="Padding" Value="5,0"/>
+            <Setter Property="Margin" Value="5,5,5,0"/>
+            <Setter Property="Padding" Value="5"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -133,8 +132,8 @@
         <Style x:Key="下拉框样式" TargetType="ComboBox">
             <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
             <Setter Property="Height" Value="30"/>
-            <Setter Property="Margin" Value="0,5,0,0"/>
-            <Setter Property="Padding" Value="5,0"/>
+            <Setter Property="Margin" Value="5,5,5,0"/>
+            <Setter Property="Padding" Value="5"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
@@ -145,16 +144,18 @@
             <Setter Property="CaretBrush" Value="{DynamicResource 一级字体颜色}"/>
             <Setter Property="Background" Value="{DynamicResource 三级背景颜色}"/>
             <Setter Property="Height" Value="30"/>
-            <Setter Property="Margin" Value="0,5,0,0"/>
-            <Setter Property="Padding" Value="5,0"/>
+            <Setter Property="Margin" Value="5,5,5,0"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
         
         <!--文本显示框样式-->
         <Style x:Key="文本显示框样式" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Padding" Value="5,8,5,0"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5,0"/>
         </Style>
 
         <!--流式面板样式-->
@@ -172,7 +173,203 @@
             <Setter Property="Margin" Value="0"/>
             <Setter Property="Padding" Value="0,5"/>
         </Style>
-        
+
+        <!--滚动条样式-->
+        <Style x:Key="滚动条把手样式" TargetType="{x:Type Thumb}">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Grid>
+                            <!--滚动条颜色-->
+                            <Border Background="{DynamicResource 一级边框颜色}"/> <!--CornerRadius="3"-->
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--水平滚动条按钮样式-->
+        <Style x:Key="水平滚动条按钮样式" TargetType="{x:Type RepeatButton}">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Opacity" Value="0.2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Rectangle Fill="{TemplateBinding Background}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--垂直滚动条按钮样式-->
+        <Style x:Key="垂直滚动条按钮样式" TargetType="{x:Type RepeatButton}">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Opacity" Value="0.2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Rectangle Fill="{TemplateBinding Background}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--垂直滚动条上下按钮2-->
+        <Style x:Key="垂直滚动条上下按钮2" TargetType="{x:Type RepeatButton}">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Opacity"  Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Rectangle Fill="#90000000" Width="0" Height="0"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--ScrollBar样式-->
+        <Style x:Key="for_scrollbar" TargetType="{x:Type ScrollBar}">
+            <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Width" Value="16"/>
+            <Setter Property="MinWidth" Value="8"/>
+            <Setter Property="Opacity" Value="0.2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollBar}">
+                        <Grid x:Name="Bg" SnapsToDevicePixels="true">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <RepeatButton  Grid.Row="0" Style="{DynamicResource 垂直滚动条上下按钮2}" Command="{x:Static ScrollBar.PageUpCommand}"/>
+                            <Track x:Name="PART_Track"   Grid.Row="1" IsEnabled="{TemplateBinding IsMouseOver}" IsDirectionReversed="true">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Style="{DynamicResource 垂直滚动条按钮样式}" Command="{x:Static ScrollBar.PageUpCommand}"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Style="{DynamicResource 垂直滚动条按钮样式}" Command="{x:Static ScrollBar.PageDownCommand}"/>
+                                </Track.IncreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Style="{DynamicResource 滚动条把手样式}"/>
+                                </Track.Thumb>
+                            </Track>
+                            <RepeatButton Grid.Row="2" Style="{DynamicResource 垂直滚动条上下按钮2}" Command="{x:Static ScrollBar.PageDownCommand}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Orientation" Value="Horizontal">
+                    <Setter Property="Background"  Value="Transparent"/>
+                    <Setter Property="Margin" Value="0"/>
+                    <Setter Property="Height" Value="5"/>
+                    <Setter Property="MinHeight" Value="5"/>
+                    <Setter Property="Width" Value="Auto"/>
+                    <Setter Property="Opacity" Value="0.2"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ScrollBar}">
+                                <Grid x:Name="Bg" SnapsToDevicePixels="true">
+                                    <Track x:Name="PART_Track" IsEnabled="{TemplateBinding IsMouseOver}">
+                                        <Track.DecreaseRepeatButton>
+                                            <RepeatButton Style="{DynamicResource 水平滚动条按钮样式}"  Command="{x:Static ScrollBar.PageLeftCommand}"/>
+                                        </Track.DecreaseRepeatButton>
+                                        <Track.IncreaseRepeatButton>
+                                            <RepeatButton Style="{DynamicResource 水平滚动条按钮样式}"  Command="{x:Static ScrollBar.PageRightCommand}"/>
+                                        </Track.IncreaseRepeatButton>
+                                        <Track.Thumb>
+                                            <Thumb Style="{DynamicResource 滚动条把手样式}"/>
+                                        </Track.Thumb>
+                                    </Track>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <!--ScrollView样式-->
+        <Style x:Key="for_scrollviewer" TargetType="{x:Type ScrollViewer}">
+            <Setter Property="BorderBrush" Value="LightGray"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                            <Grid Background="{TemplateBinding Background}">
+                                <ScrollContentPresenter  Cursor="{TemplateBinding Cursor}" Margin="{TemplateBinding Padding}" ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                                <ScrollBar x:Name="PART_VerticalScrollBar" HorizontalAlignment="Right" Maximum="{TemplateBinding ScrollableHeight}" Orientation="Vertical"
+                                       Style="{DynamicResource for_scrollbar}" ViewportSize="{TemplateBinding ViewportHeight}" Value="{TemplateBinding VerticalOffset}"
+                                       Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+                                <ScrollBar x:Name="PART_HorizontalScrollBar" Maximum="{TemplateBinding ScrollableWidth}" Orientation="Horizontal"
+                                       Style="{DynamicResource for_scrollbar}" VerticalAlignment="Bottom" Value="{TemplateBinding HorizontalOffset}"
+                                       ViewportSize="{TemplateBinding ViewportWidth}" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <EventTrigger RoutedEvent="ScrollChanged" >
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0.25"/>
+                                        <DoubleAnimation Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Opacity" To="0.2" Duration="0:0:0.25" BeginTime="0:0:1"/>
+                                        <DoubleAnimation Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Width" To="16" Duration="0:0:0.25"/>
+                                        <DoubleAnimation Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Width" To="8" Duration="0:0:0.25" BeginTime="0:0:1"/>
+                                        <DoubleAnimation Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0.25"/>
+                                        <DoubleAnimation Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Opacity"  To="0.2" Duration="0:0:0.25" BeginTime="0:0:1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="MouseEnter" SourceName="PART_VerticalScrollBar">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation  Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0.25"/>
+                                        <DoubleAnimation Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Width" To="16" Duration="0:0:0.25"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="MouseLeave" SourceName="PART_VerticalScrollBar">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Opacity" To="0.2" Duration="0:0:0.25"/>
+                                        <DoubleAnimation Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Width" To="8" Duration="0:0:0.25"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="MouseEnter" SourceName="PART_HorizontalScrollBar">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0.25"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="MouseLeave" SourceName="PART_HorizontalScrollBar">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Opacity" To="0.2" Duration="0:0:0.25"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--默认ScrollBar样式-->
+        <Style TargetType="ScrollBar" BasedOn="{StaticResource for_scrollbar}"/>
+        <!--默认ScrollView样式-->
+        <Style TargetType="ScrollViewer" BasedOn="{StaticResource for_scrollviewer}"/>
+
     </Window.Resources>
     
     <Grid x:Name="MainGrid">
@@ -234,8 +431,8 @@
                             <Button x:Name="BtnCreateEssay" Content="创建文章" Style="{DynamicResource 自由按钮样式}" Click="BtnCreateEssay_Click"/>
                         </WrapPanel>
                     </StackPanel>
-                    <ComboBox x:Name="Books" Style="{DynamicResource 下拉框样式}" Margin="0" FontSize="14" BorderThickness="0" ToolTip="最近打开过的书籍列表" DockPanel.Dock="Top"
-                              SelectionChanged="Books_SelectionChanged"  SizeChanged="Books_SizeChanged"/>
+                    <ComboBox x:Name="Books" Style="{DynamicResource 下拉框样式}" Margin="0" BorderThickness="0" ToolTip="最近打开过的书籍列表" DockPanel.Dock="Top"
+                              SelectionChanged="Books_SelectionChanged" FontSize="14" FontWeight="Bold"/>
                     <WrapPanel Style="{DynamicResource 水平流式面板样式}" DockPanel.Dock="Bottom" >
                         <Button x:Name="BtnExpand" Content="展开" ToolTip="{DynamicResource 展开}" Style="{DynamicResource 自由按钮样式}" Click="BtnExpand_Click" />
                         <Button x:Name="BtnCollapse" Content="收起" ToolTip="{DynamicResource 收起}" Style="{DynamicResource 自由按钮样式}" Click="BtnCollapse_Click" />
@@ -248,9 +445,9 @@
 
                 <DockPanel x:Name="CenterEditPage" Visibility="Collapsed">
                     <StackPanel>
-                        <DockPanel>
+                        <DockPanel Margin="5,0">
                             <Label Content="查找替换" Style="{DynamicResource 标题标签样式}" Margin="0"/>
-                            <TextBlock x:Name="FindAmount" Text="共计 0 处" Style="{DynamicResource 文本显示框样式}"/>
+                            <TextBlock x:Name="FindAmount" Text="共计 0 处" Style="{DynamicResource 文本显示框样式}" Margin="10,0,5,0"/>
                         </DockPanel>
                         <TextBox x:Name="TextFind" Style="{DynamicResource 文本输入框样式}"/>
                         <TextBox x:Name="TextReplace" Style="{DynamicResource 文本输入框样式}"/>
@@ -306,17 +503,17 @@
                 <DockPanel x:Name="CenterAboutPage" Visibility="Collapsed">
                     <StackPanel DockPanel.Dock="Top">
                         <Label Content="{DynamicResource 名称}" Style="{DynamicResource 标题标签样式}"/>
-                        <Label x:Name="ThisName" Content="?" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top"/>
+                        <TextBlock x:Name="ThisName" Text="?" Style="{DynamicResource 文本显示框样式}"/>
                         <Label Content="{DynamicResource 说明}" Style="{DynamicResource 标题标签样式}"/>
-                        <Label x:Name="Description" Content="?" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top"/>
+                        <TextBlock x:Name="Description" Text="?" Style="{DynamicResource 文本显示框样式}"/>
                         <Label Content="{DynamicResource 作者}" Style="{DynamicResource 标题标签样式}"/>
-                        <Label x:Name="Developer" Content="?" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top"/>
+                        <TextBlock x:Name="Developer" Text="?" Style="{DynamicResource 文本显示框样式}"/>
                         <Label Content="{DynamicResource 版本}"  Style="{DynamicResource 标题标签样式}"/>
-                        <Label x:Name="Version" Content="?" Margin="0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                        <TextBlock x:Name="Version" Text="?" Style="{DynamicResource 文本显示框样式}"/>
                         <Label Content="{DynamicResource 更新日志}" Style="{DynamicResource 标题标签样式}"/>
                     </StackPanel>
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <TextBlock x:Name="UpdateNote" Text="?" TextWrapping="Wrap" Padding="5" />
+                        <TextBlock x:Name="UpdateNote" Text="?" Style="{DynamicResource 文本显示框样式}" TextWrapping="Wrap" VerticalAlignment="Top"/>
                     </ScrollViewer>
                 </DockPanel>
             </Grid>
@@ -324,13 +521,15 @@
             <DockPanel x:Name="PanRight" Background="{DynamicResource 二级背景颜色}" Margin="0">
                 <TextBox x:Name="TbxFileName" Text="标题" Style="{DynamicResource 文本输入框样式}" Margin="0" FontWeight="Bold" FontSize="16" Background="{x:Null}" DockPanel.Dock="Top"
                          ToolTip="当前未选中任何文件" GotFocus="TbxFileName_GotFocus" KeyUp="TbxFileName_KeyUp" BorderThickness="0"/>
-                <DockPanel DockPanel.Dock="Bottom">
-                    <TextBlock x:Name="Words" Text="字数：0" Style="{DynamicResource 文本显示框样式}" MaxWidth="100" DockPanel.Dock="Right"/>
-                    <TextBlock x:Name="RowAndColumn" Text="行：0，列：0" Style="{DynamicResource 文本显示框样式}" MaxWidth="150" Margin="5,0" DockPanel.Dock="Right"/>
-                    <TextBlock x:Name="HelpMessage" Text="帮助消息" Style="{DynamicResource 文本显示框样式}"/>
+                <DockPanel DockPanel.Dock="Bottom" Height="30">
+                    <TextBlock x:Name="Words" Text="字数：0" Style="{DynamicResource 文本显示框样式}" MaxWidth="100" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
+                    <TextBlock x:Name="RowAndColumn" Text="行：0，列：0" Style="{DynamicResource 文本显示框样式}" MaxWidth="150" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
+                    <TextBlock x:Name="HelpMessage" Text="帮助消息" Style="{DynamicResource 文本显示框样式}" HorizontalAlignment="Left"/>
                 </DockPanel>
-                <TextBox x:Name="TbxFileContent" Style="{DynamicResource 文本输入框样式}" VerticalScrollBarVisibility="Auto" AcceptsReturn="true" TextWrapping="Wrap" Padding="5" BorderThickness="0" Height="Auto"
-                         TextChanged="TbxFileContent_TextChanged" KeyUp="TbxFileContent_KeyUp" SelectionChanged="TbxFileContent_SelectionChanged" SizeChanged="TbxFileContent_SizeChanged" LostFocus="TbxFileContent_LostFocus" PreviewTextInput="TbxFileContent_PreviewTextInput" VerticalContentAlignment="Top"/>
+                <TextBox x:Name="TbxFileContent" Style="{DynamicResource 文本输入框样式}" VerticalScrollBarVisibility="Auto"
+                         AcceptsReturn="true" TextWrapping="Wrap" Padding="5" BorderThickness="0" Height="Auto" Margin="0"
+                         TextChanged="TbxFileContent_TextChanged" KeyUp="TbxFileContent_KeyUp" SelectionChanged="TbxFileContent_SelectionChanged" SizeChanged="TbxFileContent_SizeChanged"
+                         LostFocus="TbxFileContent_LostFocus" PreviewTextInput="TbxFileContent_PreviewTextInput" VerticalContentAlignment="Top"/>
             </DockPanel>
         </DockPanel>
     </Grid>

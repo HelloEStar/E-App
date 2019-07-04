@@ -22,6 +22,7 @@ using Application = System.Windows.Forms.Application;
 using MessageBox = System.Windows.MessageBox;
 using ContextMenu = System.Windows.Controls.ContextMenu;
 using MenuItem = System.Windows.Controls.MenuItem;
+using Button = System.Windows.Controls.Button;
 
 using E.Utility;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
@@ -334,7 +335,7 @@ namespace E.Writer
                 Properties.User.Default.BooksDir = Path.GetDirectoryName(CurrentBook.Path);
                 //加入书籍列表
                 AddBookItem(true, CurrentBook.Name, CurrentBook.Path);
-                SelectBookItem();
+                SelectBookItem(CurrentBook);
                 GetBookInfo();
                 FilesTree.ToolTip = FindResource("当前书籍") + "：" + CurrentBook.Name + Environment.NewLine + FindResource("书籍位置") + "：" + CurrentBook.Path;
                 RefreshTitle();
@@ -422,12 +423,9 @@ namespace E.Writer
         /// </summary>
         private void OpenLastBook()
         {
-            foreach (var item in Books.Items)
+            foreach (ComboBoxItem item in Books.Items)
             {
-                Grid grid = item as Grid;
-                System.Windows.Controls.Label tb = grid.Children[0] as System.Windows.Controls.Label;
-                System.Windows.Controls.Button btn = grid.Children[1] as System.Windows.Controls.Button;
-                if (tb.Tag.ToString() == Properties.Settings.Default._lastBook)
+                if (item.Tag.ToString() == Properties.Settings.Default._lastBook)
                 {
                     Books.SelectedItem = item;
                     AutoOpenBook();
@@ -445,7 +443,7 @@ namespace E.Writer
                 //获取当前书籍（文件夹）的名字、路径、根目录
                 CurrentBook = new FileOrFolderInfo(Properties.Settings.Default._lastBook);
                 //同步书籍列表选项
-                SelectBookItem();
+                SelectBookItem(CurrentBook);
                 //显示书籍信息
                 GetBookInfo();
                 FilesTree.ToolTip = FindResource("当前书籍") + "：" + CurrentBook.Name + Environment.NewLine + FindResource("书籍位置") + "：" + CurrentBook.Path;
@@ -536,6 +534,8 @@ namespace E.Writer
                     TbxFileName.IsEnabled = false;
                 }
 
+                SelectedNode = null;
+
                 RefreshBtnsState();
                 RefreshTitle();
             }
@@ -621,11 +621,9 @@ namespace E.Writer
             {
                 //记录最近打开过的书籍，将所有路径集合到一个字符串
                 Properties.Settings.Default._books = "";
-                foreach (var item in Books.Items)
+                foreach (ComboBoxItem item in Books.Items)
                 {
-                    Grid grid = item as Grid;
-                    System.Windows.Controls.Label tb = grid.Children[0] as System.Windows.Controls.Label;
-                    Properties.Settings.Default._books += tb.Tag.ToString() + "///";
+                    Properties.Settings.Default._books += item.Tag.ToString() + "///";
                 }
                 Properties.Settings.Default._books = Properties.Settings.Default._books.Substring(0, Properties.Settings.Default._books.Length - 3);
             }
@@ -714,7 +712,7 @@ namespace E.Writer
             string path = BtnCreateBook.ToolTip.ToString();
             if (CurrentBook != null)
             {
-                if (path.Contains(CurrentBook.Path) && path != CurrentBook.Path)
+                if (path.Contains(CurrentBook.Path) && Path.GetDirectoryName(path) != Path.GetDirectoryName(CurrentBook.Path))
                 {
                     MessageBox.Show("请勿把新书籍创建在另一个书籍里");
                     return;
@@ -920,14 +918,11 @@ namespace E.Writer
             //检测列表是否有此书
             if (Books.Items.Count > 0)
             {
-                foreach (var item in Books.Items)
+                foreach (ComboBoxItem item in Books.Items)
                 {
-                    Grid grid = item as Grid;
-                    System.Windows.Controls.Label tb = grid.Children[0] as System.Windows.Controls.Label;
-                    System.Windows.Controls.Button btn = grid.Children[1] as System.Windows.Controls.Button;
                     if (CurrentBook != null)
                     {
-                        if (tb.Tag.ToString() == CurrentBook.Path)
+                        if (item.Tag.ToString() == CurrentBook.Path)
                         {
                             hasBook = true;
                             break;
@@ -937,48 +932,15 @@ namespace E.Writer
             }
             if (!hasBook)
             {
-                Grid grid = new Grid
+                ComboBoxItem item = new ComboBoxItem
                 {
-                    Height = 30,
-                    Width = 261,
-                    //Background = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0))
-                };
-                System.Windows.Controls.Label tb = new System.Windows.Controls.Label
-                {
-                    FontSize = 18,
+                    FontSize = 14,
                     Content = book,
                     Tag = _book,
                     ToolTip = _book,
-                    Height = 30,
-                    Width = grid.Width - 35,
-                    //Margin = new Thickness(0,0,35,0),
-                    Padding = new Thickness(0, 0, 0, 0),
-                    HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
-                    VerticalContentAlignment = System.Windows.VerticalAlignment.Center,
-                    Background = new SolidColorBrush(Color.FromArgb(0, 210, 210, 210)),
-                    //Cursor = System.Windows.Input.Cursors.Hand
                 };
-                //double d = Books.Width - 30;
-                //Thickness tn1 = new Thickness(d, 0, 0, 0);
-                System.Windows.Controls.Button btn = new System.Windows.Controls.Button
-                {
-                    FontSize = 18,
-                    Content = "x",
-                    Tag = _book,
-                    ToolTip = FindResource("删除此书的打开纪录"),
-                    Height = 30,
-                    Width = 30,
-                    //Margin = new Thickness(210, 0, 0, 0),
-                    HorizontalAlignment = System.Windows.HorizontalAlignment.Right,
-                    Foreground = new SolidColorBrush(Color.FromArgb(255, 100, 100, 150)),
-                    Background = new SolidColorBrush(Color.FromArgb(0, 210, 210, 220)),
-                    BorderBrush = null,
-                    Cursor = System.Windows.Input.Cursors.Hand
-                };
-                btn.Click += new RoutedEventHandler(BtnRemoveBookHistory_Click);
-                grid.Children.Add(tb);
-                grid.Children.Add(btn);
-                Books.Items.Add(grid);
+
+                Books.Items.Add(item);
 
                 if (isAdd)
                 {
@@ -1036,6 +998,25 @@ namespace E.Writer
                 FilesTree.Items.Refresh();
             }
         }
+        /// <summary>
+        /// 移除书籍打开记录
+        /// </summary>
+        /// <param name="book"></param>
+        private void RemoveBookHistory(FileOrFolderInfo book)
+        {
+            foreach (ComboBoxItem item in Books.Items)
+            {
+                if (item.Tag.ToString() == book.Path)
+                {
+                    CloseBook();
+                    Books.Items.Remove(item);
+                    Properties.Settings.Default._books = Properties.Settings.Default._books.Replace(book.Path, "");
+                    Properties.Settings.Default.Save();
+                    break;
+                }
+            }
+        }
+
 
         //清空
         /// <summary>
@@ -1081,16 +1062,13 @@ namespace E.Writer
         {
             if (CurrentBook != null)
             {
-                MessageBoxResult result = MessageBox.Show("是否删除当前书籍？", "删除项目", MessageBoxButton.YesNo);
+                MessageBoxResult result = MessageBox.Show("是否删除当前书籍？\n是：删除当前书籍并删除打开记录\n否：仅删除打开记录\n取消：不做任何操作", "删除项目", MessageBoxButton.YesNoCancel);
                 if (result == MessageBoxResult.Yes)
                 {
                     Directory.Delete(CurrentBook.Path, true);
                     for (int i = 0; i < Books.Items.Count; i++)
                     {
-                        Grid grid = Books.Items[i] as Grid;
-                        System.Windows.Controls.Label tb = grid.Children[0] as System.Windows.Controls.Label;
-                        System.Windows.Controls.Button btn = grid.Children[1] as System.Windows.Controls.Button;
-                        if (tb.Tag.ToString() == CurrentBook.Path)
+                        if (((ComboBoxItem)Books.Items[i]).Tag.ToString() == CurrentBook.Path)
                         {
                             Books.Items.RemoveAt(i);
                             break;
@@ -1112,19 +1090,24 @@ namespace E.Writer
                     RefreshTitle();
                     FilesTree.Items.Clear();
                 }
+                else if (result == MessageBoxResult.No)
+                {
+                    RemoveBookHistory(CurrentBook);
+                }
             }
         }
         /// <summary>
         /// 删除卷册
         /// </summary>
         private void DeleteChapter()
-        { 
-            MessageBoxResult result = MessageBox.Show("是否删除该卷册？", "删除项目", MessageBoxButton.YesNo);
+        {
+            //获取对应文件路径
+            string _path = SelectedNode.Path;
+            string name = SelectedNode.Header.ToString();
+            MessageBoxResult result = MessageBox.Show("是否删除卷册 " + name + " ？", "删除项目", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                //获取对应文件路径
-                string _path = SelectedNode.Path;
-                string name = SelectedNode.Header.ToString();
+                Directory.Delete(_path);
                 RemoveFolderNode(SelectedNode);
                 //如果选择的是正在编辑的卷册
                 if (CurrentChapter != null)
@@ -1150,12 +1133,12 @@ namespace E.Writer
         /// </summary>
         private void DeleteEssay()
         {
-            MessageBoxResult result = MessageBox.Show("是否删除该文章？", "删除项目", MessageBoxButton.YesNo);
+            //获取对应文件路径
+            string _path = SelectedNode.Path;
+            string name = SelectedNode.Header.ToString();
+            MessageBoxResult result = MessageBox.Show("是否删除文章 " + name +" ？", "删除项目", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                //获取对应文件路径
-                string _path = SelectedNode.Path;
-                string name = SelectedNode.Header.ToString();
                 RemoveFolderNode(SelectedNode);
                 File.Delete(_path);
                 //如果选择的是正在编辑的
@@ -1715,14 +1698,11 @@ namespace E.Writer
         /// <summary>
         /// 设置书籍选项
         /// </summary>
-        private void SelectBookItem()
+        private void SelectBookItem(FileOrFolderInfo book)
         {
-            foreach (var item in Books.Items)
+            foreach (ComboBoxItem item in Books.Items)
             {
-                Grid grid = item as Grid;
-                System.Windows.Controls.Label tb = grid.Children[0] as System.Windows.Controls.Label;
-                System.Windows.Controls.Button btn = grid.Children[1] as System.Windows.Controls.Button;
-                if (tb.Tag.ToString() == CurrentBook.Path)
+                if (item.Tag.ToString() == book.Path)
                 {
                     Books.SelectedItem = item;
                     break;
@@ -2031,10 +2011,10 @@ namespace E.Writer
         /// </summary>
         private void ShowAppInfo()
         {
-            ThisName.Content = AppInfo.Name;
-            Description.Content = AppInfo.Description;
-            Developer.Content = AppInfo.Company;
-            Version.Content = AppInfo.Version;
+            ThisName.Text = AppInfo.Name;
+            Description.Text = AppInfo.Description;
+            Developer.Text = AppInfo.Company;
+            Version.Text = AppInfo.Version.ToString();
             UpdateNote.Text = AppInfo.UpdateNote;
         }
         /// <summary>
@@ -2391,7 +2371,11 @@ namespace E.Writer
                 //Ctrl+M 书籍信息
                 if (e.Key == Key.M && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
                                    && !(e.KeyboardDevice.IsKeyDown(Key.LeftAlt) || e.KeyboardDevice.IsKeyDown(Key.RightAlt)))
-                { GetBookInfo(); }
+                {
+                    CloseChapter();
+                    CloseEssay();
+                    GetBookInfo();
+                }
                 //Ctrl+Q 关闭书籍
                 if (e.Key == Key.Q && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
                                    && !(e.KeyboardDevice.IsKeyDown(Key.LeftAlt) || e.KeyboardDevice.IsKeyDown(Key.RightAlt))
@@ -2674,39 +2658,20 @@ namespace E.Writer
             SelectNode(2);
         }
 
-        private void Books_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            foreach (var item in Books.Items)
-            {
-                Grid grid = item as Grid;
-                grid.Width = Books.ActualWidth + 18;
-                System.Windows.Controls.Label tb = grid.Children[0] as System.Windows.Controls.Label;
-                //System.Windows.Controls.Button btn = grid.Children[1] as System.Windows.Controls.Button;
-                if (grid.Width - 35 > 0)
-                {
-                    tb.Width = grid.Width - 35;
-                }
-            }
-        }
         private void Books_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (Books.SelectedItem != null)
             {
-                //关闭书籍
                 if (CurrentBook != null)
                 { CloseBook(); }
 
-                Grid grid = Books.SelectedItem as Grid;
-                System.Windows.Controls.Label tb = grid.Children[0] as System.Windows.Controls.Label;
-                string path = tb.Tag.ToString();
-                //检测书籍文件夹是否存在
+                ComboBoxItem item = Books.SelectedItem as ComboBoxItem;
+                string path = item.Tag.ToString();
                 if (Directory.Exists(path))
                 {
-                    //获取当前书籍（文件夹）的名字、路径，并记录
                     CurrentBook = new FileOrFolderInfo(path);
                     Properties.Settings.Default._lastBook = CurrentBook.Path;
                     SaveAppSettings();
-                    //打开
                     OpenBook(CurrentBook.Path);
                 }
                 else
@@ -2819,6 +2784,8 @@ namespace E.Writer
         }
         private void BtnBookInfo_Click(object sender, RoutedEventArgs e)
         {
+            CloseChapter();
+            CloseEssay();
             GetBookInfo();
         }
         private void BtnSave_Click(object sender, RoutedEventArgs e)
@@ -3388,27 +3355,6 @@ namespace E.Writer
         {
             //timer2.Stop();
             Backup();
-        }
-
-        //动态绑定事件
-        private void BtnRemoveBookHistory_Click(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Controls.Button closeBtn = sender as System.Windows.Controls.Button;
-            foreach (var item in Books.Items)
-            {
-                Grid grid = item as Grid;
-                System.Windows.Controls.Button btn = grid.Children[1] as System.Windows.Controls.Button;
-                if (closeBtn.Tag.ToString() == btn.Tag.ToString())
-                {
-                    if (btn.Tag.ToString() == CurrentBook.Path)
-                    {
-                        CloseBook();
-                    }
-                    Books.Items.Remove(grid);
-                    Properties.Settings.Default._books = Properties.Settings.Default._books.Replace(btn.Tag.ToString(), "");
-                    break;
-                }
-            }
         }
         #endregion
     }
