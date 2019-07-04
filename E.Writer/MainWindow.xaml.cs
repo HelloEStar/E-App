@@ -1588,22 +1588,27 @@ namespace E.Writer
         /// <summary>
         /// 重置主题颜色
         /// </summary>
-        /// <param name="_skin">主题文件路径</param>
-        private void SetSkin(string _skin)
+        /// <param name="themePath">主题文件路径</param>
+        private void SetSkin(string themePath)
         {
             //左配色
-            PanLeft.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("左", "背景", _skin)));
-            PanLeft.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("左", "菜单按钮背景", _skin)));
-            PanLeft.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("左", "工具按钮背景", _skin)));
-           
-            //中配色
-            PanCenter.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("中", "背景", _skin)));
-
-            //右配色
-            PanRight.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("右", "背景", _skin)));
-            TbxFileContent.Background = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("右", "文件内容背景", _skin)));
-            TbxFileContent.Foreground = new SolidColorBrush(CreateColor(INIOperator.ReadIniKeys("右", "文件内容前景", _skin)));
-            TbxFileContent.CaretBrush = TbxFileContent.Foreground;
+            SetColor("一级字体颜色", CreateColor(INIOperator.ReadIniKeys("字体", "一级字体", themePath)));
+            SetColor("二级字体颜色", CreateColor(INIOperator.ReadIniKeys("字体", "二级字体", themePath)));
+            SetColor("三级字体颜色", CreateColor(INIOperator.ReadIniKeys("字体", "三级字体", themePath)));
+            SetColor("一级背景颜色", CreateColor(INIOperator.ReadIniKeys("背景", "一级背景", themePath)));
+            SetColor("二级背景颜色", CreateColor(INIOperator.ReadIniKeys("背景", "二级背景", themePath)));
+            SetColor("三级背景颜色", CreateColor(INIOperator.ReadIniKeys("背景", "三级背景", themePath)));
+            SetColor("一级边框颜色", CreateColor(INIOperator.ReadIniKeys("边框", "一级边框", themePath)));
+        }
+        /// <summary>
+        /// 设置颜色
+        /// </summary>
+        /// <param name="colorName"></param>
+        /// <param name="c"></param>
+        public void SetColor(string colorName, Color c)
+        {
+            Resources.Remove(colorName);
+            Resources.Add(colorName, new SolidColorBrush(c));
         }
         /// <summary>
         /// 设置内部展开状态
