@@ -59,6 +59,8 @@
             <Setter Property="Height" Value="40"/>
             <Setter Property="Width" Value="40"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="IsTabStop" Value="False"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -85,6 +87,8 @@
             <Setter Property="Background" Value="{DynamicResource 二级背景颜色}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="IsTabStop" Value="False"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -130,17 +134,10 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="IsTabStop" Value="False"/>
         </Style>
 
-        <!--下拉框样式2-->
-        <Style x:Key="下拉框样式2" TargetType="ComboBox">
-            <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Margin" Value="3"/>
-            <Setter Property="Padding" Value="5"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
         <!--下拉框样式-->
         <Style x:Key="下拉框样式" TargetType="{x:Type ComboBox}">
             <Setter Property="Background" Value="{DynamicResource 一级背景颜色}"/>
@@ -150,6 +147,8 @@
             <Setter Property="Padding" Value="5"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="IsTabStop" Value="False"/>
 
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
             <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
@@ -308,6 +307,8 @@
             <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
             <!--<Setter Property="BorderThickness" Value="0"/>-->
             <Setter Property="Margin" Value="0"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="IsTabStop" Value="False"/>
             <!--<Setter Property="Padding" Value="0,5"/>-->
             <Setter Property="ItemContainerStyle" Value="{DynamicResource 树状图子项样式}"></Setter>
             <Setter Property="ItemsPanel">
@@ -700,10 +701,7 @@
                     <WrapPanel  x:Name="BtnsEdit" Orientation="Vertical" Visibility="Collapsed">
                         <Button x:Name="BtnUndo" Content="撤销" ToolTip="{DynamicResource 撤销}" Style="{DynamicResource 工具按钮样式}" Click="BtnUndo_Click" />
                         <Button x:Name="BtnRedo" Content="重做" ToolTip="{DynamicResource 重做}" Style="{DynamicResource 工具按钮样式}" Click="BtnRedo_Click" />
-                        <Button x:Name="BtnCopy" Content="复制" ToolTip="{DynamicResource 复制}" Style="{DynamicResource 工具按钮样式}" Click="BtnCopy_Click" />
-                        <Button x:Name="BtnCut" Content="剪切" ToolTip="{DynamicResource 剪切}" Style="{DynamicResource 工具按钮样式}" Click="BtnCut_Click" />
-                        <Button x:Name="BtnPaste" Content="粘贴" ToolTip="{DynamicResource 粘贴}" Style="{DynamicResource 工具按钮样式}" Click="BtnPaste_Click" />
-                        <Button x:Name="BtnToTraditional" Content="转繁" ToolTip="{DynamicResource 转繁}" Style="{DynamicResource 工具按钮样式}" Click="BtnToTraditional_Click" />
+                        <Button x:Name="BtnToTraditional" Content="转繁" ToolTip="{DynamicResource 转繁}" Style="{DynamicResource 工具按钮样式}" Click="BtnToTraditional_Click"/>
                         <Button x:Name="BtnToSimplified" Content="转简" ToolTip="{DynamicResource 转简}" Style="{DynamicResource 工具按钮样式}" Click="BtnToSimplified_Click" />
                     </WrapPanel>
                     <WrapPanel  x:Name="BtnsSetting" Orientation="Vertical" Visibility="Collapsed">
@@ -822,7 +820,7 @@
             <!--右-->
             <DockPanel x:Name="PanRight" Background="{DynamicResource 二级背景颜色}" Margin="0">
                 <TextBox x:Name="TbxFileName" Text="标题" Style="{DynamicResource 文本输入框样式}" Margin="0" FontSize="20" Background="{x:Null}" DockPanel.Dock="Top"
-                         ToolTip="当前未选中任何文件" GotFocus="TbxFileName_GotFocus" KeyUp="TbxFileName_KeyUp" BorderThickness="0" Height="40" Padding="5,7"/>
+                         ToolTip="当前未选中任何文件" GotFocus="TbxFileName_GotFocus" KeyUp="TbxFileName_KeyUp" BorderThickness="0" Height="40" Padding="5,7" TextChanged="TbxFileName_TextChanged"/>
                 <DockPanel DockPanel.Dock="Bottom" Height="30">
                     <TextBlock x:Name="Words" Text="字数：0" Style="{DynamicResource 文本显示框样式}" MaxWidth="100" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
                     <TextBlock x:Name="RowAndColumn" Text="行：0，列：0" Style="{DynamicResource 文本显示框样式}" MaxWidth="150" DockPanel.Dock="Right" HorizontalAlignment="Right"/>

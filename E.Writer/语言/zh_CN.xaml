@@ -32,8 +32,8 @@
     <sys:String x:Key="复制">复制 Ctrl+C</sys:String>
     <sys:String x:Key="剪切">剪切 Ctrl+X</sys:String>
     <sys:String x:Key="粘贴">粘贴 Ctrl+V</sys:String>
-    <sys:String x:Key="转繁">转为繁体 Shift+F</sys:String>
-    <sys:String x:Key="转简">转为简体 Shift+J</sys:String>
+    <sys:String x:Key="转繁">转为繁体 Ctrl+Shift+K</sys:String>
+    <sys:String x:Key="转简">转为简体 Ctrl+Shift+J</sys:String>
     <sys:String x:Key="查换">查找替换 Ctrl+F</sys:String>
 
     <sys:String x:Key="展开">展开目录 Ctrl+I</sys:String>

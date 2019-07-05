@@ -399,7 +399,6 @@ namespace E.Writer
                 TbxFileName.Text = Path.GetFileNameWithoutExtension(CurrentEssay.Path);
                 TbxFileName.IsEnabled = true;
                 TbxFileContent.IsEnabled = true;
-
                 RefreshBtnsState();
                 RefreshTitle();
                 //光标到最后
@@ -1870,6 +1869,8 @@ namespace E.Writer
             BtnOpenBook.IsEnabled = true;
             BtnCreateBook.IsEnabled = true;
             BtnFold.IsEnabled = true;
+            BtnToSimplified.IsEnabled = false;
+            BtnToTraditional.IsEnabled = false;
 
             if (CurrentBook != null)
             {
@@ -1884,6 +1885,12 @@ namespace E.Writer
                 BtnRefresh.IsEnabled = true;
                 BtnDelete.IsEnabled = true;
 
+                if (CurrentChapter != null)
+                {
+                    BtnToSimplified.IsEnabled = true;
+                    BtnToTraditional.IsEnabled = true;
+                }
+
                 if (CurrentEssay != null)
                 {
                     BtnSave.IsEnabled = true;
@@ -1891,23 +1898,8 @@ namespace E.Writer
 
                     BtnUndo.IsEnabled = true;
                     BtnRedo.IsEnabled = true;
-
-                    if (TbxFileContent.SelectedText != "" && TbxFileContent.SelectedText != null)
-                    {
-                        BtnCut.IsEnabled = true;
-                        BtnCopy.IsEnabled = true;
-                        BtnPaste.IsEnabled = true;
-                        BtnToSimplified.IsEnabled = true;
-                        BtnToTraditional.IsEnabled = true;
-                    }
-                    else
-                    {
-                        BtnCut.IsEnabled = false;
-                        BtnCopy.IsEnabled = false;
-                        BtnPaste.IsEnabled = true;
-                        BtnToSimplified.IsEnabled = false;
-                        BtnToTraditional.IsEnabled = false;
-                    }
+                    BtnToSimplified.IsEnabled = true;
+                    BtnToTraditional.IsEnabled = true;
 
                     BtnFindNext.IsEnabled = true;
                     BtnReplaceNext.IsEnabled = true;
@@ -1922,11 +1914,6 @@ namespace E.Writer
 
                     BtnUndo.IsEnabled = false;
                     BtnRedo.IsEnabled = false;
-                    BtnCut.IsEnabled = false;
-                    BtnCopy.IsEnabled = false;
-                    BtnPaste.IsEnabled = false;
-                    BtnToSimplified.IsEnabled = false;
-                    BtnToTraditional.IsEnabled = false;
                     BtnFindNext.IsEnabled = false;
                     BtnReplaceNext.IsEnabled = false;
                     BtnReplaceAll.IsEnabled = false;
@@ -1951,9 +1938,6 @@ namespace E.Writer
 
                 BtnUndo.IsEnabled = false;
                 BtnRedo.IsEnabled = false;
-                BtnCut.IsEnabled = false;
-                BtnCopy.IsEnabled = false;
-                BtnPaste.IsEnabled = false;
                 BtnToSimplified.IsEnabled = false;
                 BtnToTraditional.IsEnabled = false;
                 BtnFindNext.IsEnabled = false;
@@ -2297,7 +2281,8 @@ namespace E.Writer
         //窗口事件
         private void Main_Loaded(object sender, RoutedEventArgs e)
         {
-            AddRunTime();
+            CheckFolders();
+            CreateTimer();
 
             //载入并显示应用信息
             LoadAppInfo();
@@ -2311,6 +2296,7 @@ namespace E.Writer
 
             //载入设置
             LoadSettings();
+            AddRunTime();
 
             //初始化
             SelectLanguageItem(Properties.User.Default.language);
@@ -2332,8 +2318,6 @@ namespace E.Writer
                     OpenLastBook();
                 }
             }
-            CheckFolders();
-            CreateTimer();
 
             //刷新
             RefreshBtnsState();
@@ -2450,7 +2434,33 @@ namespace E.Writer
                     if (e.Key == Key.M && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
                                        && (e.KeyboardDevice.IsKeyDown(Key.LeftAlt) || e.KeyboardDevice.IsKeyDown(Key.LeftAlt)))
                     {
-                        CloseEssay();
+                        GetChapterInfo();
+                    }
+                    //Ctrl+Shift+J
+                    if (e.Key == Key.J && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                                       && (e.KeyboardDevice.IsKeyDown(Key.LeftShift) || e.KeyboardDevice.IsKeyDown(Key.RightShift)))
+                    {
+                        if (TbxFileContent.IsFocused && TbxFileContent.SelectedText != null && TbxFileContent.SelectedText != "")
+                        {
+                            TbxFileContent.SelectedText = GetSimplified(TbxFileContent.SelectedText);
+                        }
+                        else if (TbxFileName.IsFocused && TbxFileName.SelectedText != null && TbxFileName.SelectedText != "")
+                        {
+                            TbxFileName.SelectedText = GetSimplified(TbxFileName.SelectedText);
+                        }
+                    }
+                    //Ctrl+Shift+K 
+                    if (e.Key == Key.K && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                                       && (e.KeyboardDevice.IsKeyDown(Key.LeftShift) || e.KeyboardDevice.IsKeyDown(Key.RightShift)))
+                    {
+                        if (TbxFileContent.IsFocused && TbxFileContent.SelectedText != null && TbxFileContent.SelectedText != "")
+                        {
+                            TbxFileContent.SelectedText = GetTraditional(TbxFileContent.SelectedText);
+                        }
+                        else if (TbxFileName.IsFocused && TbxFileName.SelectedText != null && TbxFileName.SelectedText != "")
+                        {
+                            TbxFileName.SelectedText = GetTraditional(TbxFileName.SelectedText);
+                        }
                     }
                 }
             }
@@ -2465,6 +2475,44 @@ namespace E.Writer
             { SetNextTheme(); }
         }
 
+        private void TbxCreatePath_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (TbxCreatePath.Text == null || TbxCreatePath.Text == "")
+            {
+                BtnCreateBook.ToolTip = "请设置存放位置";
+                BtnCreateChapter.ToolTip = "请设置存放位置";
+                BtnCreateEssay.ToolTip = "请设置存放位置";
+            }
+            else
+            {
+                BtnCreateBook.ToolTip = TbxCreatePath.Text + @"\" + TbxCreateName.Text;
+                BtnCreateChapter.ToolTip = TbxCreatePath.Text + @"\" + TbxCreateName.Text;
+                BtnCreateEssay.ToolTip = TbxCreatePath.Text + @"\" + TbxCreateName.Text + ".txt";
+            }
+        }
+        private void TbxCreateName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (TbxCreateName.Text == null || TbxCreateName.Text == "")
+            {
+                BtnCreateBook.ToolTip = "请输入书籍名称";
+                BtnCreateChapter.ToolTip = "请输入卷册名称";
+                BtnCreateEssay.ToolTip = "请输入文章名称";
+            }
+            else
+            {
+                BtnCreateBook.ToolTip = TbxCreatePath.Text + @"\" + TbxCreateName.Text;
+                BtnCreateChapter.ToolTip = TbxCreatePath.Text + @"\" + TbxCreateName.Text;
+                BtnCreateEssay.ToolTip = TbxCreatePath.Text + @"\" + TbxCreateName.Text + ".txt";
+            }
+        }
+
+        private void TbxFileName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (CurrentEssay != null || CurrentChapter != null)
+            {
+
+            }
+        }
         private void TbxFileName_GotFocus(object sender, RoutedEventArgs e)
         {
             ShowMessage("在此处重命名", false);
@@ -2534,37 +2582,6 @@ namespace E.Writer
                 }
                 else
                     ShowMessage("重命名不能为空", false);
-            }
-        }
-
-        private void TbxCreatePath_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (TbxCreatePath.Text == null || TbxCreatePath.Text == "")
-            {
-                BtnCreateBook.ToolTip = "请设置存放位置";
-                BtnCreateChapter.ToolTip = "请设置存放位置";
-                BtnCreateEssay.ToolTip = "请设置存放位置";
-            }
-            else
-            {
-                BtnCreateBook.ToolTip = TbxCreatePath.Text + @"\" + TbxCreateName.Text;
-                BtnCreateChapter.ToolTip = TbxCreatePath.Text + @"\" + TbxCreateName.Text;
-                BtnCreateEssay.ToolTip = TbxCreatePath.Text + @"\" + TbxCreateName.Text + ".txt";
-            }
-        }
-        private void TbxCreateName_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (TbxCreateName.Text == null || TbxCreateName.Text == "")
-            {
-                BtnCreateBook.ToolTip = "请输入书籍名称";
-                BtnCreateChapter.ToolTip = "请输入卷册名称";
-                BtnCreateEssay.ToolTip = "请输入文章名称";
-            }
-            else
-            {
-                BtnCreateBook.ToolTip = TbxCreatePath.Text + @"\" + TbxCreateName.Text;
-                BtnCreateChapter.ToolTip = TbxCreatePath.Text + @"\" + TbxCreateName.Text;
-                BtnCreateEssay.ToolTip = TbxCreatePath.Text + @"\" + TbxCreateName.Text + ".txt";
             }
         }
 
@@ -2867,30 +2884,26 @@ namespace E.Writer
         {
             TbxFileContent.Redo();
         }
-        private void BtnCut_Click(object sender, RoutedEventArgs e)
-        {
-            TbxFileContent.Cut();
-        }
-        private void BtnCopy_Click(object sender, RoutedEventArgs e)
-        {
-            TbxFileContent.Copy();
-        }
-        private void BtnPaste_Click(object sender, RoutedEventArgs e)
-        {
-            TbxFileContent.Paste();
-        }
         private void BtnToTraditional_Click(object sender, RoutedEventArgs e)
         {
-            if (TbxFileContent.IsFocused)
+            if (TbxFileContent.IsFocused && TbxFileContent.SelectedText != null && TbxFileContent.SelectedText != "")
             {
                 TbxFileContent.SelectedText = GetTraditional(TbxFileContent.SelectedText);
+            }
+            else if (TbxFileName.IsFocused && TbxFileName.SelectedText != null && TbxFileName.SelectedText != "")
+            {
+                TbxFileName.SelectedText = GetTraditional(TbxFileName.SelectedText);
             }
         }
         private void BtnToSimplified_Click(object sender, RoutedEventArgs e)
         {
-            if (TbxFileContent.IsFocused)
+            if (TbxFileContent.IsFocused && TbxFileContent.SelectedText != null && TbxFileContent.SelectedText != "")
             {
                 TbxFileContent.SelectedText = GetSimplified(TbxFileContent.SelectedText);
+            }
+            else if (TbxFileName.IsFocused && TbxFileName.SelectedText != null && TbxFileName.SelectedText != "")
+            {
+                TbxFileName.SelectedText = GetSimplified(TbxFileName.SelectedText);
             }
         }
         private void BtnFindNext_Click(object sender, RoutedEventArgs e)

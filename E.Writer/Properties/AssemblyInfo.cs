@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("E Writer")]
 [assembly: AssemblyDescription("这是一个小巧又强大的码字工具。")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("菌临天下工作室")]
+[assembly: AssemblyCompany("E Star")]
 [assembly: AssemblyProduct("E Writer")]
 [assembly: AssemblyCopyright("Copyright ©  2018 菌临天下工作室")]
 [assembly: AssemblyTrademark("E Writer")]
@@ -53,3 +53,5 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: NeutralResourcesLanguage("zh")]
+

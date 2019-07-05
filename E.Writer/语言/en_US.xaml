@@ -31,9 +31,9 @@
     <sys:String x:Key="复制">Copy</sys:String>
     <sys:String x:Key="剪切">Cut</sys:String>
     <sys:String x:Key="粘贴">Paste</sys:String>
-    <sys:String x:Key="转繁">To Traditional</sys:String>
-    <sys:String x:Key="转简">To Simplified</sys:String>
-    <sys:String x:Key="查换">Find and Replace</sys:String>
+    <sys:String x:Key="转繁">To Traditional Ctrl+Shift+K</sys:String>
+    <sys:String x:Key="转简">To Simplified Ctrl+Shift+J</sys:String>
+    <sys:String x:Key="查换">Find and Replace Ctrl+F</sys:String>
 
     <sys:String x:Key="展开">Expand List</sys:String>
     <sys:String x:Key="收起">Collapse List</sys:String>
