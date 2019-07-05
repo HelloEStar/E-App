@@ -18,7 +18,7 @@
         <SolidColorBrush x:Key="二级背景颜色" Color="#FFF0F0F0" />
         <SolidColorBrush x:Key="三级背景颜色" Color="White" />
         <SolidColorBrush x:Key="一级边框颜色" Color="#FFA0A0A0" />
-        
+
         <!--按钮样式-->
         <Style x:Key="菜单按钮样式" TargetType="Button">
             <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
@@ -102,7 +102,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <!--标签样式-->
         <Style x:Key="标题标签样式" TargetType="Label">
             <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
@@ -117,7 +117,7 @@
             <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
-        
+
         <!--检查框样式-->
         <Style x:Key="检查框样式" TargetType="CheckBox">
             <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
@@ -127,9 +127,9 @@
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
-        
+
         <!--下拉框样式-->
-        <Style x:Key="下拉框样式" TargetType="ComboBox">
+        <Style x:Key="下拉框样式2" TargetType="ComboBox">
             <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
             <Setter Property="Height" Value="30"/>
             <Setter Property="Margin" Value="5,5,5,0"/>
@@ -137,7 +137,137 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
-        
+        <!--下拉框样式2-->
+        <Style x:Key="下拉框样式" TargetType="{x:Type ComboBox}">
+            <Setter Property="Background" Value="{DynamicResource 一级背景颜色}"/>
+            <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="5,5,5,0"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+
+            <Setter Property="ItemContainerStyle" Value="{DynamicResource 下拉框子项样式}"/>
+            <Setter Property="Template" Value="{DynamicResource 下拉框模板}"/>
+        </Style>
+        <!--下拉框模板-->
+        <ControlTemplate x:Key="下拉框模板" TargetType="{x:Type ComboBox}">
+            <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="0"/>
+                </Grid.ColumnDefinitions>
+                <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="0"
+                       PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" Placement="Bottom">
+                    <Border x:Name="dropDownBorder" BorderBrush="{DynamicResource 一级边框颜色}" BorderThickness="1" Background="{DynamicResource 三级背景颜色}"
+                            MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{Binding ActualWidth, ElementName=templateRoot}">
+                        <ScrollViewer x:Name="DropDownScrollViewer">
+                            <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
+                                <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
+                                    <Rectangle x:Name="opaqueRect" Fill="{Binding Background, ElementName=dropDownBorder}" Height="{Binding ActualHeight, ElementName=dropDownBorder}" Width="{Binding ActualWidth, ElementName=dropDownBorder}"/>
+                                </Canvas>
+                                <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Continue" Background="{DynamicResource 三级背景颜色}"/>
+                                <!--<ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>-->
+                            </Grid>
+                        </ScrollViewer>
+                    </Border>
+                </Popup>
+                <Border Grid.ColumnSpan="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"><!--CornerRadius="4"-->
+                    <Grid>
+                        <ToggleButton x:Name="toggleButton" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" Background="{TemplateBinding Background}" Grid.ColumnSpan="2"
+                                      IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{DynamicResource 下拉框切换按钮样式}"/>
+                        <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                              Content="{TemplateBinding SelectionBoxItem}" ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              IsHitTestVisible="false" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Grid>
+                </Border>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <!--<Trigger Property="HasDropShadow" SourceName="PART_Popup" Value="true">  
+                        <Setter Property="Margin" TargetName="shadow" Value="0,0,5,5"/>  
+                        <Setter Property="Color" TargetName="shadow" Value="#71000000"/>  
+                    </Trigger>-->
+                <Trigger Property="HasItems" Value="false">
+                    <Setter Property="Height" TargetName="dropDownBorder" Value="60"/>
+                </Trigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsGrouping" Value="true"/>
+                        <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                </MultiTrigger>
+                <Trigger Property="ScrollViewer.CanContentScroll" SourceName="DropDownScrollViewer" Value="false">
+                    <Setter Property="Canvas.Top" TargetName="opaqueRect" Value="{Binding VerticalOffset, ElementName=DropDownScrollViewer}"/>
+                    <Setter Property="Canvas.Left" TargetName="opaqueRect" Value="{Binding HorizontalOffset, ElementName=DropDownScrollViewer}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <!--下拉框切换按钮样式-->
+        <Style x:Key="下拉框切换按钮样式" TargetType="{x:Type ToggleButton}">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="ClickMode" Value="Press"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border x:Name="templateRoot" SnapsToDevicePixels="true" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <Border x:Name="splitBorder" Width="30" SnapsToDevicePixels="true" Margin="0" HorizontalAlignment="Right" 
+                                        BorderThickness="{TemplateBinding BorderThickness}" Background="{x:Null}">
+                                <Path x:Name="arrow" VerticalAlignment="Center" Margin="0" Stretch="Fill" Height="10" Width="12" HorizontalAlignment="Center" Fill="{DynamicResource 三级字体颜色}" Data="M 50,50 L 0,0 100,0 z"/>
+                            </Border>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type ComboBox}}}" Value="true"/>
+                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                    <Condition Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="BorderBrush" TargetName="templateRoot" Value="#FF565656"/>
+                            </MultiDataTrigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Fill" TargetName="arrow" Value="{StaticResource 三级字体颜色}"/>
+                                <Setter Property="BorderBrush" TargetName="templateRoot" Value="#FFADADAD"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- 下拉框子项样式 -->
+        <Style x:Key="下拉框子项样式" TargetType="ComboBoxItem">
+            <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
+            <Setter Property="Background" Value="{DynamicResource 三级背景颜色}"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border Name="Back" BorderThickness="0,0,0,0">
+                            <ContentPresenter ContentSource="{Binding Source}" Margin="{TemplateBinding Padding}" Width="240" HorizontalAlignment="Left" VerticalAlignment="Center"></ContentPresenter>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="Back" Property="Background" Value="{DynamicResource 二级背景颜色}"></Setter>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Back" Property="Background" Value="{DynamicResource 一级背景颜色}"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!--文本输入框样式-->
         <Style x:Key="文本输入框样式" TargetType="TextBox">
             <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
@@ -149,7 +279,7 @@
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
-        
+
         <!--文本显示框样式-->
         <Style x:Key="文本显示框样式" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
@@ -166,12 +296,166 @@
             <Setter Property="ItemHeight" Value="30"/>
         </Style>
 
+        <Color x:Key="SelectedBackgroundColor">#FFC5CBF9</Color>
+        <Color x:Key="SelectedUnfocusedColor">#FFDDDDDD</Color>
         <!--树状图样式-->
         <Style x:Key="树状图样式" TargetType="TreeView">
             <Setter Property="Background" Value="{DynamicResource 二级背景颜色}"/>
-            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
+            <!--<Setter Property="BorderThickness" Value="0"/>-->
             <Setter Property="Margin" Value="0"/>
-            <Setter Property="Padding" Value="0,5"/>
+            <!--<Setter Property="Padding" Value="0,5"/>-->
+            <Setter Property="ItemContainerStyle" Value="{DynamicResource 树状图子项样式}"></Setter>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel IsItemsHost="True" Margin="0"/>
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TreeView">
+                        <Border Name="Border" CornerRadius="1" BorderThickness="1">
+                            <Border.BorderBrush>
+                                <SolidColorBrush Color="{DynamicResource BorderMediumColor}" />
+                            </Border.BorderBrush>
+                            <Border.Background>
+                                <SolidColorBrush Color="{DynamicResource ControlLightColor}" />
+                            </Border.Background>
+                            <ScrollViewer Focusable="False" CanContentScroll="False" Padding="4">
+                                <ItemsPresenter />
+                            </ScrollViewer>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--树状图ToggleButton样式-->
+        <Style x:Key="ExpandCollapseToggleStyle" TargetType="ToggleButton">
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Grid Width="20"  Height="20" Background="Transparent">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CheckStates">
+                                    <VisualState x:Name="Checked">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="Collapsed">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Hidden}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="Expanded">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Unchecked" />
+                                    <VisualState x:Name="Indeterminate" />
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Path x:Name="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" Data="M 0 0 L 10 5 L 0 10 Z" Fill="{DynamicResource 三级字体颜色}"></Path>
+                            <Path x:Name="Expanded" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="0" Data="M 0 0 L 10 0 L 5 10 Z" Fill="{DynamicResource 三级字体颜色}" Visibility="Hidden"></Path>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--树状图子项焦点可视样式-->
+        <Style x:Key="TreeViewItemFocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border>
+                            <Rectangle Margin="0,0,0,0" StrokeThickness="5" Stroke="Black" StrokeDashArray="1 2" Opacity="0" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--树状图子项样式-->
+        <Style x:Key="树状图子项样式" TargetType="{x:Type TreeViewItem}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+            <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}" />
+            <Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition MinWidth="20"  Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="SelectionStates">
+                                    <VisualState x:Name="Selected">
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Bd" Storyboard.TargetProperty="(Panel.Background). (SolidColorBrush.Color)">
+                                                <EasingColorKeyFrame KeyTime="0"  Value="{StaticResource SelectedBackgroundColor}" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Unselected" />
+                                    <VisualState x:Name="SelectedInactive">
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Bd"  Storyboard.TargetProperty="(Panel.Background). (SolidColorBrush.Color)">
+                                                <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource SelectedUnfocusedColor}" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="ExpansionStates">
+                                    <VisualState x:Name="Expanded">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="ItemsHost"> 
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Collapsed" />
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ToggleButton x:Name="Expander"  Style="{DynamicResource ExpandCollapseToggleStyle}" ClickMode="Press"  IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <Border x:Name="Bd" Grid.Column="1" Width="205" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" VerticalAlignment="Center">
+                                <ContentPresenter x:Name="PART_Header" ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                            </Border>
+                            <ItemsPresenter x:Name="ItemsHost" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Visibility="Collapsed" VerticalAlignment="Center" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasItems" Value="false">
+                                <Setter TargetName="Expander" Property="Visibility" Value="Hidden" />
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="HasHeader"  Value="false" />
+                                    <Condition Property="Width" Value="Auto" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="PART_Header" Property="MinWidth" Value="75" />
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="HasHeader" Value="false" />
+                                    <Condition Property="Height" Value="Auto" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="PART_Header" Property="MinHeight" Value="20" />
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <!--滚动条样式-->
@@ -183,7 +467,8 @@
                     <ControlTemplate TargetType="{x:Type Thumb}">
                         <Grid>
                             <!--滚动条颜色-->
-                            <Border Background="{DynamicResource 一级边框颜色}"/> <!--CornerRadius="3"-->
+                            <Border Background="{DynamicResource 一级边框颜色}"/>
+                            <!--CornerRadius="3"-->
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
@@ -371,7 +656,7 @@
         <Style TargetType="ScrollViewer" BasedOn="{StaticResource for_scrollviewer}"/>
 
     </Window.Resources>
-    
+
     <Grid x:Name="MainGrid">
         <DockPanel>
             <!--左-->
@@ -431,7 +716,7 @@
                             <Button x:Name="BtnCreateEssay" Content="创建文章" Style="{DynamicResource 自由按钮样式}" Click="BtnCreateEssay_Click"/>
                         </WrapPanel>
                     </StackPanel>
-                    <ComboBox x:Name="Books" Style="{DynamicResource 下拉框样式}" Margin="0" BorderThickness="0" ToolTip="最近打开过的书籍列表" DockPanel.Dock="Top"
+                    <ComboBox x:Name="Books" Style="{DynamicResource 下拉框样式}"  ToolTip="最近打开过的书籍列表" DockPanel.Dock="Top"
                               SelectionChanged="Books_SelectionChanged" FontSize="14" FontWeight="Bold"/>
                     <WrapPanel Style="{DynamicResource 水平流式面板样式}" DockPanel.Dock="Bottom" >
                         <Button x:Name="BtnExpand" Content="展开" ToolTip="{DynamicResource 展开}" Style="{DynamicResource 自由按钮样式}" Click="BtnExpand_Click" />
@@ -439,8 +724,12 @@
                         <Button x:Name="BtnRefresh" Content="刷新" ToolTip="{DynamicResource 刷新}" Style="{DynamicResource 自由按钮样式}" Click="BtnRefresh_Click" />
                         <Button x:Name="BtnDelete" Content="删除" ToolTip="{DynamicResource 删除目标}" Style="{DynamicResource 自由按钮样式}" Click="BtnDelete_Click" />
                     </WrapPanel>
-                    <TreeView x:Name="FilesTree" Style="{DynamicResource 树状图样式}"
-                              SelectedItemChanged="FilesTree_SelectedItemChanged" MouseDoubleClick="FilesTree_MouseDoubleClick" KeyUp="FilesTree_KeyUp"/>
+                    <TreeView x:Name="FilesTree" Style="{DynamicResource 树状图样式}" SelectedItemChanged="FilesTree_SelectedItemChanged" MouseDoubleClick="FilesTree_MouseDoubleClick" KeyUp="FilesTree_KeyUp">
+                        <TreeViewItem Header="001" >
+                            <TreeViewItem Header="002" />
+                        </TreeViewItem>
+                        <TreeViewItem Header="003" />
+                    </TreeView>
                 </DockPanel>
 
                 <DockPanel x:Name="CenterEditPage" Visibility="Collapsed">
@@ -519,8 +808,8 @@
             </Grid>
             <!--右-->
             <DockPanel x:Name="PanRight" Background="{DynamicResource 二级背景颜色}" Margin="0">
-                <TextBox x:Name="TbxFileName" Text="标题" Style="{DynamicResource 文本输入框样式}" Margin="0" FontWeight="Bold" FontSize="16" Background="{x:Null}" DockPanel.Dock="Top"
-                         ToolTip="当前未选中任何文件" GotFocus="TbxFileName_GotFocus" KeyUp="TbxFileName_KeyUp" BorderThickness="0"/>
+                <TextBox x:Name="TbxFileName" Text="标题" Style="{DynamicResource 文本输入框样式}" Margin="0" FontWeight="Bold" FontSize="20" Background="{x:Null}" DockPanel.Dock="Top"
+                         ToolTip="当前未选中任何文件" GotFocus="TbxFileName_GotFocus" KeyUp="TbxFileName_KeyUp" BorderThickness="0" Height="40" Padding="5,8"/>
                 <DockPanel DockPanel.Dock="Bottom" Height="30">
                     <TextBlock x:Name="Words" Text="字数：0" Style="{DynamicResource 文本显示框样式}" MaxWidth="100" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
                     <TextBlock x:Name="RowAndColumn" Text="行：0，列：0" Style="{DynamicResource 文本显示框样式}" MaxWidth="150" DockPanel.Dock="Right" HorizontalAlignment="Right"/>

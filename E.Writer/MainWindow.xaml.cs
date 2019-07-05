@@ -70,11 +70,11 @@ namespace E.Writer
         /// <summary>
         /// 选中的节点
         /// </summary>
-        private FileNode SelectedNode { get; set; }
+        private TreeViewItemNode SelectedNode { get; set; }
         /// <summary>
         /// 打开的节点
         /// </summary>
-        private FileNode OpenedNode { get; set; }
+        private TreeViewItemNode OpenedNode { get; set; }
 
         /// <summary>
         /// 自动保存计时器
@@ -783,8 +783,8 @@ namespace E.Writer
             RefreshTitle();
 
             //创建节点
-            FileNode newfolderNode = new FileNode(CurrentChapter.Name, CurrentChapter.Path, false, false, null);
-            FileNode fatherNote = FindNote(TbxCreatePath.Text);
+            TreeViewItemNode newfolderNode = new TreeViewItemNode(CurrentChapter.Name, CurrentChapter.Path, false, false, null);
+            TreeViewItemNode fatherNote = FindNote(TbxCreatePath.Text);
             if (fatherNote == null)
             {
                 FilesTree.Items.Add(newfolderNode);
@@ -844,8 +844,8 @@ namespace E.Writer
             RefreshTitle();
 
             //创建节点
-            FileNode newFileNode = new FileNode(CurrentEssay.Name, CurrentEssay.Path, true, false, null);
-            FileNode fatherNote = FindNote(TbxCreatePath.Text);
+            TreeViewItemNode newFileNode = new TreeViewItemNode(CurrentEssay.Name, CurrentEssay.Path, true, false, null);
+            TreeViewItemNode fatherNote = FindNote(TbxCreatePath.Text);
             if (fatherNote == null)
             {
                 FilesTree.Items.Add(newFileNode);
@@ -934,7 +934,6 @@ namespace E.Writer
             {
                 ComboBoxItem item = new ComboBoxItem
                 {
-                    FontSize = 14,
                     Content = book,
                     Tag = _book,
                     ToolTip = _book,
@@ -967,12 +966,12 @@ namespace E.Writer
         /// 深度优先移除节点
         /// </summary>
         /// <param name="Node">要删除的节点</param>
-        private void RemoveFolderNode(FileNode node)
+        private void RemoveFolderNode(TreeViewItemNode node)
         {
             if (node.IsFile)
             {
                 //父节点 
-                FileNode fatherNote = FindNote(Directory.GetParent(node.Path).FullName);
+                TreeViewItemNode fatherNote = FindNote(Directory.GetParent(node.ToolTip.ToString()).FullName);
                 if (fatherNote != null)
                 {
                     fatherNote.Items.Remove(node);
@@ -985,7 +984,7 @@ namespace E.Writer
             else
             {
                 //父节点 
-                FileNode fatherNote = FindNote(Directory.GetParent(node.Path).FullName);
+                TreeViewItemNode fatherNote = FindNote(Directory.GetParent(node.ToolTip.ToString()).FullName);
                 if (fatherNote != null)
                 {
                     fatherNote.Items.Remove(node);
@@ -1102,7 +1101,7 @@ namespace E.Writer
         private void DeleteChapter()
         {
             //获取对应文件路径
-            string _path = SelectedNode.Path;
+            string _path = SelectedNode.ToolTip.ToString();
             string name = SelectedNode.Header.ToString();
             MessageBoxResult result = MessageBox.Show("是否删除卷册 " + name + " ？", "删除项目", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
@@ -1134,7 +1133,7 @@ namespace E.Writer
         private void DeleteEssay()
         {
             //获取对应文件路径
-            string _path = SelectedNode.Path;
+            string _path = SelectedNode.ToolTip.ToString();
             string name = SelectedNode.Header.ToString();
             MessageBoxResult result = MessageBox.Show("是否删除文章 " + name +" ？", "删除项目", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
@@ -1354,12 +1353,12 @@ namespace E.Writer
         /// 遍历书籍目录下的子文件夹，创建节点
         /// </summary>
         /// <param name="_folder">文件夹路径</param>
-        private FileNode ScanFolder(string _folder)
+        private TreeViewItemNode ScanFolder(string _folder)
         {
             //
-            List<FileNode> thisNodes = new List<FileNode>();
+            List<TreeViewItemNode> thisNodes = new List<TreeViewItemNode>();
             //遍历当前文件夹中的文件
-            foreach (FileNode fileNode in ScanFile(_folder))
+            foreach (TreeViewItemNode fileNode in ScanFile(_folder))
             {
                 thisNodes.Add(fileNode);
             }
@@ -1375,21 +1374,21 @@ namespace E.Writer
                 foreach (DirectoryInfo childFolder in childFolders)
                 {
                     //遍历当前子文件夹中的子文件夹
-                    FileNode node = ScanFolder(_folder + @"\" + childFolder.ToString());
+                    TreeViewItemNode node = ScanFolder(_folder + @"\" + childFolder.ToString());
                     thisNodes.Add(node);
                 }
             }
-            FileNode thisNode = new FileNode(System.IO.Path.GetFileName(_folder), _folder, false, false, thisNodes);
+            TreeViewItemNode thisNode = new TreeViewItemNode(System.IO.Path.GetFileName(_folder), _folder, false, false, thisNodes);
             return thisNode;
         }
         /// <summary>
         /// 遍历此目录下的子文件，创建节点
         /// </summary>
         /// <param name="_folder">文件夹路径</param>
-        private List<FileNode> ScanFile(string _folder)
+        private List<TreeViewItemNode> ScanFile(string _folder)
         {
             //
-            List<FileNode> thisNodes = new List<FileNode>();
+            List<TreeViewItemNode> thisNodes = new List<TreeViewItemNode>();
             //
             DirectoryInfo DI = new DirectoryInfo(_folder);
             //遍历文件夹里的文件
@@ -1398,7 +1397,7 @@ namespace E.Writer
             foreach (FileInfo nextEssay in theEssays)
             {
                 //添加文件节点
-                FileNode thisNode = new FileNode(nextEssay.Name, nextEssay.FullName, true, false, null);
+                TreeViewItemNode thisNode = new TreeViewItemNode(nextEssay.Name, nextEssay.FullName, true, false, null);
                 thisNodes.Add(thisNode);
             }
             return thisNodes;
@@ -1408,19 +1407,19 @@ namespace E.Writer
         /// </summary>
         /// <param name="path">节点路径</param>
         /// <returns></returns>
-        private FileNode FindNote(string path)
+        private TreeViewItemNode FindNote(string path)
         {
-            FileNode found = null;
-            foreach (FileNode item in FilesTree.Items)
+            TreeViewItemNode found = null;
+            foreach (TreeViewItemNode item in FilesTree.Items)
             {
-                if (item.Path == path)
+                if (item.ToolTip.ToString() == path)
                 {
                     found = item;
                     break;
                 }
 
-                List<FileNode> nos = new List<FileNode>();
-                foreach (FileNode it in item.Items)
+                List<TreeViewItemNode> nos = new List<TreeViewItemNode>();
+                foreach (TreeViewItemNode it in item.Items)
                 {
                     nos.Add(it);
                 }
@@ -1434,21 +1433,21 @@ namespace E.Writer
         /// <param name="nodes">节点集合</param>
         /// <param name="path">节点路径</param>
         /// <returns></returns>
-        private FileNode FindNote(List<FileNode> nodes, string path)
+        private TreeViewItemNode FindNote(List<TreeViewItemNode> nodes, string path)
         {
-            FileNode found = null;
+            TreeViewItemNode found = null;
             if (nodes != null)
             {
-                foreach (FileNode item in nodes)
+                foreach (TreeViewItemNode item in nodes)
                 {
-                    if (item.Path == path)
+                    if (item.ToolTip.ToString() == path)
                     {
                         found = item;
                         break;
                     }
 
-                    List<FileNode> nos = new List<FileNode>();
-                    foreach (FileNode it in item.Items)
+                    List<TreeViewItemNode> nos = new List<TreeViewItemNode>();
+                    foreach (TreeViewItemNode it in item.Items)
                     {
                         nos.Add(it);
                     }
@@ -1597,7 +1596,7 @@ namespace E.Writer
         /// 设置内部展开状态
         /// </summary>
         /// <param name="node">节点</param>
-        private void SetExpandedState(FileNode node)
+        private void SetExpandedState(TreeViewItemNode node)
         {
             if (node.IsFile == false)
             {
@@ -1716,7 +1715,7 @@ namespace E.Writer
         private void SelectNode(int clickTimes)
         {
             //记录选择的节点
-            SelectedNode = (FileNode)FilesTree.SelectedItem;
+            SelectedNode = (TreeViewItemNode)FilesTree.SelectedItem;
             if (SelectedNode != null)
             {
                 //如果选中的节点是文件，且双击
@@ -1725,7 +1724,7 @@ namespace E.Writer
                     if (clickTimes == 2)
                     {
                         //确认是否打开非txt文件
-                        if (Path.GetExtension(SelectedNode.Path) != ".txt")
+                        if (Path.GetExtension(SelectedNode.ToolTip.ToString()) != ".txt")
                         {
                             MessageBoxResult dr = MessageBox.Show("打开非txt文件可能导致其损坏，确认打开吗？", "提示", MessageBoxButton.YesNo, MessageBoxImage.None);
                             if (dr == MessageBoxResult.Yes)
@@ -1738,9 +1737,9 @@ namespace E.Writer
                         if (CurrentEssay != null && Properties.User.Default.isAutoSaveWhenSwitch == true)
                         { SaveFile(); }
                         //打开
-                        OpenEssay(SelectedNode.Path);
+                        OpenEssay(SelectedNode.ToolTip.ToString());
                         //记录打开的节点
-                        OpenedNode = (FileNode)FilesTree.SelectedItem;
+                        OpenedNode = (TreeViewItemNode)FilesTree.SelectedItem;
                     //SaveFile();
                     finish:;
                     }
@@ -1757,9 +1756,9 @@ namespace E.Writer
                         if (CurrentEssay != null && Properties.User.Default.isAutoSaveWhenSwitch == true)
                         { SaveFile(); }
                         //打开卷册
-                        OpenChapter(SelectedNode.Path);
+                        OpenChapter(SelectedNode.ToolTip.ToString());
                         //记录打开的节点
-                        OpenedNode = (FileNode)FilesTree.SelectedItem;
+                        OpenedNode = (TreeViewItemNode)FilesTree.SelectedItem;
                     }
                     else
                     { ShowMessage("双击或按回车键打开该卷册", false); }
@@ -2090,7 +2089,7 @@ namespace E.Writer
         /// </summary>
         private void ExpandTree()
         {
-            foreach (FileNode item in FilesTree.Items)
+            foreach (TreeViewItemNode item in FilesTree.Items)
             {
                 //DependencyObject dObject = FilesTree.ItemContainerGenerator.ContainerFromItem(item);
                 //((FileNode)dObject).ExpandSubtree();
@@ -2114,7 +2113,7 @@ namespace E.Writer
         /// </summary>
         private void CollapseTree()
         {
-            foreach (FileNode item in FilesTree.Items)
+            foreach (TreeViewItemNode item in FilesTree.Items)
             {
                 //DependencyObject dObject = FilesTree.ItemContainerGenerator.ContainerFromItem(item);
                 //FileNode tvi = (FileNode)dObject;
@@ -2163,16 +2162,13 @@ namespace E.Writer
         private void ScanBookPath(string _book)
         {
             //遍历当前文件夹中的文件
-            foreach (FileNode fileNode in ScanFile(_book))
+            foreach (TreeViewItemNode fileNode in ScanFile(_book))
             {
-                //BookList.Add(fileNode);
                 FilesTree.Items.Add(fileNode);
             }
             //获取子文件夹信息
             DirectoryInfo DI = new DirectoryInfo(_book);
-            //遍历目录里的子文件夹
             DirectoryInfo[] childFolders = DI.GetDirectories();
-            //子文件夹的总数
             int j = childFolders.Length;
             //遍历当前文件夹中的子文件夹
             if (j != 0)
@@ -2180,7 +2176,7 @@ namespace E.Writer
                 foreach (DirectoryInfo childFolder in childFolders)
                 {
                     //遍历当前子文件夹中的子文件夹
-                    FileNode node = ScanFolder(_book + @"\" + childFolder.ToString());
+                    TreeViewItemNode node = ScanFolder(_book + @"\" + childFolder.ToString());
                     FilesTree.Items.Add(node);
                 }
             }
@@ -2198,7 +2194,7 @@ namespace E.Writer
             File.CreateText(_output).Close();
             //书名
             //File.AppendAllText(output, selectedBook + Environment.NewLine);
-            foreach (FileNode txt in FilesTree.Items)
+            foreach (TreeViewItemNode txt in FilesTree.Items)
             {
                 if (!txt.IsFile)
                 {
@@ -2214,11 +2210,11 @@ namespace E.Writer
                 else
                 {
                     //添加文章名
-                    File.AppendAllText(_output, System.IO.Path.GetFileNameWithoutExtension(txt.Path));
+                    File.AppendAllText(_output, System.IO.Path.GetFileNameWithoutExtension(txt.ToolTip.ToString()));
                     //换行
                     File.AppendAllText(_output, Environment.NewLine);
                     //获取所有字符
-                    string[] txtText = File.ReadAllLines(txt.Path, Encoding.UTF8);
+                    string[] txtText = File.ReadAllLines(txt.ToolTip.ToString(), Encoding.UTF8);
                     File.AppendAllLines(_output, txtText);
                     //换行
                     File.AppendAllText(_output, Environment.NewLine);
@@ -2239,7 +2235,7 @@ namespace E.Writer
 
             //显示消息
             ShowMessage("导出成功", " " + l, false);
-            Process.Start(System.IO.Path.GetDirectoryName(_output));
+            Process.Start(Path.GetDirectoryName(_output));
         }
         /// <summary>
         /// 自动缩进
@@ -3363,16 +3359,12 @@ namespace E.Writer
     /// <summary>
     /// 书籍的节点
     /// </summary>
-    public class FileNode : TreeViewItem
+    public class TreeViewItemNode : TreeViewItem
     {
         /// <summary>
         /// 节点类型
         /// </summary>
         public bool IsFile { get; set; }
-        /// <summary>
-        /// 路径
-        /// </summary>
-        public string Path { get; set; }
 
         /// <summary>
         /// 书籍节点构造器
@@ -3384,20 +3376,19 @@ namespace E.Writer
         /// <param name="_fileOrFolder">路径</param>
         /// <param name="isFile">是否文件</param>
         /// <param name="isExpanded">是否展开</param>
-        public FileNode(string DisplayName, string _fileOrFolder, bool isFile, bool isExpanded, List<FileNode> nodes)
+        public TreeViewItemNode(string DisplayName, string _fileOrFolder, bool isFile, bool isExpanded, List<TreeViewItemNode> nodes)
         {
             Header = DisplayName;
-            Path = _fileOrFolder;
+            ToolTip = _fileOrFolder;
             IsFile = isFile;
             IsExpanded = isExpanded;
             if (nodes != null)
             {
-                foreach (FileNode item in nodes)
+                foreach (TreeViewItemNode item in nodes)
                 {
                     Items.Add(item);
                 }
             }
         }
     }
-
 }
