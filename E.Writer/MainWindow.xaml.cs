@@ -165,8 +165,6 @@ namespace E.Writer
             if ((bool)AutoBackup.IsChecked) { AutoBackupTime.IsEnabled = true; }
             else { AutoBackupTime.IsEnabled = false; }
             AutoBackup.ToolTip = "备份位置：" + Application.StartupPath + @"\" + Properties.User.Default.BackupDir;
-            //滚动条
-            ShowScrollBar.IsChecked = Properties.User.Default.isShowScrollBar;
             //字体尺寸
             TextSize.Text = Properties.User.Default.fontSize.ToString();
 
@@ -186,11 +184,11 @@ namespace E.Writer
                 string tmp = Path.GetExtension(s);
                 if (tmp == ".ini" || tmp == ".INI")
                 {
-                    string tmp2 = INIOperator.ReadIniKeys("info", "type", s);
+                    string tmp2 = INIOperator.ReadIniKeys("文件", "类型", s);
                     //若是主题配置文件
-                    if (tmp2 == "theme")
+                    if (tmp2 == "主题")
                     {
-                        string tmp3 = INIOperator.ReadIniKeys("info", "version", s);
+                        string tmp3 = INIOperator.ReadIniKeys("文件", "版本", s);
                         //若与当前版本匹配
                         if (tmp3 == AppInfo.Version.ToString())
                         {
@@ -270,9 +268,7 @@ namespace E.Writer
                 {
                     if (Directory.Exists(b))
                     {
-                        string temp1 = Path.GetDirectoryName(b);
-                        string temp2 = (b.Replace(temp1, "")).Replace(@"\", "");
-                        AddBookItem(false, temp2, b);
+                        AddBookItem(false, new FileOrFolderInfo(b));
                     }
                 }
             }
@@ -317,32 +313,33 @@ namespace E.Writer
                 Properties.Settings.Default._lastBook = CurrentBook.Path;
                 SaveAppSettings();
                 //打开
-                OpenBook(CurrentBook.Path);
+                OpenBook(CurrentBook);
             }
         }
         /// <summary>
         /// 打开书籍
         /// </summary>
         /// <param name="_path">书籍文件夹路径</param>
-        private void OpenBook(string _path)
+        private void OpenBook(FileOrFolderInfo book)
         {
-            if (Directory.Exists(_path))
+            if (Directory.Exists(book.Path))
             {
                 CurrentChapter = null;
                 CurrentEssay = null;
                 TbxFileName.IsEnabled = false;
                 TbxFileContent.IsEnabled = false;
-                Properties.User.Default.BooksDir = Path.GetDirectoryName(CurrentBook.Path);
+                TbxCreatePath.Text = book.Path;
+                Properties.User.Default.BooksDir = Path.GetDirectoryName(book.Path);
                 //加入书籍列表
-                AddBookItem(true, CurrentBook.Name, CurrentBook.Path);
+                AddBookItem(true, book);
                 SelectBookItem(CurrentBook);
                 GetBookInfo();
-                FilesTree.ToolTip = FindResource("当前书籍") + "：" + CurrentBook.Name + Environment.NewLine + FindResource("书籍位置") + "：" + CurrentBook.Path;
+                FilesTree.ToolTip = FindResource("当前书籍") + "：" + book.Name + Environment.NewLine + FindResource("书籍位置") + "：" + book.Path;
                 RefreshTitle();
                 RefreshBtnsState();
                 ReloadFilesTree();
 
-                ShowMessage("已打开书籍", " " + CurrentBook.Name, false);
+                ShowMessage("已打开书籍", " " + book.Name, false);
             }
             else
             {
@@ -361,6 +358,7 @@ namespace E.Writer
                 CurrentEssay = null;
                 TbxFileName.IsEnabled = true;
                 TbxFileContent.IsEnabled = false;
+                TbxCreatePath.Text = _path;
                 GetChapterInfo();
                 RefreshTitle();
                 RefreshBtnsState();
@@ -736,7 +734,7 @@ namespace E.Writer
             Properties.Settings.Default._lastBook = CurrentBook.Path;
             SaveAppSettings();
             //打开
-            OpenBook(CurrentBook.Path);
+            OpenBook(CurrentBook);
         }
         /// <summary>
         /// 创建卷册
@@ -911,7 +909,7 @@ namespace E.Writer
         /// <param name="isAdd"></param>
         /// <param name="book">书名</param>
         /// <param name="_book">书籍路径</param>
-        private void AddBookItem(bool isAdd, string book, string _book)
+        private void AddBookItem(bool isAdd, FileOrFolderInfo book)
         {
             Books.ToolTip = FindResource("最近打开过的书籍列表");
             bool hasBook = false;
@@ -934,9 +932,9 @@ namespace E.Writer
             {
                 ComboBoxItem item = new ComboBoxItem
                 {
-                    Content = book,
-                    Tag = _book,
-                    ToolTip = _book,
+                    Content = book.Name,
+                    Tag = book.Path,
+                    ToolTip = book.Path,
                 };
 
                 Books.Items.Add(item);
@@ -1025,6 +1023,16 @@ namespace E.Writer
         {
             Properties.Settings.Default.Reset();
             ShowMessage("已清空运行信息", true);
+        }
+        /// <summary>
+        /// 清空文本
+        /// </summary>
+        private void ClearNameAndContent()
+        {
+            TbxFileName.Text = "";
+            TbxFileContent.Text = "";
+            TbxFileName.IsEnabled = false;
+            TbxFileContent.IsEnabled = false;
         }
 
         //删除
@@ -1518,19 +1526,18 @@ namespace E.Writer
                 {
                     if (File.Exists(themePath))
                     {
-                        //设为此主题
                         SetSkin(themePath);
+                        Properties.User.Default.ThemePath = themePath;
                     }
                     else
                     {
                         Themes.Remove(theme);
                         //设为默认主题
                         Properties.User.Default.ThemePath = Properties.User.Default.ThemePath;
-                        SavePreferences();
                         SetSkin(Properties.User.Default.ThemePath);
-                        //显示消息
                         ShowMessage("偏好主题的不存在", false);
                     }
+                    SavePreferences();
                     break;
                 }
             }
@@ -1573,14 +1580,18 @@ namespace E.Writer
         /// <param name="themePath">主题文件路径</param>
         private void SetSkin(string themePath)
         {
-            //左配色
             SetColor("一级字体颜色", CreateColor(INIOperator.ReadIniKeys("字体", "一级字体", themePath)));
             SetColor("二级字体颜色", CreateColor(INIOperator.ReadIniKeys("字体", "二级字体", themePath)));
             SetColor("三级字体颜色", CreateColor(INIOperator.ReadIniKeys("字体", "三级字体", themePath)));
+
             SetColor("一级背景颜色", CreateColor(INIOperator.ReadIniKeys("背景", "一级背景", themePath)));
             SetColor("二级背景颜色", CreateColor(INIOperator.ReadIniKeys("背景", "二级背景", themePath)));
             SetColor("三级背景颜色", CreateColor(INIOperator.ReadIniKeys("背景", "三级背景", themePath)));
+
             SetColor("一级边框颜色", CreateColor(INIOperator.ReadIniKeys("边框", "一级边框", themePath)));
+
+            SetColor("有焦点选中颜色", CreateColor(INIOperator.ReadIniKeys("高亮", "有焦点选中", themePath)));
+            SetColor("无焦点选中颜色", CreateColor(INIOperator.ReadIniKeys("高亮", "无焦点选中", themePath)));
         }
         /// <summary>
         /// 设置颜色
@@ -2045,6 +2056,8 @@ namespace E.Writer
                                    FindResource("上次关闭时间") + "：" + Properties.Settings.Default.lastEndTime + Environment.NewLine +
                                    FindResource("总运行时长") + "：" + t;
             }
+            TbxFileName.IsEnabled = false;
+            TbxFileContent.IsEnabled = false;
         }
         /// <summary>
         /// 显示消息
@@ -2310,6 +2323,14 @@ namespace E.Writer
             if (Properties.User.Default.isShowRunInfo)
             {
                 ShowRunInfo();
+            }
+            else
+            {
+                ClearNameAndContent();
+                if (Properties.User.Default.isAutoOpenBook)
+                {
+                    OpenLastBook();
+                }
             }
             CheckFolders();
             CreateTimer();
@@ -2668,7 +2689,7 @@ namespace E.Writer
                     CurrentBook = new FileOrFolderInfo(path);
                     Properties.Settings.Default._lastBook = CurrentBook.Path;
                     SaveAppSettings();
-                    OpenBook(CurrentBook.Path);
+                    OpenBook(CurrentBook);
                 }
                 else
                 {
@@ -3138,7 +3159,6 @@ namespace E.Writer
                     {
                         Properties.User.Default.autoIndentations = t;
                         SavePreferences();
-                        //显示消息
                         ShowMessage("已更改", false);
                     }
                     else
@@ -3197,7 +3217,6 @@ namespace E.Writer
                         Properties.User.Default.autoSaveMinute = t;
                         SavePreferences();
                         AutoSaveTimer.Interval = ts;
-                        //显示消息
                         ShowMessage("已更改", false);
                     }
                     else
@@ -3229,7 +3248,7 @@ namespace E.Writer
             //显示消息
             ShowMessage("已更改", false);
         }
-        private void AutoBackupTime_KeyUp(object sender, KeyEventArgs e)
+        private void AutoBackupTime_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (AutoBackupTime.Text != "" && AutoBackupTime.Text != null)
             {
@@ -3257,22 +3276,6 @@ namespace E.Writer
                     ShowMessage("输入整数", false);
                 }
             }
-        }
-        private void ShowScrollBar_Checked(object sender, RoutedEventArgs e)
-        {
-            Properties.User.Default.isShowScrollBar = true;
-            SavePreferences();
-            TbxFileContent.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
-            //显示消息
-            ShowMessage("已更改", false);
-        }
-        private void ShowScrollBar_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Properties.User.Default.isShowScrollBar = false;
-            SavePreferences();
-            TbxFileContent.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            //显示消息
-            ShowMessage("已更改", false);
         }
         private void CbbLanguages_SelectionChanged(object sender, RoutedEventArgs e)
         {

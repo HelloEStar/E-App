@@ -18,6 +18,10 @@
         <SolidColorBrush x:Key="二级背景颜色" Color="#FFF0F0F0" />
         <SolidColorBrush x:Key="三级背景颜色" Color="White" />
         <SolidColorBrush x:Key="一级边框颜色" Color="#FFA0A0A0" />
+        <SolidColorBrush x:Key="有焦点选中颜色" Color="#7F007FFF"/>
+        <SolidColorBrush x:Key="无焦点选中颜色" Color="#7F7FC8FF"/>
+        <Color x:Key="SelectedBackgroundColor">#7F007FFF</Color>
+        <Color x:Key="SelectedUnfocusedColor2">#7F7FC8FF</Color>
 
         <!--按钮样式-->
         <Style x:Key="菜单按钮样式" TargetType="Button">
@@ -248,19 +252,21 @@
             <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
             <Setter Property="Background" Value="{DynamicResource 三级背景颜色}"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Height" Value="30"/>
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Normal"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ComboBoxItem">
                         <Border Name="Back" BorderThickness="0,0,0,0">
-                            <ContentPresenter ContentSource="{Binding Source}" Margin="{TemplateBinding Padding}" Width="240" HorizontalAlignment="Left" VerticalAlignment="Center"></ContentPresenter>
+                            <ContentPresenter ContentSource="{Binding Source}" HorizontalAlignment="Stretch" VerticalAlignment="Center"></ContentPresenter>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsHighlighted" Value="True">
-                                <Setter TargetName="Back" Property="Background" Value="{DynamicResource 二级背景颜色}"></Setter>
+                                <Setter TargetName="Back" Property="Background" Value="{DynamicResource 无焦点选中颜色}"></Setter>
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="Back" Property="Background" Value="{DynamicResource 一级背景颜色}"></Setter>
+                                <Setter TargetName="Back" Property="Background" Value="{DynamicResource 有焦点选中颜色}"></Setter>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -282,7 +288,7 @@
 
         <!--文本显示框样式-->
         <Style x:Key="文本显示框样式" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
+            <Setter Property="Foreground" Value="{DynamicResource 二级字体颜色}"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="5,0"/>
@@ -296,8 +302,6 @@
             <Setter Property="ItemHeight" Value="30"/>
         </Style>
 
-        <Color x:Key="SelectedBackgroundColor">#FFC5CBF9</Color>
-        <Color x:Key="SelectedUnfocusedColor">#FFDDDDDD</Color>
         <!--树状图样式-->
         <Style x:Key="树状图样式" TargetType="TreeView">
             <Setter Property="Background" Value="{DynamicResource 二级背景颜色}"/>
@@ -321,7 +325,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TreeView">
-                        <Border Name="Border" CornerRadius="1" BorderThickness="1">
+                        <Border Name="Border" CornerRadius="0" BorderThickness="0">
                             <Border.BorderBrush>
                                 <SolidColorBrush Color="{DynamicResource BorderMediumColor}" />
                             </Border.BorderBrush>
@@ -359,8 +363,8 @@
                                     <VisualState x:Name="Indeterminate" />
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
-                            <Path x:Name="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" Data="M 0 0 L 10 5 L 0 10 Z" Fill="{DynamicResource 三级字体颜色}"></Path>
-                            <Path x:Name="Expanded" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="0" Data="M 0 0 L 10 0 L 5 10 Z" Fill="{DynamicResource 三级字体颜色}" Visibility="Hidden"></Path>
+                            <Path x:Name="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" Data="M 0 0 L 8 5 L 0 10 Z" Fill="{DynamicResource 三级字体颜色}"></Path>
+                            <Path x:Name="Expanded" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="0" Data="M 0 0 L 10 0 L 5 8 Z" Fill="{DynamicResource 三级字体颜色}" Visibility="Hidden"></Path>
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
@@ -372,7 +376,7 @@
                 <Setter.Value>
                     <ControlTemplate>
                         <Border>
-                            <Rectangle Margin="0,0,0,0" StrokeThickness="5" Stroke="Black" StrokeDashArray="1 2" Opacity="0" />
+                            <Rectangle Margin="0" StrokeThickness="5" Stroke="Red" StrokeDashArray="1 2" Opacity="0" />
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -381,11 +385,21 @@
         <!--树状图子项样式-->
         <Style x:Key="树状图子项样式" TargetType="{x:Type TreeViewItem}">
             <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}" />
             <Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
             <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}" />
+            <Setter Property="Padding" Value="5" />
             <Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}" />
+
+            <Setter Property="ItemContainerStyle" Value="{DynamicResource 树状图子项样式}"></Setter>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel IsItemsHost="True" Margin="0"/>
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type TreeViewItem}">
@@ -412,7 +426,7 @@
                                     <VisualState x:Name="SelectedInactive">
                                         <Storyboard>
                                             <ColorAnimationUsingKeyFrames Storyboard.TargetName="Bd"  Storyboard.TargetProperty="(Panel.Background). (SolidColorBrush.Color)">
-                                                <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource SelectedUnfocusedColor}" />
+                                                <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource SelectedUnfocusedColor2}" />
                                             </ColorAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
@@ -429,7 +443,7 @@
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
                             <ToggleButton x:Name="Expander"  Style="{DynamicResource ExpandCollapseToggleStyle}" ClickMode="Press"  IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"/>
-                            <Border x:Name="Bd" Grid.Column="1" Width="205" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" VerticalAlignment="Center">
+                            <Border x:Name="Bd" Grid.Column="1" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" VerticalAlignment="Center">
                                 <ContentPresenter x:Name="PART_Header" ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
                             </Border>
                             <ItemsPresenter x:Name="ItemsHost" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Visibility="Collapsed" VerticalAlignment="Center" />
@@ -612,6 +626,8 @@
                                         <DoubleAnimation Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Width" To="8" Duration="0:0:0.25" BeginTime="0:0:1"/>
                                         <DoubleAnimation Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0.25"/>
                                         <DoubleAnimation Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Opacity"  To="0.2" Duration="0:0:0.25" BeginTime="0:0:1"/>
+                                        <DoubleAnimation Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Height" To="16" Duration="0:0:0.25"/>
+                                        <DoubleAnimation Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Height" To="8" Duration="0:0:0.25" BeginTime="0:0:1"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </EventTrigger>
@@ -635,6 +651,7 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0.25"/>
+                                        <DoubleAnimation Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Height" To="16" Duration="0:0:0.25"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </EventTrigger>
@@ -642,6 +659,7 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Opacity" To="0.2" Duration="0:0:0.25"/>
+                                        <DoubleAnimation Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Height" To="8" Duration="0:0:0.25"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </EventTrigger>
@@ -717,19 +735,14 @@
                         </WrapPanel>
                     </StackPanel>
                     <ComboBox x:Name="Books" Style="{DynamicResource 下拉框样式}"  ToolTip="最近打开过的书籍列表" DockPanel.Dock="Top"
-                              SelectionChanged="Books_SelectionChanged" FontSize="14" FontWeight="Bold"/>
+                              SelectionChanged="Books_SelectionChanged" FontSize="18" FontWeight="Bold" Height="40" Margin="0" BorderThickness="0"/>
                     <WrapPanel Style="{DynamicResource 水平流式面板样式}" DockPanel.Dock="Bottom" >
                         <Button x:Name="BtnExpand" Content="展开" ToolTip="{DynamicResource 展开}" Style="{DynamicResource 自由按钮样式}" Click="BtnExpand_Click" />
                         <Button x:Name="BtnCollapse" Content="收起" ToolTip="{DynamicResource 收起}" Style="{DynamicResource 自由按钮样式}" Click="BtnCollapse_Click" />
                         <Button x:Name="BtnRefresh" Content="刷新" ToolTip="{DynamicResource 刷新}" Style="{DynamicResource 自由按钮样式}" Click="BtnRefresh_Click" />
                         <Button x:Name="BtnDelete" Content="删除" ToolTip="{DynamicResource 删除目标}" Style="{DynamicResource 自由按钮样式}" Click="BtnDelete_Click" />
                     </WrapPanel>
-                    <TreeView x:Name="FilesTree" Style="{DynamicResource 树状图样式}" SelectedItemChanged="FilesTree_SelectedItemChanged" MouseDoubleClick="FilesTree_MouseDoubleClick" KeyUp="FilesTree_KeyUp">
-                        <TreeViewItem Header="001" >
-                            <TreeViewItem Header="002" />
-                        </TreeViewItem>
-                        <TreeViewItem Header="003" />
-                    </TreeView>
+                    <TreeView x:Name="FilesTree" Style="{DynamicResource 树状图样式}" SelectedItemChanged="FilesTree_SelectedItemChanged" MouseDoubleClick="FilesTree_MouseDoubleClick" KeyUp="FilesTree_KeyUp"></TreeView>
                 </DockPanel>
 
                 <DockPanel x:Name="CenterEditPage" Visibility="Collapsed">
@@ -763,9 +776,6 @@
                             <Label Content="{DynamicResource 字号}" Style="{DynamicResource 标题标签样式}"/>
                             <TextBox x:Name="TextSize" Style="{DynamicResource 文本输入框样式}" TextChanged="TextSize_TextChanged"/>
 
-                            <Label Content="{DynamicResource 界面}" Style="{DynamicResource 标题标签样式}"/>
-                            <CheckBox x:Name="ShowScrollBar" Content="{DynamicResource 显示滚动条}" Style="{DynamicResource 检查框样式}" Checked="ShowScrollBar_Checked" Unchecked="ShowScrollBar_Unchecked"/>
-
                             <Label Content="{DynamicResource 启动}" Style="{DynamicResource 标题标签样式}"/>
                             <CheckBox x:Name="ShowRunInfoCheckBox" Content="{DynamicResource 显示运行信息}" Style="{DynamicResource 检查框样式}" Checked="ShowRunInfo_Checked" Unchecked="ShowRunInfo_Unchecked"/>
                             <CheckBox x:Name="AutoOpenBookCheckBox" Content="{DynamicResource 自动打开书籍}" Style="{DynamicResource 检查框样式}" Checked="AutoOpenBook_Checked" Unchecked="AutoOpenBook_Unchecked"/>
@@ -775,7 +785,7 @@
 
                             <Label Content="{DynamicResource 缩进}" Style="{DynamicResource 标题标签样式}"/>
                             <CheckBox x:Name="AutoIndentation" Content="{DynamicResource 自动缩进}" Style="{DynamicResource 检查框样式}" Checked="AutoIndentation_Checked" Unchecked="AutoIndentation_Unchecked"/>
-                            <TextBox x:Name="AutoIndentations" Style="{DynamicResource 文本输入框样式}" Text="4" ToolTip="按回车键保存更改" TextChanged="AutoIndentations_TextChanged"/>
+                            <TextBox x:Name="AutoIndentations" Style="{DynamicResource 文本输入框样式}" ToolTip="按回车键保存更改" TextChanged="AutoIndentations_TextChanged"/>
 
                             <Label Content="{DynamicResource 保存}" Style="{DynamicResource 标题标签样式}"/>
                             <CheckBox x:Name="AutoSaveWhenSwitch" Content="{DynamicResource 文章切换时自动保存}" Style="{DynamicResource 检查框样式}" Checked="AutoSaveWhenSwitch_Checked" Unchecked="AutoSaveWhenSwitch_Unchecked"/>
@@ -783,8 +793,8 @@
                             <TextBox x:Name="AutoSaveTime" Style="{DynamicResource 文本输入框样式}" ToolTip="按回车键保存更改" TextChanged="AutoSaveTime_TextChanged"/>
 
                             <Label Content="{DynamicResource 备份}" Style="{DynamicResource 标题标签样式}"/>
-                            <CheckBox x:Name="AutoBackup" Content="{DynamicResource 间隔时间自动备份}" Style="{DynamicResource 检查框样式}" Unchecked="AutoBackup_Unchecked"/>
-                            <TextBox x:Name="AutoBackupTime" Style="{DynamicResource 文本输入框样式}" Text="10" KeyUp="AutoBackupTime_KeyUp" ToolTip="按回车键保存更改"/>
+                            <CheckBox x:Name="AutoBackup" Content="{DynamicResource 间隔时间自动备份}" Style="{DynamicResource 检查框样式}" Checked="AutoBackup_Checked" Unchecked="AutoBackup_Unchecked"/>
+                            <TextBox x:Name="AutoBackupTime" Style="{DynamicResource 文本输入框样式}" ToolTip="按回车键保存更改" TextChanged="AutoBackupTime_TextChanged"/>
                         </StackPanel>
                     </ScrollViewer>
                 </DockPanel>
