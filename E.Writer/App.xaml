@@ -10,8 +10,6 @@
                 <ResourceDictionary Source="语言\zh_CN.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-
         </ResourceDictionary>
-
     </Application.Resources>
 </Application>

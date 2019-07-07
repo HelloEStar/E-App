@@ -43,13 +43,13 @@ namespace E.Player
             CreateTimer();
 
             //获取软件信息
-            Name.Content = MainWindow.ThisName;
-            Description.Content = MainWindow.ThisDescription;
-            Developer.Content = MainWindow.ThisDeveloper + "@" + MainWindow.ThisCompany;
-            Version.Content = Ow.ThisVer;
+            Name.Content = Ow.AppInfo.Name;
+            Description.Content = Ow.AppInfo.Description;
+            Developer.Content = Ow.AppInfo.Company;
+            Version.Content = Ow.AppInfo.Version;
             //Developer.Content = MainWindow.company;
             //载入更新日志
-            Stream src = Application.GetResourceStream(new Uri("/Documents/更新日志.txt", UriKind.Relative)).Stream;
+            Stream src = Application.GetResourceStream(new Uri("/文档/更新日志.txt", UriKind.Relative)).Stream;
             string str = new StreamReader(src, Encoding.UTF8).ReadToEnd();
             UpdateLog.Text = str;
 
@@ -146,12 +146,12 @@ namespace E.Player
                     if (langName == "zh_CN")
                     {
                         //根据名字载入语言文件
-                        langRd = Application.LoadComponent(new Uri(@"Languages/zh_CN.xaml", UriKind.Relative)) as ResourceDictionary;
+                        langRd = Application.LoadComponent(new Uri(@"语言/zh_CN.xaml", UriKind.Relative)) as ResourceDictionary;
                     }
                     else
                     {
                         //根据名字载入语言文件
-                        langRd = Application.LoadComponent(new Uri(@"Languages/" + langName + ".xaml", UriKind.Relative)) as ResourceDictionary;
+                        langRd = Application.LoadComponent(new Uri(@"语言/" + langName + ".xaml", UriKind.Relative)) as ResourceDictionary;
                     }
                 }
                 catch (Exception e2)

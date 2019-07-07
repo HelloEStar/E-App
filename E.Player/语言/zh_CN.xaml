@@ -90,7 +90,6 @@
     <sys:String x:Key="退出时保留播放列表">退出时保留播放列表</sys:String>
     <sys:String x:Key="自定义快进快退">快进快退时间长度</sys:String>
     <sys:String x:Key="自动检查更新">自动检查更新</sys:String>
-    <sys:String x:Key="重置">重置</sys:String>
     <sys:String x:Key="已重置">偏好设置已重置</sys:String>
     <sys:String x:Key="已更改">偏好设置已更改</sys:String>
     <sys:String x:Key="已载入">偏好设置已载入</sys:String>
@@ -98,9 +97,6 @@
     <sys:String x:Key="输入整数">请输入整数</sys:String>
     
     <!--帮助窗口，软件信息-->
-    <sys:String x:Key="名称">名称</sys:String>
-    <sys:String x:Key="说明">说明</sys:String>
-    <sys:String x:Key="版本">版本</sys:String>
     <sys:String x:Key="开发者">开发者</sys:String>
     <sys:String x:Key="更新日志">更新日志</sys:String>
     <sys:String x:Key="检查更新">检查更新</sys:String>
@@ -113,5 +109,33 @@
     <sys:String x:Key="交流QQ群">交流QQ群</sys:String>
     <sys:String x:Key="赞助开发者">比特币赞助</sys:String>
 
+
+    <sys:String x:Key="重置">重置</sys:String>
+    <sys:String x:Key="应用">应用</sys:String>
+    <sys:String x:Key="清空">清空</sys:String>
+    <sys:String x:Key="重置+">重置偏好设置</sys:String>
+    <sys:String x:Key="应用+">应用偏好设置</sys:String>
+    <sys:String x:Key="清空+">清空运行信息</sys:String>
+
+    <sys:String x:Key="名称">应用名称</sys:String>
+    <sys:String x:Key="说明">应用说明</sys:String>
+    <sys:String x:Key="作者">应用作者</sys:String>
+    <sys:String x:Key="版本">当前版本</sys:String>
+    <sys:String x:Key="日志">更新日志</sys:String>
+    <sys:String x:Key="赞助">赞助比特币</sys:String>
+    <sys:String x:Key="点复">点击复制</sys:String>
+
+    <sys:String x:Key="官网">官网</sys:String>
+    <sys:String x:Key="主页">主页</sys:String>
+    <sys:String x:Key="下载">下载</sys:String>
+    <sys:String x:Key="反馈">反馈</sys:String>
+    <sys:String x:Key="开源">开源</sys:String>
+    <sys:String x:Key="讨论">讨论</sys:String>
+    <sys:String x:Key="官网+">官方网站 F1</sys:String>
+    <sys:String x:Key="主页+">应用主页 F2</sys:String>
+    <sys:String x:Key="下载+">下载新版 F3</sys:String>
+    <sys:String x:Key="反馈+">提交反馈 F4</sys:String>
+    <sys:String x:Key="开源+">GitHub开源地址 F5</sys:String>
+    <sys:String x:Key="讨论+">QQ交流讨论群 F6</sys:String>
 
 </ResourceDictionary>
