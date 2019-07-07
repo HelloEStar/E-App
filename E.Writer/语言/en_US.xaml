@@ -9,84 +9,104 @@
     <sys:String x:Key="设置">Setting</sys:String>
     <sys:String x:Key="关于">About</sys:String>
 
+    <sys:String x:Key="打开">Open</sys:String>
+    <sys:String x:Key="关闭">Close</sys:String>
     <sys:String x:Key="创建">Create</sys:String>
-    <sys:String x:Key="浏览">Browser</sys:String>
-    
-    <sys:String x:Key="打开书籍">Open Book</sys:String>
-    <sys:String x:Key="关闭书籍">Close Book</sys:String>
-    <sys:String x:Key="关闭卷册">Close Chapter</sys:String>
-    <sys:String x:Key="关闭文章">Close Essay</sys:String>
-    <sys:String x:Key="创建书籍">Create Book</sys:String>
-    <sys:String x:Key="创建卷册">Create Chapter</sys:String>
-    <sys:String x:Key="创建文章">Create Essay</sys:String>
-    <sys:String x:Key="保存文章">Save Essay</sys:String>
-    <sys:String x:Key="另存文章">Save Essay As</sys:String>
-    <sys:String x:Key="导出全文">Export Book</sys:String>
-    <sys:String x:Key="删除选中">Delete Target</sys:String>
-    <sys:String x:Key="书籍信息">Book Info</sys:String>
-    <sys:String x:Key="卷册信息">Chapter Info</sys:String>
+    <sys:String x:Key="保存">Save</sys:String>
+    <sys:String x:Key="另存">SaveAs</sys:String>
+    <sys:String x:Key="导出">Export</sys:String>
+    <sys:String x:Key="信息">Info</sys:String>
+    <sys:String x:Key="打开+">Open Book Ctrl+O</sys:String>
+    <sys:String x:Key="关闭+">Close Book Ctrl+Q</sys:String>
+    <sys:String x:Key="创建+">Create Panel Ctrl+B</sys:String>
+    <sys:String x:Key="保存+">Save Essay Ctrl+S</sys:String>
+    <sys:String x:Key="另存+">Save Essay As Ctrl+Shift+S</sys:String>
+    <sys:String x:Key="导出+">Export Book Ctrl+E</sys:String>
+    <sys:String x:Key="信息+">Book Info Ctrl+M</sys:String>
 
     <sys:String x:Key="撤销">Undo</sys:String>
     <sys:String x:Key="重做">Redo</sys:String>
-    <sys:String x:Key="复制">Copy</sys:String>
-    <sys:String x:Key="剪切">Cut</sys:String>
-    <sys:String x:Key="粘贴">Paste</sys:String>
-    <sys:String x:Key="转繁">To Traditional Ctrl+Shift+K</sys:String>
-    <sys:String x:Key="转简">To Simplified Ctrl+Shift+J</sys:String>
-    <sys:String x:Key="查换">Find and Replace Ctrl+F</sys:String>
-
-    <sys:String x:Key="展开">Expand List</sys:String>
-    <sys:String x:Key="收起">Collapse List</sys:String>
-    <sys:String x:Key="刷新">Refresh List</sys:String>
+    <sys:String x:Key="转繁">ToTrad</sys:String>
+    <sys:String x:Key="转简">ToSimp</sys:String>
+    <sys:String x:Key="撤销+">Undo Ctrl+Z</sys:String>
+    <sys:String x:Key="重做+">Redo Ctrl+Y</sys:String>
+    <sys:String x:Key="转繁+">To Traditional Ctrl+Shift+K</sys:String>
+    <sys:String x:Key="转简+">To Simplified Ctrl+Shift+J</sys:String>
 
     <sys:String x:Key="重置">Reset</sys:String>
     <sys:String x:Key="应用">Apply</sys:String>
-    <sys:String x:Key="清空运行信息">Clear Run Info</sys:String>
+    <sys:String x:Key="清空">Clear</sys:String>
+    <sys:String x:Key="重置+">Reset Settings</sys:String>
+    <sys:String x:Key="应用+">Apply Settings</sys:String>
+    <sys:String x:Key="清空+">Clear Running Info</sys:String>
 
-    <sys:String x:Key="官方网站">Official Website F1</sys:String>
-    <sys:String x:Key="应用主页">APP Page F2</sys:String>
-    <sys:String x:Key="检查更新">Check Update F3</sys:String>
-    <sys:String x:Key="提交反馈">Report Bugs F4</sys:String>
-    <sys:String x:Key="GitHub">GitHub F5</sys:String>
-    <sys:String x:Key="QQ交流群">QQ Group F6</sys:String>
-    <sys:String x:Key="赞助">BitCoin Support F7</sys:String>
+    <sys:String x:Key="官网">OffiWeb</sys:String>
+    <sys:String x:Key="主页">AppInfo</sys:String>
+    <sys:String x:Key="下载">Download</sys:String>
+    <sys:String x:Key="反馈">Feedback</sys:String>
+    <sys:String x:Key="开源">OpenSource</sys:String>
+    <sys:String x:Key="讨论">Discuss</sys:String>
+    <sys:String x:Key="官网+">Official Website F1</sys:String>
+    <sys:String x:Key="主页+">APP Main Page F2</sys:String>
+    <sys:String x:Key="下载+">Download Page F3</sys:String>
+    <sys:String x:Key="反馈+">Feedback Page F4</sys:String>
+    <sys:String x:Key="开源+">GitHub Open Source Page F5</sys:String>
+    <sys:String x:Key="讨论+">QQ Discuss Group F6</sys:String>
 
     <!--中间区域-->
     <!--书籍页-->
-    <!--编辑页-->
-    <!--<sys:String x:Key="书籍">Book</sys:String>-->
-    <sys:String x:Key="卷册">Chapter</sys:String>
-    <sys:String x:Key="文章">Essay</sys:String>
+    <sys:String x:Key="浏览">Browser</sys:String>
+    <sys:String x:Key="创书">+ Book</sys:String>
+    <sys:String x:Key="创卷">+ Chapter</sys:String>
+    <sys:String x:Key="创文">+ Essay</sys:String>
+    <sys:String x:Key="展开">Expand</sys:String>
+    <sys:String x:Key="收起">Collapse</sys:String>
+    <sys:String x:Key="刷新">Refresh</sys:String>
+    <sys:String x:Key="删除">Delete</sys:String>
+    <sys:String x:Key="书史+">Books Open History</sys:String>
+    <sys:String x:Key="浏览+">Change Target Location</sys:String>
+    <sys:String x:Key="展开+">Expand TreeView Ctrl+I</sys:String>
+    <sys:String x:Key="收起+">Collapse TreeView Ctrl+U</sys:String>
+    <sys:String x:Key="刷新+">Refresh TreeView Ctrl+R</sys:String>
+    <sys:String x:Key="删除+">Delete Target Delete</sys:String>
 
+
+    <!--编辑页-->
+    <sys:String x:Key="查换">Find and Replace</sys:String>
+    <sys:String x:Key="查内">Find Content</sys:String>
+    <sys:String x:Key="换内">Replace Content</sys:String>
+    <sys:String x:Key="查下">Find Next</sys:String>
+    <sys:String x:Key="换下">Replace Next</sys:String>
+    <sys:String x:Key="换全">Replace All</sys:String>
+    <sys:String x:Key="查换+">Find and Replace Ctrl+F</sys:String>
     <!--设置页-->
     <sys:String x:Key="语言">Language</sys:String>
     <sys:String x:Key="主题">Theme</sys:String>
     <sys:String x:Key="字体">Font Family</sys:String>
     <sys:String x:Key="字号">Font Size</sys:String>
     <sys:String x:Key="界面">UI</sys:String>
-    <sys:String x:Key="启动">Bott</sys:String>
+    <sys:String x:Key="启动">Boot</sys:String>
     <sys:String x:Key="补全">Complementy</sys:String>
     <sys:String x:Key="缩进">Indentation</sys:String>
-    <sys:String x:Key="保存">Save</sys:String>
+    <!--<sys:String x:Key="保存">Save</sys:String>-->
     <sys:String x:Key="备份">Backup</sys:String>
-    <sys:String x:Key="显示滚动条">Show scroll bar</sys:String>
     <sys:String x:Key="显示运行信息">Show running info</sys:String>
     <sys:String x:Key="自动检查更新">Check new version</sys:String>
     <sys:String x:Key="自动打开书籍">Open last book</sys:String>
-    <sys:String x:Key="补全书名号">Add book title mark automatically</sys:String>
     <sys:String x:Key="自动补全">Auto Complementy</sys:String>
     <sys:String x:Key="自动缩进">Auto Indentation</sys:String>
     <sys:String x:Key="间隔时间自动保存">Auto save every timespan</sys:String>
     <sys:String x:Key="文章切换时自动保存">Auto save when swich file</sys:String>
     <sys:String x:Key="间隔时间自动备份">Auto backup every timespan</sys:String>
     <!--信息页-->
-    <sys:String x:Key="名称">Name</sys:String>
+    <sys:String x:Key="名称">App Name</sys:String>
     <sys:String x:Key="说明">Description</sys:String>
     <sys:String x:Key="版本">Version</sys:String>
     <sys:String x:Key="作者">Developer</sys:String>
-    <sys:String x:Key="更新日志">Update Log</sys:String>
+    <sys:String x:Key="日志">Update Log</sys:String>
+    <sys:String x:Key="赞助">Sponsor BitCoin</sys:String>
+    <sys:String x:Key="点复">Click to Copy</sys:String>
 
-    
     <!--右侧区域-->
     <sys:String x:Key="欢迎使用">Welcome to</sys:String>
     <sys:String x:Key="启动次数">Start up counts</sys:String>
@@ -95,11 +115,10 @@
     <sys:String x:Key="上次关闭时间">Last close up time</sys:String>
     <sys:String x:Key="总运行时长">Totally Running time</sys:String>
     <sys:String x:Key="行">Row</sys:String>
-    <sys:String x:Key="列">Columns</sys:String>
+    <sys:String x:Key="列">Col</sys:String>
     <sys:String x:Key="字数">Word counts</sys:String>
     <sys:String x:Key="全书字数">Totally Word counts</sys:String>
 
-    
     <!--提示消息-->
     <sys:String x:Key="提示">Help</sys:String>
     <sys:String x:Key="创建或打开以开始">Open or create a book to start</sys:String>
@@ -123,7 +142,7 @@
     <sys:String x:Key="总字数">Words counts</sys:String>
 
     <sys:String x:Key="重命名不能为空">Rename should not be noname</sys:String>
-    <sys:String x:Key="重命名中不能含有以下字符">Rename should not contains the following characters</sys:String>
+    <sys:String x:Key="重命名中不能含有以下字符">Rename should not contains these characters</sys:String>
     <sys:String x:Key="文章重命名成功">Essay rename successfully, list reloaded</sys:String>
     <sys:String x:Key="卷册重命名成功">Chapter rename successfully，list reloaded</sys:String>
     <sys:String x:Key="在此处重命名">Rename here, press enter to apply</sys:String>
@@ -164,6 +183,4 @@
     <sys:String x:Key="输入1~999整数">Please input integer from 1 to 999</sys:String>
     <sys:String x:Key="输入整数">Please input integer</sys:String>
     
-    
-
 </ResourceDictionary>

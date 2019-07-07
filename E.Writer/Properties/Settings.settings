@@ -32,26 +32,5 @@
     <Setting Name="_lastBook" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="HomePage" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">http://estar.zone</Value>
-    </Setting>
-    <Setting Name="InfoPage" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">http://estar.zone/introduction/e-writer/</Value>
-    </Setting>
-    <Setting Name="DownloadPage" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">http://estar.zone/introduction/e-writer/</Value>
-    </Setting>
-    <Setting Name="GitHubPage" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">https://github.com/HelloEStar/E.App</Value>
-    </Setting>
-    <Setting Name="QQGroupLink" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">http://jq.qq.com/?_wv=1027&amp;k=5TQxcvR</Value>
-    </Setting>
-    <Setting Name="BitCoinAddress" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">19LHHVQzWJo8DemsanJhSZ4VNRtknyzR1q</Value>
-    </Setting>
-    <Setting Name="QQGroup" Type="System.String" Scope="User">
-      <Value Profile="(Default)">279807070</Value>
-    </Setting>
   </Settings>
 </SettingsFile>

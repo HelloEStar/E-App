@@ -47,18 +47,26 @@ namespace E.Utility
         /// <summary>
         /// 反馈链接
         /// </summary>
+        public string FeedbackPage { get; }
+        /// <summary>
+        /// GitHub链接
+        /// </summary>
         public string GitHubPage { get; }
         /// <summary>
         /// 官方Q群
         /// </summary>
-        public string QQGroup { get; }
+        public string QQGroupLink { get; }
+        /// <summary>
+        /// 官方Q群
+        /// </summary>
+        public string QQGroupNumber { get; }
         /// <summary>
         /// 比特币地址
         /// </summary>
         public string BitCoinAddress { get; }
 
         public AppInfo(string name, string description, string company, string copyright, Version version, string updateNote, 
-                       string homePage, string infoPage, string downloadPage, string gitHubPage, string qqGroup,string bitCoinAddress)
+                       string homePage, string infoPage, string downloadPage, string gitHubPage, string qqGroupLink, string qqGroupNumber, string bitCoinAddress)
         {
             Name = name;
             Description = description;
@@ -71,7 +79,8 @@ namespace E.Utility
             InfoPage = infoPage;
             DownloadPage = downloadPage;
             GitHubPage = gitHubPage;
-            QQGroup = qqGroup;
+            QQGroupLink = qqGroupLink;
+            QQGroupNumber = qqGroupNumber;
             BitCoinAddress = bitCoinAddress;
         }
 

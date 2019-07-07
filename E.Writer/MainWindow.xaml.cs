@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Controls;
@@ -11,21 +11,24 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Text.RegularExpressions;
 using System.Windows.Threading;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.Net;
 using System.Diagnostics;
 using System.Reflection;
+
 using Application = System.Windows.Forms.Application;
 using MessageBox = System.Windows.MessageBox;
 using ContextMenu = System.Windows.Controls.ContextMenu;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Button = System.Windows.Controls.Button;
-
-using E.Utility;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+
+using Settings = E.Writer.Properties.Settings;
+using User = E.Writer.Properties.User;
+using E.Utility;
 
 namespace E.Writer
 {
@@ -47,7 +50,7 @@ namespace E.Writer
         /// <summary>
         /// 主题集合
         /// </summary>
-        private List<TextBlock> Themes { get; set; } = new List<TextBlock>();
+        private List<TextBlock> ThemeItems { get; set; } = new List<TextBlock>();
 
         /// <summary>
         /// 
@@ -66,25 +69,6 @@ namespace E.Writer
         /// 打开的文件是否已保存
         /// </summary>
         private bool IsSaved { get; set; } = true;
-
-        /// <summary>
-        /// 选中的节点
-        /// </summary>
-        private TreeViewItemNode SelectedNode { get; set; }
-        /// <summary>
-        /// 打开的节点
-        /// </summary>
-        private TreeViewItemNode OpenedNode { get; set; }
-
-        /// <summary>
-        /// 自动保存计时器
-        /// </summary>
-        private DispatcherTimer AutoSaveTimer { get; set; }
-        /// <summary>
-        /// 自动备份计时器
-        /// </summary>
-        private DispatcherTimer AutoBackupTimer { get; set; }
-
         /// <summary>
         /// 当前匹配文字
         /// </summary>
@@ -97,6 +81,19 @@ namespace E.Writer
         /// 下个匹配文字的索引
         /// </summary>
         private int NextStartIndex { get; set; }
+        /// <summary>
+        /// 选中的节点
+        /// </summary>
+        private TreeViewItemNode SelectedNode { get; set; }
+
+        /// <summary>
+        /// 自动保存计时器
+        /// </summary>
+        private DispatcherTimer AutoSaveTimer { get; set; }
+        /// <summary>
+        /// 自动备份计时器
+        /// </summary>
+        private DispatcherTimer AutoBackupTimer { get; set; }
         #endregion 
 
         #region 方法
@@ -121,14 +118,15 @@ namespace E.Writer
             AssemblyCopyrightAttribute copyright = (AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyCopyrightAttribute));
             Stream src = System.Windows.Application.GetResourceStream(new Uri("/文档/更新日志.txt", UriKind.Relative)).Stream;
             string updateNote = new StreamReader(src, Encoding.UTF8).ReadToEnd();
-            string homePage = Properties.Settings.Default.HomePage;
-            string infoPage = Properties.Settings.Default.InfoPage;
-            string downloadPage = Properties.Settings.Default.DownloadPage;
-            string gitHubPage = Properties.Settings.Default.GitHubPage;
-            string qqGroup = Properties.Settings.Default.QQGroup;
-            string bitCoinAddress = Properties.Settings.Default.BitCoinAddress;
+            string homePage = "http://estar.zone";
+            string infoPage = "http://estar.zone/introduction/e-writer/";
+            string downloadPage = "http://estar.zone/introduction/e-writer/";
+            string gitHubPage = "https://github.com/HelloEStar/E.App";
+            string qqGroupLink = "http://jq.qq.com/?_wv=1027&k=5TQxcvR";
+            string qqGroupNumber = "279807070";
+            string bitCoinAddress = "19LHHVQzWJo8DemsanJhSZ4VNRtknyzR1q";
             AppInfo = new AppInfo(product.Product, description.Description, company.Company, copyright.Copyright, new Version(Application.ProductVersion), updateNote,
-                                  homePage, infoPage, downloadPage, gitHubPage, qqGroup, bitCoinAddress);
+                                  homePage, infoPage, downloadPage, gitHubPage, qqGroupLink, qqGroupNumber, bitCoinAddress);
         }
         /// <summary>
         /// 载入偏好设置
@@ -136,49 +134,54 @@ namespace E.Writer
         private void LoadSettings()
         {
             //启动时显示运行信息
-            ShowRunInfoCheckBox.IsChecked = Properties.User.Default.isShowRunInfo;
+            ShowRunInfoCheckBox.IsChecked = User.Default.isShowRunInfo;
             //自动开书
-            AutoOpenBookCheckBox.IsChecked = Properties.User.Default.isAutoOpenBook;
+            AutoOpenBookCheckBox.IsChecked = User.Default.isAutoOpenBook;
             //自动补全
-            AutoCompletion.IsChecked = Properties.User.Default.isAutoCompletion;
+            AutoCompletion.IsChecked = User.Default.isAutoCompletion;
             //自动缩进
-            AutoIndentation.IsChecked = Properties.User.Default.isAutoIndentation;
+            AutoIndentation.IsChecked = User.Default.isAutoIndentation;
             //缩进数
-            AutoIndentations.Text = Properties.User.Default.autoIndentations.ToString();
+            AutoIndentations.Text = User.Default.autoIndentations.ToString();
             //缩进数可编辑性
             if ((bool)AutoIndentation.IsChecked) { AutoIndentations.IsEnabled = true; }
             else { AutoIndentations.IsEnabled = false; }
             //定时自动保存
-            AutoSaveEvery.IsChecked = Properties.User.Default.isAutoSaveEvery;
+            AutoSaveEvery.IsChecked = User.Default.isAutoSaveEvery;
             //定时自动保存时间间隔
-            AutoSaveTime.Text = Properties.User.Default.autoSaveMinute.ToString();
+            AutoSaveTime.Text = User.Default.autoSaveMinute.ToString();
             //时间间隔可编辑性
             if ((bool)AutoSaveEvery.IsChecked) { AutoSaveTime.IsEnabled = true; }
             else { AutoSaveTime.IsEnabled = false; }
             //切换自动保存
-            AutoSaveWhenSwitch.IsChecked = Properties.User.Default.isAutoSaveWhenSwitch;
+            AutoSaveWhenSwitch.IsChecked = User.Default.isAutoSaveWhenSwitch;
             //定时自动备份
-            AutoBackup.IsChecked = Properties.User.Default.isAutoBackup;
+            AutoBackup.IsChecked = User.Default.isAutoBackup;
             //自动备份时间间隔
-            AutoBackupTime.Text = Properties.User.Default.autoBackupMinute.ToString();
+            AutoBackupTime.Text = User.Default.autoBackupMinute.ToString();
             //自动备份可编辑性
             if ((bool)AutoBackup.IsChecked) { AutoBackupTime.IsEnabled = true; }
             else { AutoBackupTime.IsEnabled = false; }
-            AutoBackup.ToolTip = "备份位置：" + Application.StartupPath + @"\" + Properties.User.Default.BackupDir;
+            AutoBackup.ToolTip = "备份位置：" + Application.StartupPath + @"\" + User.Default.BackupDir;
             //字体尺寸
-            TextSize.Text = Properties.User.Default.fontSize.ToString();
+            TextSize.Text = User.Default.fontSize.ToString();
 
             //刷新list item
-            SelectLanguageItem(Properties.User.Default.language);
-            SelectThemeItem(Properties.User.Default.ThemePath);
-            SelectFontItem(Properties.User.Default.fontName);
+            SelectLanguageItem(User.Default.language);
+            SelectThemeItem(User.Default.ThemePath);
+            SelectFontItem(User.Default.fontName);
         }
         /// <summary>
         /// 载入所有可用主题
         /// </summary>
         private void LoadThemeItems()
         {
-            string[] _mySkins = Directory.GetFiles(Properties.User.Default.ThemesDir);
+            //创建皮肤文件夹
+            if (!Directory.Exists(User.Default.ThemesDir))
+            { Directory.CreateDirectory(User.Default.ThemesDir); }
+
+            string[] _mySkins = Directory.GetFiles(User.Default.ThemesDir);
+            ThemeItems.Clear();
             foreach (string s in _mySkins)
             {
                 string tmp = Path.GetExtension(s);
@@ -189,23 +192,21 @@ namespace E.Writer
                     if (tmp2 == "主题")
                     {
                         string tmp3 = INIOperator.ReadIniKeys("文件", "版本", s);
-                        //若与当前版本匹配
                         if (tmp3 == AppInfo.Version.ToString())
                         {
-                            //添加选项
                             TextBlock theme = new TextBlock
                             {
                                 Text = Path.GetFileNameWithoutExtension(s),
                                 ToolTip = s
                             };
-                            Themes.Add(theme);
+                            ThemeItems.Add(theme);
                         }
                     }
                 }
             }
 
             CbbThemes.Items.Clear();
-            foreach (TextBlock item in Themes)
+            foreach (TextBlock item in ThemeItems)
             {
                 TextBlock theme = new TextBlock()
                 {
@@ -255,15 +256,15 @@ namespace E.Writer
         private void LoadBookItems()
         {
             //验证上次关闭的书籍路径是否存在，若不存在，重置为根目录
-            if (!Directory.Exists(Properties.Settings.Default._lastBook))
+            if (!Directory.Exists(Settings.Default._lastBook))
             {
-                Properties.Settings.Default._lastBook = Properties.User.Default.BooksDir;
+                Settings.Default._lastBook = User.Default.BooksDir;
                 SaveAppSettings();
             }
             //读取集合所有打开过的书籍路径的单字符串，并加入书籍列表
-            if (Properties.Settings.Default._books != null && Properties.Settings.Default._books != "")
+            if (Settings.Default._books != null && Settings.Default._books != "")
             {
-                string[] _myB = Regex.Split(Properties.Settings.Default._books, "///");
+                string[] _myB = Regex.Split(Settings.Default._books, "///");
                 foreach (var b in _myB)
                 {
                     if (Directory.Exists(b))
@@ -285,7 +286,7 @@ namespace E.Writer
             FilesTree.Items.Clear();
             ScanBookPath(CurrentBook.Path);
             //提示消息
-            ShowMessage("目录已重新导入", false);
+            ShowMessage("目录已重新导入");
         }
 
         //打开
@@ -297,7 +298,7 @@ namespace E.Writer
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog
             {
                 ShowNewFolderButton = true,
-                SelectedPath = Properties.Settings.Default._lastBook,
+                SelectedPath = Settings.Default._lastBook,
                 Description = "请选择书籍所在的路径：" + Environment.NewLine
                             + "注意：请确保该书籍内的txt文件都以UTF-8的格式编码，否则打开时会显示乱码。"
             };
@@ -310,7 +311,7 @@ namespace E.Writer
                 }
                 //获取当前书籍（文件夹）的名字、路径、根目录
                 CurrentBook = new FileOrFolderInfo(folderBrowserDialog.SelectedPath);
-                Properties.Settings.Default._lastBook = CurrentBook.Path;
+                Settings.Default._lastBook = CurrentBook.Path;
                 SaveAppSettings();
                 //打开
                 OpenBook(CurrentBook);
@@ -329,7 +330,7 @@ namespace E.Writer
                 TbxFileName.IsEnabled = false;
                 TbxFileContent.IsEnabled = false;
                 TbxCreatePath.Text = book.Path;
-                Properties.User.Default.BooksDir = Path.GetDirectoryName(book.Path);
+                User.Default.BooksDir = Path.GetDirectoryName(book.Path);
                 //加入书籍列表
                 AddBookItem(true, book);
                 SelectBookItem(CurrentBook);
@@ -339,7 +340,7 @@ namespace E.Writer
                 RefreshBtnsState();
                 ReloadFilesTree();
 
-                ShowMessage("已打开书籍", " " + book.Name, false);
+                ShowMessage("已打开书籍", " " + book.Name);
             }
             else
             {
@@ -363,7 +364,7 @@ namespace E.Writer
                 RefreshTitle();
                 RefreshBtnsState();
 
-                ShowMessage("已打开卷册", " " + CurrentChapter.Name, false);
+                ShowMessage("已打开卷册", " " + CurrentChapter.Name);
             }
             else
             {
@@ -387,7 +388,7 @@ namespace E.Writer
                     CurrentChapter = null;
                 }
 
-                ShowMessage("正在读取文本", false);
+                ShowMessage("正在读取文本");
                 RefreshWindow();
 
                 //创建读取文件
@@ -407,7 +408,7 @@ namespace E.Writer
                 TbxFileContent.ScrollToEnd();
                 IsSaved = true;
 
-                ShowMessage("已打开文章", " " + CurrentEssay.Name, false);
+                ShowMessage("已打开文章", " " + CurrentEssay.Name);
 
             }
             else
@@ -422,7 +423,7 @@ namespace E.Writer
         {
             foreach (ComboBoxItem item in Books.Items)
             {
-                if (item.Tag.ToString() == Properties.Settings.Default._lastBook)
+                if (item.Tag.ToString() == Settings.Default._lastBook)
                 {
                     Books.SelectedItem = item;
                     AutoOpenBook();
@@ -435,10 +436,10 @@ namespace E.Writer
         /// </summary>
         private void AutoOpenBook()
         {
-            if (Directory.Exists(Properties.Settings.Default._lastBook))
+            if (Directory.Exists(Settings.Default._lastBook))
             {
                 //获取当前书籍（文件夹）的名字、路径、根目录
-                CurrentBook = new FileOrFolderInfo(Properties.Settings.Default._lastBook);
+                CurrentBook = new FileOrFolderInfo(Settings.Default._lastBook);
                 //同步书籍列表选项
                 SelectBookItem(CurrentBook);
                 //显示书籍信息
@@ -452,7 +453,7 @@ namespace E.Writer
                 ReloadFilesTree();
 
                 //显示消息
-                ShowMessage("已自动打开书籍", " " + CurrentBook.Name, false);
+                ShowMessage("已自动打开书籍", " " + CurrentBook.Name);
             }
             else
             {
@@ -478,7 +479,7 @@ namespace E.Writer
                 Words.Text = FindResource("字数") + "：0";
                 FilesTree.ToolTip = FindResource("创建或打开以开始");
 
-                ShowMessage("已关闭书籍", " " + CurrentBook.Name, false);
+                ShowMessage("已关闭书籍", " " + CurrentBook.Name);
                 CurrentBook = null;
                 RefreshBtnsState();
                 RefreshTitle();
@@ -508,7 +509,7 @@ namespace E.Writer
         {
             if (CurrentEssay != null)
             {
-                if (Properties.User.Default.isAutoSaveWhenSwitch == true)
+                if (User.Default.isAutoSaveWhenSwitch == true)
                 { SaveFile(); }
 
                 TbxFileName.Text = null;
@@ -519,7 +520,7 @@ namespace E.Writer
                 Words.Text = FindResource("字数") + "：0";
                 Words.ToolTip = null;
 
-                ShowMessage("已关闭文章", " " + CurrentEssay.Name, false);
+                ShowMessage("已关闭文章", " " + CurrentEssay.Name);
                 CurrentEssay = null;
                 if (CurrentChapter != null)
                 {
@@ -557,11 +558,11 @@ namespace E.Writer
                     fs.Close();
                     IsSaved = true;
                     //显示消息
-                    ShowMessage("保存成功", false);
+                    ShowMessage("保存成功");
                 }
                 else
                 {
-                    ShowMessage("保存失败", false);
+                    ShowMessage("保存失败");
                 }
             }
         }
@@ -590,7 +591,7 @@ namespace E.Writer
                         };
                         st.Close();
                         //显示消息
-                        ShowMessage("另存为成功", false);
+                        ShowMessage("另存为成功");
                     }
                 }
             }
@@ -600,14 +601,14 @@ namespace E.Writer
         /// </summary>
         private void SaveAppSettings()
         {
-            Properties.Settings.Default.Save();
+            Settings.Default.Save();
         }
         /// <summary>
         /// 保存用户偏好设置
         /// </summary>
         private void SavePreferences()
         {
-            Properties.User.Default.Save();
+            User.Default.Save();
         }
         /// <summary>
         /// 保存书籍历史
@@ -617,18 +618,18 @@ namespace E.Writer
             if (Books.Items.Count > 0)
             {
                 //记录最近打开过的书籍，将所有路径集合到一个字符串
-                Properties.Settings.Default._books = "";
+                Settings.Default._books = "";
                 foreach (ComboBoxItem item in Books.Items)
                 {
-                    Properties.Settings.Default._books += item.Tag.ToString() + "///";
+                    Settings.Default._books += item.Tag.ToString() + "///";
                 }
-                Properties.Settings.Default._books = Properties.Settings.Default._books.Substring(0, Properties.Settings.Default._books.Length - 3);
+                Settings.Default._books = Settings.Default._books.Substring(0, Settings.Default._books.Length - 3);
             }
-            Properties.Settings.Default.thisEndTime = DateTime.Now;
-            Properties.Settings.Default.lastStartTime = Properties.Settings.Default.thisStartTime;
-            Properties.Settings.Default.lastEndTime = Properties.Settings.Default.thisEndTime;
-            Properties.Settings.Default.thisTotalTime = Properties.Settings.Default.thisEndTime - Properties.Settings.Default.thisStartTime;
-            Properties.Settings.Default.totalTime = Properties.Settings.Default.thisTotalTime + Properties.Settings.Default.totalTime;
+            Settings.Default.thisEndTime = DateTime.Now;
+            Settings.Default.lastStartTime = Settings.Default.thisStartTime;
+            Settings.Default.lastEndTime = Settings.Default.thisEndTime;
+            Settings.Default.thisTotalTime = Settings.Default.thisEndTime - Settings.Default.thisStartTime;
+            Settings.Default.totalTime = Settings.Default.thisTotalTime + Settings.Default.totalTime;
             SaveAppSettings();
         }
 
@@ -656,13 +657,13 @@ namespace E.Writer
             }
 
             //获取上级目录
-            if (Properties.Settings.Default._lastBook == Properties.User.Default.BooksDir)
+            if (Settings.Default._lastBook == User.Default.BooksDir)
             {
-                TbxCreatePath.Text = Properties.User.Default.BooksDir;
+                TbxCreatePath.Text = User.Default.BooksDir;
             }
             else
             {
-                TbxCreatePath.Text = Path.GetDirectoryName(Properties.Settings.Default._lastBook);
+                TbxCreatePath.Text = Path.GetDirectoryName(Settings.Default._lastBook);
             }
 
             if (CurrentBook != null)
@@ -722,7 +723,7 @@ namespace E.Writer
             }
 
             //保存当前文件再创建书籍
-            if (CurrentEssay != null && Properties.User.Default.isAutoSaveWhenSwitch == true)
+            if (CurrentEssay != null && User.Default.isAutoSaveWhenSwitch == true)
             {
                 SaveFile();
             }
@@ -730,7 +731,7 @@ namespace E.Writer
             //创建书籍文件夹
             Directory.CreateDirectory(CurrentBook.Path);
             //记录
-            Properties.Settings.Default._lastBook = CurrentBook.Path;
+            Settings.Default._lastBook = CurrentBook.Path;
             SaveAppSettings();
             //打开
             OpenBook(CurrentBook);
@@ -792,7 +793,6 @@ namespace E.Writer
                 fatherNote.Items.Add(newfolderNode);
             }
             SelectedNode = newfolderNode;
-            OpenedNode = newfolderNode;
             FilesTree.Items.Refresh();
         }
         /// <summary>
@@ -854,8 +854,6 @@ namespace E.Writer
             }
             //选择节点
             SelectedNode = newFileNode;
-            //打开节点
-            OpenedNode = newFileNode;
             //刷新目录
             FilesTree.Items.Refresh();
         }
@@ -890,13 +888,13 @@ namespace E.Writer
         {
             //设置计时器1，默认每1分钟触发一次
             AutoSaveTimer = new DispatcherTimer
-            { Interval = TimeSpan.FromMinutes(Properties.User.Default.autoSaveMinute) };
+            { Interval = TimeSpan.FromMinutes(User.Default.autoSaveMinute) };
             AutoSaveTimer.Tick += new EventHandler(TimerAutoSave_Tick);
             AutoSaveTimer.Start();
 
             //设置计时器2
             AutoBackupTimer = new DispatcherTimer
-            { Interval = TimeSpan.FromMinutes(Properties.User.Default.autoBackupMinute) };
+            { Interval = TimeSpan.FromMinutes(User.Default.autoBackupMinute) };
             AutoBackupTimer.Tick += new EventHandler(TimerAutoBackup_Tick);
             AutoBackupTimer.Start();
         }
@@ -941,7 +939,7 @@ namespace E.Writer
                 if (isAdd)
                 {
                     //记录的书籍数+1
-                    Properties.Settings.Default.bookCounts += 1;
+                    Settings.Default.bookCounts += 1;
                     SaveAppSettings();
                 }
             }
@@ -952,9 +950,9 @@ namespace E.Writer
         private void AddRunTime()
         {
             //运行次数+1
-            Properties.Settings.Default.runTimes += 1;
+            Settings.Default.runTimes += 1;
             //记录启动时间
-            Properties.Settings.Default.thisStartTime = DateTime.Now;
+            Settings.Default.thisStartTime = DateTime.Now;
             SaveAppSettings();
         }
 
@@ -1006,8 +1004,8 @@ namespace E.Writer
                 {
                     CloseBook();
                     Books.Items.Remove(item);
-                    Properties.Settings.Default._books = Properties.Settings.Default._books.Replace(book.Path, "");
-                    Properties.Settings.Default.Save();
+                    Settings.Default._books = Settings.Default._books.Replace(book.Path, "");
+                    Settings.Default.Save();
                     break;
                 }
             }
@@ -1020,7 +1018,7 @@ namespace E.Writer
         /// </summary>
         private void ClearRunInfo()
         {
-            Properties.Settings.Default.Reset();
+            Settings.Default.Reset();
             ShowMessage("已清空运行信息", true);
         }
         /// <summary>
@@ -1053,7 +1051,7 @@ namespace E.Writer
                 else
                 {
                     //显示消息
-                    ShowMessage("请选择一个项目再删除", false);
+                    ShowMessage("请选择一个项目再删除");
                 }
             }
             else
@@ -1088,7 +1086,7 @@ namespace E.Writer
                     Words.Text = FindResource("字数") + "：0";
                     FilesTree.ToolTip = FindResource("创建或打开以开始");
 
-                    ShowMessage("已删除书籍" + CurrentBook.Name, false);
+                    ShowMessage("已删除书籍" + CurrentBook.Name);
                     CurrentBook = null;
                     CurrentChapter = null;
                     CurrentEssay = null;
@@ -1131,7 +1129,7 @@ namespace E.Writer
                         RefreshTitle();
                     }
                 }
-                ShowMessage("已删除卷册", " " + name, false);
+                ShowMessage("已删除卷册", " " + name);
             }
         }
         /// <summary>
@@ -1171,7 +1169,7 @@ namespace E.Writer
                         RefreshTitle();
                     }
                 }
-                ShowMessage("已删除文章", " " + name, false);
+                ShowMessage("已删除文章", " " + name);
             }
         }
 
@@ -1487,7 +1485,7 @@ namespace E.Writer
                         Resources.MergedDictionaries.Clear();
                     }
                     Resources.MergedDictionaries.Add(langRd);
-                    Properties.User.Default.language = language;
+                    User.Default.language = language;
                     SavePreferences();
                 }
             }
@@ -1507,7 +1505,7 @@ namespace E.Writer
                 {
                     TbxFileContent.FontFamily = font;
                     //储存更改
-                    Properties.User.Default.fontName = fontName;
+                    User.Default.fontName = fontName;
                     SavePreferences();
                     //EssayName.FontFamily = font;
                     break;
@@ -1519,22 +1517,22 @@ namespace E.Writer
         /// </summary>
         private void SetTheme(string themePath)
         {
-            foreach (TextBlock theme in Themes)
+            foreach (TextBlock theme in ThemeItems)
             {
                 if (theme.ToolTip.ToString() == themePath)
                 {
                     if (File.Exists(themePath))
                     {
                         SetSkin(themePath);
-                        Properties.User.Default.ThemePath = themePath;
+                        User.Default.ThemePath = themePath;
                     }
                     else
                     {
-                        Themes.Remove(theme);
+                        ThemeItems.Remove(theme);
                         //设为默认主题
-                        Properties.User.Default.ThemePath = Properties.User.Default.ThemePath;
-                        SetSkin(Properties.User.Default.ThemePath);
-                        ShowMessage("偏好主题的不存在", false);
+                        User.Default.ThemePath = User.Default.ThemePath;
+                        SetSkin(User.Default.ThemePath);
+                        ShowMessage("偏好主题的不存在");
                     }
                     SavePreferences();
                     break;
@@ -1546,27 +1544,27 @@ namespace E.Writer
         /// </summary>
         private void SetNextTheme()
         {
-            foreach (TextBlock theme in Themes)
+            foreach (TextBlock theme in ThemeItems)
             {
-                if (theme.ToolTip.ToString() == Properties.User.Default.ThemePath)
+                if (theme.ToolTip.ToString() == User.Default.ThemePath)
                 {
-                    int themeOrder = Themes.IndexOf(theme);
-                    int themeCounts = Themes.Count;
+                    int themeOrder = ThemeItems.IndexOf(theme);
+                    int themeCounts = ThemeItems.Count;
                     if (themeOrder + 1 < themeCounts)
                     { themeOrder += 1; }
                     else
                     { themeOrder = 0; }
-                    if (File.Exists(Themes[themeOrder].ToolTip.ToString()))
+                    if (File.Exists(ThemeItems[themeOrder].ToolTip.ToString()))
                     {
                         //设为此主题
-                        Properties.User.Default.ThemePath = Themes[themeOrder].ToolTip.ToString();
+                        User.Default.ThemePath = ThemeItems[themeOrder].ToolTip.ToString();
                         SavePreferences();
-                        SetSkin(Properties.User.Default.ThemePath);
+                        SetSkin(User.Default.ThemePath);
                     }
                     else
                     {
-                        ShowMessage("下一个主题的配置文件不存在", false);
-                        Themes.Remove(Themes[themeOrder]);
+                        ShowMessage("下一个主题的配置文件不存在");
+                        ThemeItems.Remove(ThemeItems[themeOrder]);
                     }
                     break;
                 }
@@ -1650,13 +1648,13 @@ namespace E.Writer
             sw.Close();
         }
 
-        //重设
+        //重置
         /// <summary>
         /// 重置偏好设置
         /// </summary>
         private void ResetPreferences()
         {
-            Properties.User.Default.Reset();
+            User.Default.Reset();
         }
 
         //选择
@@ -1744,17 +1742,15 @@ namespace E.Writer
                         }
                     open:
                         //保存当前文件再打开新文件
-                        if (CurrentEssay != null && Properties.User.Default.isAutoSaveWhenSwitch == true)
+                        if (CurrentEssay != null && User.Default.isAutoSaveWhenSwitch == true)
                         { SaveFile(); }
                         //打开
                         OpenEssay(SelectedNode.ToolTip.ToString());
-                        //记录打开的节点
-                        OpenedNode = (TreeViewItemNode)FilesTree.SelectedItem;
                     //SaveFile();
                     finish:;
                     }
                     else
-                    { ShowMessage("双击或按回车键打开该文章", false); }
+                    { ShowMessage("双击或按回车键打开该文章"); }
                 }
                 //如果选中的节点是文件夹
                 else if (SelectedNode.IsFile == false)
@@ -1763,15 +1759,13 @@ namespace E.Writer
                     if (clickTimes == 2)
                     {
                         //保存当前文件再打开新文件
-                        if (CurrentEssay != null && Properties.User.Default.isAutoSaveWhenSwitch == true)
+                        if (CurrentEssay != null && User.Default.isAutoSaveWhenSwitch == true)
                         { SaveFile(); }
                         //打开卷册
                         OpenChapter(SelectedNode.ToolTip.ToString());
-                        //记录打开的节点
-                        OpenedNode = (TreeViewItemNode)FilesTree.SelectedItem;
                     }
                     else
-                    { ShowMessage("双击或按回车键打开该卷册", false); }
+                    { ShowMessage("双击或按回车键打开该卷册"); }
                 }
             }
         }
@@ -1783,14 +1777,11 @@ namespace E.Writer
         private void CheckFolders()
         {
             //创建存档文件夹
-            if (!Directory.Exists(Properties.User.Default.BooksDir))
-            { Directory.CreateDirectory(Properties.User.Default.BooksDir); }
+            if (!Directory.Exists(User.Default.BooksDir))
+            { Directory.CreateDirectory(User.Default.BooksDir); }
             //创建备份文件夹
-            if (!Directory.Exists(Properties.User.Default.BackupDir))
-            { Directory.CreateDirectory(Properties.User.Default.BackupDir); }
-            //创建皮肤文件夹
-            if (!Directory.Exists(Properties.User.Default.ThemesDir))
-            { Directory.CreateDirectory(Properties.User.Default.ThemesDir); }
+            if (!Directory.Exists(User.Default.BackupDir))
+            { Directory.CreateDirectory(User.Default.BackupDir); }
         }
         /// <summary>
         /// 准备导出全书
@@ -1807,7 +1798,7 @@ namespace E.Writer
             FolderBrowserDialog fbd = new FolderBrowserDialog
             {
                 ShowNewFolderButton = true,
-                SelectedPath = Path.GetDirectoryName(Properties.Settings.Default._lastBook),
+                SelectedPath = Path.GetDirectoryName(Settings.Default._lastBook),
                 Description = FindResource("选择导出目录").ToString()
             };
             //按下确定选择的按钮，获取文件夹路径
@@ -1823,7 +1814,7 @@ namespace E.Writer
                     }
                     else
                     {
-                        ShowMessage("已取消导出", false);
+                        ShowMessage("已取消导出");
                     }
                 }
                 else
@@ -2009,6 +2000,7 @@ namespace E.Writer
             Description.Text = AppInfo.Description;
             Developer.Text = AppInfo.Company;
             Version.Text = AppInfo.Version.ToString();
+            BitCoinAddress.Text = AppInfo.BitCoinAddress;
             UpdateNote.Text = AppInfo.UpdateNote;
         }
         /// <summary>
@@ -2017,27 +2009,27 @@ namespace E.Writer
         private void ShowRunInfo()
         {
             //若第一次运行软件，提示消息
-            if (Properties.Settings.Default.runTimes == 1)
+            if (Settings.Default.runTimes == 1)
             {
                 TbxFileName.Text = FindResource("欢迎使用") + " " + AppInfo.Name;
                 //显示运行记录
-                TbxFileContent.Text = FindResource("启动次数") + "：" + Properties.Settings.Default.runTimes + Environment.NewLine +
-                                   FindResource("启动时间") + "：" + Properties.Settings.Default.thisStartTime;
+                TbxFileContent.Text = FindResource("启动次数") + "：" + Settings.Default.runTimes + Environment.NewLine +
+                                   FindResource("启动时间") + "：" + Settings.Default.thisStartTime;
             }
             else
             {
                 TbxFileName.Text = FindResource("欢迎使用") + " " + AppInfo.Name;
-                int d = Properties.Settings.Default.totalTime.Days;
-                int h = Properties.Settings.Default.totalTime.Hours;
-                int m = Properties.Settings.Default.totalTime.Minutes;
-                int s = Properties.Settings.Default.totalTime.Seconds;
+                int d = Settings.Default.totalTime.Days;
+                int h = Settings.Default.totalTime.Hours;
+                int m = Settings.Default.totalTime.Minutes;
+                int s = Settings.Default.totalTime.Seconds;
                 string t = d + "天" + h + "时" + m + "分" + s + "秒";
                 //显示运行记录
-                TbxFileContent.Text = FindResource("启动次数") + "：" + Properties.Settings.Default.runTimes + Environment.NewLine +
-                                   FindResource("启动时间") + "：" + Properties.Settings.Default.thisStartTime + Environment.NewLine +
+                TbxFileContent.Text = FindResource("启动次数") + "：" + Settings.Default.runTimes + Environment.NewLine +
+                                   FindResource("启动时间") + "：" + Settings.Default.thisStartTime + Environment.NewLine +
                                    Environment.NewLine +
-                                   FindResource("上次启动时间") + "：" + Properties.Settings.Default.lastStartTime + Environment.NewLine +
-                                   FindResource("上次关闭时间") + "：" + Properties.Settings.Default.lastEndTime + Environment.NewLine +
+                                   FindResource("上次启动时间") + "：" + Settings.Default.lastStartTime + Environment.NewLine +
+                                   FindResource("上次关闭时间") + "：" + Settings.Default.lastEndTime + Environment.NewLine +
                                    FindResource("总运行时长") + "：" + t;
             }
             TbxFileName.IsEnabled = false;
@@ -2048,7 +2040,7 @@ namespace E.Writer
         /// </summary>
         /// <param name="resourceName">资源名</param>
         /// <param name="newBox">是否弹出对话框</param>
-        private void ShowMessage(string message, bool newBox)
+        private void ShowMessage(string message, bool newBox = false)
         {
             if (HelpMessage == null)
             {
@@ -2070,7 +2062,7 @@ namespace E.Writer
         /// <param name="resourceName">资源名</param>
         /// <param name="moreText">附加信息</param>
         /// <param name="newBox">是否弹出对话框</param>
-        private void ShowMessage(string resourceName, string moreText, bool newBox)
+        private void ShowMessage(string resourceName, string moreText, bool newBox = false)
         {
             if (newBox)
             {
@@ -2185,7 +2177,7 @@ namespace E.Writer
         private void Export(string _output)
         {
             //显示消息
-            ShowMessage("正在导出txt", false);
+            ShowMessage("正在导出txt");
             RefreshWindow();
 
             File.CreateText(_output).Close();
@@ -2231,7 +2223,7 @@ namespace E.Writer
             fs.Close();
 
             //显示消息
-            ShowMessage("导出成功", " " + l, false);
+            ShowMessage("导出成功", " " + l);
             Process.Start(Path.GetDirectoryName(_output));
         }
         /// <summary>
@@ -2241,7 +2233,7 @@ namespace E.Writer
         {
             int start = TbxFileContent.SelectionStart;
             string spaces = "";
-            for (int i = 0; i < Properties.User.Default.autoIndentations; i++)
+            for (int i = 0; i < User.Default.autoIndentations; i++)
             {
                 spaces += " ";
             }
@@ -2255,13 +2247,13 @@ namespace E.Writer
         {
             //await Task.Run(() =>
             //{
-            if (Properties.User.Default.isAutoBackup == true)
+            if (User.Default.isAutoBackup == true)
             {
                 if (CurrentBook != null && Directory.Exists(CurrentBook.Path))
                 {
-                    ShowMessage("书籍备份中", false);
+                    ShowMessage("书籍备份中");
                     RefreshWindow();
-                    string _path = Properties.User.Default.BackupDir + @"\" + CurrentBook.Name;
+                    string _path = User.Default.BackupDir + @"\" + CurrentBook.Name;
                     //删除上个备份
                     if (Directory.Exists(_path))
                     { Directory.Delete(_path, true); }
@@ -2270,7 +2262,7 @@ namespace E.Writer
                     CopyDirectory(CurrentBook.Path, _path);
                     //显示消息
                     //Dispatcher.BeginInvoke(new Action(delegate { HelpMessage.Content = "书籍已自动备份于 " + DateTime.Now.ToLongTimeString().ToString(); }));
-                    ShowMessage("已自动备份于", DateTime.Now.ToLongTimeString().ToString(), false);
+                    ShowMessage("已自动备份于", DateTime.Now.ToLongTimeString().ToString());
                 }
             }
             //});
@@ -2299,21 +2291,27 @@ namespace E.Writer
             AddRunTime();
 
             //初始化
-            SelectLanguageItem(Properties.User.Default.language);
-            SetTheme(Properties.User.Default.ThemePath);
-            SetFont(Properties.User.Default.fontName);
-            if (Properties.User.Default.isAutoOpenBook)
+            SelectLanguageItem(User.Default.language);
+            SetTheme(User.Default.ThemePath);
+            SetFont(User.Default.fontName);
+            if (User.Default.isAutoOpenBook)
             {
                 OpenLastBook();
             }
-            if (Properties.User.Default.isShowRunInfo)
+            else
+            {
+                FilesTree.ToolTip = FindResource("创建或打开以开始");
+                HelpMessage.Text = FindResource("创建或打开以开始").ToString();
+            }
+
+            if (User.Default.isShowRunInfo)
             {
                 ShowRunInfo();
             }
             else
             {
                 ClearNameAndContent();
-                if (Properties.User.Default.isAutoOpenBook)
+                if (User.Default.isAutoOpenBook)
                 {
                     OpenLastBook();
                 }
@@ -2324,9 +2322,7 @@ namespace E.Writer
             RefreshTitle();
 
             //提示消息
-            FilesTree.ToolTip = FindResource("创建或打开以开始");
-            HelpMessage.Text = FindResource("创建或打开以开始").ToString();
-            ShowMessage("已载入", false);
+            ShowMessage("已载入");
         }
         private void Main_Closing(object sender, CancelEventArgs e)
         {
@@ -2356,7 +2352,7 @@ namespace E.Writer
                 }
             }
 
-            if (Properties.Settings.Default.runTimes > 0)
+            if (Settings.Default.runTimes > 0)
             {
                 SaveBookHistory();
             }
@@ -2470,9 +2466,23 @@ namespace E.Writer
             //Ctrl+B 创建
             if (e.Key == Key.B && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
             { Create(); }
-            //FT 切换下个主题
+            //Ctrl+T 切换下个主题
             if (e.Key == Key.T && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
             { SetNextTheme(); }
+
+            //关于菜单
+            if (e.Key == Key.F1)
+            { Process.Start("explorer.exe", AppInfo.HomePage); }
+            if (e.Key == Key.F2)
+            { Process.Start("explorer.exe", AppInfo.InfoPage); }
+            if (e.Key == Key.F3)
+            { Process.Start("explorer.exe", AppInfo.DownloadPage); }
+            if (e.Key == Key.F4)
+            { Process.Start("explorer.exe", AppInfo.FeedbackPage); }
+            if (e.Key == Key.F8)
+            { Process.Start("explorer.exe", AppInfo.GitHubPage); }
+            if (e.Key == Key.F6)
+            { Process.Start("explorer.exe", AppInfo.QQGroupLink); }
         }
 
         private void TbxCreatePath_TextChanged(object sender, TextChangedEventArgs e)
@@ -2515,7 +2525,7 @@ namespace E.Writer
         }
         private void TbxFileName_GotFocus(object sender, RoutedEventArgs e)
         {
-            ShowMessage("在此处重命名", false);
+            ShowMessage("在此处重命名");
         }
         private void TbxFileName_KeyUp(object sender, KeyEventArgs e)
         {
@@ -2551,7 +2561,7 @@ namespace E.Writer
                             ReloadFilesTree();
 
                             //显示消息
-                            ShowMessage("文章重命名成功", false);
+                            ShowMessage("文章重命名成功");
                         }
                         else if (CurrentChapter != null)
                         {
@@ -2573,15 +2583,15 @@ namespace E.Writer
                                 ReloadFilesTree();
 
                                 //显示消息
-                                ShowMessage("卷册重命名成功", false);
+                                ShowMessage("卷册重命名成功");
                             }
                         }
                     }
                     else
-                        ShowMessage("重命名中不能含有以下字符", " \\ | / < > \" ? * :", false);
+                        ShowMessage("重命名中不能含有以下字符", " \\ | / < > \" ? * :");
                 }
                 else
-                    ShowMessage("重命名不能为空", false);
+                    ShowMessage("重命名不能为空");
             }
         }
 
@@ -2597,7 +2607,7 @@ namespace E.Writer
                 Words.Text = FindResource("字数").ToString() + "：" + w;
                 Words.ToolTip = FindResource("全书字数").ToString() + "：" + GetBookWords(CurrentBook.Path, CurrentEssay.Path);
                 //显示消息
-                ShowMessage("正在编辑", false);
+                ShowMessage("正在编辑");
                 IsSaved = false;
                 if (w > 100000)
                 {
@@ -2609,7 +2619,7 @@ namespace E.Writer
         {
             //NodePath.Text = e.Text;
             //自动补全
-            if (Properties.User.Default.isAutoCompletion)
+            if (User.Default.isAutoCompletion)
             {
                 //记录光标位置
                 int position = TbxFileContent.SelectionStart;
@@ -2649,7 +2659,7 @@ namespace E.Writer
         {
             if (e.Key == Key.Enter)
             {
-                if (Properties.User.Default.isAutoIndentation)
+                if (User.Default.isAutoIndentation)
                 {
                     Indentation();
                 }
@@ -2704,7 +2714,7 @@ namespace E.Writer
                 if (Directory.Exists(path))
                 {
                     CurrentBook = new FileOrFolderInfo(path);
-                    Properties.Settings.Default._lastBook = CurrentBook.Path;
+                    Settings.Default._lastBook = CurrentBook.Path;
                     SaveAppSettings();
                     OpenBook(CurrentBook);
                 }
@@ -3062,20 +3072,21 @@ namespace E.Writer
         {
             ResetPreferences();
             LoadSettings();
-            ShowMessage("已重置", false);
+            ShowMessage("已重置");
         }
         private void BtnApply_Click(object sender, RoutedEventArgs e)
         {
 
         }
-
-        private void BtnCheckNew_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("explorer.exe", AppInfo.InfoPage);
-        }
         private void BtnClearRunInfo_Click(object sender, RoutedEventArgs e)
         {
             ClearRunInfo();
+        }
+
+        private void BitCoinAddress_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            System.Windows.Clipboard.SetDataObject(BitCoinAddress.Text, true);
+            ShowMessage("已复制");
         }
         private void BtnHomePage_Click(object sender, RoutedEventArgs e)
         {
@@ -3089,77 +3100,77 @@ namespace E.Writer
         {
             Process.Start("explorer.exe", AppInfo.DownloadPage);
         }
+        private void BtnFeedbackPage_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("explorer.exe", AppInfo.FeedbackPage);
+        }
         private void BtnGitHubPage_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("explorer.exe", AppInfo.GitHubPage);
         }
         private void BtnQQGroup_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start("explorer.exe", AppInfo.QQGroup);
-        }
-        private void BtnBitCoinAddress_Click(object sender, RoutedEventArgs e)
-        {
-            //Process.Start("explorer.exe", AppInfo.BitCoinAddress);
+            Process.Start("explorer.exe", AppInfo.QQGroupLink);
         }
 
         //设置更改事件
         private void ShowRunInfo_Checked(object sender, RoutedEventArgs e)
         {
-            Properties.User.Default.isShowRunInfo = true;
+            User.Default.isShowRunInfo = true;
             SavePreferences();
             //显示消息
-            ShowMessage("已更改", false);
+            ShowMessage("已更改");
         }
         private void ShowRunInfo_Unchecked(object sender, RoutedEventArgs e)
         {
-            Properties.User.Default.isShowRunInfo = false;
+            User.Default.isShowRunInfo = false;
             SavePreferences();
             //显示消息
-            ShowMessage("已更改", false);
+            ShowMessage("已更改");
         }
         private void AutoOpenBook_Checked(object sender, RoutedEventArgs e)
         {
-            Properties.User.Default.isAutoOpenBook = true;
+            User.Default.isAutoOpenBook = true;
             SavePreferences();
             //显示消息
-            ShowMessage("已更改", false);
+            ShowMessage("已更改");
         }
         private void AutoOpenBook_Unchecked(object sender, RoutedEventArgs e)
         {
-            Properties.User.Default.isAutoOpenBook = false;
+            User.Default.isAutoOpenBook = false;
             SavePreferences();
             //显示消息
-            ShowMessage("已更改", false);
+            ShowMessage("已更改");
         }
         private void AutoCompletion_Checked(object sender, RoutedEventArgs e)
         {
-            Properties.User.Default.isAutoCompletion = true;
+            User.Default.isAutoCompletion = true;
             SavePreferences();
             //显示消息
-            ShowMessage("已更改", false);
+            ShowMessage("已更改");
         }
         private void AutoCompletion_Unchecked(object sender, RoutedEventArgs e)
         {
-            Properties.User.Default.isAutoCompletion = false;
+            User.Default.isAutoCompletion = false;
             SavePreferences();
             //显示消息
-            ShowMessage("已更改", false);
+            ShowMessage("已更改");
         }
         private void AutoIndentation_Checked(object sender, RoutedEventArgs e)
         {
-            Properties.User.Default.isAutoIndentation = true;
+            User.Default.isAutoIndentation = true;
             SavePreferences();
             AutoIndentations.IsEnabled = true;
             //显示消息
-            ShowMessage("已更改", false);
+            ShowMessage("已更改");
         }
         private void AutoIndentation_Unchecked(object sender, RoutedEventArgs e)
         {
-            Properties.User.Default.isAutoIndentation = false;
+            User.Default.isAutoIndentation = false;
             SavePreferences();
             AutoIndentations.IsEnabled = false;
             //显示消息
-            ShowMessage("已更改", false);
+            ShowMessage("已更改");
         }
         private void AutoIndentations_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -3170,52 +3181,52 @@ namespace E.Writer
                     int t = int.Parse(AutoIndentations.Text);
                     if (t > 0 && t < 1000)
                     {
-                        Properties.User.Default.autoIndentations = t;
+                        User.Default.autoIndentations = t;
                         SavePreferences();
-                        ShowMessage("已更改", false);
+                        ShowMessage("已更改");
                     }
                     else
                     {
-                        AutoIndentations.Text = Properties.User.Default.autoIndentations.ToString();
-                        ShowMessage("输入1~999整数", false);
+                        AutoIndentations.Text = User.Default.autoIndentations.ToString();
+                        ShowMessage("输入1~999整数");
                     }
                 }
                 catch (Exception)
                 {
-                    AutoIndentations.Text = Properties.User.Default.autoIndentations.ToString();
-                    ShowMessage("输入整数", false);
+                    AutoIndentations.Text = User.Default.autoIndentations.ToString();
+                    ShowMessage("输入整数");
                 }
             }
         }
         private void AutoSaveWhenSwitch_Checked(object sender, RoutedEventArgs e)
         {
-            Properties.User.Default.isAutoSaveWhenSwitch = true;
+            User.Default.isAutoSaveWhenSwitch = true;
             SavePreferences();
             //显示消息
-            ShowMessage("已更改", false);
+            ShowMessage("已更改");
         }
         private void AutoSaveWhenSwitch_Unchecked(object sender, RoutedEventArgs e)
         {
-            Properties.User.Default.isAutoSaveWhenSwitch = false;
+            User.Default.isAutoSaveWhenSwitch = false;
             SavePreferences();
             //显示消息
-            ShowMessage("已更改", false);
+            ShowMessage("已更改");
         }
         private void AutoSaveEvery_Checked(object sender, RoutedEventArgs e)
         {
-            Properties.User.Default.isAutoSaveEvery = true;
+            User.Default.isAutoSaveEvery = true;
             SavePreferences();
             AutoSaveTime.IsEnabled = true;
             //显示消息
-            ShowMessage("已更改", false);
+            ShowMessage("已更改");
         }
         private void AutoSaveEvery_Unchecked(object sender, RoutedEventArgs e)
         {
-            Properties.User.Default.isAutoSaveEvery = false;
+            User.Default.isAutoSaveEvery = false;
             SavePreferences();
             AutoSaveTime.IsEnabled = false;
             //显示消息
-            ShowMessage("已更改", false);
+            ShowMessage("已更改");
         }
         private void AutoSaveTime_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -3227,39 +3238,39 @@ namespace E.Writer
                     if (t > 0 && t < 1000)
                     {
                         TimeSpan ts = TimeSpan.FromMinutes(t);
-                        Properties.User.Default.autoSaveMinute = t;
+                        User.Default.autoSaveMinute = t;
                         SavePreferences();
                         AutoSaveTimer.Interval = ts;
-                        ShowMessage("已更改", false);
+                        ShowMessage("已更改");
                     }
                     else
                     {
-                        AutoSaveTime.Text = Properties.User.Default.autoSaveMinute.ToString();
-                        ShowMessage("输入1~999整数", false);
+                        AutoSaveTime.Text = User.Default.autoSaveMinute.ToString();
+                        ShowMessage("输入1~999整数");
                     }
                 }
                 catch (Exception)
                 {
-                    AutoSaveTime.Text = Properties.User.Default.autoSaveMinute.ToString();
-                    ShowMessage("输入整数", false);
+                    AutoSaveTime.Text = User.Default.autoSaveMinute.ToString();
+                    ShowMessage("输入整数");
                 }
             }
         }
         private void AutoBackup_Checked(object sender, RoutedEventArgs e)
         {
-            Properties.User.Default.isAutoBackup = true;
+            User.Default.isAutoBackup = true;
             SavePreferences();
             AutoBackupTime.IsEnabled = true;
             //显示消息
-            ShowMessage("已更改", false);
+            ShowMessage("已更改");
         }
         private void AutoBackup_Unchecked(object sender, RoutedEventArgs e)
         {
-            Properties.User.Default.isAutoBackup = false;
+            User.Default.isAutoBackup = false;
             SavePreferences();
             AutoBackupTime.IsEnabled = false;
             //显示消息
-            ShowMessage("已更改", false);
+            ShowMessage("已更改");
         }
         private void AutoBackupTime_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -3271,22 +3282,22 @@ namespace E.Writer
                     if (t > 0 && t < 1000)
                     {
                         TimeSpan ts = TimeSpan.FromMinutes(t);
-                        Properties.User.Default.autoBackupMinute = t;
+                        User.Default.autoBackupMinute = t;
                         SavePreferences();
                         AutoBackupTimer.Interval = ts;
                         //显示消息
-                        ShowMessage("已更改", false);
+                        ShowMessage("已更改");
                     }
                     else
                     {
-                        AutoBackupTime.Text = Properties.User.Default.autoBackupMinute.ToString();
-                        ShowMessage("输入1~999整数", false);
+                        AutoBackupTime.Text = User.Default.autoBackupMinute.ToString();
+                        ShowMessage("输入1~999整数");
                     }
                 }
                 catch (Exception)
                 {
-                    AutoBackupTime.Text = Properties.User.Default.autoBackupMinute.ToString();
-                    ShowMessage("输入整数", false);
+                    AutoBackupTime.Text = User.Default.autoBackupMinute.ToString();
+                    ShowMessage("输入整数");
                 }
             }
         }
@@ -3307,12 +3318,12 @@ namespace E.Writer
                 if (File.Exists(tmp))
                 {
                     SetTheme(tmp);
-                    ShowMessage("已更改", false);
+                    ShowMessage("已更改");
                 }
                 else
                 {
                     CbbThemes.Items.Remove(CbbThemes.SelectedItem);
-                    ShowMessage("该主题的配置文件不存在", false);
+                    ShowMessage("该主题的配置文件不存在");
                 }
             }
         }
@@ -3322,7 +3333,7 @@ namespace E.Writer
             {
                 TextBlock item = CbbFonts.SelectedItem as TextBlock;
                 SetFont(item.Text);
-                ShowMessage("已更改", false);
+                ShowMessage("已更改");
             }
         }
         private void TextSize_TextChanged(object sender, TextChangedEventArgs e)
@@ -3334,21 +3345,21 @@ namespace E.Writer
                     int i = int.Parse(TextSize.Text);
                     if (i > 0 && i < 1000)
                     {
-                        Properties.User.Default.fontSize = i;
+                        User.Default.fontSize = i;
                         SavePreferences();
                         TbxFileContent.FontSize = i;
-                        ShowMessage("已更改", false);
+                        ShowMessage("已更改");
                     }
                     else
                     {
-                        TextSize.Text = Properties.User.Default.fontSize.ToString();
-                        ShowMessage("输入1~999整数", false);
+                        TextSize.Text = User.Default.fontSize.ToString();
+                        ShowMessage("输入1~999整数");
                     }
                 }
                 catch (Exception)
                 {
-                    TextSize.Text = Properties.User.Default.fontSize.ToString();
-                    ShowMessage("输入整数", false);
+                    TextSize.Text = User.Default.fontSize.ToString();
+                    ShowMessage("输入整数");
                 }
             }
         }
@@ -3356,11 +3367,11 @@ namespace E.Writer
         //计时器事件
         private void TimerAutoSave_Tick(object sender, EventArgs e)
         {
-            if (CurrentEssay.Name != null && Properties.User.Default.isAutoSaveEvery == true)
+            if (CurrentEssay.Name != null && User.Default.isAutoSaveEvery == true)
             {
                 SaveFile();
                 //显示消息
-                ShowMessage("已自动保存于", DateTime.Now.ToLongTimeString().ToString(), false);
+                ShowMessage("已自动保存于", DateTime.Now.ToLongTimeString().ToString());
             }
         }
         private void TimerAutoBackup_Tick(object sender, EventArgs e)
