@@ -295,10 +295,19 @@ namespace E.Writer
         /// </summary>
         private void OpenNewBook()
         {
+            string path;
+            if (!Directory.Exists(Settings.Default._lastBook))
+            {
+                path = User.Default.BooksDir;
+            }
+            else
+            {
+                path = Settings.Default._lastBook;
+            }
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog
             {
                 ShowNewFolderButton = true,
-                SelectedPath = Settings.Default._lastBook,
+                SelectedPath = path,
                 Description = "请选择书籍所在的路径：" + Environment.NewLine
                             + "注意：请确保该书籍内的txt文件都以UTF-8的格式编码，否则打开时会显示乱码。"
             };
@@ -782,7 +791,7 @@ namespace E.Writer
 
             //创建节点
             TreeViewItemNode newfolderNode = new TreeViewItemNode(CurrentChapter.Name, CurrentChapter.Path, false, false, null);
-            TreeViewItemNode fatherNote = FindNote(TbxCreatePath.Text);
+            TreeViewItemNode fatherNote = FindNote(Path.GetDirectoryName(CurrentChapter.Path));
             if (fatherNote == null)
             {
                 FilesTree.Items.Add(newfolderNode);
@@ -842,7 +851,7 @@ namespace E.Writer
 
             //创建节点
             TreeViewItemNode newFileNode = new TreeViewItemNode(CurrentEssay.Name, CurrentEssay.Path, true, false, null);
-            TreeViewItemNode fatherNote = FindNote(TbxCreatePath.Text);
+            TreeViewItemNode fatherNote = FindNote(Path.GetDirectoryName(CurrentEssay.Path));
             if (fatherNote == null)
             {
                 FilesTree.Items.Add(newFileNode);
@@ -1111,7 +1120,7 @@ namespace E.Writer
             MessageBoxResult result = MessageBox.Show("是否删除卷册 " + name + " ？", "删除项目", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                Directory.Delete(_path);
+                Directory.Delete(_path, true);
                 RemoveFolderNode(SelectedNode);
                 //如果选择的是正在编辑的卷册
                 if (CurrentChapter != null)
@@ -1415,9 +1424,11 @@ namespace E.Writer
         private TreeViewItemNode FindNote(string path)
         {
             TreeViewItemNode found = null;
+            //path = path.Replace("\\","/");
             foreach (TreeViewItemNode item in FilesTree.Items)
             {
-                if (item.ToolTip.ToString() == path)
+                string itemPath = item.ToolTip.ToString();
+                if (itemPath == path)
                 {
                     found = item;
                     break;
@@ -2861,10 +2872,15 @@ namespace E.Writer
         }
         private void BtnBrowse_Click(object sender, RoutedEventArgs e)
         {
+            string path = Path.GetFullPath(TbxCreatePath.Text);
+            if (!Directory.Exists(path))
+            {
+                path = Path.GetFullPath(User.Default.BooksDir);
+            }
             FolderBrowserDialog fbd = new FolderBrowserDialog
             {
                 ShowNewFolderButton = true,
-                SelectedPath = TbxCreatePath.Text,
+                SelectedPath = path,
                 Description = "请选择目标存放位置："
             };
             //按下确定选择的按钮，获取存放路径
