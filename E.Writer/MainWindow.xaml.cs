@@ -2484,15 +2484,15 @@ namespace E.Writer
             //关于菜单
             if (e.Key == Key.F1)
             { Process.Start("explorer.exe", AppInfo.HomePage); }
-            if (e.Key == Key.F2)
+            else if (e.Key == Key.F2)
             { Process.Start("explorer.exe", AppInfo.InfoPage); }
-            if (e.Key == Key.F3)
+            else if (e.Key == Key.F3)
             { Process.Start("explorer.exe", AppInfo.DownloadPage); }
-            if (e.Key == Key.F4)
+            else if (e.Key == Key.F4)
             { Process.Start("explorer.exe", AppInfo.FeedbackPage); }
-            if (e.Key == Key.F8)
+            else if (e.Key == Key.F8)
             { Process.Start("explorer.exe", AppInfo.GitHubPage); }
-            if (e.Key == Key.F6)
+            else if (e.Key == Key.F6)
             { Process.Start("explorer.exe", AppInfo.QQGroupLink); }
         }
 

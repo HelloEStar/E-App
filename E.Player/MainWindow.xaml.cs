@@ -22,11 +22,13 @@ using System.Net;
 using System.Diagnostics;
 using System.Reflection;
 using System.Drawing.Imaging;
-
 using Application = System.Windows.Forms.Application;
 using MessageBox = System.Windows.MessageBox;
 using ContextMenu = System.Windows.Controls.ContextMenu;
 using MenuItem = System.Windows.Controls.MenuItem;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using DragEventArgs = System.Windows.DragEventArgs;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using E.Utility;
 
 namespace E.Player
@@ -40,75 +42,54 @@ namespace E.Player
         /// <summary>
         /// 应用信息
         /// </summary>
-        public AppInfo AppInfo { get; set; }
+        private AppInfo AppInfo { get; set; }
+        /// <summary>
+        /// 选中的视频的路径
+        /// </summary>
+        private string SelectedVideoPath { get; set; }
+        /// <summary>
+        /// 正在播放的视频的路径
+        /// </summary>
+        private string PlayingVideoPath { get; set; }
+        /// <summary>
+        /// 是否正在播放
+        /// </summary>
+        private bool IsPlay { get; set; } = false;
+        /// <summary>
+        /// 是否全屏
+        /// </summary>
+        private bool IsFullScreen { get; set; } = false; 
+        /// <summary>
+        /// 列表中视频数量
+        /// </summary>
+        private int VideoCount { get; set; } = 0;
+        /// <summary>
+        /// 循环的开始
+        /// </summary>
+        private TimeSpan StartPosition { get; set; } = TimeSpan.Zero;
+        /// <summary>
+        /// 循环的结束
+        /// </summary>
+        private TimeSpan EndPosition { get; set; } = TimeSpan.Zero;
+        /// <summary>
+        /// 是否有循环开始点
+        /// </summary>
+        private bool HasStartPosition { get; set; } = false;
+        /// <summary>
+        /// 是否有循环结束点
+        /// </summary>
+        private bool HasEndPosition { get; set; } = false;
 
+        private List<ItemInfo> LanguageItems { get; set; } = new List<ItemInfo>();
 
-        //路径
-        public static string _download = @"下载";           //下载文件夹
         //计时器
-        public DispatcherTimer timer1;
-        public DispatcherTimer timer2;
-        public DispatcherTimer timer3;
-        //运行中的信息
-        public string _selectedVideo;                    //选中的视频的路径
-        public string _playingVideo;                     //正在播放的视频的路径
-        public bool isPlay = false;                      //是否正在播放
-        public bool isFullScreen = false;                //是否全屏
-        public int videoCount = 0;                       //列表中视频数量
-        public double tmpWidthRight;                     //右侧区域大小
-        public TimeSpan startPosition = TimeSpan.Zero;   //循环的开始
-        public TimeSpan endPosition = TimeSpan.Zero;     //循环的结束
-        public bool hasStartPosition = false;            //是否有循环开始点
-        public bool hasEndPosition = false;              //是否有循环结束点
+        private DispatcherTimer timer1;
+        private DispatcherTimer timer2;
+        private DispatcherTimer timer3;
 
-        //右键菜单
-        ContextMenu CM = new ContextMenu();
-        //一级菜单
-        MenuItem MenuFile = new MenuItem();
-        MenuItem MenuControl = new MenuItem();
-        MenuItem MenuWindow = new MenuItem();
-        MenuItem MenuHelp = new MenuItem();
-        //二级菜单 MenuFile
-        MenuItem MenuOpen = new MenuItem();
-        MenuItem MenuAdd = new MenuItem();
-        MenuItem MenuDelete = new MenuItem();
-        Separator separator1 = new Separator();
-        MenuItem MenuCloseEP = new MenuItem();
-        //二级菜单 MenuControl
-        MenuItem MenuPlay = new MenuItem();
-        //MenuItem MenuPause = new MenuItem();
-        //MenuItem MenuStop = new MenuItem();
-        MenuItem MenuReplay = new MenuItem();
-        Separator separator2 = new Separator();
-        MenuItem MenuForward = new MenuItem();
-        MenuItem MenuBack = new MenuItem();
-        MenuItem MenuVolumeUp = new MenuItem();
-        MenuItem MenuVolumeDown = new MenuItem();
-        MenuItem MenuSpeedUp = new MenuItem();
-        MenuItem MenuSpeedDown = new MenuItem();
-        Separator separator3 = new Separator();
-        MenuItem MenuLoopStart = new MenuItem();
-        MenuItem MenuLoopEnd = new MenuItem();
-        MenuItem MenuClearLoop = new MenuItem();
-        Separator separator4 = new Separator();
-        MenuItem MenuLRFlip = new MenuItem();
-        MenuItem MenuUDFlip = new MenuItem();
         MenuItem MenuClockwise = new MenuItem();
         MenuItem MenuCClockwise = new MenuItem();
-        Separator separator5 = new Separator();
         MenuItem MenuFullScreen = new MenuItem();
-        Separator separator6 = new Separator();
-        MenuItem MenuSingle = new MenuItem();
-        MenuItem MenuLoop = new MenuItem();
-        MenuItem MenuOrder = new MenuItem();
-        MenuItem MenuRandom = new MenuItem();
-        //二级菜单 MenuWindow
-        MenuItem MenuHideList = new MenuItem();
-        MenuItem MenuHideControl = new MenuItem();
-        //二级菜单 MenuHelp
-        MenuItem MenuPreference = new MenuItem();
-        MenuItem MenuAbout = new MenuItem();
-        MenuItem MenuLink = new MenuItem();
         #endregion
 
         //构造
@@ -146,7 +127,7 @@ namespace E.Player
         /// 载入语言
         /// </summary>
         /// <param name="lang">语言简拼</param>
-        public void LoadLanguage(string lang)
+        private void LoadLanguage(string lang)
         {
             ResourceDictionary langRd = null;
             try
@@ -163,6 +144,37 @@ namespace E.Player
                 { Resources.MergedDictionaries.Clear(); }
                 Resources.MergedDictionaries.Add(langRd);
             }
+        }
+        /// <summary>
+        /// 载入媒体记录
+        /// </summary>
+        private void LoadVideos()
+        {
+            //读取一个字符串，并加入播放列表
+            if (Properties.User.Default._medias != null && Properties.User.Default._medias != "")
+            {
+                string[] _myB = Regex.Split(Properties.User.Default._medias, "///");
+                foreach (var b in _myB)
+                {
+                    CreateListBoxItem(b, false);
+                }
+            }
+        }
+        /// <summary>
+        /// 载入偏好设置
+        /// </summary>
+        private void LoadSettings()
+        {
+            //是否在切换视频时保持变换
+            KeepTrans.IsChecked = Properties.User.Default.isKeepTrans;
+            //是否在退出时保留播放列表
+            SavePlaylist.IsChecked = Properties.User.Default.isSavePlaylist;
+            //快进快退时间
+            JumpTime.Text = Properties.User.Default.jumpTime.ToString();
+
+            //创建语言选项
+            GetLanguage();
+            SetLanguage(Properties.User.Default.language);
         }
 
         //打开
@@ -182,49 +194,6 @@ namespace E.Player
             dialog.ShowDialog();
             //获取视频文件路径
             return dialog.FileName;
-        }
-        /// <summary>
-        /// 实例化帮助窗口，载入设置信息
-        /// </summary>
-        /// <param name="tab">选择打开的标签</param>
-        public void OpenHelp(int tab)
-        {
-            HelpWindow Help = new HelpWindow(this);
-            Help.Show();
-            Help.MainTab.SelectedIndex = tab - 1;
-        }
-
-        //检查
-        /// <summary>
-        /// 检测路径是否正确
-        /// </summary>
-        /// <param name="path">路径</param>
-        /// <returns>路径是否正确</returns>
-        private bool IsPathRight(string path)
-        {
-            //检测路径是否存在
-            if (File.Exists(path))
-            {
-                //获取文件扩展名
-                string _videoExtension = System.IO.Path.GetExtension(path);
-                //检测文件扩展名是否正确
-                if (_videoExtension == ".avi" || _videoExtension == ".mp4" || _videoExtension == ".rmvb" || _videoExtension == ".mkv" || _videoExtension == ".wmv" || _videoExtension == ".wma" ||
-                    _videoExtension == ".AVI" || _videoExtension == ".MP4" || _videoExtension == ".RMVB" || _videoExtension == ".MKV" || _videoExtension == ".WMV" || _videoExtension == ".WMA" ||
-                    _videoExtension == ".wav" || _videoExtension == ".mp3" || _videoExtension == ".aac" || _videoExtension == ".flac" ||
-                    _videoExtension == ".WAV" || _videoExtension == ".MP3" || _videoExtension == ".AAC" || _videoExtension == ".FLAC")
-                {
-                    return true;
-                }
-                else
-                {
-                    ShowMessage("无法播放", true);
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
         }
 
         //创建
@@ -267,12 +236,12 @@ namespace E.Player
                 //添加Item时检测是否有重复视频
                 bool isThere = false;
                 //如果播放列表是空的
-                if (videoCount == 0)
+                if (VideoCount == 0)
                 {
                     //增加第一个Item进PlayListBox
                     PlayListBox.Items.Add(PlayListBoxItem);
-                    videoCount = 1;
-                    PlayListBox.ToolTip = FindResource("媒体总数") + "：" + videoCount;
+                    VideoCount = 1;
+                    PlayListBox.ToolTip = FindResource("媒体总数") + "：" + VideoCount;
                     //选中此Item
                     PlayListBox.SelectedIndex = 0;
                     if (isPlay == true)
@@ -286,7 +255,7 @@ namespace E.Player
                 {
                     ListBoxItem tempItem = new ListBoxItem();
                     //获取正在添加的Item视频路径
-                    for (int i = 0; i < videoCount; i++)
+                    for (int i = 0; i < VideoCount; i++)
                     {
                         //获得所有item的视频路径
                         tempItem = PlayListBox.Items.GetItemAt(i) as ListBoxItem;
@@ -307,8 +276,8 @@ namespace E.Player
                     {
                         //增加第一个Item进PlayListBox
                         PlayListBox.Items.Add(PlayListBoxItem);
-                        videoCount = PlayListBox.Items.Count;
-                        PlayListBox.ToolTip = FindResource("媒体总数") + "：" + videoCount;
+                        VideoCount = PlayListBox.Items.Count;
+                        PlayListBox.ToolTip = FindResource("媒体总数") + "：" + VideoCount;
                         PlayListBox.SelectedItem = PlayListBoxItem;
                         //是否直接播放新增加的视频
                         if (isPlay == true)
@@ -380,155 +349,238 @@ namespace E.Player
                 //Cover.Visibility = Visibility.Hidden;
             }
         }
+
+        //删除
         /// <summary>
-        /// 初始化右键菜单
+        /// 删除媒体
         /// </summary>
-        public void CreteContextMenu()
+        private void Delete()
         {
-            //一级菜单
-            MenuFile.Header = FindResource("文件");
-            CM.Items.Add(MenuFile);
-            MenuControl.Header = FindResource("控制");
-            CM.Items.Add(MenuControl);
-            MenuWindow.Header = FindResource("窗口");
-            CM.Items.Add(MenuWindow);
-            MenuHelp.Header = FindResource("帮助");
-            MenuHelp.InputGestureText = "F1";
-            CM.Items.Add(MenuHelp);
+            //获取当前选择的Item在PlayListBox的索引
+            ListBoxItem tempItem;
+            tempItem = PlayListBox.SelectedItem as ListBoxItem;
+            if (tempItem != null)
+            {
+                if (PlayingVideoPath == tempItem.Tag.ToString())
+                {
+                    Media.Stop();
+                    Media.Source = null;
+                    PlayingVideoPath = "";
+                    Cover.Source = null;
+                    Cover.IsEnabled = false;
+                    IsPlay = false;
+                    //不激活按钮
+                    ChangeElementState(0);
+                    VideoName.Content = FindResource("媒体路径");
+                    VideoName.ToolTip = FindResource("媒体路径");
+                    TimeAll.Content = "00:00:00";
+                    BtnPlay.Content = FindResource("播放");
 
-            //二级菜单 MenuFile
-            MenuOpen.Header = FindResource("打开");
-            MenuOpen.InputGestureText = "O";
-            MenuOpen.Click += new RoutedEventHandler(MenuOpen_Click);
-            MenuFile.Items.Add(MenuOpen);
-            MenuAdd.Header = FindResource("添加");
-            MenuAdd.InputGestureText = "A";
-            MenuAdd.Click += new RoutedEventHandler(MenuAdd_Click);
-            MenuFile.Items.Add(MenuAdd);
-            MenuDelete.Header = FindResource("删除");
-            MenuDelete.InputGestureText = "Delete";
-            MenuDelete.Click += new RoutedEventHandler(MenuDelete_Click);
-            MenuFile.Items.Add(MenuDelete);
-            //分隔线1
-            MenuFile.Items.Add(separator1);
-            MenuCloseEP.Header = FindResource("退出");
-            MenuCloseEP.InputGestureText = "Alt+F4";
-            MenuCloseEP.Click += new RoutedEventHandler(MenuCloseEP_Click);
-            MenuFile.Items.Add(MenuCloseEP);
+                    //显示消息
+                    ShowMessage("删除视频", false);
+                }
+                int s = PlayListBox.SelectedIndex;
+                PlayListBox.Items.Remove(PlayListBox.SelectedItem);
+                PlayListBox.SelectedIndex = s;
+                if (s == VideoCount - 1)
+                {
+                    PlayListBox.SelectedIndex = s - 1;
+                }
+                VideoCount -= 1;
+                PlayListBox.ToolTip = FindResource("媒体总数") + "：" + VideoCount;
+            }
+            else
+            {
+                //显示消息
+                ShowMessage("未选择视频", false);
+            }
+        }
 
-            //二级菜单 MenuControl
-            MenuPlay.Header = FindResource("播放");
-            MenuPlay.InputGestureText = "Space";
-            MenuPlay.IsEnabled = true;
-            MenuPlay.Click += new RoutedEventHandler(MenuPlay_Click);
-            MenuControl.Items.Add(MenuPlay);
-            MenuReplay.Header = FindResource("重播");
-            MenuReplay.InputGestureText = "R";
-            MenuReplay.IsEnabled = true;
-            MenuReplay.Click += new RoutedEventHandler(MenuReplay_Click);
-            MenuControl.Items.Add(MenuReplay);
-            //分隔线
-            MenuControl.Items.Add(separator2);
-            MenuForward.Header = FindResource("快进");
-            MenuForward.InputGestureText = "→";
-            MenuForward.IsEnabled = true;
-            MenuForward.Click += new RoutedEventHandler(MenuForward_Click);
-            MenuControl.Items.Add(MenuForward);
-            MenuBack.Header = FindResource("快退");
-            MenuBack.InputGestureText = "←";
-            MenuBack.IsEnabled = true;
-            MenuBack.Click += new RoutedEventHandler(MenuBack_Click);
-            MenuControl.Items.Add(MenuBack);
-            MenuVolumeUp.Header = FindResource("音量升高");
-            MenuVolumeUp.InputGestureText = "";
-            MenuVolumeUp.Click += new RoutedEventHandler(MenuVolumeUp_Click);
-            MenuControl.Items.Add(MenuVolumeUp);
-            MenuVolumeDown.Header = FindResource("音量降低");
-            MenuVolumeDown.InputGestureText = "";
-            MenuVolumeDown.Click += new RoutedEventHandler(MenuVolumeDown_Click);
-            MenuControl.Items.Add(MenuVolumeDown);
-            MenuSpeedUp.Header = FindResource("速度增加");
-            MenuSpeedUp.InputGestureText = "";
-            MenuSpeedUp.Click += new RoutedEventHandler(MenuSpeedUp_Click);
-            MenuControl.Items.Add(MenuSpeedUp);
-            MenuSpeedDown.Header = FindResource("速度减少");
-            MenuSpeedDown.InputGestureText = "";
-            MenuSpeedDown.Click += new RoutedEventHandler(MenuSpeedDown_Click);
-            MenuControl.Items.Add(MenuSpeedDown);
-            //分隔线
-            MenuControl.Items.Add(separator3);
-            MenuLoopStart.Header = FindResource("循环起点");
-            MenuLoopStart.InputGestureText = "";
-            MenuLoopStart.IsEnabled = true;
-            MenuLoopStart.Click += new RoutedEventHandler(MenuLoopStart_Click);
-            MenuControl.Items.Add(MenuLoopStart);
-            MenuLoopEnd.Header = FindResource("循环终点");
-            MenuLoopEnd.InputGestureText = "";
-            MenuLoopEnd.IsEnabled = true;
-            MenuLoopEnd.Click += new RoutedEventHandler(MenuLoopEnd_Click);
-            MenuControl.Items.Add(MenuLoopEnd);
-            MenuClearLoop.Header = FindResource("清除循环");
-            MenuClearLoop.InputGestureText = "";
-            MenuClearLoop.IsEnabled = true;
-            MenuClearLoop.Click += new RoutedEventHandler(MenuClearLoop_Click);
-            MenuControl.Items.Add(MenuClearLoop);
-            //分隔线
-            MenuControl.Items.Add(separator4);
-            MenuLRFlip.Header = FindResource("左右翻转");
-            MenuLRFlip.InputGestureText = "M";
-            MenuLRFlip.Click += new RoutedEventHandler(MenuLRFlip_Click);
-            MenuControl.Items.Add(MenuLRFlip);
-            MenuUDFlip.Header = FindResource("上下翻转");
-            MenuUDFlip.InputGestureText = "N";
-            MenuUDFlip.Click += new RoutedEventHandler(MenuUDFlip_Click);
-            MenuControl.Items.Add(MenuUDFlip);
-            MenuClockwise.Header = FindResource("顺时针旋转");
-            MenuClockwise.InputGestureText = "E";
-            MenuClockwise.Click += new RoutedEventHandler(MenuClockwise_Click);
-            MenuControl.Items.Add(MenuClockwise);
-            MenuCClockwise.Header = FindResource("逆时针旋转");
-            MenuCClockwise.InputGestureText = "Q";
-            MenuCClockwise.Click += new RoutedEventHandler(MenuCClockwise_Click);
-            MenuControl.Items.Add(MenuCClockwise);
-            //分隔线
-            MenuControl.Items.Add(separator5);
-            MenuFullScreen.Header = FindResource("全屏显示");
-            MenuFullScreen.InputGestureText = FindResource("双击左键").ToString();
-            MenuFullScreen.Click += new RoutedEventHandler(MenuFullScreen_Click);
-            MenuControl.Items.Add(MenuFullScreen);
-            //分隔线
-            MenuControl.Items.Add(separator6);
-            MenuSingle.Header = FindResource("单次");
-            MenuSingle.InputGestureText = "Ctrl+1";
-            MenuSingle.Click += new RoutedEventHandler(MenuSingle_Click);
-            MenuControl.Items.Add(MenuSingle);
-            MenuLoop.Header = FindResource("循环");
-            MenuLoop.InputGestureText = "Ctrl+2";
-            MenuLoop.Click += new RoutedEventHandler(MenuLoop_Click);
-            MenuControl.Items.Add(MenuLoop);
-            MenuOrder.Header = FindResource("顺序");
-            MenuOrder.InputGestureText = "Ctrl+3";
-            MenuOrder.Click += new RoutedEventHandler(MenuOrder_Click);
-            MenuControl.Items.Add(MenuOrder);
-            MenuRandom.Header = FindResource("随机");
-            MenuRandom.InputGestureText = "Ctrl+4";
-            MenuRandom.Click += new RoutedEventHandler(MenuRandom_Click);
-            MenuControl.Items.Add(MenuRandom);
+        //清除
+        /// <summary>
+        /// 清除循环段
+        /// </summary>
+        private void ClearLoop()
+        {
+            if (HasEndPosition == true || HasStartPosition == true)
+            {
+                StartPosition = TimeSpan.Zero;
+                EndPosition = TimeSpan.Zero;
+                HasStartPosition = false;
+                HasEndPosition = false;
 
-            //二级菜单 MenuWindow
-            MenuHideControl.Header = FindResource("隐藏控制台");
-            MenuHideControl.InputGestureText = "C";
-            MenuHideControl.IsEnabled = true;
-            MenuHideControl.Click += new RoutedEventHandler(MenuHideControl_Click);
-            MenuWindow.Items.Add(MenuHideControl);
-            MenuHideList.Header = FindResource("隐藏播放列表");
-            MenuHideList.InputGestureText = "L";
-            MenuHideList.IsEnabled = true;
-            MenuHideList.Click += new RoutedEventHandler(MenuHideList_Click);
-            MenuWindow.Items.Add(MenuHideList);
+                //滑块高亮区域
+                TimeSlider.SelectionStart = 0;
+                TimeSlider.SelectionEnd = 0;
+                //显示消息
+                ShowMessage("已清除循环", false);
+            }
+        }
 
-            //绑定右键菜单
-            MainGrid.ContextMenu = CM;
+        //获取
+        /// <summary>
+        /// 创建语言选项
+        /// </summary>
+        private void GetLanguage()
+        {
+            ItemInfo zh_CN = new ItemInfo() { Name = "中文（默认）", Value = "zh_CN" };
+            LanguageItems.Add(zh_CN);
+            ItemInfo en_US = new ItemInfo() { Name = "English", Value = "en_US" };
+            LanguageItems.Add(en_US);
+            //绑定数据，真正的赋值
+            CbbLanguages.ItemsSource = LanguageItems;
+            CbbLanguages.DisplayMemberPath = "Name";
+            CbbLanguages.SelectedValuePath = "Value";
+        }
+        /// <summary>
+        /// 获取媒体名字
+        /// </summary>
+        /// <param name="path">媒体路径</param>
+        /// <returns>媒体名称</returns>
+        private string GetVideoName(string path)
+        {
+            string _videoName = System.IO.Path.GetFileName(path);
+            return _videoName;
+        }
+        /// <summary>
+        /// 由地址返回图片，返回类型为System.Drawing.Image
+        /// </summary>
+        /// <param name="MP3path">MP3全地址</param>
+        /// <returns></returns>
+        private List<BitmapImage> CoverofMP3(string MP3path)
+        {
+            try
+            {
+                List<BitmapImage> list_bitmapimg = new List<BitmapImage>();
+                Tags.ID3.ID3Info File = new Tags.ID3.ID3Info(MP3path, true);
+
+                foreach (Tags.ID3.ID3v2Frames.BinaryFrames.AttachedPictureFrame F in File.ID3v2Info.AttachedPictureFrames)
+                {
+                    System.Drawing.Image imgWinForms = F.Picture; // 此段代码用于将获得的System.Drawing.Image类型转化为
+                    BitmapImage bi = new BitmapImage();                     //WPF中Image控件可以接受的内容
+                    float scale = imgWinForms.Height / imgWinForms.Width;
+                    bi.BeginInit();
+                    MemoryStream ms = new MemoryStream();
+                    imgWinForms.Save(ms, ImageFormat.Bmp);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    bi.StreamSource = ms;
+                    bi.EndInit();
+                    list_bitmapimg.Add(bi);
+                }
+                return list_bitmapimg;
+            }
+            catch (Exception e)
+            {
+                System.Windows.MessageBox.Show(e.Message);
+                return null;
+            }
+        }
+
+        //设置
+        /// <summary>
+        /// 翻转归位
+        /// </summary>
+        private void ResetFlip()
+        {
+            Properties.User.Default.isLRFlip = false;
+            Properties.User.Default.isUDFlip = false;
+            Properties.User.Default.Save();
+            ScaleTransform scaleTransform = new ScaleTransform();
+            scaleTransform.ScaleX = 1;
+            scaleTransform.ScaleY = 1;
+            Media.LayoutTransform = scaleTransform;
+        }
+        /// <summary>
+        /// 旋转归位
+        /// </summary>
+        private void ResetRotation()
+        {
+            Properties.User.Default.rotateTo = 0;
+            Properties.User.Default.Save();
+            Media.LayoutTransform = new RotateTransform(0);
+        }
+        /// <summary>
+        /// 设置循环段开始
+        /// </summary>
+        private void SetLoopStart()
+        {
+            //获取当前位置
+            TimeSpan tempPosition = Media.Position;
+            if (tempPosition < EndPosition || HasEndPosition == false)
+            {
+                StartPosition = tempPosition;
+                string str = StartPosition.ToString();
+                //滑块高亮区域
+                TimeSlider.SelectionStart = StartPosition.TotalSeconds;
+                HasStartPosition = true;
+
+                //显示消息
+                ShowMessage("循环始于", "：" + str.Substring(0, 8), false);
+            }
+            else
+            {
+                //显示消息
+                ShowMessage("开始点应靠前", false);
+            }
+        }
+        /// <summary>
+        /// 设置循环段结束
+        /// </summary>
+        private void SetLoopEnd()
+        {
+            //获取当前位置
+            TimeSpan tempPosition = Media.Position;
+            if (StartPosition < tempPosition)
+            {
+                EndPosition = tempPosition;
+                string str = EndPosition.ToString();
+                //滑块高亮区域
+                TimeSlider.SelectionEnd = EndPosition.TotalSeconds;
+                HasEndPosition = true;
+
+                //显示消息
+                ShowMessage("循环终于", "：" + str.Substring(0, 8), false);
+            }
+            else
+            {
+                //显示消息
+                ShowMessage("结束点应靠后", false);
+            }
+        }
+        /// <summary>
+        /// 设置播放模式
+        /// </summary>
+        /// <param name="mode">模式</param>
+        /// <param name="showMessage">是否显示消息</param>
+        private void SetPlayMode(int mode, bool show)
+        {
+            Properties.User.Default.playMode = mode;
+            Properties.User.Default.Save();
+        }
+        /// <summary>
+        /// 切换播放模式
+        /// </summary>
+        private void ChangePlayMode()
+        {
+            Properties.User.Default.playMode += 1;
+            if (Properties.User.Default.playMode == 4)
+            { Properties.User.Default.playMode = 0; }
+            Properties.User.Default.Save();
+        }
+        /// <summary>
+        /// 设置语言选项
+        /// </summary>
+        /// <param name="language">语言简拼</param>
+        private void SetLanguage(string language)
+        {
+            foreach (ItemInfo ci in LanguageItems)
+            {
+                if (ci.Value == language)
+                {
+                    CbbLanguages.SelectedItem = ci;
+                    break;
+                }
+            }
         }
 
         //执行
@@ -552,11 +604,11 @@ namespace E.Player
             Media.Source = new Uri(path);
             Media.Play();
             Media.ScrubbingEnabled = true;
-            isPlay = true;
+            IsPlay = true;
             //激活按钮
             ChangeElementState(1);
-            ButtonPlay.Content = FindResource("暂停");
-            _playingVideo = path;
+            BtnPlay.Content = FindResource("暂停");
+            PlayingVideoPath = path;
 
             //帮助消息
             VideoName.ToolTip = path;
@@ -569,21 +621,19 @@ namespace E.Player
         /// </summary>
         private void Play()
         {
-            if (isPlay == false)
+            if (IsPlay == false)
             {
                 Media.Play();
-                isPlay = true;
-                ButtonPlay.Content = FindResource("暂停");
-                MenuPlay.Header = FindResource("暂停");
+                IsPlay = true;
+                BtnPlay.Content = FindResource("暂停");
                 //显示消息
                 ShowMessage("开始播放", false);
             }
-            else if (isPlay == true)
+            else if (IsPlay == true)
             {
                 Media.Pause();
-                isPlay = false;
-                ButtonPlay.Content = FindResource("播放");
-                MenuPlay.Header = FindResource("播放");
+                IsPlay = false;
+                BtnPlay.Content = FindResource("播放");
                 //显示消息
                 ShowMessage("暂停播放", false);
             }
@@ -595,9 +645,8 @@ namespace E.Player
         {
             Media.Position = TimeSpan.Zero;
             Media.Play();
-            isPlay = true;
-            ButtonPlay.Content = FindResource("暂停");
-            MenuPlay.Header = FindResource("暂停");
+            IsPlay = true;
+            BtnPlay.Content = FindResource("暂停");
             //显示消息
             ShowMessage("开始播放", false);
         }
@@ -606,7 +655,7 @@ namespace E.Player
         /// </summary>
         private void Forward()
         {
-            if (File.Exists(_playingVideo))
+            if (File.Exists(PlayingVideoPath))
             {
                 Media.Position += TimeSpan.FromSeconds(Properties.User.Default.jumpTime);
                 if (Media.Position > Media.NaturalDuration.TimeSpan)
@@ -623,7 +672,7 @@ namespace E.Player
         /// </summary>
         private void Back()
         {
-            if (File.Exists(_playingVideo))
+            if (File.Exists(PlayingVideoPath))
             {
                 Media.Position -= TimeSpan.FromSeconds(Properties.User.Default.jumpTime);
                 if (Media.Position <= TimeSpan.Zero)
@@ -682,7 +731,7 @@ namespace E.Player
         /// </summary>
         private void FullScreen()
         {
-            if (isFullScreen == false)
+            if (IsFullScreen == false)
             {
                 WindowState = WindowState.Normal;
                 WindowStyle = WindowStyle.None;
@@ -694,7 +743,7 @@ namespace E.Player
                 Width = SystemParameters.PrimaryScreenWidth;
                 Height = SystemParameters.PrimaryScreenHeight;
 
-                isFullScreen = true;
+                IsFullScreen = true;
                 MenuFullScreen.Header = FindResource("退出全屏");
             }
             else
@@ -704,7 +753,7 @@ namespace E.Player
                 ResizeMode = ResizeMode.CanResize;
                 Topmost = false;
 
-                isFullScreen = false;
+                IsFullScreen = false;
                 MenuFullScreen.Header = FindResource("全屏显示");
             }
         }
@@ -823,223 +872,49 @@ namespace E.Player
         /// </summary>
         private void Loop()
         {
-            if (hasEndPosition == true && startPosition < endPosition)
+            if (HasEndPosition == true && StartPosition < EndPosition)
             {
-                if (Media.Position > endPosition)
+                if (Media.Position > EndPosition)
                 {
-                    Media.Position = startPosition;
+                    Media.Position = StartPosition;
                 }
-                if (Media.Position < startPosition)
+                if (Media.Position < StartPosition)
                 {
-                    Media.Position = startPosition;
+                    Media.Position = StartPosition;
                 }
             }
         }
 
-        //获取
+        //检查
         /// <summary>
-        /// 获取媒体名字
+        /// 检测路径是否正确
         /// </summary>
-        /// <param name="path">媒体路径</param>
-        /// <returns>媒体名称</returns>
-        private string GetVideoName(string path)
+        /// <param name="path">路径</param>
+        /// <returns>路径是否正确</returns>
+        private bool IsPathRight(string path)
         {
-            string _videoName = System.IO.Path.GetFileName(path);
-            return _videoName;
-        }
-        /// <summary>
-        /// 由地址返回图片，返回类型为System.Drawing.Image
-        /// </summary>
-        /// <param name="MP3path">MP3全地址</param>
-        /// <returns></returns>
-        public List<BitmapImage> CoverofMP3(string MP3path)
-        {
-            try
+            //检测路径是否存在
+            if (File.Exists(path))
             {
-                List<BitmapImage> list_bitmapimg = new List<BitmapImage>();
-                Tags.ID3.ID3Info File = new Tags.ID3.ID3Info(MP3path, true);
-
-                foreach (Tags.ID3.ID3v2Frames.BinaryFrames.AttachedPictureFrame F in File.ID3v2Info.AttachedPictureFrames)
+                //获取文件扩展名
+                string _videoExtension = System.IO.Path.GetExtension(path);
+                //检测文件扩展名是否正确
+                if (_videoExtension == ".avi" || _videoExtension == ".mp4" || _videoExtension == ".rmvb" || _videoExtension == ".mkv" || _videoExtension == ".wmv" || _videoExtension == ".wma" ||
+                    _videoExtension == ".AVI" || _videoExtension == ".MP4" || _videoExtension == ".RMVB" || _videoExtension == ".MKV" || _videoExtension == ".WMV" || _videoExtension == ".WMA" ||
+                    _videoExtension == ".wav" || _videoExtension == ".mp3" || _videoExtension == ".aac" || _videoExtension == ".flac" ||
+                    _videoExtension == ".WAV" || _videoExtension == ".MP3" || _videoExtension == ".AAC" || _videoExtension == ".FLAC")
                 {
-                    System.Drawing.Image imgWinForms = F.Picture; // 此段代码用于将获得的System.Drawing.Image类型转化为
-                    BitmapImage bi = new BitmapImage();                     //WPF中Image控件可以接受的内容
-                    float scale = imgWinForms.Height / imgWinForms.Width;
-                    bi.BeginInit();
-                    MemoryStream ms = new MemoryStream();
-                    imgWinForms.Save(ms, ImageFormat.Bmp);
-                    ms.Seek(0, SeekOrigin.Begin);
-                    bi.StreamSource = ms;
-                    bi.EndInit();
-                    list_bitmapimg.Add(bi);
+                    return true;
                 }
-                return list_bitmapimg;
-            }
-            catch (Exception e)
-            {
-                System.Windows.MessageBox.Show(e.Message);
-                return null;
-            }
-        }
-
-        //删除
-        /// <summary>
-        /// 删除媒体
-        /// </summary>
-        private void Delete()
-        {
-            //获取当前选择的Item在PlayListBox的索引
-            ListBoxItem tempItem;
-            tempItem = PlayListBox.SelectedItem as ListBoxItem;
-            if (tempItem != null)
-            {
-                if (_playingVideo == tempItem.Tag.ToString())
+                else
                 {
-                    Media.Stop();
-                    Media.Source = null;
-                    _playingVideo = "";
-                    Cover.Source = null;
-                    Cover.IsEnabled = false;
-                    isPlay = false;
-                    //不激活按钮
-                    ChangeElementState(0);
-                    VideoName.Content = FindResource("媒体路径");
-                    VideoName.ToolTip = FindResource("媒体路径");
-                    TimeAll.Content = "00:00:00";
-                    ButtonPlay.Content = FindResource("播放");
-
-                    //显示消息
-                    ShowMessage("删除视频", false);
+                    ShowMessage("无法播放", true);
+                    return false;
                 }
-                int s = PlayListBox.SelectedIndex;
-                PlayListBox.Items.Remove(PlayListBox.SelectedItem);
-                PlayListBox.SelectedIndex = s;
-                if (s == videoCount - 1)
-                {
-                    PlayListBox.SelectedIndex = s - 1;
-                }
-                videoCount -= 1;
-                PlayListBox.ToolTip = FindResource("媒体总数") + "：" + videoCount;
             }
             else
             {
-                //显示消息
-                ShowMessage("未选择视频", false);
-            }
-        }
-
-        //设置
-        /// <summary>
-        /// 翻转归位
-        /// </summary>
-        private void ResetFlip()
-        {
-            Properties.User.Default.isLRFlip = false;
-            Properties.User.Default.isUDFlip = false;
-            Properties.User.Default.Save();
-            ScaleTransform scaleTransform = new ScaleTransform();
-            scaleTransform.ScaleX = 1;
-            scaleTransform.ScaleY = 1;
-            Media.LayoutTransform = scaleTransform;
-        }
-        /// <summary>
-        /// 旋转归位
-        /// </summary>
-        private void ResetRotation()
-        {
-            Properties.User.Default.rotateTo = 0;
-            Properties.User.Default.Save();
-            Media.LayoutTransform = new RotateTransform(0);
-        }
-        /// <summary>
-        /// 设置循环段开始
-        /// </summary>
-        private void SetLoopStart()
-        {
-            //获取当前位置
-            TimeSpan tempPosition = Media.Position;
-            if (tempPosition < endPosition || hasEndPosition == false)
-            {
-                startPosition = tempPosition;
-                string str = startPosition.ToString();
-                //滑块高亮区域
-                TimeSlider.SelectionStart = startPosition.TotalSeconds;
-                hasStartPosition = true;
-
-                //显示消息
-                ShowMessage("循环始于", "：" + str.Substring(0, 8), false);
-            }
-            else
-            {
-                //显示消息
-                ShowMessage("开始点应靠前", false);
-            }
-        }
-        /// <summary>
-        /// 设置循环段结束
-        /// </summary>
-        private void SetLoopEnd()
-        {
-            //获取当前位置
-            TimeSpan tempPosition = Media.Position;
-            if (startPosition < tempPosition)
-            {
-                endPosition = tempPosition;
-                string str = endPosition.ToString();
-                //滑块高亮区域
-                TimeSlider.SelectionEnd = endPosition.TotalSeconds;
-                hasEndPosition = true;
-
-                //显示消息
-                ShowMessage("循环终于", "：" + str.Substring(0, 8), false);
-            }
-            else
-            {
-                //显示消息
-                ShowMessage("结束点应靠后", false);
-            }
-        }
-        /// <summary>
-        /// 设置播放模式
-        /// </summary>
-        /// <param name="mode">模式</param>
-        /// <param name="showMessage">是否显示消息</param>
-        private void SetPlayMode(int mode, bool show)
-        {
-            Properties.User.Default.playMode = mode;
-            Properties.User.Default.Save();
-            ShowPlayMode(mode, show);
-        }
-        /// <summary>
-        /// 切换播放模式
-        /// </summary>
-        private void ChangePlayMode()
-        {
-            Properties.User.Default.playMode += 1;
-            if (Properties.User.Default.playMode == 4)
-            { Properties.User.Default.playMode = 0; }
-            Properties.User.Default.Save();
-
-            ShowPlayMode(Properties.User.Default.playMode, true);
-        }
-
-        //清除
-        /// <summary>
-        /// 清除循环段
-        /// </summary>
-        private void ClearLoop()
-        {
-            if (hasEndPosition == true || hasStartPosition == true)
-            {
-                startPosition = TimeSpan.Zero;
-                endPosition = TimeSpan.Zero;
-                hasStartPosition = false;
-                hasEndPosition = false;
-
-                //滑块高亮区域
-                TimeSlider.SelectionStart = 0;
-                TimeSlider.SelectionEnd = 0;
-                //显示消息
-                ShowMessage("已清除循环", false);
+                return false;
             }
         }
 
@@ -1047,9 +922,9 @@ namespace E.Player
         /// <summary>
         /// 手动刷新一些未自动更改语言的UI文字
         /// </summary>
-        public void RefreshUILanguage()
+        private void RefreshUILanguage()
         {
-            PlayListBox.ToolTip = FindResource("媒体总数") + "：" + videoCount;
+            PlayListBox.ToolTip = FindResource("媒体总数") + "：" + VideoCount;
             SetPlayMode(Properties.User.Default.playMode, false);
 
             if (Media.Source == null)
@@ -1062,146 +937,64 @@ namespace E.Player
         /// 更改主窗口右键菜单和窗口控件状态
         /// </summary>
         /// <param name="state"></param>
-        public void ChangeElementState(int state)
+        private void ChangeElementState(int state)
         {
             if (state == 0)
             {
-                //右键按钮可用性
-                MenuPlay.IsEnabled = false;
-                //MenuStop.IsEnabled = false;
-                MenuReplay.IsEnabled = false;
-                MenuForward.IsEnabled = false;
-                MenuBack.IsEnabled = false;
-                MenuLoopStart.IsEnabled = false;
-                MenuLoopEnd.IsEnabled = false;
-                MenuClearLoop.IsEnabled = false;
                 //按钮可用性
-                ButtonPlay.IsEnabled = false;
-                ButtonReplay.IsEnabled = false;
-                ButtonForward.IsEnabled = false;
-                ButtonBack.IsEnabled = false;
-                ButtonSetLoopStart.IsEnabled = false;
-                ButtonSetLoopEnd.IsEnabled = false;
-                ButtonClearLoop.IsEnabled = false;
+                BtnPlay.IsEnabled = false;
+                BtnReplay.IsEnabled = false;
+                BtnForward.IsEnabled = false;
+                BtnBack.IsEnabled = false;
+                BtnSetLoopStart.IsEnabled = false;
+                BtnSetLoopEnd.IsEnabled = false;
+                BtnClearLoop.IsEnabled = false;
             }
             else
             {
-                //右键按钮可用性
-                MenuPlay.IsEnabled = true;
-                //MenuStop.IsEnabled = true;
-                MenuReplay.IsEnabled = true;
-                MenuForward.IsEnabled = true;
-                MenuBack.IsEnabled = true;
-                MenuLoopStart.IsEnabled = true;
-                MenuLoopEnd.IsEnabled = true;
-                MenuClearLoop.IsEnabled = true;
                 //按钮可用性
-                ButtonPlay.IsEnabled = true;
-                ButtonReplay.IsEnabled = true;
-                ButtonForward.IsEnabled = true;
-                ButtonBack.IsEnabled = true;
-                ButtonSetLoopStart.IsEnabled = true;
-                ButtonSetLoopEnd.IsEnabled = true;
-                ButtonClearLoop.IsEnabled = true;
+                BtnPlay.IsEnabled = true;
+                BtnReplay.IsEnabled = true;
+                BtnForward.IsEnabled = true;
+                BtnBack.IsEnabled = true;
+                BtnSetLoopStart.IsEnabled = true;
+                BtnSetLoopEnd.IsEnabled = true;
+                BtnClearLoop.IsEnabled = true;
             }
         }
 
         //显示
         /// <summary>
-        /// 
+        /// 显示软件信息
         /// </summary>
-        /// <param name="mode"></param>
-        /// <param name="showMessage"></param>
-        public void ShowPlayMode(int mode, bool showMessage)
+        private void ShowAppInfo()
         {
-            switch (mode)
-            {
-                case 0:
-                    MenuSingle.IsChecked = true;
-                    MenuLoop.IsChecked = false;
-                    MenuOrder.IsChecked = false;
-                    MenuRandom.IsChecked = false;
-                    ButtonPlayMode.Content = FindResource("单次");
-                    if (showMessage)
-                    {
-                        //显示消息
-                        ShowMessage("播放模式切换", "：" + FindResource("单次").ToString(), false);
-                    }
-                    break;
-                case 1:
-                    MenuSingle.IsChecked = false;
-                    MenuLoop.IsChecked = true;
-                    MenuOrder.IsChecked = false;
-                    MenuRandom.IsChecked = false;
-                    ButtonPlayMode.Content = FindResource("循环");
-                    if (showMessage)
-                    {
-                        //显示消息
-                        ShowMessage("播放模式切换", "：" + FindResource("循环").ToString(), false);
-                    }
-                    break;
-                case 2:
-                    MenuSingle.IsChecked = false;
-                    MenuLoop.IsChecked = false;
-                    MenuOrder.IsChecked = true;
-                    MenuRandom.IsChecked = false;
-                    ButtonPlayMode.Content = FindResource("顺序");
-                    if (showMessage)
-                    {
-                        //显示消息
-                        ShowMessage("播放模式切换", "：" + FindResource("顺序").ToString(), false);
-                    }
-                    break;
-                case 3:
-                    MenuSingle.IsChecked = false;
-                    MenuLoop.IsChecked = false;
-                    MenuOrder.IsChecked = false;
-                    MenuRandom.IsChecked = true;
-                    ButtonPlayMode.Content = FindResource("随机");
-                    if (showMessage)
-                    {
-                        //显示消息
-                        ShowMessage("播放模式切换", "：" + FindResource("随机").ToString(), false);
-                    }
-                    break;
-            }
+            ThisName.Text = AppInfo.Name;
+            Description.Text = AppInfo.Description;
+            Developer.Text = AppInfo.Company;
+            Version.Text = AppInfo.Version.ToString();
+            BitCoinAddress.Text = AppInfo.BitCoinAddress;
+            UpdateNote.Text = AppInfo.UpdateNote;
         }
         /// <summary>
         /// 显示/隐藏控制区域
         /// </summary>
         private void ActiveControlArea()
         {
-            //显示
-            if (ConsoleGrid.Opacity < 0.5)
-            {
-                ConsoleGrid.Opacity = 1;
-                timer3.Stop();
-                MenuHideControl.Header = FindResource("隐藏控制台");
-            }
-            //隐藏
-            else if (ConsoleGrid.Opacity >= 0.5)
-            {
-                ConsoleGrid.Opacity = 0;
-                timer3.Stop();
-                MenuHideControl.Header = FindResource("显示控制台");
-            }
         }
         /// <summary>
         /// 显示/隐藏播放列表
         /// </summary>
         private void ShowList()
         {
-            //显示
-            if (Properties.User.Default.isShowList == false)
+            Properties.User.Default.isShowList = !Properties.User.Default.isShowList;
+            if (Properties.User.Default.isShowList)
             {
-                Properties.User.Default.isShowList = true;
-                MenuHideList.Header = FindResource("隐藏播放列表");
+                PanLeft.Visibility = Visibility.Visible;
             }
-            //隐藏
-            else if (Properties.User.Default.isShowList == true)
+            else
             {
-                Properties.User.Default.isShowList = false;
-                MenuHideList.Header = FindResource("显示播放列表");
+                PanLeft.Visibility = Visibility.Collapsed;
             }
         }
         /// <summary>
@@ -1209,7 +1002,7 @@ namespace E.Player
         /// </summary>
         /// <param name="resourceName">资源名</param>
         /// <param name="newBox">是否弹出对话框</param>
-        public void ShowMessage(string resourceName, bool newBox)
+        private void ShowMessage(string resourceName, bool newBox)
         {
             if (newBox)
             {
@@ -1227,7 +1020,7 @@ namespace E.Player
         /// <param name="resourceName">资源名</param>
         /// <param name="moreText">附加信息</param>
         /// <param name="newBox">是否弹出对话框</param>
-        public void ShowMessage(string resourceName, string moreText, bool newBox)
+        private void ShowMessage(string resourceName, string moreText, bool newBox)
         {
             if (newBox)
             {
@@ -1240,45 +1033,26 @@ namespace E.Player
             }
         }
 
-
         //窗口
-        /// <summary>
-        /// 窗口载入事件
-        /// </summary>
         private void Main_Loaded(object sender, RoutedEventArgs e)
         {
             LoadAppInfo();
+            ShowAppInfo();
+            LoadSettings();
 
+            CreateTimer();
 
             Message.Opacity = 0;
-            //创建计时器
-            CreateTimer();
-            //VideoName.ToolTip = FindResource("媒体路径");
-            //设置标题
             Main.Title = AppInfo.Name;
-            //载入界面语言
+
+            LoadVideos();
             LoadLanguage(Properties.User.Default.language);
-            //初始化右键菜单
-            CreteContextMenu();
-            //不激活按钮
-            ChangeElementState(0);
-            //读取一个字符串，并加入播放列表
-            if (Properties.User.Default._medias != null && Properties.User.Default._medias != "")
-            {
-                string[] _myB = Regex.Split(Properties.User.Default._medias, "///");
-                foreach (var b in _myB)
-                {
-                    CreateListBoxItem(b, false);
-                }
-                //激活按钮
-                //ChangeElementState(1);
-            }
-            //设置播放模式按钮信息
+
             SetPlayMode(Properties.User.Default.playMode, false);
+
+            ChangeElementState(0);
+
         }
-        /// <summary>
-        /// 窗口关闭事件
-        /// </summary>
         private void Main_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (Properties.User.Default.isSavePlaylist)
@@ -1309,11 +1083,7 @@ namespace E.Player
             ResetFlip();
             ResetRotation();
         }
-        //快捷键
-        /// <summary>
-        /// 快捷键
-        /// </summary>
-        private void Main_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void Main_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             //Ctrl+1 
             if (e.Key == Key.D1 && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
@@ -1335,33 +1105,22 @@ namespace E.Player
             {
                 SetPlayMode(3, true);
             }
-            else if (e.Key == Key.F1)
-            {
-                OpenHelp(1);
-            }
-            else if (e.Key == Key.F2)
-            {
-                OpenHelp(2);
-            }
-            else if (e.Key == Key.F3)
-            {
-                OpenHelp(3);
-            }
+
             //O键打开媒体文件
             if (e.KeyStates == Keyboard.GetKeyStates(Key.O))
             {
                 //浏览文件
-                _selectedVideo = Open();
+                SelectedVideoPath = Open();
                 //在播放列表添加此媒体，播放
-                CreateListBoxItem(_selectedVideo, true);
+                CreateListBoxItem(SelectedVideoPath, true);
             }
             //A键添加媒体文件
             else if (e.KeyStates == Keyboard.GetKeyStates(Key.A))
             {
                 //浏览文件
-                _selectedVideo = Open();
+                SelectedVideoPath = Open();
                 //在播放列表添加此媒体，不播放
-                CreateListBoxItem(_selectedVideo, false);
+                CreateListBoxItem(SelectedVideoPath, false);
             }
             //M键左右翻转
             else if (e.KeyStates == Keyboard.GetKeyStates(Key.M))
@@ -1404,14 +1163,14 @@ namespace E.Player
             //按Esc键退出全屏
             else if (e.KeyStates == Keyboard.GetKeyStates(Key.Escape))
             {
-                if (isFullScreen == true)
+                if (IsFullScreen == true)
                 {
                     WindowState = WindowState.Maximized;
                     WindowStyle = WindowStyle.SingleBorderWindow;
                     ResizeMode = ResizeMode.CanResize;
                     Topmost = false;
 
-                    isFullScreen = false;
+                    IsFullScreen = false;
                 }
             }
             //H键隐藏控制区
@@ -1438,13 +1197,13 @@ namespace E.Player
                 if (tempItem != null)
                 {
                     //获取路径
-                    _selectedVideo = tempItem.Tag.ToString();
+                    SelectedVideoPath = tempItem.Tag.ToString();
                     //播放
-                    PlayNewVideo(_selectedVideo);
+                    PlayNewVideo(SelectedVideoPath);
                 }
             }
             //
-            if (_playingVideo != "" && _playingVideo != null)
+            if (PlayingVideoPath != "" && PlayingVideoPath != null)
             {
                 //按空格键播放和暂停
                 if (e.KeyStates == Keyboard.GetKeyStates(Key.Space))
@@ -1457,20 +1216,20 @@ namespace E.Player
                     Replay();
                 }
                 //按←→键改变进度
-                else if (e.KeyStates == Keyboard.GetKeyStates(Key.Right) && File.Exists(_playingVideo))
+                else if (e.KeyStates == Keyboard.GetKeyStates(Key.Right) && File.Exists(PlayingVideoPath))
                 {
                     Forward();
                 }
-                else if (e.KeyStates == Keyboard.GetKeyStates(Key.Left) && File.Exists(_playingVideo))
+                else if (e.KeyStates == Keyboard.GetKeyStates(Key.Left) && File.Exists(PlayingVideoPath))
                 {
                     Back();
                 }
                 //按[]键设置循环段开始与结束
-                else if (e.KeyStates == Keyboard.GetKeyStates(Key.OemOpenBrackets) && File.Exists(_playingVideo))
+                else if (e.KeyStates == Keyboard.GetKeyStates(Key.OemOpenBrackets) && File.Exists(PlayingVideoPath))
                 {
                     SetLoopStart();
                 }
-                else if (e.KeyStates == Keyboard.GetKeyStates(Key.OemCloseBrackets) && File.Exists(_playingVideo))
+                else if (e.KeyStates == Keyboard.GetKeyStates(Key.OemCloseBrackets) && File.Exists(PlayingVideoPath))
                 {
                     SetLoopEnd();
                 }
@@ -1480,21 +1239,36 @@ namespace E.Player
                     ClearLoop();
                 }
             }
+
+            //关于菜单
+            if (e.Key == Key.F1)
+            { Process.Start("explorer.exe", AppInfo.HomePage); }
+            else if (e.Key == Key.F2)
+            { Process.Start("explorer.exe", AppInfo.InfoPage); }
+            else if (e.Key == Key.F3)
+            { Process.Start("explorer.exe", AppInfo.DownloadPage); }
+            else if (e.Key == Key.F4)
+            { Process.Start("explorer.exe", AppInfo.FeedbackPage); }
+            else if (e.Key == Key.F8)
+            { Process.Start("explorer.exe", AppInfo.GitHubPage); }
+            else if (e.Key == Key.F6)
+            { Process.Start("explorer.exe", AppInfo.QQGroupLink); }
+
         }
         //右键菜单点击
         private void MenuOpen_Click(object sender, RoutedEventArgs e)
         {
             //浏览文件
-            _selectedVideo = Open();
+            SelectedVideoPath = Open();
             //在播放列表添加此媒体，播放
-            CreateListBoxItem(_selectedVideo, true);
+            CreateListBoxItem(SelectedVideoPath, true);
         }
         private void MenuAdd_Click(object sender, RoutedEventArgs e)
         {
             //浏览文件
-            _selectedVideo = Open();
+            SelectedVideoPath = Open();
             //在播放列表添加此媒体，不播放
-            CreateListBoxItem(_selectedVideo, false);
+            CreateListBoxItem(SelectedVideoPath, false);
         }
         private void MenuDelete_Click(object sender, RoutedEventArgs e)
         {
@@ -1592,16 +1366,334 @@ namespace E.Player
         {
             ShowList();
         }
-        public void MenuHelp_Click(object sender, RoutedEventArgs e)
-        {
-            OpenHelp(1);
-        }
-        /// <summary>
-        /// 切换播放模式按钮
-        /// </summary>
+
         private void ButtonPlayMode_Click(object sender, RoutedEventArgs e)
         {
             ChangePlayMode();
+        }
+        private void MediaPlayer_MediaOpened(object sender, RoutedEventArgs e)
+        {
+            TimeSlider.Maximum = Media.NaturalDuration.TimeSpan.TotalSeconds;
+            TimeAll.Content = Media.NaturalDuration;
+        }
+        private void ConsoleGrid_MouseEnter(object sender, MouseEventArgs e)
+        {
+            ConsoleGrid.Opacity = 1;
+            timer3.Stop();
+        }
+        private void ConsoleGrid_MouseLeave(object sender, MouseEventArgs e)
+        {
+            timer3.Start();
+        }
+        private void TimeSlider_Loaded(object sender, RoutedEventArgs e)
+        {
+            TimeSlider.AddHandler(MouseLeftButtonUpEvent,
+                new MouseButtonEventHandler(TimeSlider_MouseLeftButtonUp), true);
+            VolumeSlider.AddHandler(MouseLeftButtonUpEvent,
+                new MouseButtonEventHandler(VolumeSlider_MouseLeftButtonUp), true);
+        }
+        private void TimeSlider_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Media.Position = TimeSpan.FromSeconds(TimeSlider.Value);
+            string str = Media.Position.ToString();
+            //显示消息
+            Message.Opacity = 1;
+            Message.Content = "当前进度：" + str.Substring(0, 8);
+        }
+        private void VolumeSlider_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            double temp = Math.Round(VolumeSlider.Value, 2);
+            Media.Volume = temp;
+            VolumeSlider.ToolTip = temp;
+            //显示消息
+            Message.Opacity = 1;
+            Message.Content = "当前音量：" + temp;
+
+        }
+        private void Media_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Play();
+        }
+        private void Player_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+            {
+                FullScreen();
+            }
+        }
+        private void Item_Play_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+            {
+                //获取当前选择的Item在PlayListBox的索引
+                ListBoxItem tempItem;
+                tempItem = PlayListBox.SelectedItem as ListBoxItem;
+                //获取路径
+                SelectedVideoPath = tempItem.Tag.ToString();
+                //播放
+                PlayNewVideo(SelectedVideoPath);
+            }
+        }
+        private void Item_Delete_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //Delete();
+        }
+        private void PlayListBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+        private void PlayListBox_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            //if (e.LeftButton == MouseButtonState.Pressed)
+            //{
+            //    var pos = e.GetPosition(PlayListBox);
+            //    HitTestResult result = VisualTreeHelper.HitTest(PlayListBox, pos);
+            //    if (result == null)
+            //    {
+            //        return;
+            //    }
+            //    var listBoxItem = Utils.FindVisualParent<ListBoxItem>(result.VisualHit);
+            //    if (listBoxItem == null || listBoxItem.Content != PlayListBox.SelectedItem)
+            //    {
+            //        return;
+            //    }
+            //    System.Windows.DataObject dataObj = new System.Windows.DataObject(listBoxItem.Content as TextBlock);
+            //    DragDrop.DoDragDrop(PlayListBox, dataObj, System.Windows.DragDropEffects.Move);
+            //}
+        }
+        private void PlayListBox_PreviewDrop(object sender, DragEventArgs e)
+        {
+            ////拖拽排序
+            //var pos = e.GetPosition(PlayListBox);
+            //var result = VisualTreeHelper.HitTest(PlayListBox, pos);
+            //if (result == null)
+            //{
+            //    return;
+            //}
+            ////查找元数据  
+            //var sourcePerson = e.Data.GetData(typeof(TextBlock)) as TextBlock;
+            //if (sourcePerson == null)
+            //{
+            //    return;
+            //}
+            ////查找目标数据  
+            //var listBoxItem = Utils.FindVisualParent<ListBoxItem>(result.VisualHit);
+            //if (listBoxItem == null)
+            //{
+            //    return;
+            //}
+            //var targetPerson = listBoxItem.Content as TextBlock;
+
+            //if (ReferenceEquals(targetPerson, sourcePerson))
+            //{
+            //    return;
+            //}
+            //PlayListBox.Items.Remove(sourcePerson);
+            //PlayListBox.Items.Insert(PlayListBox.Items.IndexOf(targetPerson), sourcePerson);
+        }
+
+        private void Player_Drop(object sender, DragEventArgs e)
+        {
+            //如果有文件拖拽进入
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            {
+                //获取该文件路径
+                SelectedVideoPath = ((Array)e.Data.GetData(System.Windows.DataFormats.FileDrop)).GetValue(0).ToString();
+                //检测路径是否正确
+                if (IsPathRight(SelectedVideoPath))
+                {
+                    //在播放列表添加此媒体，播放
+                    CreateListBoxItem(SelectedVideoPath, true);
+                }
+            }
+        }
+        private void PlayListBox_Drop(object sender, DragEventArgs e)
+        {
+            //如果有文件拖拽进入
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            {
+                //获取该文件路径
+                SelectedVideoPath = ((Array)e.Data.GetData(System.Windows.DataFormats.FileDrop)).GetValue(0).ToString();
+                //检测路径是否正确
+                if (IsPathRight(SelectedVideoPath))
+                {
+                    //在播放列表添加此媒体，不播放
+                    CreateListBoxItem(SelectedVideoPath, false);
+                }
+            }
+        }
+        private void Media_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            //单次
+            if (Properties.User.Default.playMode == 0)
+            {
+                Media.Stop();
+                IsPlay = false;
+                BtnPlay.Content = FindResource("播放");
+
+                //显示消息
+                ShowMessage("播放结束", false);
+            }
+            //循环
+            else if (Properties.User.Default.playMode == 1)
+            {
+                Media.Position = TimeSpan.Zero;
+            }
+            //顺序
+            else if (Properties.User.Default.playMode == 2)
+            {
+                //获取当前正在播放的Item在PlayListBox的索引
+                int n = 0;
+                string[] path = new string[VideoCount];
+                ListBoxItem tempItem;
+                for (int i = 0; i < VideoCount; i++)
+                {
+                    tempItem = PlayListBox.Items.GetItemAt(i) as ListBoxItem;
+                    path[i] = tempItem.Tag.ToString();
+
+                    if (PlayingVideoPath == path[i])
+                    {
+                        n = PlayListBox.Items.IndexOf(tempItem);
+                        break;
+                    }
+                }
+                //如果是最后一个Item
+                if (n == VideoCount - 1)
+                {
+                    //获取第一个Item
+                    //ListBoxItem nextItem = PlayListBox.Items.GetItemAt(0) as ListBoxItem;
+                    //获取nextItem储存的路径信息
+                    //_selectedVideo = nextItem.Tag.ToString();
+                    //停止播放
+                    //Media.Source = new Uri(_selectedVideo);
+                    Media.Stop();
+                    Media.Source = null;
+                    IsPlay = false;
+                    VideoName.Content = FindResource("媒体路径");
+                    TimeAll.Content = "00:00:00";
+
+                    //显示消息
+                    ShowMessage("全部播放完毕", false);
+                }
+                else
+                {
+                    //获取它的下一个Item
+                    ListBoxItem nextItem = PlayListBox.Items.GetItemAt(n + 1) as ListBoxItem;
+                    //获取nextItem储存的路径信息
+                    SelectedVideoPath = nextItem.Tag.ToString();
+
+                    PlayListBox.SelectedIndex = n + 1;
+                    //播放下一个视频
+                    PlayNewVideo(SelectedVideoPath);
+                    IsPlay = true;
+                }
+            }
+            //随机
+            else if (Properties.User.Default.playMode == 3)
+            {
+                Random ran = new Random();
+                int n = ran.Next(0, VideoCount);
+                //获取Item
+                ListBoxItem nextItem = PlayListBox.ItemContainerGenerator.ContainerFromIndex(n) as ListBoxItem;
+                //获取nextItem储存的路径信息
+                SelectedVideoPath = nextItem.Tag.ToString();
+
+                PlayListBox.SelectedIndex = n;
+                //播放下一个视频
+                PlayNewVideo(SelectedVideoPath);
+                IsPlay = true;
+            }
+
+        }
+       
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            TimePosition.Content = Media.Position;
+            TimeSlider.Value = Media.Position.TotalSeconds;
+        }
+        private void Timer2_Tick(object sender, EventArgs e)
+        {
+            Message.Opacity -= 0.01;
+            Loop();
+        }
+        private void Timer3_Tick(object sender, EventArgs e)
+        {
+            ConsoleGrid.Opacity -= 0.01;
+        }
+
+        //按钮点击事件
+        private void BtnFold_Click(object sender, RoutedEventArgs e)
+        {
+            if (PanCenter.Visibility == Visibility.Visible)
+            {
+                PanCenter.Visibility = Visibility.Collapsed;
+                BtnFold.BorderThickness = new Thickness(0, 0, 0, 0);
+            }
+            else
+            {
+                PanCenter.Visibility = Visibility.Visible;
+                BtnFold.BorderThickness = new Thickness(4, 0, 0, 0);
+            }
+        }
+        private void BtnFile_Click(object sender, RoutedEventArgs e)
+        {
+            CenterFilePage.Visibility = Visibility.Visible;
+            CenterSettingPage.Visibility = Visibility.Collapsed;
+            CenterAboutPage.Visibility = Visibility.Collapsed;
+
+            BtnsFile.Visibility = Visibility.Visible;
+            BtnsSetting.Visibility = Visibility.Collapsed;
+            BtnsAbout.Visibility = Visibility.Collapsed;
+
+            BtnFile.BorderThickness = new Thickness(4, 0, 0, 0);
+            BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
+            BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
+        }
+        private void BtnSetting_Click(object sender, RoutedEventArgs e)
+        {
+            CenterFilePage.Visibility = Visibility.Collapsed;
+            CenterSettingPage.Visibility = Visibility.Visible;
+            CenterAboutPage.Visibility = Visibility.Collapsed;
+
+            BtnsFile.Visibility = Visibility.Collapsed;
+            BtnsSetting.Visibility = Visibility.Visible;
+            BtnsAbout.Visibility = Visibility.Collapsed;
+
+            BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
+            BtnSetting.BorderThickness = new Thickness(4, 0, 0, 0);
+            BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
+        }
+        private void BtnAbout_Click(object sender, RoutedEventArgs e)
+        {
+            CenterFilePage.Visibility = Visibility.Collapsed;
+            CenterSettingPage.Visibility = Visibility.Collapsed;
+            CenterAboutPage.Visibility = Visibility.Visible;
+
+            BtnsFile.Visibility = Visibility.Collapsed;
+            BtnsSetting.Visibility = Visibility.Collapsed;
+            BtnsAbout.Visibility = Visibility.Visible;
+
+            BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
+            BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
+            BtnAbout.BorderThickness = new Thickness(4, 0, 0, 0);
+        }
+
+        private void BtnReset_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.User.Default.Reset();
+
+            //是否在切换视频时保持变换
+            KeepTrans.IsChecked = Properties.User.Default.isKeepTrans;
+            //是否在退出时保留播放列表
+            SavePlaylist.IsChecked = Properties.User.Default.isSavePlaylist;
+            //快进快退时间
+            JumpTime.Text = Properties.User.Default.jumpTime.ToString();
+
+            //语言
+            SetLanguage(Properties.User.Default.language);
+
+            //显示消息
+            //ShowMessage("已重置");
         }
 
 
@@ -1635,332 +1727,115 @@ namespace E.Player
             Process.Start("explorer.exe", AppInfo.QQGroupLink);
         }
 
-        /// <summary>
-        /// 视频载入时获取视频时长
-        /// </summary>
-        private void MediaPlayer_MediaOpened(object sender, RoutedEventArgs e)
-        {
-            TimeSlider.Maximum = Media.NaturalDuration.TimeSpan.TotalSeconds;
-            TimeAll.Content = Media.NaturalDuration;
-        }
-        /// <summary>
-        /// 同步播放列表媒体元素宽度
-        /// </summary>
-        private void PlayListBox_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            foreach (ListBoxItem item in PlayListBox.Items)
-            {
-                if (PlayListBox.ActualWidth - 4 <= 0)
-                {
-                    item.Width = 100;
-                }
-                else
-                {
-                    item.Width = PlayListBox.ActualWidth - 4;
-                }
-            }
-        }
-        /// <summary>
-        /// 窗口尺寸变更
-        /// </summary>
-        private void Main_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
 
-
-        }
-        private void Main_StateChanged(object sender, EventArgs e)
+        //切换视频时是否保留变换
+        private void KeepTrans_Checked(object sender, RoutedEventArgs e)
         {
-        }
-        /// <summary>
-        /// 控制区域显隐
-        /// </summary>
-        private void ConsoleGrid_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            ConsoleGrid.Opacity = 1;
-            timer3.Stop();
-        }
-        private void ConsoleGrid_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            timer3.Start();
-        }
-        /// <summary>
-        /// 增加句柄，保证触发鼠标左键点击事件
-        /// </summary>
-        private void TimeSlider_Loaded(object sender, RoutedEventArgs e)
-        {
-            TimeSlider.AddHandler(MouseLeftButtonUpEvent,
-                new MouseButtonEventHandler(TimeSlider_MouseLeftButtonUp), true);
-            VolumeSlider.AddHandler(MouseLeftButtonUpEvent,
-                new MouseButtonEventHandler(VolumeSlider_MouseLeftButtonUp), true);
-        }
-        /// <summary>
-        /// 按鼠标左键改变进度
-        /// </summary>
-        private void TimeSlider_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            Media.Position = TimeSpan.FromSeconds(TimeSlider.Value);
-            string str = Media.Position.ToString();
+            Properties.User.Default.isKeepTrans = true;
+            Properties.User.Default.Save();
             //显示消息
-            Message.Opacity = 1;
-            Message.Content = "当前进度：" + str.Substring(0, 8);
+            //ShowMessage("已更改");
         }
-        /// <summary>
-        /// 按鼠标左键改变音量
-        /// </summary>
-        private void VolumeSlider_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void KeepTrans_Unchecked(object sender, RoutedEventArgs e)
         {
-            double temp = Math.Round(VolumeSlider.Value, 2);
-            Media.Volume = temp;
-            VolumeSlider.ToolTip = temp;
+            Properties.User.Default.isKeepTrans = false;
+            Properties.User.Default.Save();
             //显示消息
-            Message.Opacity = 1;
-            Message.Content = "当前音量：" + temp;
-
+            //ShowMessage("已更改");
         }
-        /// <summary>
-        /// 鼠标左键播放与暂停
-        /// </summary>
-        private void Media_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        //是否在退出时保留播放列表
+        private void SavePlaylist_Checked(object sender, RoutedEventArgs e)
         {
-            Play();
+            Properties.User.Default.isSavePlaylist = true;
+            Properties.User.Default.Save();
+            //显示消息
+            //ShowMessage("已更改");
         }
-        /// <summary>
-        /// 在播放区域，双击鼠标左键设置全屏
-        /// </summary>
-        private void Player_MouseDown(object sender, MouseButtonEventArgs e)
+        private void SavePlaylist_Unchecked(object sender, RoutedEventArgs e)
         {
-            if (e.ClickCount == 2)
+            Properties.User.Default.isSavePlaylist = false;
+            Properties.User.Default.Save();
+            //显示消息
+            //ShowMessage("已更改");
+        }
+        //更改快进快退时间
+        private void JumpTime_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (JumpTime.Text != "")
             {
-                FullScreen();
-            }
-        }
-        /// <summary>
-        /// 在播放列表Item，双击鼠标左键播放视频
-        /// </summary>
-        private void Item_Play_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ClickCount == 2)
-            {
-                //获取当前选择的Item在PlayListBox的索引
-                ListBoxItem tempItem;
-                tempItem = PlayListBox.SelectedItem as ListBoxItem;
-                //获取路径
-                _selectedVideo = tempItem.Tag.ToString();
-                //播放
-                PlayNewVideo(_selectedVideo);
-            }
-        }
-        /// <summary>
-        /// 在播放列表Item，单击鼠标右键
-        /// </summary>
-        private void Item_Delete_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            //Delete();
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        private void PlayListBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-        private void PlayListBox_PreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            //if (e.LeftButton == MouseButtonState.Pressed)
-            //{
-            //    var pos = e.GetPosition(PlayListBox);
-            //    HitTestResult result = VisualTreeHelper.HitTest(PlayListBox, pos);
-            //    if (result == null)
-            //    {
-            //        return;
-            //    }
-            //    var listBoxItem = Utils.FindVisualParent<ListBoxItem>(result.VisualHit);
-            //    if (listBoxItem == null || listBoxItem.Content != PlayListBox.SelectedItem)
-            //    {
-            //        return;
-            //    }
-            //    System.Windows.DataObject dataObj = new System.Windows.DataObject(listBoxItem.Content as TextBlock);
-            //    DragDrop.DoDragDrop(PlayListBox, dataObj, System.Windows.DragDropEffects.Move);
-            //}
-        }
-        private void PlayListBox_PreviewDrop(object sender, System.Windows.DragEventArgs e)
-        {
-            ////拖拽排序
-            //var pos = e.GetPosition(PlayListBox);
-            //var result = VisualTreeHelper.HitTest(PlayListBox, pos);
-            //if (result == null)
-            //{
-            //    return;
-            //}
-            ////查找元数据  
-            //var sourcePerson = e.Data.GetData(typeof(TextBlock)) as TextBlock;
-            //if (sourcePerson == null)
-            //{
-            //    return;
-            //}
-            ////查找目标数据  
-            //var listBoxItem = Utils.FindVisualParent<ListBoxItem>(result.VisualHit);
-            //if (listBoxItem == null)
-            //{
-            //    return;
-            //}
-            //var targetPerson = listBoxItem.Content as TextBlock;
-
-            //if (ReferenceEquals(targetPerson, sourcePerson))
-            //{
-            //    return;
-            //}
-            //PlayListBox.Items.Remove(sourcePerson);
-            //PlayListBox.Items.Insert(PlayListBox.Items.IndexOf(targetPerson), sourcePerson);
-        }
-
-        /// <summary>
-        /// 拖拽文件进入Player
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Player_Drop(object sender, System.Windows.DragEventArgs e)
-        {
-            //如果有文件拖拽进入
-            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
-            {
-                //获取该文件路径
-                _selectedVideo = ((Array)e.Data.GetData(System.Windows.DataFormats.FileDrop)).GetValue(0).ToString();
-                //检测路径是否正确
-                if (IsPathRight(_selectedVideo))
+                try
                 {
-                    //在播放列表添加此媒体，播放
-                    CreateListBoxItem(_selectedVideo, true);
-                }
-            }
-        }
-        /// <summary>
-        /// 拖拽文件进入播放列表
-        /// </summary>
-        private void PlayListBox_Drop(object sender, System.Windows.DragEventArgs e)
-        {
-            //如果有文件拖拽进入
-            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
-            {
-                //获取该文件路径
-                _selectedVideo = ((Array)e.Data.GetData(System.Windows.DataFormats.FileDrop)).GetValue(0).ToString();
-                //检测路径是否正确
-                if (IsPathRight(_selectedVideo))
-                {
-                    //在播放列表添加此媒体，不播放
-                    CreateListBoxItem(_selectedVideo, false);
-                }
-            }
-        }
-        /// <summary>
-        /// 媒体播放结束事件
-        /// </summary>
-        private void Media_MediaEnded(object sender, RoutedEventArgs e)
-        {
-            //单次
-            if (Properties.User.Default.playMode == 0)
-            {
-                Media.Stop();
-                isPlay = false;
-                ButtonPlay.Content = FindResource("播放");
-
-                //显示消息
-                ShowMessage("播放结束", false);
-            }
-            //循环
-            else if (Properties.User.Default.playMode == 1)
-            {
-                Media.Position = TimeSpan.Zero;
-            }
-            //顺序
-            else if (Properties.User.Default.playMode == 2)
-            {
-                //获取当前正在播放的Item在PlayListBox的索引
-                int n = 0;
-                string[] path = new string[videoCount];
-                ListBoxItem tempItem;
-                for (int i = 0; i < videoCount; i++)
-                {
-                    tempItem = PlayListBox.Items.GetItemAt(i) as ListBoxItem;
-                    path[i] = tempItem.Tag.ToString();
-
-                    if (_playingVideo == path[i])
+                    int t = int.Parse(JumpTime.Text);
+                    if (t > 0 && t < 1000)
                     {
-                        n = PlayListBox.Items.IndexOf(tempItem);
-                        break;
+                        TimeSpan ts = TimeSpan.FromMinutes(t);
+                        Properties.User.Default.jumpTime = t;
+                        Properties.User.Default.Save();
+                        //显示消息
+                       // ShowMessage("已更改");
+                    }
+                    else
+                    {
+                        JumpTime.Text = Properties.User.Default.jumpTime.ToString();
+                       // ShowMessage("输入1~999整数");
                     }
                 }
-                //如果是最后一个Item
-                if (n == videoCount - 1)
+                catch (Exception)
                 {
-                    //获取第一个Item
-                    //ListBoxItem nextItem = PlayListBox.Items.GetItemAt(0) as ListBoxItem;
-                    //获取nextItem储存的路径信息
-                    //_selectedVideo = nextItem.Tag.ToString();
-                    //停止播放
-                    //Media.Source = new Uri(_selectedVideo);
-                    Media.Stop();
-                    Media.Source = null;
-                    isPlay = false;
-                    VideoName.Content = FindResource("媒体路径");
-                    TimeAll.Content = "00:00:00";
-
-                    //显示消息
-                    ShowMessage("全部播放完毕", false);
-                }
-                else
-                {
-                    //获取它的下一个Item
-                    ListBoxItem nextItem = PlayListBox.Items.GetItemAt(n + 1) as ListBoxItem;
-                    //获取nextItem储存的路径信息
-                    _selectedVideo = nextItem.Tag.ToString();
-
-                    PlayListBox.SelectedIndex = n + 1;
-                    //播放下一个视频
-                    PlayNewVideo(_selectedVideo);
-                    isPlay = true;
+                    JumpTime.Text = Properties.User.Default.jumpTime.ToString();
+                   // ShowMessage("输入整数");
                 }
             }
-            //随机
-            else if (Properties.User.Default.playMode == 3)
+        }
+
+        private void CBSelectedLanguage_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            object selectedName = CbbLanguages.SelectedValue;
+            if (selectedName != null)
             {
-                Random ran = new Random();
-                int n = ran.Next(0, videoCount);
-                //获取Item
-                ListBoxItem nextItem = PlayListBox.ItemContainerGenerator.ContainerFromIndex(n) as ListBoxItem;
-                //获取nextItem储存的路径信息
-                _selectedVideo = nextItem.Tag.ToString();
+                string langName = selectedName.ToString();
+                //根据本地语言来进行本地化,不过这里上不到
+                //CultureInfo currentCultureInfo = CultureInfo.CurrentCulture;
+                ResourceDictionary langRd = null;
+                try
+                {
+                    if (langName == "zh_CN")
+                    {
+                        //根据名字载入语言文件
+                        langRd = System.Windows.Application.LoadComponent(new Uri(@"语言/zh_CN.xaml", UriKind.Relative)) as ResourceDictionary;
+                    }
+                    else
+                    {
+                        //根据名字载入语言文件
+                        langRd = System.Windows.Application.LoadComponent(new Uri(@"语言/" + langName + ".xaml", UriKind.Relative)) as ResourceDictionary;
+                    }
+                }
+                catch (Exception e2)
+                { MessageBox.Show(e2.Message); }
 
-                PlayListBox.SelectedIndex = n;
-                //播放下一个视频
-                PlayNewVideo(_selectedVideo);
-                isPlay = true;
+                if (langRd != null)
+                {
+                    //本窗口更改语言，如果已使用其他语言,先清空
+                    if (this.Resources.MergedDictionaries.Count > 0)
+                    { this.Resources.MergedDictionaries.Clear(); }
+                    this.Resources.MergedDictionaries.Add(langRd);
+                    //主窗口更改语言
+                    if (Resources.MergedDictionaries.Count > 0)
+                    {Resources.MergedDictionaries.Clear(); }
+                    Resources.MergedDictionaries.Add(langRd);
+                    //手动刷新一些未自动更改语言的UI文字
+                    RefreshUILanguage();
+                    //保存设置
+                    Properties.User.Default.language = langName;
+                    Properties.User.Default.Save();
+                    //显示消息
+                    //ShowMessage("已更改");
+                }
             }
+        }
+        private void CbbThemes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
 
-        }
-       
-        /// <summary>
-        /// 计时器1，进度条绑定媒体播放进度
-        /// </summary>
-        private void Timer1_Tick(object sender, EventArgs e)
-        {
-            TimePosition.Content = Media.Position;
-            TimeSlider.Value = Media.Position.TotalSeconds;
-        }
-        /// <summary>
-        /// 计时器2，消息透明度降低
-        /// </summary>
-        private void Timer2_Tick(object sender, EventArgs e)
-        {
-            Message.Opacity -= 0.01;
-            Loop();
-        }
-        /// <summary>
-        /// 计时器3，控制区域透明度降低
-        /// </summary>
-        private void Timer3_Tick(object sender, EventArgs e)
-        {
-            ConsoleGrid.Opacity -= 0.01;
         }
     }
 }

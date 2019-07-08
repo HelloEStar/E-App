@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:E.Player"
         mc:Ignorable="d"
-        Title="E Player" Height="500" Width="800" MinHeight="400" PreviewKeyDown="Main_PreviewKeyDown" AllowDrop="True" Loaded="Main_Loaded" Closing="Main_Closing" SizeChanged="Main_SizeChanged" StateChanged="Main_StateChanged" Icon="图片/E Player.ico" MinWidth="500">
+        Title="E Player" Height="500" Width="800" MinHeight="400" PreviewKeyDown="Main_PreviewKeyDown" AllowDrop="True" Loaded="Main_Loaded" Closing="Main_Closing" Icon="图片/E Player.ico" MinWidth="600">
 
     <!--自定义控件模板-->
     <Window.Resources>
@@ -123,6 +123,166 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
 
+        <!--检查框样式-->
+        <Style x:Key="检查框样式" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="IsTabStop" Value="False"/>
+        </Style>
+
+        <!--下拉框样式-->
+        <Style x:Key="下拉框样式" TargetType="{x:Type ComboBox}">
+            <Setter Property="Background" Value="{DynamicResource 一级背景颜色}"/>
+            <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="IsTabStop" Value="False"/>
+
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+
+            <Setter Property="ItemContainerStyle" Value="{DynamicResource 下拉框子项样式}"/>
+            <Setter Property="Template" Value="{DynamicResource 下拉框模板}"/>
+        </Style>
+        <!--下拉框模板-->
+        <ControlTemplate x:Key="下拉框模板" TargetType="{x:Type ComboBox}">
+            <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="0"/>
+                </Grid.ColumnDefinitions>
+                <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="0"
+                       PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" Placement="Bottom">
+                    <Border x:Name="dropDownBorder" BorderBrush="{DynamicResource 一级边框颜色}" BorderThickness="1" Background="{DynamicResource 三级背景颜色}"
+                            MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{Binding ActualWidth, ElementName=templateRoot}">
+                        <ScrollViewer x:Name="DropDownScrollViewer">
+                            <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
+                                <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
+                                    <Rectangle x:Name="opaqueRect" Fill="{Binding Background, ElementName=dropDownBorder}" Height="{Binding ActualHeight, ElementName=dropDownBorder}" Width="{Binding ActualWidth, ElementName=dropDownBorder}"/>
+                                </Canvas>
+                                <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Continue" Background="{DynamicResource 三级背景颜色}"/>
+                                <!--<ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>-->
+                            </Grid>
+                        </ScrollViewer>
+                    </Border>
+                </Popup>
+                <Border Grid.ColumnSpan="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                    <!--CornerRadius="4"-->
+                    <Grid>
+                        <ToggleButton x:Name="toggleButton" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" Background="{TemplateBinding Background}" Grid.ColumnSpan="2"
+                                      IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{DynamicResource 下拉框切换按钮样式}"/>
+                        <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                              Content="{TemplateBinding SelectionBoxItem}" ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              IsHitTestVisible="false" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Grid>
+                </Border>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <!--<Trigger Property="HasDropShadow" SourceName="PART_Popup" Value="true">  
+                        <Setter Property="Margin" TargetName="shadow" Value="0,0,5,5"/>  
+                        <Setter Property="Color" TargetName="shadow" Value="#71000000"/>  
+                    </Trigger>-->
+                <Trigger Property="HasItems" Value="false">
+                    <Setter Property="Height" TargetName="dropDownBorder" Value="60"/>
+                </Trigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsGrouping" Value="true"/>
+                        <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                </MultiTrigger>
+                <Trigger Property="ScrollViewer.CanContentScroll" SourceName="DropDownScrollViewer" Value="false">
+                    <Setter Property="Canvas.Top" TargetName="opaqueRect" Value="{Binding VerticalOffset, ElementName=DropDownScrollViewer}"/>
+                    <Setter Property="Canvas.Left" TargetName="opaqueRect" Value="{Binding HorizontalOffset, ElementName=DropDownScrollViewer}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <!--下拉框切换按钮样式-->
+        <Style x:Key="下拉框切换按钮样式" TargetType="{x:Type ToggleButton}">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="ClickMode" Value="Press"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border x:Name="templateRoot" SnapsToDevicePixels="true" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <Border x:Name="splitBorder" Width="30" SnapsToDevicePixels="true" Margin="0" HorizontalAlignment="Right" 
+                                        BorderThickness="{TemplateBinding BorderThickness}" Background="{x:Null}">
+                                <Path x:Name="arrow" VerticalAlignment="Center" Margin="0" Stretch="Fill" Height="10" Width="12" HorizontalAlignment="Center" Fill="{DynamicResource 三级字体颜色}" Data="M 50,50 L 0,0 100,0 z"/>
+                            </Border>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type ComboBox}}}" Value="true"/>
+                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                    <Condition Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="BorderBrush" TargetName="templateRoot" Value="#FF565656"/>
+                            </MultiDataTrigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Fill" TargetName="arrow" Value="{StaticResource 三级字体颜色}"/>
+                                <Setter Property="BorderBrush" TargetName="templateRoot" Value="#FFADADAD"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- 下拉框子项样式 -->
+        <Style x:Key="下拉框子项样式" TargetType="ComboBoxItem">
+            <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
+            <Setter Property="Background" Value="{DynamicResource 三级背景颜色}"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border Name="Back" BorderThickness="0,0,0,0">
+                            <ContentPresenter ContentSource="{Binding Source}" HorizontalAlignment="Stretch" VerticalAlignment="Center"></ContentPresenter>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="Back" Property="Background" Value="{DynamicResource 无焦点选中颜色}"></Setter>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Back" Property="Background" Value="{DynamicResource 有焦点选中颜色}"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--文本输入框样式-->
+        <Style x:Key="文本输入框样式" TargetType="TextBox">
+            <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
+            <Setter Property="CaretBrush" Value="{DynamicResource 一级字体颜色}"/>
+            <Setter Property="Background" Value="{DynamicResource 三级背景颜色}"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
         <!--文本显示框样式-->
         <Style x:Key="文本显示框样式" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{DynamicResource 二级字体颜色}"/>
@@ -130,7 +290,7 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="3"/>
         </Style>
-        
+
         <!--流式面板样式-->
         <Style x:Key="水平流式面板样式" TargetType="WrapPanel">
             <Setter Property="Height" Value="30"/>
@@ -145,21 +305,20 @@
             <!--左-->
             <DockPanel x:Name="PanLeft" Background="{DynamicResource 二级背景颜色}" >
                 <StackPanel DockPanel.Dock="Top">
-                    <Button x:Name="BtnFold" Content="折叠" Style="{DynamicResource 菜单按钮样式}" BorderThickness="4,0,0,0"/>
-                    <Button x:Name="BtnFile" Content="文件" Style="{DynamicResource 菜单按钮样式}" BorderThickness="4,0,0,0"/>
-                    <Button x:Name="BtnControl" Content="控制" Style="{DynamicResource 菜单按钮样式}"/>
-                    <Button x:Name="BtnSetting" Content="设置" Style="{DynamicResource 菜单按钮样式}"/>
-                    <Button x:Name="BtnAbout" Content="关于"  Style="{DynamicResource 菜单按钮样式}"/>
+                    <Button x:Name="BtnFold" Content="折叠" Style="{DynamicResource 菜单按钮样式}" BorderThickness="4,0,0,0" Click="BtnFold_Click"/>
+                    <Button x:Name="BtnFile" Content="文件" Style="{DynamicResource 菜单按钮样式}" BorderThickness="4,0,0,0" Click="BtnFile_Click"/>
+                    <Button x:Name="BtnSetting" Content="设置" Style="{DynamicResource 菜单按钮样式}" Click="BtnSetting_Click"/>
+                    <Button x:Name="BtnAbout" Content="关于"  Style="{DynamicResource 菜单按钮样式}" Click="BtnAbout_Click"/>
                 </StackPanel>
                 <WrapPanel Orientation="Vertical">
                     <WrapPanel  x:Name="BtnsFile" Orientation="Vertical">
-                        <Button x:Name="BtnOpen" Content="{DynamicResource 打开}" Style="{DynamicResource 工具按钮样式}"/>
-                        <Button x:Name="BtnAdd" Content="{DynamicResource 添加}" Style="{DynamicResource 工具按钮样式}"/>
-                        <Button x:Name="BtnRemove" Content="{DynamicResource 删除}" Style="{DynamicResource 工具按钮样式}"/>
+                        <Button x:Name="BtnOpen" Content="{DynamicResource 打开}" Style="{DynamicResource 工具按钮样式}" Click="MenuOpen_Click"/>
+                        <Button x:Name="BtnAdd" Content="{DynamicResource 添加}" Style="{DynamicResource 工具按钮样式}" Click="MenuAdd_Click"/>
+                        <Button x:Name="BtnRemove" Content="{DynamicResource 删除}" Style="{DynamicResource 工具按钮样式}" Click="MenuDelete_Click"/>
                     </WrapPanel>
                     <WrapPanel  x:Name="BtnsSetting" Orientation="Vertical" Visibility="Collapsed">
-                        <Button x:Name="BtnReset" Content="{DynamicResource 重置}" ToolTip="{DynamicResource 重置}" Style="{DynamicResource 工具按钮样式}"/>
-                        <Button x:Name="BtnApply" Content="{DynamicResource 应用}" ToolTip="{DynamicResource 应用}" Style="{DynamicResource 工具按钮样式}"/>
+                        <Button x:Name="BtnReset" Content="{DynamicResource 重置}"  ToolTip="{DynamicResource 重置+}" Style="{DynamicResource 工具按钮样式}" Click="BtnReset_Click"/>
+                        <Button x:Name="BtnApply" Content="{DynamicResource 应用}" ToolTip="{DynamicResource 应用+}" Style="{DynamicResource 工具按钮样式}"/>
                         <Button x:Name="BtnClearRunInfo" Content="{DynamicResource 清空}" ToolTip="{DynamicResource 清空+}" Style="{DynamicResource 工具按钮样式}"/>
                     </WrapPanel>
                     <WrapPanel  x:Name="BtnsAbout" Orientation="Vertical" Visibility="Collapsed">
@@ -173,15 +332,25 @@
                 </WrapPanel>
             </DockPanel>
             <!--中-->
-            <Grid x:Name="PlayList" Background="#FFE6E6E6" Margin="0" Width="240">
-                <DockPanel>
-                    <WrapPanel Style="{DynamicResource 水平流式面板样式}" ItemWidth="80" Margin="0" DockPanel.Dock="Top">
-                        <Button x:Name="ButtonAdd" Content="{DynamicResource 添加}" Style="{DynamicResource 自由按钮样式}" Click="MenuAdd_Click" Padding="0"/>
-                        <Button x:Name="ButtonDelete" Content="{DynamicResource 删除}" Style="{DynamicResource 自由按钮样式}" Click="MenuDelete_Click" Padding="0"/>
-                        <Button x:Name="ButtonPlayMode" Content="{DynamicResource 单次}" Style="{DynamicResource 自由按钮样式}" Click="ButtonPlayMode_Click" />
-                    </WrapPanel>
-                    <ListBox x:Name="PlayListBox" Background="White" Margin="0" Drop="PlayListBox_Drop" 
-                             SizeChanged="PlayListBox_SizeChanged" PreviewMouseMove="PlayListBox_PreviewMouseMove" PreviewDrop="PlayListBox_PreviewDrop" PreviewMouseLeftButtonDown="PlayListBox_PreviewMouseLeftButtonDown"/>
+            <Grid x:Name="PanCenter" Background="{DynamicResource 二级背景颜色}" Width="240" Visibility="Collapsed">
+                <DockPanel x:Name="CenterFilePage">
+                    <ListBox x:Name="PlayListBox" Drop="PlayListBox_Drop" PreviewMouseMove="PlayListBox_PreviewMouseMove" PreviewDrop="PlayListBox_PreviewDrop" PreviewMouseLeftButtonDown="PlayListBox_PreviewMouseLeftButtonDown" Background="{x:Null}" BorderThickness="0"/>
+                </DockPanel>
+
+                <DockPanel  x:Name="CenterSettingPage" Visibility="Collapsed">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel DockPanel.Dock="Top">
+                            <Label Content="{DynamicResource 语言}" Style="{DynamicResource 标题标签样式}"/>
+                            <ComboBox x:Name="CbbLanguages" Style="{DynamicResource 下拉框样式}" SelectionChanged="CBSelectedLanguage_SelectionChanged"/>
+                            <Label Content="主题" Style="{DynamicResource 标题标签样式}"/>
+                            <ComboBox x:Name="CbbThemes" Style="{DynamicResource 下拉框样式}" SelectionChanged="CbbThemes_SelectionChanged"/>
+                            <Label Content="视图" Style="{DynamicResource 标题标签样式}"/>
+                            <CheckBox x:Name="KeepTrans" Content="{DynamicResource 保留视频的翻转与旋转效果}" Style="{DynamicResource 检查框样式}" Checked="KeepTrans_Checked" Unchecked="KeepTrans_Unchecked"/>
+                            <CheckBox x:Name="SavePlaylist" Content="{DynamicResource 退出时保留播放列表}" Style="{DynamicResource 检查框样式}" Checked="SavePlaylist_Checked" Unchecked="SavePlaylist_Unchecked"/>
+                            <Label Content="{DynamicResource 自定义快进快退}" Style="{DynamicResource 标题标签样式}" />
+                            <TextBox x:Name="JumpTime" Style="{DynamicResource 文本输入框样式}" KeyUp="JumpTime_KeyUp"/>
+                        </StackPanel>
+                    </ScrollViewer>
                 </DockPanel>
 
                 <DockPanel x:Name="CenterAboutPage" Visibility="Collapsed">
@@ -204,33 +373,40 @@
                 </DockPanel>
             </Grid>
             <!--右-->
-            <Grid x:Name="Player" Background="Black" Drop="Player_Drop" MouseDown="Player_MouseDown">
+            <Grid x:Name="PanRight" Background="{DynamicResource 三级背景颜色}"  Drop="Player_Drop" MouseDown="Player_MouseDown">
                 <MediaElement x:Name="Media" LoadedBehavior="Manual" Volume="0.5" AllowDrop="True" MediaOpened="MediaPlayer_MediaOpened" MediaEnded="Media_MediaEnded" MouseLeftButtonUp="Media_MouseLeftButtonUp" />
                 <Image x:Name="Cover" Margin="0" MouseLeftButtonUp="Media_MouseLeftButtonUp"/>
                 <Label x:Name="Message" Content="消息提示" Margin="10,10,10,0" Foreground="#FFFFE800" Background="{x:Null}" Height="30" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="14" Padding="3,0,0,0"/>
-                <Grid x:Name="ConsoleGrid" Height="125" VerticalAlignment="Bottom" Background="#7FFFFFFF" AllowDrop="False" MouseEnter="ConsoleGrid_MouseEnter" MouseLeave="ConsoleGrid_MouseLeave" DockPanel.Dock="Bottom">
-                    <Label x:Name="VideoName" Content="{DynamicResource 媒体路径}" Margin="10,5,160,0" Foreground="Black" ToolTip="{DynamicResource 媒体路径}" Height="25" VerticalAlignment="Top"/>
-                    <Label x:Name="VideoVolume" Content="{DynamicResource 音量}" Margin="0,5,110,0" Foreground="Black" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top"/>
-                    <Slider x:Name="VolumeSlider" IsMoveToPointEnabled="True" HorizontalAlignment="Right" Margin="0,8,10,0" 
-                    Width="100" SmallChange="0" Value="0.5" Cursor="Hand" LargeChange="0" ToolTip="0.5" TickFrequency="10" Maximum="1" Focusable="False" Height="22" VerticalAlignment="Top" IsTabStop="False"/>
-                    <Slider x:Name="TimeSlider" IsMoveToPointEnabled="True" Margin="10,30,10,0" Height="23" VerticalAlignment="Top"
-                     Loaded="TimeSlider_Loaded" Maximum="1" LargeChange="10" SmallChange="5" Cursor="Hand" Focusable="False" AllowDrop="False" IsSelectionRangeEnabled="True" />
-                    <Label x:Name="TimePosition" Content="00:00:00" Margin="10,53,0,0" Foreground="Black" HorizontalAlignment="Left" Width="58" Height="25" VerticalAlignment="Top" AllowDrop="False"/>
-                    <Label x:Name="TimeAll" Content="00:00:00" Margin="0,53,10,0" VerticalAlignment="Top" Foreground="Black" HorizontalAlignment="Right" Width="58" AllowDrop="False"/>
-                    <Button x:Name="ButtonOpen" Content="{DynamicResource 打开}" Click="MenuOpen_Click" Height="25" RenderTransformOrigin="0.833,0.52" HorizontalAlignment="Left" Width="60" Margin="10,0,0,10" VerticalAlignment="Bottom" AllowDrop="False"/>
-                    <Grid HorizontalAlignment="Center" Margin="75,0" Width="342" Height="67" VerticalAlignment="Bottom">
-                        <Button x:Name="ButtonReplay" Content="{DynamicResource 重播}" Click="MenuReplay_Click" Height="25" RenderTransformOrigin="0.638,0.44" HorizontalAlignment="Center" Width="60" VerticalAlignment="Bottom" Margin="6,0,276,40" AllowDrop="False" />
-                        <Button x:Name="ButtonBack" Content="{DynamicResource 快退}" Click="MenuBack_Click" Height="25" RenderTransformOrigin="1.067,0.48" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" VerticalAlignment="Bottom" Margin="71,0,211,40" AllowDrop="False" />
-                        <Button x:Name="ButtonPlay" Content="{DynamicResource 播放}" Click="MenuPlay_Click" Height="25" Width="70" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="96,0,96,40" />
-                        <Button x:Name="ButtonForward" Content="{DynamicResource 快进}" Click="MenuForward_Click" Height="25" HorizontalAlignment="Center" Width="60" VerticalAlignment="Bottom" Margin="211,0,71,40" RenderTransformOrigin="1.329,0.48" AllowDrop="False" />
-                        <Button x:Name="ButtonLRFlip" Content="{DynamicResource 左右翻转}" Click="MenuLRFlip_Click" Height="25" RenderTransformOrigin="1.067,0.48" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" VerticalAlignment="Bottom" Margin="276,0,6,40" AllowDrop="False" />
-                        <Button x:Name="ButtonSetLoopStart" Content="{DynamicResource 循环起点}" Click="MenuLoopStart_Click" Height="25" RenderTransformOrigin="1.067,0.48" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="70" VerticalAlignment="Bottom" Margin="25,0,247,10" AllowDrop="False" />
-                        <Button x:Name="ButtonSetLoopEnd" Content="{DynamicResource 循环终点}" Click="MenuLoopEnd_Click" Height="25" HorizontalAlignment="Center" Width="70" VerticalAlignment="Bottom" Margin="100,0,172,10" RenderTransformOrigin="1.329,0.48" AllowDrop="False" />
-                        <Button x:Name="ButtonClearLoop" Content="{DynamicResource 清除循环}" Click="MenuClearLoop_Click" Height="25" HorizontalAlignment="Center" Width="70" VerticalAlignment="Bottom" Margin="175,0,97,10" RenderTransformOrigin="1.329,0.48" AllowDrop="False" />
-                        <Button x:Name="ButtonList" Content="{DynamicResource 播放列表}" Click="MenuHideList_Click" HorizontalAlignment="Center" Width="70" Height="25" VerticalAlignment="Bottom" Margin="250,0,22,10" AllowDrop="False"/>
+                <DockPanel x:Name="ConsoleGrid" Height="125" Background="{DynamicResource 一级背景颜色}"  VerticalAlignment="Bottom" DockPanel.Dock="Bottom" MouseEnter="ConsoleGrid_MouseEnter" MouseLeave="ConsoleGrid_MouseLeave">
+                    <Grid DockPanel.Dock="Top">
+                        <Label x:Name="VideoName" Content="{DynamicResource 媒体路径}" Margin="10,5,160,0" Foreground="Black" ToolTip="{DynamicResource 媒体路径}" Height="25" VerticalAlignment="Top"/>
+                        <Label x:Name="VideoVolume" Content="{DynamicResource 音量}" Margin="0,5,110,0" Foreground="Black" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top"/>
+                        <Slider x:Name="VolumeSlider" IsMoveToPointEnabled="True" HorizontalAlignment="Right" Margin="0,8,10,0" 
+                        Width="100" SmallChange="0" Value="0.5" Cursor="Hand" LargeChange="0" ToolTip="0.5" TickFrequency="10" Maximum="1" Focusable="False" Height="22" VerticalAlignment="Top" IsTabStop="False"/>
+                        <Slider x:Name="TimeSlider" IsMoveToPointEnabled="True" Margin="10,30,10,0" Height="23" VerticalAlignment="Top"
+                         Loaded="TimeSlider_Loaded" Maximum="1" LargeChange="10" SmallChange="5" Cursor="Hand" Focusable="False" AllowDrop="False" IsSelectionRangeEnabled="True" />
+                        <Label x:Name="TimePosition" Content="00:00:00" Margin="10,53,0,0" Foreground="Black" HorizontalAlignment="Left" Width="58" Height="25" VerticalAlignment="Top" AllowDrop="False"/>
+                        <Label x:Name="TimeAll" Content="00:00:00" Margin="0,53,10,0" VerticalAlignment="Top" Foreground="Black" HorizontalAlignment="Right" Width="58" AllowDrop="False"/>
                     </Grid>
-                    <Button x:Name="ButtonHelp" Content="{DynamicResource 帮助}" Click="MenuHelp_Click" Background="#FF646464" Foreground="White" HorizontalAlignment="Right" Width="60" RenderTransformOrigin="1.767,0.56" Margin="0,0,10,10" Height="25" VerticalAlignment="Bottom" AllowDrop="False"/>
-                </Grid>
+                    <WrapPanel ItemHeight="30" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Button x:Name="BtnPlay" Content="{DynamicResource 播放}" Style="{DynamicResource 自由按钮样式}" Click="MenuPlay_Click"/>
+                        <Button x:Name="BtnReplay" Content="{DynamicResource 重播}" Style="{DynamicResource 自由按钮样式}" Click="MenuReplay_Click"/>
+                        <Button x:Name="BtnBack" Content="{DynamicResource 快退}" Style="{DynamicResource 自由按钮样式}" Click="MenuBack_Click"/>
+                        <Button x:Name="BtnForward" Content="{DynamicResource 快进}" Style="{DynamicResource 自由按钮样式}" Click="MenuForward_Click"/>
+                        <Button x:Name="BtnSpeedUp" Content="加速" Style="{DynamicResource 自由按钮样式}" Click="MenuSpeedUp_Click"/>
+                        <Button x:Name="BtnSpeedDown" Content="减速" Style="{DynamicResource 自由按钮样式}" Click="MenuSpeedDown_Click"/>
+                        <Button x:Name="BtnLRFlip" Content="{DynamicResource 左右翻转}" Style="{DynamicResource 自由按钮样式}" Click="MenuLRFlip_Click"/>
+                        <Button x:Name="BtnUDFlip" Content="{DynamicResource 上下翻转}" Style="{DynamicResource 自由按钮样式}" Click="MenuUDFlip_Click"/>
+                        <Button x:Name="BtnClockwise" Content="{DynamicResource 顺时针旋转}" Style="{DynamicResource 自由按钮样式}" Click="MenuClockwise_Click"/>
+                        <Button x:Name="BtnCClockwise" Content="{DynamicResource 逆时针旋转}" Style="{DynamicResource 自由按钮样式}" Click="MenuCClockwise_Click"/>
+                        <Button x:Name="BtnSetLoopStart" Content="{DynamicResource 循环起点}" Style="{DynamicResource 自由按钮样式}" Click="MenuLoopStart_Click"/>
+                        <Button x:Name="BtnSetLoopEnd" Content="{DynamicResource 循环终点}" Style="{DynamicResource 自由按钮样式}" Click="MenuLoopEnd_Click"/>
+                        <Button x:Name="BtnClearLoop" Content="{DynamicResource 清除循环}" Style="{DynamicResource 自由按钮样式}" Click="MenuClearLoop_Click"/>
+                        <Button x:Name="BtnPlayMode" Content="{DynamicResource 单次}" Style="{DynamicResource 自由按钮样式}" Click="ButtonPlayMode_Click"/>
+                        <Button x:Name="BtnMenu" Content="菜单" Style="{DynamicResource 自由按钮样式}" Click="MenuHideList_Click"/>
+                        <Button x:Name="BtnFullScreen" Content="全屏" Style="{DynamicResource 自由按钮样式}" Click="MenuFullScreen_Click"/>
+                    </WrapPanel>
+                </DockPanel>
             </Grid>
         </DockPanel>
     </Grid>
