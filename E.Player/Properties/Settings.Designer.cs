@@ -50,12 +50,12 @@ namespace E.Player.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string isShowList {
+        public string isShowMenu {
             get {
-                return ((string)(this["isShowList"]));
+                return ((string)(this["isShowMenu"]));
             }
             set {
-                this["isShowList"] = value;
+                this["isShowMenu"] = value;
             }
         }
         

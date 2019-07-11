@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:E.Player"
         mc:Ignorable="d"
-        Title="E Player" Height="500" Width="800" MinHeight="400" PreviewKeyDown="Main_PreviewKeyDown" AllowDrop="True" Loaded="Main_Loaded" Closing="Main_Closing" Icon="图片/E Player.ico" MinWidth="600">
+        Title="E Player" Height="500" Width="800" MinWidth="800" MinHeight="400" AllowDrop="True" Loaded="Main_Loaded" Closing="Main_Closing" Icon="图片/E Player.ico" WindowStartupLocation="CenterScreen" KeyUp="Main_KeyUp" MouseRightButtonUp="Main_MouseRightButtonUp" MouseDoubleClick="Main_MouseDoubleClick">
 
     <!--自定义控件模板-->
     <Window.Resources>
@@ -312,22 +312,22 @@
                 </StackPanel>
                 <WrapPanel Orientation="Vertical">
                     <WrapPanel  x:Name="BtnsFile" Orientation="Vertical">
-                        <Button x:Name="BtnOpen" Content="{DynamicResource 打开}" Style="{DynamicResource 工具按钮样式}" Click="MenuOpen_Click"/>
-                        <Button x:Name="BtnAdd" Content="{DynamicResource 添加}" Style="{DynamicResource 工具按钮样式}" Click="MenuAdd_Click"/>
-                        <Button x:Name="BtnRemove" Content="{DynamicResource 删除}" Style="{DynamicResource 工具按钮样式}" Click="MenuDelete_Click"/>
+                        <Button x:Name="BtnOpen" Content="{DynamicResource 打开}" Style="{DynamicResource 工具按钮样式}" Click="BtnOpen_Click"/>
+                        <Button x:Name="BtnAdd" Content="{DynamicResource 添加}" Style="{DynamicResource 工具按钮样式}" Click="BtnAdd_Click"/>
+                        <Button x:Name="BtnRemove" Content="{DynamicResource 删除}" Style="{DynamicResource 工具按钮样式}" Click="BtnDelete_Click"/>
                     </WrapPanel>
                     <WrapPanel  x:Name="BtnsSetting" Orientation="Vertical" Visibility="Collapsed">
                         <Button x:Name="BtnReset" Content="{DynamicResource 重置}"  ToolTip="{DynamicResource 重置+}" Style="{DynamicResource 工具按钮样式}" Click="BtnReset_Click"/>
-                        <Button x:Name="BtnApply" Content="{DynamicResource 应用}" ToolTip="{DynamicResource 应用+}" Style="{DynamicResource 工具按钮样式}"/>
-                        <Button x:Name="BtnClearRunInfo" Content="{DynamicResource 清空}" ToolTip="{DynamicResource 清空+}" Style="{DynamicResource 工具按钮样式}"/>
+                        <Button x:Name="BtnApply" Content="{DynamicResource 应用}" ToolTip="{DynamicResource 应用+}" Style="{DynamicResource 工具按钮样式}" Click="BtnApply_Click"/>
+                        <Button x:Name="BtnClearRunInfo" Content="{DynamicResource 清空}" ToolTip="{DynamicResource 清空+}" Style="{DynamicResource 工具按钮样式}" Click="BtnClearRunInfo_Click"/>
                     </WrapPanel>
                     <WrapPanel  x:Name="BtnsAbout" Orientation="Vertical" Visibility="Collapsed">
-                        <Button x:Name="BtnHomePage" Content="{DynamicResource 官网}" ToolTip="{DynamicResource 官网+}" Style="{DynamicResource 工具按钮样式}"/>
-                        <Button x:Name="BtnInfoPage" Content="{DynamicResource 主页}" ToolTip="{DynamicResource 主页+}" Style="{DynamicResource 工具按钮样式}"/>
-                        <Button x:Name="BtnDownloadPage" Content="{DynamicResource 下载}" ToolTip="{DynamicResource 下载+}" Style="{DynamicResource 工具按钮样式}"/>
-                        <Button x:Name="BtnFeedbackPage" Content="{DynamicResource 反馈}" ToolTip="{DynamicResource 反馈+}" Style="{DynamicResource 工具按钮样式}"/>
-                        <Button x:Name="BtnGitHubPage" Content="{DynamicResource 开源}" ToolTip="{DynamicResource 开源+}" Style="{DynamicResource 工具按钮样式}"/>
-                        <Button x:Name="BtnQQGroup" Content="{DynamicResource 讨论}" ToolTip="{DynamicResource 讨论+}" Style="{DynamicResource 工具按钮样式}"/>
+                        <Button x:Name="BtnHomePage" Content="{DynamicResource 官网}" ToolTip="{DynamicResource 官网+}" Style="{DynamicResource 工具按钮样式}" Click="BtnHomePage_Click"/>
+                        <Button x:Name="BtnInfoPage" Content="{DynamicResource 主页}" ToolTip="{DynamicResource 主页+}" Style="{DynamicResource 工具按钮样式}" Click="BtnInfoPage_Click"/>
+                        <Button x:Name="BtnDownloadPage" Content="{DynamicResource 下载}" ToolTip="{DynamicResource 下载+}" Style="{DynamicResource 工具按钮样式}" Click="BtnDownloadPage_Click"/>
+                        <Button x:Name="BtnFeedbackPage" Content="{DynamicResource 反馈}" ToolTip="{DynamicResource 反馈+}" Style="{DynamicResource 工具按钮样式}" Click="BtnFeedbackPage_Click"/>
+                        <Button x:Name="BtnGitHubPage" Content="{DynamicResource 开源}" ToolTip="{DynamicResource 开源+}" Style="{DynamicResource 工具按钮样式}" Click="BtnGitHubPage_Click"/>
+                        <Button x:Name="BtnQQGroup" Content="{DynamicResource 讨论}" ToolTip="{DynamicResource 讨论+}" Style="{DynamicResource 工具按钮样式}" Click="BtnQQGroup_Click"/>
                     </WrapPanel>
                 </WrapPanel>
             </DockPanel>
@@ -373,39 +373,63 @@
                 </DockPanel>
             </Grid>
             <!--右-->
-            <Grid x:Name="PanRight" Background="{DynamicResource 三级背景颜色}"  Drop="Player_Drop" MouseDown="Player_MouseDown">
+            <Grid x:Name="PanRight" Background="{DynamicResource 三级背景颜色}"  Drop="Player_Drop">
                 <MediaElement x:Name="Media" LoadedBehavior="Manual" Volume="0.5" AllowDrop="True" MediaOpened="MediaPlayer_MediaOpened" MediaEnded="Media_MediaEnded" MouseLeftButtonUp="Media_MouseLeftButtonUp" />
                 <Image x:Name="Cover" Margin="0" MouseLeftButtonUp="Media_MouseLeftButtonUp"/>
                 <Label x:Name="Message" Content="消息提示" Margin="10,10,10,0" Foreground="#FFFFE800" Background="{x:Null}" Height="30" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="14" Padding="3,0,0,0"/>
-                <DockPanel x:Name="ConsoleGrid" Height="125" Background="{DynamicResource 一级背景颜色}"  VerticalAlignment="Bottom" DockPanel.Dock="Bottom" MouseEnter="ConsoleGrid_MouseEnter" MouseLeave="ConsoleGrid_MouseLeave">
-                    <Grid DockPanel.Dock="Top">
-                        <Label x:Name="VideoName" Content="{DynamicResource 媒体路径}" Margin="10,5,160,0" Foreground="Black" ToolTip="{DynamicResource 媒体路径}" Height="25" VerticalAlignment="Top"/>
-                        <Label x:Name="VideoVolume" Content="{DynamicResource 音量}" Margin="0,5,110,0" Foreground="Black" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top"/>
-                        <Slider x:Name="VolumeSlider" IsMoveToPointEnabled="True" HorizontalAlignment="Right" Margin="0,8,10,0" 
-                        Width="100" SmallChange="0" Value="0.5" Cursor="Hand" LargeChange="0" ToolTip="0.5" TickFrequency="10" Maximum="1" Focusable="False" Height="22" VerticalAlignment="Top" IsTabStop="False"/>
-                        <Slider x:Name="TimeSlider" IsMoveToPointEnabled="True" Margin="10,30,10,0" Height="23" VerticalAlignment="Top"
+                <DockPanel x:Name="ConsoleGrid" Height="100" Background="{DynamicResource 一级背景颜色}"  VerticalAlignment="Bottom" DockPanel.Dock="Bottom" MouseEnter="ConsoleGrid_MouseEnter" MouseLeave="ConsoleGrid_MouseLeave">
+                    <DockPanel DockPanel.Dock="Top">
+                        <DockPanel Height="30" VerticalAlignment="Top" DockPanel.Dock="Top">
+                            <Label x:Name="TimePosition" Content="00:00:00" Foreground="Black" HorizontalAlignment="Left" Width="60" Height="30" VerticalAlignment="Top" AllowDrop="False" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Padding="5,0"/>
+                            <Label x:Name="TimeAll" Content="00:00:00" VerticalAlignment="Top" Foreground="Black" HorizontalAlignment="Right" AllowDrop="False" Height="30" Width="60" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" DockPanel.Dock="Right" Padding="5,0"/>
+                            <Slider x:Name="TimeSlider" IsMoveToPointEnabled="True" Margin="0,6,0,0" VerticalAlignment="Top"
                          Loaded="TimeSlider_Loaded" Maximum="1" LargeChange="10" SmallChange="5" Cursor="Hand" Focusable="False" AllowDrop="False" IsSelectionRangeEnabled="True" />
-                        <Label x:Name="TimePosition" Content="00:00:00" Margin="10,53,0,0" Foreground="Black" HorizontalAlignment="Left" Width="58" Height="25" VerticalAlignment="Top" AllowDrop="False"/>
-                        <Label x:Name="TimeAll" Content="00:00:00" Margin="0,53,10,0" VerticalAlignment="Top" Foreground="Black" HorizontalAlignment="Right" Width="58" AllowDrop="False"/>
-                    </Grid>
-                    <WrapPanel ItemHeight="30" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Button x:Name="BtnPlay" Content="{DynamicResource 播放}" Style="{DynamicResource 自由按钮样式}" Click="MenuPlay_Click"/>
-                        <Button x:Name="BtnReplay" Content="{DynamicResource 重播}" Style="{DynamicResource 自由按钮样式}" Click="MenuReplay_Click"/>
-                        <Button x:Name="BtnBack" Content="{DynamicResource 快退}" Style="{DynamicResource 自由按钮样式}" Click="MenuBack_Click"/>
-                        <Button x:Name="BtnForward" Content="{DynamicResource 快进}" Style="{DynamicResource 自由按钮样式}" Click="MenuForward_Click"/>
-                        <Button x:Name="BtnSpeedUp" Content="加速" Style="{DynamicResource 自由按钮样式}" Click="MenuSpeedUp_Click"/>
-                        <Button x:Name="BtnSpeedDown" Content="减速" Style="{DynamicResource 自由按钮样式}" Click="MenuSpeedDown_Click"/>
-                        <Button x:Name="BtnLRFlip" Content="{DynamicResource 左右翻转}" Style="{DynamicResource 自由按钮样式}" Click="MenuLRFlip_Click"/>
-                        <Button x:Name="BtnUDFlip" Content="{DynamicResource 上下翻转}" Style="{DynamicResource 自由按钮样式}" Click="MenuUDFlip_Click"/>
-                        <Button x:Name="BtnClockwise" Content="{DynamicResource 顺时针旋转}" Style="{DynamicResource 自由按钮样式}" Click="MenuClockwise_Click"/>
-                        <Button x:Name="BtnCClockwise" Content="{DynamicResource 逆时针旋转}" Style="{DynamicResource 自由按钮样式}" Click="MenuCClockwise_Click"/>
-                        <Button x:Name="BtnSetLoopStart" Content="{DynamicResource 循环起点}" Style="{DynamicResource 自由按钮样式}" Click="MenuLoopStart_Click"/>
-                        <Button x:Name="BtnSetLoopEnd" Content="{DynamicResource 循环终点}" Style="{DynamicResource 自由按钮样式}" Click="MenuLoopEnd_Click"/>
-                        <Button x:Name="BtnClearLoop" Content="{DynamicResource 清除循环}" Style="{DynamicResource 自由按钮样式}" Click="MenuClearLoop_Click"/>
-                        <Button x:Name="BtnPlayMode" Content="{DynamicResource 单次}" Style="{DynamicResource 自由按钮样式}" Click="ButtonPlayMode_Click"/>
-                        <Button x:Name="BtnMenu" Content="菜单" Style="{DynamicResource 自由按钮样式}" Click="MenuHideList_Click"/>
-                        <Button x:Name="BtnFullScreen" Content="全屏" Style="{DynamicResource 自由按钮样式}" Click="MenuFullScreen_Click"/>
-                    </WrapPanel>
+                        </DockPanel>
+                        <StackPanel Width="160">
+                            <DockPanel Height="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="160">
+                                <Label Content="{DynamicResource 音量}" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="60" Padding="5,0"/>
+                                <Slider x:Name="SldVolume" IsMoveToPointEnabled="True" SmallChange="0" Value="0.5" Cursor="Hand" ToolTip="0.5" TickFrequency="10" Maximum="1" Margin="0,6,0,0" LargeChange="0" ValueChanged="SldVolume_ValueChanged"/>
+                            </DockPanel>
+                            <DockPanel Height="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="160">
+                                <Label Content="速度" Foreground="Black" Padding="5,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="60"/>
+                                <Slider x:Name="SldSpeed" IsMoveToPointEnabled="True" SmallChange="0" Value="0.5" Cursor="Hand" LargeChange="0" ToolTip="0.5" TickFrequency="10" Maximum="1" Margin="0,6,0,0" ValueChanged="SldSpeed_ValueChanged"/>
+                            </DockPanel>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Right" Width="160">
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,0,5,0">
+                                <Button x:Name="BtnMenu" Content="菜单" Style="{DynamicResource 自由按钮样式}" Click="BtnMenu_Click" Width="50" Height="30"/>
+                                <Button x:Name="BtnFullScreen" Content="全屏" Style="{DynamicResource 自由按钮样式}" Click="BtnFullScreen_Click" Width="50" Height="30"/>
+                            </StackPanel>
+                            <StackPanel VerticalAlignment="Center" Margin="0,5,5,0" HorizontalAlignment="Right">
+                                <ComboBox x:Name="CbbPlayMode"  Style="{DynamicResource 下拉框样式}" SelectionChanged="CbbPlayMode_SelectionChanged" Width="100" SelectedIndex="0" Margin="0" >
+                                    <ComboBoxItem Content="单次播放"/>
+                                    <ComboBoxItem Content="循环播放"/>
+                                    <ComboBoxItem Content="顺序播放"/>
+                                    <ComboBoxItem Content="随机播放"/>
+                                </ComboBox>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel>
+                            <WrapPanel ItemHeight="30" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0">
+                                <Button x:Name="BtnBack" Content="{DynamicResource 快退}" Style="{DynamicResource 自由按钮样式}" Width="60" Click="BtnBack_Click"/>
+                                <Button x:Name="BtnReplay" Content="{DynamicResource 重播}" Style="{DynamicResource 自由按钮样式}" Width="60" Click="BtnReplay_Click"/>
+                                <Button x:Name="BtnPlay" Content="{DynamicResource 播放}" Style="{DynamicResource 自由按钮样式}" Width="60" Click="BtnPlay_Click"/>
+                                <Button x:Name="BtnStop" Content="停止" Style="{DynamicResource 自由按钮样式}" Width="60" Click="BtnReplay_Click"/>
+                                <Button x:Name="BtnForward" Content="{DynamicResource 快进}" Style="{DynamicResource 自由按钮样式}" Width="60" Click="BtnForward_Click"/>
+                            </WrapPanel>
+                            <WrapPanel ItemHeight="30" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,5,0,0" DockPanel.Dock="Bottom">
+                                <!--<Button x:Name="BtnSpeedUp" Content="加速" Style="{DynamicResource 自由按钮样式}" Click="BtnSpeedUp_Click"/>
+                                <Button x:Name="BtnSpeedDown" Content="减速" Style="{DynamicResource 自由按钮样式}" Click="BtnSpeedDown_Click"/>-->
+                                <Button x:Name="BtnLRFlip" Content="{DynamicResource 左右翻转}" Style="{DynamicResource 自由按钮样式}" Click="BtnLRFlip_Click" Margin="2,0"/>
+                                <Button x:Name="BtnUDFlip" Content="{DynamicResource 上下翻转}" Style="{DynamicResource 自由按钮样式}" Click="BtnUDFlip_Click" Margin="2,0"/>
+                                <Button x:Name="BtnClockwise" Content="{DynamicResource 顺时针旋转}" Style="{DynamicResource 自由按钮样式}" Click="BtnClockwise_Click" Margin="2,0"/>
+                                <Button x:Name="BtnCClockwise" Content="{DynamicResource 逆时针旋转}" Style="{DynamicResource 自由按钮样式}" Click="BtnCClockwise_Click" Margin="2,0"/>
+                                <Button x:Name="BtnSetLoopStart" Content="{DynamicResource 循环起点}" Style="{DynamicResource 自由按钮样式}" Click="BtnLoopStart_Click" Margin="2,0"/>
+                                <Button x:Name="BtnSetLoopEnd" Content="{DynamicResource 循环终点}" Style="{DynamicResource 自由按钮样式}" Click="BtnLoopEnd_Click" Margin="2,0"/>
+                                <Button x:Name="BtnClearLoop" Content="{DynamicResource 清除循环}" Style="{DynamicResource 自由按钮样式}" Click="BtnClearLoop_Click" Margin="2,0"/>
+                            </WrapPanel>
+                        </StackPanel>
+                     </DockPanel>
                 </DockPanel>
             </Grid>
         </DockPanel>

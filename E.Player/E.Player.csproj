@@ -162,7 +162,7 @@
     <Resource Include="图片\E Player.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DLL\Tags.dll" />
+    <Resource Include="Tags.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

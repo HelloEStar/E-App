@@ -8,7 +8,7 @@
     <Setting Name="isLRFlip" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="isShowList" Type="System.String" Scope="User">
+    <Setting Name="isShowMenu" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="language" Type="System.String" Scope="User">
