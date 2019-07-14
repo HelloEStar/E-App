@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -14,39 +16,40 @@ namespace E.Player
     /// </summary>
     public partial class App : Application
     {
-        /// <summary>
-        /// 刚运行时执行
-        /// </summary>
-        /// <param name="e"></param>
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            //LoadLanguage();
+            AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
         }
 
-        /// <summary>
-        /// 载入语言
-        /// </summary>
-        private void LoadLanguage()
+        private static Assembly OnResolveAssembly(object sender, ResolveEventArgs args)
         {
-            CultureInfo currentCultureInfo = CultureInfo.CurrentCulture;
-            ResourceDictionary langRd = null;
-            try
+            Assembly executingAssembly = Assembly.GetExecutingAssembly();
+            var executingAssemblyName = executingAssembly.GetName();
+            var resName = executingAssemblyName.Name + ".resources";
+
+            AssemblyName assemblyName = new AssemblyName(args.Name); string path = "";
+            if (resName == assemblyName.Name)
             {
-                langRd = LoadComponent
-                         (new Uri(@"language\" + currentCultureInfo.Name + ".xaml", UriKind.Relative))
-                         as ResourceDictionary;
+                path = executingAssemblyName.Name + ".g.resources"; ;
             }
-            catch
+            else
             {
-            }
-            if (langRd != null)
-            {
-                if (this.Resources.MergedDictionaries.Count > 0)
+                path = assemblyName.Name + ".dll";
+                if (assemblyName.CultureInfo.Equals(CultureInfo.InvariantCulture) == false)
                 {
-                    this.Resources.MergedDictionaries.Clear();
+                    path = String.Format(@"{0}\{1}", assemblyName.CultureInfo, path);
                 }
-                this.Resources.MergedDictionaries.Add(langRd);
+            }
+
+            using (Stream stream = executingAssembly.GetManifestResourceStream(path))
+            {
+                if (stream == null)
+                    return null;
+
+                byte[] assemblyRawBytes = new byte[stream.Length];
+                stream.Read(assemblyRawBytes, 0, assemblyRawBytes.Length);
+                return Assembly.Load(assemblyRawBytes);
             }
         }
     }

@@ -1,60 +1,115 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
-    <!--适用E Player 0.8.0.0-->
-    <!--主窗口-->
-    <sys:String x:Key="播放列表">播放列表</sys:String>
-    <sys:String x:Key="音量">音量</sys:String>
-    <sys:String x:Key="媒体路径">当前没有媒体</sys:String>
-    <sys:String x:Key="播放模式">播放模式</sys:String>
-    <sys:String x:Key="媒体总数">媒体总数</sys:String>
-    <!--主窗口，右键菜单-->
-    <sys:String x:Key="文件">文件</sys:String>
+
+    <!--菜单-->
+    <sys:String x:Key="菜单">菜单</sys:String>
+    <sys:String x:Key="折叠">折叠</sys:String>
+    <sys:String x:Key="媒体">媒体</sys:String>
     <sys:String x:Key="控制">控制</sys:String>
-    <sys:String x:Key="窗口">窗口</sys:String>
-    <sys:String x:Key="帮助">帮助</sys:String>
+    <sys:String x:Key="设置">设置</sys:String>
+    <sys:String x:Key="关于">关于</sys:String>
+    <sys:String x:Key="菜单+">显示/隐藏菜单 J/鼠标右键</sys:String>
+    <sys:String x:Key="折叠+">折叠 F</sys:String>
+    <sys:String x:Key="媒体+">媒体列表 L</sys:String>
+    <sys:String x:Key="控制+">控制面板 K</sys:String>
+    <sys:String x:Key="设置+">设置 S</sys:String>
+    <sys:String x:Key="关于+">关于 H</sys:String>
 
     <sys:String x:Key="打开">打开</sys:String>
     <sys:String x:Key="添加">添加</sys:String>
     <sys:String x:Key="删除">删除</sys:String>
-    <sys:String x:Key="退出">退出E Player</sys:String>
-    
+    <sys:String x:Key="清空">清空</sys:String>
+    <sys:String x:Key="打开+">打开 O</sys:String>
+    <sys:String x:Key="添加+">添加 A</sys:String>
+    <sys:String x:Key="删除+">删除 Delete</sys:String>
+    <sys:String x:Key="清空+">清空媒体列表</sys:String>
+
+    <sys:String x:Key="左右">左右</sys:String>
+    <sys:String x:Key="上下">上下</sys:String>
+    <sys:String x:Key="顺旋">顺旋</sys:String>
+    <sys:String x:Key="逆旋">逆旋</sys:String>
+    <sys:String x:Key="循起">循起</sys:String>
+    <sys:String x:Key="循终">循终</sys:String>
+    <sys:String x:Key="清循">清循</sys:String>
+    <sys:String x:Key="全屏">全屏</sys:String>
+    <sys:String x:Key="左右+">左右翻转 M</sys:String>
+    <sys:String x:Key="上下+">上下翻转 N</sys:String>
+    <sys:String x:Key="顺旋+">顺时针旋转 E</sys:String>
+    <sys:String x:Key="逆旋+">逆时针旋转 Q</sys:String>
+    <sys:String x:Key="循起+">设置循环起点 [</sys:String>
+    <sys:String x:Key="循终+">设置循环终点 [</sys:String>
+    <sys:String x:Key="清循+">清除循环点 \</sys:String>
+    <sys:String x:Key="全屏+">全屏/退出全屏 鼠标中键</sys:String>
+
+    <sys:String x:Key="重置">重置</sys:String>
+    <sys:String x:Key="应用">应用</sys:String>
+    <sys:String x:Key="重置+">重置设置</sys:String>
+    <sys:String x:Key="应用+">应用设置</sys:String>
+
+    <sys:String x:Key="官网">官网</sys:String>
+    <sys:String x:Key="主页">主页</sys:String>
+    <sys:String x:Key="下载">下载</sys:String>
+    <sys:String x:Key="反馈">反馈</sys:String>
+    <sys:String x:Key="开源">开源</sys:String>
+    <sys:String x:Key="讨论">讨论</sys:String>
+    <sys:String x:Key="官网+">官方网站 F1</sys:String>
+    <sys:String x:Key="主页+">应用主页 F2</sys:String>
+    <sys:String x:Key="下载+">下载新版 F3</sys:String>
+    <sys:String x:Key="反馈+">提交反馈 F4</sys:String>
+    <sys:String x:Key="开源+">GitHub开源地址 F5</sys:String>
+    <sys:String x:Key="讨论+">QQ交流讨论群 F6</sys:String>
+
+    <!--面板-->
+    <sys:String x:Key="名称">应用名称</sys:String>
+    <sys:String x:Key="说明">应用说明</sys:String>
+    <sys:String x:Key="作者">应用作者</sys:String>
+    <sys:String x:Key="版本">当前版本</sys:String>
+    <sys:String x:Key="日志">更新日志</sys:String>
+    <sys:String x:Key="赞助">赞助比特币</sys:String>
+    <sys:String x:Key="点复">点击复制</sys:String>
+
+    <sys:String x:Key="上个">上个</sys:String>
+    <sys:String x:Key="快退">快退</sys:String>
+    <sys:String x:Key="重播">重播</sys:String>
     <sys:String x:Key="播放">播放</sys:String>
     <sys:String x:Key="暂停">暂停</sys:String>
     <sys:String x:Key="停止">停止</sys:String>
-    <sys:String x:Key="重播">重播</sys:String>
     <sys:String x:Key="快进">快进</sys:String>
-    <sys:String x:Key="快退">快退</sys:String>
-    <sys:String x:Key="音量升高">音量升高</sys:String>
-    <sys:String x:Key="音量降低">音量降低</sys:String>
-    <sys:String x:Key="速度增加">速度增加</sys:String>
-    <sys:String x:Key="速度减少">速度减少</sys:String>
-    <sys:String x:Key="循环起点">循环起点</sys:String>
-    <sys:String x:Key="循环终点">循环终点</sys:String>
-    <sys:String x:Key="清除循环">清除循环</sys:String>
-    <sys:String x:Key="左右翻转">左右翻转</sys:String>
-    <sys:String x:Key="上下翻转">上下翻转</sys:String>
-    <sys:String x:Key="取消左右翻转">取消左右翻转</sys:String>
-    <sys:String x:Key="取消上下翻转">取消上下翻转</sys:String>
-    <sys:String x:Key="顺时针旋转">顺时针旋转</sys:String>
-    <sys:String x:Key="逆时针旋转">逆时针旋转</sys:String>
-    <sys:String x:Key="全屏显示">全屏显示</sys:String>
-    <sys:String x:Key="退出全屏">退出全屏</sys:String>
+    <sys:String x:Key="下个">下个</sys:String>
+    <sys:String x:Key="上个+">播放上个媒体 PageUp</sys:String>
+    <sys:String x:Key="快退+">快退 ←</sys:String>
+    <sys:String x:Key="重播+">重播 R</sys:String>
+    <sys:String x:Key="播放+">播放 Space</sys:String>
+    <sys:String x:Key="暂停+">暂停 Space</sys:String>
+    <sys:String x:Key="停止+">停止 P</sys:String>
+    <sys:String x:Key="快进+">快进 →</sys:String>
+    <sys:String x:Key="下个+">播放下个媒体 PageDown</sys:String>
+    
+    <sys:String x:Key="音量">音量</sys:String>
+    <sys:String x:Key="速度">速度</sys:String>
+    <sys:String x:Key="音量+">媒体音量 +/-</sys:String>
+    <sys:String x:Key="速度+">播放速度 ,/.</sys:String>
+    
+    <sys:String x:Key="语言">语言</sys:String>
+    <sys:String x:Key="主题">主题</sys:String>
+    <sys:String x:Key="模式">播放模式</sys:String>
     <sys:String x:Key="单次">单次</sys:String>
     <sys:String x:Key="循环">循环</sys:String>
     <sys:String x:Key="顺序">顺序</sys:String>
     <sys:String x:Key="随机">随机</sys:String>
+    <sys:String x:Key="视图">视图</sys:String>
+    <sys:String x:Key="跳跃">跳跃时长</sys:String>
 
-    <sys:String x:Key="显示控制台">显示控制台</sys:String>
-    <sys:String x:Key="隐藏控制台">隐藏控制台</sys:String>
-    <sys:String x:Key="显示播放列表">显示播放列表</sys:String>
-    <sys:String x:Key="隐藏播放列表">隐藏播放列表</sys:String>
-
-    <sys:String x:Key="偏好设置">偏好设置</sys:String>
-    <sys:String x:Key="软件信息">软件信息</sys:String>
-    <sys:String x:Key="相关链接">相关链接</sys:String>
-
-    <!--主窗口，提示消息-->
+    <!--提示-->
+    <sys:String x:Key="媒体路径">当前没有媒体</sys:String>
+    <sys:String x:Key="播放模式">播放模式</sys:String>
+    <sys:String x:Key="媒体总数">媒体总数</sys:String>
+    <sys:String x:Key="音量升高">音量升高</sys:String>
+    <sys:String x:Key="音量降低">音量降低</sys:String>
+    <sys:String x:Key="速度增加">速度增加</sys:String>
+    <sys:String x:Key="速度减少">速度减少</sys:String>
+    
     <sys:String x:Key="已左右翻转">已左右翻转</sys:String>
     <sys:String x:Key="已取消左右翻转">已取消左右翻转</sys:String>
     <sys:String x:Key="已上下翻转">已上下翻转</sys:String>
@@ -83,59 +138,13 @@
     <sys:String x:Key="结束点应靠后">循环结束点应当迟于循环开始点</sys:String>
     <sys:String x:Key="已清除循环">已清除循环</sys:String>
 
-    <!--帮助窗口-->
-    <!--帮助窗口，偏好设置-->
-    <sys:String x:Key="语言">语言</sys:String>
     <sys:String x:Key="保留视频的翻转与旋转效果">视频切换时保留翻转与旋转效果</sys:String>
     <sys:String x:Key="退出时保留播放列表">退出时保留播放列表</sys:String>
     <sys:String x:Key="自定义快进快退">快进快退时间长度</sys:String>
-    <sys:String x:Key="自动检查更新">自动检查更新</sys:String>
     <sys:String x:Key="已重置">偏好设置已重置</sys:String>
     <sys:String x:Key="已更改">偏好设置已更改</sys:String>
     <sys:String x:Key="已载入">偏好设置已载入</sys:String>
     <sys:String x:Key="输入1~999整数">请输入1~999整数</sys:String>
     <sys:String x:Key="输入整数">请输入整数</sys:String>
     
-    <!--帮助窗口，软件信息-->
-    <sys:String x:Key="开发者">开发者</sys:String>
-    <sys:String x:Key="更新日志">更新日志</sys:String>
-    <sys:String x:Key="检查更新">检查更新</sys:String>
-    <sys:String x:Key="清空运行信息">清空运行信息</sys:String>
-    <!--帮助窗口，相关链接-->
-    <sys:String x:Key="个人站点">个人站点</sys:String>
-    <sys:String x:Key="软件主页">软件主页</sys:String>
-    <sys:String x:Key="提交问题">提交问题</sys:String>
-    <sys:String x:Key="开源地址">开源地址</sys:String>
-    <sys:String x:Key="交流QQ群">交流QQ群</sys:String>
-    <sys:String x:Key="赞助开发者">比特币赞助</sys:String>
-
-
-    <sys:String x:Key="重置">重置</sys:String>
-    <sys:String x:Key="应用">应用</sys:String>
-    <sys:String x:Key="清空">清空</sys:String>
-    <sys:String x:Key="重置+">重置偏好设置</sys:String>
-    <sys:String x:Key="应用+">应用偏好设置</sys:String>
-    <sys:String x:Key="清空+">清空运行信息</sys:String>
-
-    <sys:String x:Key="名称">应用名称</sys:String>
-    <sys:String x:Key="说明">应用说明</sys:String>
-    <sys:String x:Key="作者">应用作者</sys:String>
-    <sys:String x:Key="版本">当前版本</sys:String>
-    <sys:String x:Key="日志">更新日志</sys:String>
-    <sys:String x:Key="赞助">赞助比特币</sys:String>
-    <sys:String x:Key="点复">点击复制</sys:String>
-
-    <sys:String x:Key="官网">官网</sys:String>
-    <sys:String x:Key="主页">主页</sys:String>
-    <sys:String x:Key="下载">下载</sys:String>
-    <sys:String x:Key="反馈">反馈</sys:String>
-    <sys:String x:Key="开源">开源</sys:String>
-    <sys:String x:Key="讨论">讨论</sys:String>
-    <sys:String x:Key="官网+">官方网站 F1</sys:String>
-    <sys:String x:Key="主页+">应用主页 F2</sys:String>
-    <sys:String x:Key="下载+">下载新版 F3</sys:String>
-    <sys:String x:Key="反馈+">提交反馈 F4</sys:String>
-    <sys:String x:Key="开源+">GitHub开源地址 F5</sys:String>
-    <sys:String x:Key="讨论+">QQ交流讨论群 F6</sys:String>
-
 </ResourceDictionary>

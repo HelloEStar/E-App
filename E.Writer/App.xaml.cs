@@ -16,6 +16,12 @@ namespace E.Writer
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
+        }
+
         private static Assembly OnResolveAssembly(object sender, ResolveEventArgs args)
         {
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
@@ -45,12 +51,6 @@ namespace E.Writer
                 stream.Read(assemblyRawBytes, 0, assemblyRawBytes.Length);
                 return Assembly.Load(assemblyRawBytes);
             }
-        }
-
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            base.OnStartup(e);
-            AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
         }
     }
 }

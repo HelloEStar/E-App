@@ -166,10 +166,26 @@ namespace E.Writer
             //字体尺寸
             TextSize.Text = User.Default.fontSize.ToString();
 
-            //刷新list item
+            //刷新选中项
             SelectLanguageItem(User.Default.language);
             SelectThemeItem(User.Default.ThemePath);
             SelectFontItem(User.Default.fontName);
+        }
+        /// <summary>
+        /// 创建语言选项
+        /// </summary>
+        private void LoadLanguageItems()
+        {
+            LanguageItems.Clear();
+            ItemInfo zh_CN = new ItemInfo("中文（默认）", "zh_CN");
+            ItemInfo en_US = new ItemInfo("English", "en_US");
+            LanguageItems.Add(zh_CN);
+            LanguageItems.Add(en_US);
+
+            //绑定数据，真正的赋值
+            CbbLanguages.ItemsSource = LanguageItems;
+            CbbLanguages.DisplayMemberPath = "Name";
+            CbbLanguages.SelectedValuePath = "Value";
         }
         /// <summary>
         /// 载入所有可用主题
@@ -217,23 +233,6 @@ namespace E.Writer
             }
         }
         /// <summary>
-        /// 创建语言选项
-        /// </summary>
-        private void LoadLanguageItems()
-        {
-            LanguageItems.Clear();
-            ItemInfo zh_CN = new ItemInfo("中文（默认）", "zh_CN");
-            ItemInfo en_US = new ItemInfo("English", "en_US");
-            LanguageItems.Add(zh_CN);
-            LanguageItems.Add(en_US);
-            //绑定数据，真正的赋值
-            CbbLanguages.ItemsSource = LanguageItems;
-            //指定显示的内容
-            CbbLanguages.DisplayMemberPath = "Name";
-            //指定选中后的能够获取到的内容
-            CbbLanguages.SelectedValuePath = "Value";
-        }
-        /// <summary>
         /// 获取字体选项
         /// </summary>
         private void LoadFontItems()
@@ -251,7 +250,7 @@ namespace E.Writer
             }
         }
         /// <summary>
-        /// 载入应用设置
+        /// 载入书籍选项
         /// </summary>
         private void LoadBookItems()
         {
@@ -613,9 +612,9 @@ namespace E.Writer
             Settings.Default.Save();
         }
         /// <summary>
-        /// 保存用户偏好设置
+        /// 保存用户设置
         /// </summary>
-        private void SavePreferences()
+        private void SaveUserSettings()
         {
             User.Default.Save();
         }
@@ -1020,16 +1019,7 @@ namespace E.Writer
             }
         }
 
-
         //清空
-        /// <summary>
-        /// 清空运行信息
-        /// </summary>
-        private void ClearRunInfo()
-        {
-            Settings.Default.Reset();
-            ShowMessage("已清空运行信息", true);
-        }
         /// <summary>
         /// 清空文本
         /// </summary>
@@ -1497,30 +1487,12 @@ namespace E.Writer
                     }
                     Resources.MergedDictionaries.Add(langRd);
                     User.Default.language = language;
-                    SavePreferences();
+                    SaveUserSettings();
                 }
             }
             catch (Exception e2)
             {
                 MessageBox.Show(e2.Message);
-            }
-        }
-        /// <summary>
-        /// 设置字体显示
-        /// </summary>
-        private void SetFont(string fontName)
-        {
-            foreach (FontFamily font in Fonts.SystemFontFamilies)
-            {
-                if (fontName == font.Source)
-                {
-                    TbxFileContent.FontFamily = font;
-                    //储存更改
-                    User.Default.fontName = fontName;
-                    SavePreferences();
-                    //EssayName.FontFamily = font;
-                    break;
-                }
             }
         }
         /// <summary>
@@ -1545,7 +1517,25 @@ namespace E.Writer
                         SetSkin(User.Default.ThemePath);
                         ShowMessage("偏好主题的不存在");
                     }
-                    SavePreferences();
+                    SaveUserSettings();
+                    break;
+                }
+            }
+        }
+        /// <summary>
+        /// 设置字体显示
+        /// </summary>
+        private void SetFont(string fontName)
+        {
+            foreach (FontFamily font in Fonts.SystemFontFamilies)
+            {
+                if (fontName == font.Source)
+                {
+                    TbxFileContent.FontFamily = font;
+                    //储存更改
+                    User.Default.fontName = fontName;
+                    SaveUserSettings();
+                    //EssayName.FontFamily = font;
                     break;
                 }
             }
@@ -1569,7 +1559,7 @@ namespace E.Writer
                     {
                         //设为此主题
                         User.Default.ThemePath = ThemeItems[themeOrder].ToolTip.ToString();
-                        SavePreferences();
+                        SaveUserSettings();
                         SetSkin(User.Default.ThemePath);
                     }
                     else
@@ -1661,9 +1651,17 @@ namespace E.Writer
 
         //重置
         /// <summary>
-        /// 重置偏好设置
+        /// 重置应用设置
         /// </summary>
-        private void ResetPreferences()
+        private void ResetAppSettings()
+        {
+            Settings.Default.Reset();
+            ShowMessage("已清空运行信息", true);
+        }
+        /// <summary>
+        /// 重置用户设置
+        /// </summary>
+        private void ResetUserSettings()
         {
             User.Default.Reset();
         }
@@ -2292,9 +2290,9 @@ namespace E.Writer
             ShowAppInfo();
 
             //载入下拉菜单项
+            LoadLanguageItems();
             LoadThemeItems();
             LoadFontItems();
-            LoadLanguageItems();
             LoadBookItems();
 
             //载入设置
@@ -2302,7 +2300,7 @@ namespace E.Writer
             AddRunTime();
 
             //初始化
-            SelectLanguageItem(User.Default.language);
+            SetLanguage(User.Default.language);
             SetTheme(User.Default.ThemePath);
             SetFont(User.Default.fontName);
             if (User.Default.isAutoOpenBook)
@@ -3086,7 +3084,7 @@ namespace E.Writer
 
         private void BtnReset_Click(object sender, RoutedEventArgs e)
         {
-            ResetPreferences();
+            ResetUserSettings();
             LoadSettings();
             ShowMessage("已重置");
         }
@@ -3096,7 +3094,7 @@ namespace E.Writer
         }
         private void BtnClearRunInfo_Click(object sender, RoutedEventArgs e)
         {
-            ClearRunInfo();
+            ResetAppSettings();
         }
 
         private void BitCoinAddress_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -3130,193 +3128,6 @@ namespace E.Writer
         }
 
         //设置更改事件
-        private void ShowRunInfo_Checked(object sender, RoutedEventArgs e)
-        {
-            User.Default.isShowRunInfo = true;
-            SavePreferences();
-            //显示消息
-            ShowMessage("已更改");
-        }
-        private void ShowRunInfo_Unchecked(object sender, RoutedEventArgs e)
-        {
-            User.Default.isShowRunInfo = false;
-            SavePreferences();
-            //显示消息
-            ShowMessage("已更改");
-        }
-        private void AutoOpenBook_Checked(object sender, RoutedEventArgs e)
-        {
-            User.Default.isAutoOpenBook = true;
-            SavePreferences();
-            //显示消息
-            ShowMessage("已更改");
-        }
-        private void AutoOpenBook_Unchecked(object sender, RoutedEventArgs e)
-        {
-            User.Default.isAutoOpenBook = false;
-            SavePreferences();
-            //显示消息
-            ShowMessage("已更改");
-        }
-        private void AutoCompletion_Checked(object sender, RoutedEventArgs e)
-        {
-            User.Default.isAutoCompletion = true;
-            SavePreferences();
-            //显示消息
-            ShowMessage("已更改");
-        }
-        private void AutoCompletion_Unchecked(object sender, RoutedEventArgs e)
-        {
-            User.Default.isAutoCompletion = false;
-            SavePreferences();
-            //显示消息
-            ShowMessage("已更改");
-        }
-        private void AutoIndentation_Checked(object sender, RoutedEventArgs e)
-        {
-            User.Default.isAutoIndentation = true;
-            SavePreferences();
-            AutoIndentations.IsEnabled = true;
-            //显示消息
-            ShowMessage("已更改");
-        }
-        private void AutoIndentation_Unchecked(object sender, RoutedEventArgs e)
-        {
-            User.Default.isAutoIndentation = false;
-            SavePreferences();
-            AutoIndentations.IsEnabled = false;
-            //显示消息
-            ShowMessage("已更改");
-        }
-        private void AutoIndentations_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (AutoIndentations.Text != "" && AutoIndentations.Text != null)
-            {
-                try
-                {
-                    int t = int.Parse(AutoIndentations.Text);
-                    if (t > 0 && t < 1000)
-                    {
-                        User.Default.autoIndentations = t;
-                        SavePreferences();
-                        ShowMessage("已更改");
-                    }
-                    else
-                    {
-                        AutoIndentations.Text = User.Default.autoIndentations.ToString();
-                        ShowMessage("输入1~999整数");
-                    }
-                }
-                catch (Exception)
-                {
-                    AutoIndentations.Text = User.Default.autoIndentations.ToString();
-                    ShowMessage("输入整数");
-                }
-            }
-        }
-        private void AutoSaveWhenSwitch_Checked(object sender, RoutedEventArgs e)
-        {
-            User.Default.isAutoSaveWhenSwitch = true;
-            SavePreferences();
-            //显示消息
-            ShowMessage("已更改");
-        }
-        private void AutoSaveWhenSwitch_Unchecked(object sender, RoutedEventArgs e)
-        {
-            User.Default.isAutoSaveWhenSwitch = false;
-            SavePreferences();
-            //显示消息
-            ShowMessage("已更改");
-        }
-        private void AutoSaveEvery_Checked(object sender, RoutedEventArgs e)
-        {
-            User.Default.isAutoSaveEvery = true;
-            SavePreferences();
-            AutoSaveTime.IsEnabled = true;
-            //显示消息
-            ShowMessage("已更改");
-        }
-        private void AutoSaveEvery_Unchecked(object sender, RoutedEventArgs e)
-        {
-            User.Default.isAutoSaveEvery = false;
-            SavePreferences();
-            AutoSaveTime.IsEnabled = false;
-            //显示消息
-            ShowMessage("已更改");
-        }
-        private void AutoSaveTime_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (AutoSaveTime.Text != "" && AutoSaveTime.Text != null)
-            {
-                try
-                {
-                    int t = int.Parse(AutoSaveTime.Text);
-                    if (t > 0 && t < 1000)
-                    {
-                        TimeSpan ts = TimeSpan.FromMinutes(t);
-                        User.Default.autoSaveMinute = t;
-                        SavePreferences();
-                        AutoSaveTimer.Interval = ts;
-                        ShowMessage("已更改");
-                    }
-                    else
-                    {
-                        AutoSaveTime.Text = User.Default.autoSaveMinute.ToString();
-                        ShowMessage("输入1~999整数");
-                    }
-                }
-                catch (Exception)
-                {
-                    AutoSaveTime.Text = User.Default.autoSaveMinute.ToString();
-                    ShowMessage("输入整数");
-                }
-            }
-        }
-        private void AutoBackup_Checked(object sender, RoutedEventArgs e)
-        {
-            User.Default.isAutoBackup = true;
-            SavePreferences();
-            AutoBackupTime.IsEnabled = true;
-            //显示消息
-            ShowMessage("已更改");
-        }
-        private void AutoBackup_Unchecked(object sender, RoutedEventArgs e)
-        {
-            User.Default.isAutoBackup = false;
-            SavePreferences();
-            AutoBackupTime.IsEnabled = false;
-            //显示消息
-            ShowMessage("已更改");
-        }
-        private void AutoBackupTime_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (AutoBackupTime.Text != "" && AutoBackupTime.Text != null)
-            {
-                try
-                {
-                    int t = int.Parse(AutoBackupTime.Text);
-                    if (t > 0 && t < 1000)
-                    {
-                        TimeSpan ts = TimeSpan.FromMinutes(t);
-                        User.Default.autoBackupMinute = t;
-                        SavePreferences();
-                        AutoBackupTimer.Interval = ts;
-                        //显示消息
-                        ShowMessage("已更改");
-                    }
-                    else
-                    {
-                        AutoBackupTime.Text = User.Default.autoBackupMinute.ToString();
-                        ShowMessage("输入1~999整数");
-                    }
-                }
-                catch (Exception)
-                {
-                    AutoBackupTime.Text = User.Default.autoBackupMinute.ToString();
-                    ShowMessage("输入整数");
-                }
-            }
-        }
         private void CbbLanguages_SelectionChanged(object sender, RoutedEventArgs e)
         {
             if (CbbLanguages.SelectedValue != null)
@@ -3352,6 +3163,194 @@ namespace E.Writer
                 ShowMessage("已更改");
             }
         }
+
+        private void ShowRunInfo_Checked(object sender, RoutedEventArgs e)
+        {
+            User.Default.isShowRunInfo = true;
+            SaveUserSettings();
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void ShowRunInfo_Unchecked(object sender, RoutedEventArgs e)
+        {
+            User.Default.isShowRunInfo = false;
+            SaveUserSettings();
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoOpenBook_Checked(object sender, RoutedEventArgs e)
+        {
+            User.Default.isAutoOpenBook = true;
+            SaveUserSettings();
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoOpenBook_Unchecked(object sender, RoutedEventArgs e)
+        {
+            User.Default.isAutoOpenBook = false;
+            SaveUserSettings();
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoCompletion_Checked(object sender, RoutedEventArgs e)
+        {
+            User.Default.isAutoCompletion = true;
+            SaveUserSettings();
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoCompletion_Unchecked(object sender, RoutedEventArgs e)
+        {
+            User.Default.isAutoCompletion = false;
+            SaveUserSettings();
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoIndentation_Checked(object sender, RoutedEventArgs e)
+        {
+            User.Default.isAutoIndentation = true;
+            SaveUserSettings();
+            AutoIndentations.IsEnabled = true;
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoIndentation_Unchecked(object sender, RoutedEventArgs e)
+        {
+            User.Default.isAutoIndentation = false;
+            SaveUserSettings();
+            AutoIndentations.IsEnabled = false;
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoIndentations_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (AutoIndentations.Text != "" && AutoIndentations.Text != null)
+            {
+                try
+                {
+                    int t = int.Parse(AutoIndentations.Text);
+                    if (t > 0 && t < 1000)
+                    {
+                        User.Default.autoIndentations = t;
+                        SaveUserSettings();
+                        ShowMessage("已更改");
+                    }
+                    else
+                    {
+                        AutoIndentations.Text = User.Default.autoIndentations.ToString();
+                        ShowMessage("输入1~999整数");
+                    }
+                }
+                catch (Exception)
+                {
+                    AutoIndentations.Text = User.Default.autoIndentations.ToString();
+                    ShowMessage("输入整数");
+                }
+            }
+        }
+        private void AutoSaveWhenSwitch_Checked(object sender, RoutedEventArgs e)
+        {
+            User.Default.isAutoSaveWhenSwitch = true;
+            SaveUserSettings();
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoSaveWhenSwitch_Unchecked(object sender, RoutedEventArgs e)
+        {
+            User.Default.isAutoSaveWhenSwitch = false;
+            SaveUserSettings();
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoSaveEvery_Checked(object sender, RoutedEventArgs e)
+        {
+            User.Default.isAutoSaveEvery = true;
+            SaveUserSettings();
+            AutoSaveTime.IsEnabled = true;
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoSaveEvery_Unchecked(object sender, RoutedEventArgs e)
+        {
+            User.Default.isAutoSaveEvery = false;
+            SaveUserSettings();
+            AutoSaveTime.IsEnabled = false;
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoSaveTime_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (AutoSaveTime.Text != "" && AutoSaveTime.Text != null)
+            {
+                try
+                {
+                    int t = int.Parse(AutoSaveTime.Text);
+                    if (t > 0 && t < 1000)
+                    {
+                        TimeSpan ts = TimeSpan.FromMinutes(t);
+                        User.Default.autoSaveMinute = t;
+                        SaveUserSettings();
+                        AutoSaveTimer.Interval = ts;
+                        ShowMessage("已更改");
+                    }
+                    else
+                    {
+                        AutoSaveTime.Text = User.Default.autoSaveMinute.ToString();
+                        ShowMessage("输入1~999整数");
+                    }
+                }
+                catch (Exception)
+                {
+                    AutoSaveTime.Text = User.Default.autoSaveMinute.ToString();
+                    ShowMessage("输入整数");
+                }
+            }
+        }
+        private void AutoBackup_Checked(object sender, RoutedEventArgs e)
+        {
+            User.Default.isAutoBackup = true;
+            SaveUserSettings();
+            AutoBackupTime.IsEnabled = true;
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoBackup_Unchecked(object sender, RoutedEventArgs e)
+        {
+            User.Default.isAutoBackup = false;
+            SaveUserSettings();
+            AutoBackupTime.IsEnabled = false;
+            //显示消息
+            ShowMessage("已更改");
+        }
+        private void AutoBackupTime_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (AutoBackupTime.Text != "" && AutoBackupTime.Text != null)
+            {
+                try
+                {
+                    int t = int.Parse(AutoBackupTime.Text);
+                    if (t > 0 && t < 1000)
+                    {
+                        TimeSpan ts = TimeSpan.FromMinutes(t);
+                        User.Default.autoBackupMinute = t;
+                        SaveUserSettings();
+                        AutoBackupTimer.Interval = ts;
+                        //显示消息
+                        ShowMessage("已更改");
+                    }
+                    else
+                    {
+                        AutoBackupTime.Text = User.Default.autoBackupMinute.ToString();
+                        ShowMessage("输入1~999整数");
+                    }
+                }
+                catch (Exception)
+                {
+                    AutoBackupTime.Text = User.Default.autoBackupMinute.ToString();
+                    ShowMessage("输入整数");
+                }
+            }
+        }
         private void TextSize_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (TextSize.Text != "" && TextSize.Text != null)
@@ -3362,7 +3361,7 @@ namespace E.Writer
                     if (i > 0 && i < 1000)
                     {
                         User.Default.fontSize = i;
-                        SavePreferences();
+                        SaveUserSettings();
                         TbxFileContent.FontSize = i;
                         ShowMessage("已更改");
                     }

@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <!--左侧区域-->
+    <!--菜单-->
     <sys:String x:Key="折叠">Fold</sys:String>
     <sys:String x:Key="书籍">Book</sys:String>
     <sys:String x:Key="编辑">Edit</sys:String>
@@ -53,7 +53,7 @@
     <sys:String x:Key="开源+">GitHub Open Source Page F5</sys:String>
     <sys:String x:Key="讨论+">QQ Discuss Group F6</sys:String>
 
-    <!--中间区域-->
+    <!--面板-->
     <!--书籍页-->
     <sys:String x:Key="浏览">Browser</sys:String>
     <sys:String x:Key="创书">+ Book</sys:String>
@@ -69,7 +69,6 @@
     <sys:String x:Key="收起+">Collapse TreeView Ctrl+U</sys:String>
     <sys:String x:Key="刷新+">Refresh TreeView Ctrl+R</sys:String>
     <sys:String x:Key="删除+">Delete Target Delete</sys:String>
-
 
     <!--编辑页-->
     <sys:String x:Key="查换">Find and Replace</sys:String>
@@ -106,8 +105,8 @@
     <sys:String x:Key="日志">Update Log</sys:String>
     <sys:String x:Key="赞助">Sponsor BitCoin</sys:String>
     <sys:String x:Key="点复">Click to Copy</sys:String>
-
-    <!--右侧区域-->
+    
+    <!--内容-->
     <sys:String x:Key="欢迎使用">Welcome to</sys:String>
     <sys:String x:Key="启动次数">Start up counts</sys:String>
     <sys:String x:Key="启动时间">Start up time</sys:String>
@@ -119,7 +118,7 @@
     <sys:String x:Key="字数">Word counts</sys:String>
     <sys:String x:Key="全书字数">Totally Word counts</sys:String>
 
-    <!--提示消息-->
+    <!--提示-->
     <sys:String x:Key="提示">Help</sys:String>
     <sys:String x:Key="创建或打开以开始">Open or create a book to start</sys:String>
     <sys:String x:Key="未打开任何书籍">Didn't open any book</sys:String>

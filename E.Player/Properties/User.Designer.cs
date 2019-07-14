@@ -142,5 +142,29 @@ namespace E.Player.Properties {
                 this["rotateTo"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("主题\\浅色主题.ini")]
+        public string ThemePath {
+            get {
+                return ((string)(this["ThemePath"]));
+            }
+            set {
+                this["ThemePath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("主题")]
+        public string ThemesDir {
+            get {
+                return ((string)(this["ThemesDir"]));
+            }
+            set {
+                this["ThemesDir"] = value;
+            }
+        }
     }
 }

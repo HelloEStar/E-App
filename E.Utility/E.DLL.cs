@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Drawing;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 
 namespace E.Utility
 {
+    /// <summary>
+    /// 应用信息
+    /// </summary>
     public class AppInfo
     {
         /// <summary>

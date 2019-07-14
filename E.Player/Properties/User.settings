@@ -8,7 +8,7 @@
     <Setting Name="isLRFlip" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="isShowList" Type="System.Boolean" Scope="User">
+    <Setting Name="isShowMenu" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="language" Type="System.String" Scope="User">
@@ -31,6 +31,12 @@
     </Setting>
     <Setting Name="rotateTo" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="ThemePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">主题\浅色主题.ini</Value>
+    </Setting>
+    <Setting Name="ThemesDir" Type="System.String" Scope="User">
+      <Value Profile="(Default)">主题</Value>
     </Setting>
   </Settings>
 </SettingsFile>
