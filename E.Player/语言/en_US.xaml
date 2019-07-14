@@ -123,6 +123,7 @@
     <sys:String x:Key="未选择视频">No media Selected</sys:String>
     <sys:String x:Key="开始播放">Play</sys:String>
     <sys:String x:Key="暂停播放">Pause</sys:String>
+    <sys:String x:Key="停止播放">Stop</sys:String>
     <sys:String x:Key="当前进度">Progress</sys:String>
     <sys:String x:Key="当前音量">Volume</sys:String>
     <sys:String x:Key="播放速度">Speed</sys:String>
@@ -130,6 +131,9 @@
     <sys:String x:Key="视频重复">There is a same name media in the playlist</sys:String>
     <sys:String x:Key="播放模式切换">Play mode changed</sys:String>
     <sys:String x:Key="播放结束">All medias has been played</sys:String>
+
+    <sys:String x:Key="已经是第一个媒体">No more last</sys:String>
+    <sys:String x:Key="全部播放完毕">All Finish</sys:String>
     <sys:String x:Key="删除视频">Media has been removed</sys:String>
     <sys:String x:Key="循环始于">Loop start at</sys:String>
     <sys:String x:Key="循环终于">Loop stop at</sys:String>

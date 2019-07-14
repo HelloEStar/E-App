@@ -622,20 +622,20 @@
                     <Slider x:Name="SldSpeed" IsMoveToPointEnabled="True" SmallChange="0" Value="0.5" Cursor="Hand" LargeChange="0" ToolTip="0.5" TickFrequency="10" Maximum="1" Margin="0,6,0,0" ValueChanged="SldSpeed_ValueChanged"/>
                 </DockPanel>
                 <StackPanel Margin="0,5" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-                    <Button x:Name="BtnLast" Content="{DynamicResource 上个}" ToolTip="{DynamicResource 上个+}" Style="{DynamicResource 工具按钮样式}" Width="40"/>
+                    <Button x:Name="BtnLast" Content="{DynamicResource 上个}" ToolTip="{DynamicResource 上个+}" Style="{DynamicResource 工具按钮样式}" Click="BtnLast_Click"/>
                     <Button x:Name="BtnBack" Content="{DynamicResource 快退}" ToolTip="{DynamicResource 快退+}" Style="{DynamicResource 工具按钮样式}" Click="BtnBack_Click"/>
                     <Button x:Name="BtnReplay" Content="{DynamicResource 重播}" ToolTip="{DynamicResource 重播+}" Style="{DynamicResource 工具按钮样式}" Click="BtnReplay_Click"/>
                     <Button x:Name="BtnPlay" Content="{DynamicResource 播放}" ToolTip="{DynamicResource 播放+}" Style="{DynamicResource 工具按钮样式}" Click="BtnPlay_Click"/>
-                    <Button x:Name="BtnStop" Content="{DynamicResource 停止}" ToolTip="{DynamicResource 停止+}" Style="{DynamicResource 工具按钮样式}" Click="BtnReplay_Click"/>
+                    <Button x:Name="BtnStop" Content="{DynamicResource 停止}" ToolTip="{DynamicResource 停止+}" Style="{DynamicResource 工具按钮样式}" Click="BtnStop_Click"/>
                     <Button x:Name="BtnForward" Content="{DynamicResource 快进}" ToolTip="{DynamicResource 快进+}" Style="{DynamicResource 工具按钮样式}" Click="BtnForward_Click"/>
-                    <Button x:Name="BtnNext" Content="{DynamicResource 下个}" ToolTip="{DynamicResource 下个+}" Style="{DynamicResource 工具按钮样式}"/>
+                    <Button x:Name="BtnNext" Content="{DynamicResource 下个}" ToolTip="{DynamicResource 下个+}" Style="{DynamicResource 工具按钮样式}" Click="BtnNext_Click"/>
                 </StackPanel>
             </DockPanel>
             <!--内容-->
             <Grid x:Name="PanContent" Background="{DynamicResource 三级背景颜色}" MouseUp="PanContent_MouseUp" Drop="PanContent_Drop">
                 <MediaElement x:Name="Media" LoadedBehavior="Manual" Volume="0.5" AllowDrop="True" MediaOpened="MediaPlayer_MediaOpened" MediaEnded="Media_MediaEnded" MouseLeftButtonUp="Media_MouseLeftButtonUp" />
                 <Image x:Name="Cover" Margin="0" MouseLeftButtonUp="Media_MouseLeftButtonUp"/>
-                <Label x:Name="Message" Content="消息提示" Margin="10,10,10,0" Foreground="{DynamicResource 一级字体颜色}" Background="{x:Null}" Height="30" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="14" Padding="3,0,0,0"/>
+                <Label x:Name="Message" Content="消息提示" Margin="10,10,10,0" Foreground="{DynamicResource 有焦点选中颜色}" Background="{x:Null}" Height="30" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="14" Padding="3,0,0,0"/>
             </Grid>
         </DockPanel>
      </Grid>

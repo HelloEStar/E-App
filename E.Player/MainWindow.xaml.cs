@@ -368,7 +368,7 @@ namespace E.Player
                     }
                     else
                     {
-                        ShowMessage("视频重复", true);
+                        ShowMessage(FindResource("视频重复").ToString(), true);
                     }
                 }
             }
@@ -399,7 +399,7 @@ namespace E.Player
 
                     RefreshBtnsState();
                     RefreshTitle();
-                    ShowMessage("删除视频");
+                    ShowMessage(FindResource("删除视频").ToString());
                 }
                 int s = LtbMedia.SelectedIndex;
                 LtbMedia.Items.Remove(LtbMedia.SelectedItem);
@@ -412,7 +412,7 @@ namespace E.Player
             }
             else
             {
-                ShowMessage("未选择视频");
+                ShowMessage(FindResource("未选择视频").ToString());
             }
         }
         /// <summary>
@@ -431,7 +431,7 @@ namespace E.Player
                 SldTime.SelectionStart = 0;
                 SldTime.SelectionEnd = 0;
                 //显示消息
-                ShowMessage("已清除循环");
+                ShowMessage(FindResource("已清除循环").ToString());
             }
         }
 
@@ -456,7 +456,7 @@ namespace E.Player
 
             LtbMedia.Items.Clear();
 
-            ShowMessage("清空视频");
+            ShowMessage(FindResource("清空视频").ToString());
         }
 
         //获取
@@ -568,7 +568,7 @@ namespace E.Player
                         //设为默认主题
                         User.Default.ThemePath = User.Default.ThemePath;
                         SetSkin(User.Default.ThemePath);
-                        ShowMessage("偏好主题的不存在");
+                        ShowMessage(FindResource("偏好主题的不存在").ToString());
                     }
                     SaveUserSettings();
                     break;
@@ -609,7 +609,7 @@ namespace E.Player
                     }
                     else
                     {
-                        ShowMessage("下一个主题的配置文件不存在");
+                        ShowMessage(FindResource("下一个主题的配置文件不存在").ToString());
                         ThemeItems.Remove(ThemeItems[themeOrder]);
                     }
                     break;
@@ -662,12 +662,12 @@ namespace E.Player
                 HasStartPosition = true;
 
                 //显示消息
-                ShowMessage("循环始于", "：" + str.Substring(0, 8), false);
+                ShowMessage(FindResource("循环始于").ToString() + "：" + str.Substring(0, 8));
             }
             else
             {
                 //显示消息
-                ShowMessage("开始点应靠前");
+                ShowMessage(FindResource("开始点应靠前").ToString());
             }
         }
         /// <summary>
@@ -686,12 +686,12 @@ namespace E.Player
                 HasEndPosition = true;
 
                 //显示消息
-                ShowMessage("循环终于", "：" + str.Substring(0, 8), false);
+                ShowMessage(FindResource("循环终于").ToString() + "：" + str.Substring(0, 8));
             }
             else
             {
                 //显示消息
-                ShowMessage("结束点应靠后");
+                ShowMessage(FindResource("结束点应靠后").ToString());
             }
         }
 
@@ -797,7 +797,7 @@ namespace E.Player
                 }
                 else
                 {
-                    ShowMessage("无法播放", true);
+                    ShowMessage(FindResource("无法播放").ToString(), true);
                     return false;
                 }
             }
@@ -1002,24 +1002,6 @@ namespace E.Player
                 Message.Content = tip;
             }
         }
-        /// <summary>
-        /// 显示更多消息
-        /// </summary>
-        /// <param name="tip">资源名</param>
-        /// <param name="moreText">附加信息</param>
-        /// <param name="newBox">是否弹出对话框</param>
-        private void ShowMessage(string tip, string moreText, bool newBox = false)
-        {
-            if (newBox)
-            {
-                System.Windows.MessageBox.Show(FindResource(tip) + moreText);
-            }
-            else
-            {
-                Message.Opacity = 1;
-                Message.Content = FindResource(tip) + moreText;
-            }
-        }
 
         //切换
         /// <summary>
@@ -1195,12 +1177,12 @@ namespace E.Player
             Media.Play();
             Media.ScrubbingEnabled = true;
             IsPlaying = true;
-            BtnPlay.Content = FindResource("暂停");
+            BtnPlay.Content = FindResource("暂停").ToString();
             PlayingVideoPath = path;
 
             RefreshBtnsState();
             RefreshTitle();
-            ShowMessage("开始播放", "：" + GetVideoName(path), false);
+            ShowMessage(FindResource("开始播放").ToString() + "：" + GetVideoName(path));
         }
         /// <summary>
         /// 播放与暂停操作
@@ -1212,16 +1194,14 @@ namespace E.Player
                 Media.Play();
                 IsPlaying = true;
                 BtnPlay.Content = FindResource("暂停");
-                //显示消息
-                ShowMessage("开始播放");
+                ShowMessage(FindResource("开始播放").ToString());
             }
             else if (IsPlaying == true)
             {
                 Media.Pause();
                 IsPlaying = false;
                 BtnPlay.Content = FindResource("播放");
-                //显示消息
-                ShowMessage("暂停播放");
+                ShowMessage(FindResource("暂停播放").ToString());
             }
         }
         /// <summary>
@@ -1234,7 +1214,17 @@ namespace E.Player
             IsPlaying = true;
             BtnPlay.Content = FindResource("暂停");
             //显示消息
-            ShowMessage("开始播放");
+            ShowMessage(FindResource("开始播放").ToString());
+        }
+        /// <summary>
+        /// 停止
+        /// </summary>
+        private void Stop()
+        {
+            Media.Stop();
+            IsPlaying = false;
+            BtnPlay.Content = FindResource("播放");
+            ShowMessage(FindResource("停止播放").ToString());
         }
         /// <summary>
         /// 快进
@@ -1250,7 +1240,7 @@ namespace E.Player
                 }
                 string str = Media.Position.ToString();
                 //显示消息
-                ShowMessage("当前进度", "：" + str.Substring(0, 8), false);
+                ShowMessage(FindResource("当前进度").ToString() + "：" + str.Substring(0, 8));
             }
         }
         /// <summary>
@@ -1267,9 +1257,79 @@ namespace E.Player
                 }
                 string str = Media.Position.ToString();
                 //显示消息
-                ShowMessage("当前进度", "：" + str.Substring(0, 8), false);
+                ShowMessage(FindResource("当前进度").ToString() + "：" + str.Substring(0, 8));
             }
         }
+        /// <summary>
+        /// 上一个
+        /// </summary>
+        private void Last()
+        {
+            int n = 0;
+            string[] path = new string[LtbMedia.Items.Count];
+            ListBoxItem tempItem;
+            for (int i = 0; i < LtbMedia.Items.Count; i++)
+            {
+                tempItem = LtbMedia.Items.GetItemAt(i) as ListBoxItem;
+                path[i] = tempItem.Tag.ToString();
+
+                if (PlayingVideoPath == path[i])
+                {
+                    n = LtbMedia.Items.IndexOf(tempItem);
+                    break;
+                }
+            }
+
+            if (n == 0)
+            {
+                ShowMessage(FindResource("已经是第一个媒体").ToString());
+            }
+            else
+            {
+                ListBoxItem nextItem = LtbMedia.Items.GetItemAt(n - 1) as ListBoxItem;
+                SelectedVideoPath = nextItem.Tag.ToString();
+                LtbMedia.SelectedIndex = n - 1;
+
+                PlayNewVideo(SelectedVideoPath);
+                IsPlaying = true;
+            }
+        }
+        /// <summary>
+        /// 下一个
+        /// </summary>
+        private void Next()
+        {
+            int n = 0;
+            string[] path = new string[LtbMedia.Items.Count];
+            ListBoxItem tempItem;
+            for (int i = 0; i < LtbMedia.Items.Count; i++)
+            {
+                tempItem = LtbMedia.Items.GetItemAt(i) as ListBoxItem;
+                path[i] = tempItem.Tag.ToString();
+
+                if (PlayingVideoPath == path[i])
+                {
+                    n = LtbMedia.Items.IndexOf(tempItem);
+                    break;
+                }
+            }
+
+            if (n == LtbMedia.Items.Count - 1)
+            {
+                Stop();
+                ShowMessage(FindResource("全部播放完毕").ToString());
+            }
+            else
+            {
+                ListBoxItem nextItem = LtbMedia.Items.GetItemAt(n + 1) as ListBoxItem;
+                SelectedVideoPath = nextItem.Tag.ToString();
+                LtbMedia.SelectedIndex = n + 1;
+
+                PlayNewVideo(SelectedVideoPath);
+                IsPlaying = true;
+            }
+        }
+
         /// <summary>
         /// 音量升高
         /// </summary>
@@ -1280,7 +1340,7 @@ namespace E.Player
             SldVolume.Value = temp;
             SldVolume.ToolTip = temp;
             //显示消息
-            ShowMessage("当前音量", "：" + temp, false);
+            ShowMessage(FindResource("当前音量").ToString() + "：" + temp);
         }
         /// <summary>
         /// 音量降低
@@ -1292,7 +1352,7 @@ namespace E.Player
             SldVolume.Value = temp;
             SldVolume.ToolTip = temp;
             //显示消息
-            ShowMessage("当前音量", "：" + temp, false);
+            ShowMessage(FindResource("当前音量").ToString() + "：" + temp);
         }
         /// <summary>
         /// 速度增加
@@ -1301,7 +1361,7 @@ namespace E.Player
         {
             Media.SpeedRatio = Media.SpeedRatio + 0.1;
             //显示消息
-            ShowMessage("播放速度", "：" + Media.SpeedRatio, false);
+            ShowMessage(FindResource("播放速度").ToString() + "：" + Media.SpeedRatio);
         }
         /// <summary>
         /// 速度减少
@@ -1310,7 +1370,7 @@ namespace E.Player
         {
             Media.SpeedRatio = Media.SpeedRatio - 0.1;
             //显示消息
-            ShowMessage("播放速度", "：" + Media.SpeedRatio, false);
+            ShowMessage(FindResource("播放速度").ToString() + "：" + Media.SpeedRatio);
         }
         /// <summary>
         /// 左右翻转
@@ -1332,7 +1392,7 @@ namespace E.Player
                 Media.LayoutTransform = scaleTransform;
                 User.Default.isLRFlip = true;
                 //显示消息
-                ShowMessage("已左右翻转");
+                ShowMessage(FindResource("已左右翻转").ToString());
             }
             else if (User.Default.isLRFlip == true)
             {
@@ -1349,7 +1409,7 @@ namespace E.Player
                 Media.LayoutTransform = scaleTransform;
                 User.Default.isLRFlip = false;
                 //显示消息
-                ShowMessage("已取消左右翻转");
+                ShowMessage(FindResource("已取消左右翻转").ToString());
             }
         }
         /// <summary>
@@ -1372,7 +1432,7 @@ namespace E.Player
                 Media.LayoutTransform = scaleTransform;
                 User.Default.isUDFlip = true;
                 //显示消息
-                ShowMessage("已上下翻转");
+                ShowMessage(FindResource("已上下翻转").ToString());
             }
             else if (User.Default.isUDFlip == true)
             {
@@ -1389,7 +1449,7 @@ namespace E.Player
                 Media.LayoutTransform = scaleTransform;
                 User.Default.isUDFlip = false;
                 //显示消息
-                ShowMessage("已取消上下翻转");
+                ShowMessage(FindResource("已取消上下翻转").ToString());
             }
         }
         /// <summary>
@@ -1405,7 +1465,7 @@ namespace E.Player
             SaveUserSettings();
             Media.LayoutTransform = new RotateTransform(90 * User.Default.rotateTo);
             //显示消息
-            ShowMessage("已顺时针旋转90度");
+            ShowMessage(FindResource("已顺时针旋转90度").ToString());
         }
         /// <summary>
         /// 逆时针旋转90度
@@ -1420,7 +1480,7 @@ namespace E.Player
             SaveUserSettings();
             Media.LayoutTransform = new RotateTransform(90 * User.Default.rotateTo);
             //显示消息
-            ShowMessage("已逆时针旋转90度");
+            ShowMessage(FindResource("已逆时针旋转90度").ToString());
         }
         /// <summary>
         /// 到达循环结束点时的动作
@@ -1487,21 +1547,29 @@ namespace E.Player
             if (e.Key == Key.D1 && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
             {
                 SetPlayMode(0);
+                SelectPlayModeItem(User.Default.playMode);
+                ShowMessage(FindResource("播放模式切换").ToString() + "：" + FindResource("单次").ToString());
             }
             //Ctrl+2
             else if (e.Key == Key.D2 && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
             {
                 SetPlayMode(1);
+                SelectPlayModeItem(User.Default.playMode);
+                ShowMessage(FindResource("播放模式切换").ToString() + "：" + FindResource("循环").ToString());
             }
             //Ctrl+3 
             else if (e.Key == Key.D3 && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
             {
                 SetPlayMode(2);
+                SelectPlayModeItem(User.Default.playMode);
+                ShowMessage(FindResource("播放模式切换").ToString() + "：" + FindResource("顺序").ToString());
             }
             //Ctrl+4
             else if (e.Key == Key.D4 && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
             {
                 SetPlayMode(3);
+                SelectPlayModeItem(User.Default.playMode);
+                ShowMessage(FindResource("播放模式切换").ToString() + "：" + FindResource("随机").ToString());
             }
 
             if (e.Key == Key.F)
@@ -1557,6 +1625,16 @@ namespace E.Player
                 else if (e.Key == Key.R)
                 {
                     Replay();
+                }
+                //上一个
+                else if (e.Key == Key.PageUp)
+                {
+                    Last();
+                }
+                //下一个
+                else if (e.Key == Key.PageDown)
+                {
+                    Next();
                 }
                 //按←→键改变进度
                 else if (e.Key == Key.Right && File.Exists(PlayingVideoPath))
@@ -1621,6 +1699,10 @@ namespace E.Player
                 }
             }
 
+            //Ctrl+T 切换下个主题
+            if (e.Key == Key.T && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
+            { SetNextTheme(); }
+
             //关于菜单
             if (e.Key == Key.F1)
             { Process.Start("explorer.exe", AppInfo.HomePage); }
@@ -1662,12 +1744,8 @@ namespace E.Player
             //单次
             if (User.Default.playMode == 0)
             {
-                Media.Stop();
-                IsPlaying = false;
-                BtnPlay.Content = FindResource("播放");
-
-                //显示消息
-                ShowMessage("播放结束");
+                Stop();
+                ShowMessage(FindResource("播放结束").ToString());
             }
             //循环
             else if (User.Default.playMode == 1)
@@ -1677,42 +1755,7 @@ namespace E.Player
             //顺序
             else if (User.Default.playMode == 2)
             {
-                //获取当前正在播放的Item在PlayListBox的索引
-                int n = 0;
-                string[] path = new string[LtbMedia.Items.Count];
-                ListBoxItem tempItem;
-                for (int i = 0; i < LtbMedia.Items.Count; i++)
-                {
-                    tempItem = LtbMedia.Items.GetItemAt(i) as ListBoxItem;
-                    path[i] = tempItem.Tag.ToString();
-
-                    if (PlayingVideoPath == path[i])
-                    {
-                        n = LtbMedia.Items.IndexOf(tempItem);
-                        break;
-                    }
-                }
-                //如果是最后一个Item
-                if (n == LtbMedia.Items.Count - 1)
-                {
-                    Media.Stop();
-                    Media.Source = null;
-                    IsPlaying = false;
-                    TimeAll.Content = "00:00:00";
-
-                    //显示消息
-                    ShowMessage("全部播放完毕");
-                }
-                else
-                {
-                    //获取它的下一个Item
-                    ListBoxItem nextItem = LtbMedia.Items.GetItemAt(n + 1) as ListBoxItem;
-                    SelectedVideoPath = nextItem.Tag.ToString();
-                    LtbMedia.SelectedIndex = n + 1;
-                    //播放下一个视频
-                    PlayNewVideo(SelectedVideoPath);
-                    IsPlaying = true;
-                }
+                Next();
             }
             //随机
             else if (User.Default.playMode == 3)
@@ -1799,6 +1842,18 @@ namespace E.Player
         {
             Replay();
         }
+        private void BtnStop_Click(object sender, RoutedEventArgs e)
+        {
+            Stop();
+        }
+        private void BtnLast_Click(object sender, RoutedEventArgs e)
+        {
+            Last();
+        }
+        private void BtnNext_Click(object sender, RoutedEventArgs e)
+        {
+            Next();
+        }
         private void BtnForward_Click(object sender, RoutedEventArgs e)
         {
             Forward();
@@ -1860,7 +1915,7 @@ namespace E.Player
         {
             ResetUserSettings();
             LoadSettings();
-            ShowMessage("已重置");
+            ShowMessage(FindResource("已重置").ToString());
         }
         private void BtnApply_Click(object sender, RoutedEventArgs e)
         {
@@ -1919,12 +1974,12 @@ namespace E.Player
                 if (File.Exists(tmp))
                 {
                     SetTheme(tmp);
-                    ShowMessage("已更改");
+                    ShowMessage(FindResource("已更改").ToString());
                 }
                 else
                 {
                     CbbThemes.Items.Remove(CbbThemes.SelectedItem);
-                    ShowMessage("该主题的配置文件不存在");
+                    ShowMessage(FindResource("该主题的配置文件不存在").ToString());
                 }
             }
         }
