@@ -22,6 +22,8 @@ using System.Net;
 using System.Diagnostics;
 using System.Reflection;
 using System.Drawing.Imaging;
+using Tags.ID3;
+
 using Application = System.Windows.Forms.Application;
 using MessageBox = System.Windows.MessageBox;
 using ContextMenu = System.Windows.Controls.ContextMenu;
@@ -58,13 +60,10 @@ namespace E.Player
         private List<TextBlock> ThemeItems { get; set; } = new List<TextBlock>();
 
         /// <summary>
-        /// 选中的视频的路径
+        /// 播放中的媒体
         /// </summary>
-        private string SelectedVideoPath { get; set; }
-        /// <summary>
-        /// 正在播放的视频的路径
-        /// </summary>
-        private string PlayingVideoPath { get; set; }
+        private FileOrFolderInfo PlayingMedia { get; set; }
+
         /// <summary>
         /// 是否正在播放
         /// </summary>
@@ -219,7 +218,7 @@ namespace E.Player
                 string[] _myB = Regex.Split(User.Default._medias, "///");
                 foreach (var b in _myB)
                 {
-                    AddPlayListItem(b, false);
+                    AddPlayListItem(new FileOrFolderInfo(b), false);
                 }
             }
         }
@@ -308,18 +307,18 @@ namespace E.Player
         /// <summary>
         /// 创建播放列表媒体元素
         /// </summary>
-        /// <param name="path">媒体路径</param>
+        /// <param name="media">媒体路径</param>
         /// <param name="isPlay">是否直接播放</param>
-        private void AddPlayListItem(string path, bool isPlay)
+        private void AddPlayListItem(FileOrFolderInfo media, bool isPlay)
         {
-            if (!string.IsNullOrEmpty(path))
+            if (media != null)
             {
                 ListBoxItem PlayListBoxItem = new ListBoxItem
                 {
                     Name = "VideoItem",
-                    Tag = path,
-                    ToolTip = path,
-                    Content = GetVideoName(path),
+                    Tag = media.Path,
+                    ToolTip = media.Path,
+                    Content = media.Name,
                     Style = (Style)FindResource("列表子项样式")
                 };
                 //添加鼠标事件
@@ -335,7 +334,7 @@ namespace E.Player
                     LtbMedia.SelectedIndex = 0;
                     if (isPlay == true)
                     {
-                        PlayNewVideo(path);
+                        PlayNewVideo(media);
                     }
                 }
                 else
@@ -344,7 +343,7 @@ namespace E.Player
                     for (int i = 0; i < LtbMedia.Items.Count; i++)
                     {
                         tempItem = LtbMedia.Items.GetItemAt(i) as ListBoxItem;
-                        if (path == tempItem.Tag.ToString())
+                        if (media.Path == tempItem.Tag.ToString())
                         {
                             isThere = true;
                             break;
@@ -363,7 +362,7 @@ namespace E.Player
                         LtbMedia.SelectedItem = PlayListBoxItem;
                         if (isPlay == true)
                         {
-                            PlayNewVideo(path);
+                            PlayNewVideo(media);
                         }
                     }
                     else
@@ -385,21 +384,24 @@ namespace E.Player
             tempItem = LtbMedia.SelectedItem as ListBoxItem;
             if (tempItem != null)
             {
-                if (PlayingVideoPath == tempItem.Tag.ToString())
+                if (PlayingMedia != null)
                 {
-                    Media.Stop();
-                    Media.Source = null;
-                    PlayingVideoPath = "";
-                    Cover.Source = null;
-                    Cover.IsEnabled = false;
-                    IsPlaying = false;
+                    if (PlayingMedia.Path == tempItem.Tag.ToString())
+                    {
+                        Media.Stop();
+                        Media.Source = null;
+                        Cover.Source = null;
+                        Cover.IsEnabled = false;
+                        IsPlaying = false;
+                        PlayingMedia = null;
 
-                    TimeAll.Content = "00:00:00";
-                    BtnPlay.Content = FindResource("播放");
+                        TimeAll.Content = "00:00:00";
+                        BtnPlay.Content = FindResource("播放");
 
-                    RefreshBtnsState();
-                    RefreshTitle();
-                    ShowMessage(FindResource("删除视频").ToString());
+                        RefreshBtnsState();
+                        RefreshTitle();
+                        ShowMessage(FindResource("删除视频").ToString());
+                    }
                 }
                 int s = LtbMedia.SelectedIndex;
                 LtbMedia.Items.Remove(LtbMedia.SelectedItem);
@@ -443,7 +445,7 @@ namespace E.Player
         {
             Media.Stop();
             Media.Source = null;
-            PlayingVideoPath = "";
+            PlayingMedia = null;
             Cover.Source = null;
             Cover.IsEnabled = false;
             IsPlaying = false;
@@ -456,7 +458,7 @@ namespace E.Player
 
             LtbMedia.Items.Clear();
 
-            ShowMessage(FindResource("清空视频").ToString());
+            ShowMessage(FindResource("已清空媒体列表").ToString());
         }
 
         //获取
@@ -467,7 +469,7 @@ namespace E.Player
         /// <returns>媒体名称</returns>
         private string GetVideoName(string path)
         {
-            string _videoName = System.IO.Path.GetFileName(path);
+            string _videoName = Path.GetFileName(path);
             return _videoName;
         }
         /// <summary>
@@ -478,8 +480,8 @@ namespace E.Player
         {
             OpenFileDialog dialog = new OpenFileDialog
             {
-                Filter = "Video File(*.avi;*.mp4;*.rmvb;*.mkv;*.wmv;*.wma;*.wav;*.mp3;*.aac;*.flac)|" +
-                                    "*.avi;*.mp4;*.rmvb;*.mkv;*.wmv;*.wma;*.wav;*.mp3;*.aac;*.flac|" +
+                Filter = "Video File(*.avi;*.mp4;*.mkv;*.wmv;*.wma;*.wav;*.mp3;*.aac;*.flac)|" +
+                                    "*.avi;*.mp4;*.mkv;*.wmv;*.wma;*.wav;*.mp3;*.aac;*.flac|" +
                          "All File(*.*)|" +
                                   "*.*"
             };
@@ -496,7 +498,7 @@ namespace E.Player
             try
             {
                 List<BitmapImage> list_bitmapimg = new List<BitmapImage>();
-                Tags.ID3.ID3Info File = new Tags.ID3.ID3Info(MP3path, true);
+                ID3Info File = new ID3Info(MP3path, true);
 
                 foreach (Tags.ID3.ID3v2Frames.BinaryFrames.AttachedPictureFrame F in File.ID3v2Info.AttachedPictureFrames)
                 {
@@ -814,7 +816,7 @@ namespace E.Player
         /// <param name="state"></param>
         private void RefreshBtnsState()
         {
-            if (string.IsNullOrEmpty(PlayingVideoPath))
+            if (PlayingMedia == null)
             {
                 BtnLast.IsEnabled = false;
                 BtnNext.IsEnabled = false;
@@ -861,9 +863,9 @@ namespace E.Player
         public void RefreshTitle()
         {
             Main.Title = AppInfo.Name + " " + AppInfo.Version;
-            if (!string.IsNullOrEmpty(PlayingVideoPath))
+            if (PlayingMedia != null)
             {
-                Main.Title += PlayingVideoPath;
+                Main.Title += " " + PlayingMedia.Name;
             }
         }
 
@@ -1039,82 +1041,18 @@ namespace E.Player
         /// <summary>
         /// 
         /// </summary>
-        private void SwichPanMediaList()
-        {
-            if (PanPanels.Visibility == Visibility.Visible)
-            {
-                if (PanMediaList.Visibility == Visibility.Visible)
-                {
-                    PanPanels.Visibility = Visibility.Collapsed;
-                    BtnMedia.BorderThickness = new Thickness(0, 0, 0, 0);
-                }
-                else
-                {
-                    ShowPanMediaList();
-                }
-            }
-            else
-            {
-                ShowPanMediaList();
-            }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
         private void SwichPanControl()
         {
             if (PanControl.Visibility == Visibility.Visible)
             {
                 PanControl.Visibility = Visibility.Collapsed;
                 BtnControl.BorderThickness = new Thickness(0, 0, 0, 0);
+                Trigger.Visibility = Visibility.Visible;
             }
             else
             {
                 ShowPanControl();
-            }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        private void SwichPanSetting()
-        {
-            if (PanPanels.Visibility == Visibility.Visible)
-            {
-                if (PanSetting.Visibility == Visibility.Visible)
-                {
-                    PanPanels.Visibility = Visibility.Collapsed;
-                    BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
-                }
-                else
-                {
-                    ShowPanSetting();
-                }
-            }
-            else
-            {
-                ShowPanSetting();
-            }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        private void SwichPanAbout()
-        {
-            if (PanPanels.Visibility == Visibility.Visible)
-            {
-                if (PanAbout.Visibility == Visibility.Visible)
-                {
-                    PanPanels.Visibility = Visibility.Collapsed;
-                    BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
-                }
-                else
-                {
-                    ShowPanAbout();
-                }
-            }
-            else
-            {
-                ShowPanAbout();
+                Trigger.Visibility = Visibility.Collapsed;
             }
         }
         /// <summary>
@@ -1160,8 +1098,10 @@ namespace E.Player
         /// 播放新媒体
         /// </summary>
         /// <param name="path">媒体路径</param>
-        private void PlayNewVideo(string path)
+        private void PlayNewVideo(FileOrFolderInfo media)
         {
+            PlayingMedia = media;
+
             //若在切换视频时不保留镜像状态
             if (User.Default.isKeepTrans == false)
             {
@@ -1171,18 +1111,17 @@ namespace E.Player
             //清空媒体源
             Media.Source = null;
             //若播放音频，显示封面
-            ShowMP3Cover(path);
+            ShowMP3Cover(media.Path);
             //获取路径开始播放
-            Media.Source = new Uri(path);
+            Media.Source = new Uri(media.Path);
             Media.Play();
             Media.ScrubbingEnabled = true;
             IsPlaying = true;
             BtnPlay.Content = FindResource("暂停").ToString();
-            PlayingVideoPath = path;
 
             RefreshBtnsState();
             RefreshTitle();
-            ShowMessage(FindResource("开始播放").ToString() + "：" + GetVideoName(path));
+            ShowMessage(FindResource("开始播放").ToString() + "：" + GetVideoName(media.Path));
         }
         /// <summary>
         /// 播放与暂停操作
@@ -1231,7 +1170,11 @@ namespace E.Player
         /// </summary>
         private void Forward()
         {
-            if (File.Exists(PlayingVideoPath))
+            if (PlayingMedia == null)
+            {
+                return;
+            }
+            if (File.Exists(PlayingMedia.Path))
             {
                 Media.Position += TimeSpan.FromSeconds(User.Default.jumpTime);
                 if (Media.Position > Media.NaturalDuration.TimeSpan)
@@ -1248,7 +1191,11 @@ namespace E.Player
         /// </summary>
         private void Back()
         {
-            if (File.Exists(PlayingVideoPath))
+            if (PlayingMedia == null)
+            {
+                return;
+            }
+            if (File.Exists(PlayingMedia.Path))
             {
                 Media.Position -= TimeSpan.FromSeconds(User.Default.jumpTime);
                 if (Media.Position <= TimeSpan.Zero)
@@ -1265,6 +1212,11 @@ namespace E.Player
         /// </summary>
         private void Last()
         {
+            if (PlayingMedia == null)
+            {
+                return;
+            }
+
             int n = 0;
             string[] path = new string[LtbMedia.Items.Count];
             ListBoxItem tempItem;
@@ -1273,7 +1225,7 @@ namespace E.Player
                 tempItem = LtbMedia.Items.GetItemAt(i) as ListBoxItem;
                 path[i] = tempItem.Tag.ToString();
 
-                if (PlayingVideoPath == path[i])
+                if (PlayingMedia.Path == path[i])
                 {
                     n = LtbMedia.Items.IndexOf(tempItem);
                     break;
@@ -1287,10 +1239,9 @@ namespace E.Player
             else
             {
                 ListBoxItem nextItem = LtbMedia.Items.GetItemAt(n - 1) as ListBoxItem;
-                SelectedVideoPath = nextItem.Tag.ToString();
+                FileOrFolderInfo media = new FileOrFolderInfo(nextItem.Tag.ToString());
                 LtbMedia.SelectedIndex = n - 1;
-
-                PlayNewVideo(SelectedVideoPath);
+                PlayNewVideo(media);
                 IsPlaying = true;
             }
         }
@@ -1299,6 +1250,11 @@ namespace E.Player
         /// </summary>
         private void Next()
         {
+            if (PlayingMedia == null)
+            {
+                return;
+            }
+
             int n = 0;
             string[] path = new string[LtbMedia.Items.Count];
             ListBoxItem tempItem;
@@ -1307,7 +1263,7 @@ namespace E.Player
                 tempItem = LtbMedia.Items.GetItemAt(i) as ListBoxItem;
                 path[i] = tempItem.Tag.ToString();
 
-                if (PlayingVideoPath == path[i])
+                if (PlayingMedia.Path == path[i])
                 {
                     n = LtbMedia.Items.IndexOf(tempItem);
                     break;
@@ -1322,10 +1278,9 @@ namespace E.Player
             else
             {
                 ListBoxItem nextItem = LtbMedia.Items.GetItemAt(n + 1) as ListBoxItem;
-                SelectedVideoPath = nextItem.Tag.ToString();
+                FileOrFolderInfo media = new FileOrFolderInfo(nextItem.Tag.ToString());
                 LtbMedia.SelectedIndex = n + 1;
-
-                PlayNewVideo(SelectedVideoPath);
+                PlayNewVideo(media);
                 IsPlaying = true;
             }
         }
@@ -1360,8 +1315,11 @@ namespace E.Player
         private void SpeedUp()
         {
             Media.SpeedRatio = Media.SpeedRatio + 0.1;
+            double temp = Math.Round(Media.SpeedRatio, 2);
+            SldSpeed.Value = temp;
+            SldSpeed.ToolTip = temp;
             //显示消息
-            ShowMessage(FindResource("播放速度").ToString() + "：" + Media.SpeedRatio);
+            ShowMessage(FindResource("播放速度").ToString() + "：" + temp);
         }
         /// <summary>
         /// 速度减少
@@ -1369,8 +1327,11 @@ namespace E.Player
         private void SpeedDown()
         {
             Media.SpeedRatio = Media.SpeedRatio - 0.1;
+            double temp = Math.Round(Media.SpeedRatio, 2);
+            SldSpeed.Value = temp;
+            SldSpeed.ToolTip = temp;
             //显示消息
-            ShowMessage(FindResource("播放速度").ToString() + "：" + Media.SpeedRatio);
+            ShowMessage(FindResource("播放速度").ToString() + "：" + temp);
         }
         /// <summary>
         /// 左右翻转
@@ -1576,17 +1537,23 @@ namespace E.Player
             {
                 SwichPanels();
             }
+            else if (e.Key == Key.S)
+            {
+                ShowPanSetting();
+            }
+            else if (e.Key == Key.H)
+            {
+                ShowPanAbout();
+            }
             //O键打开媒体文件
             else if (e.Key == Key.O)
             {
-                SelectedVideoPath = GetFilePath();
-                AddPlayListItem(SelectedVideoPath, true);
+                AddPlayListItem(new FileOrFolderInfo(GetFilePath()), true);
             }
             //A键添加媒体文件
             else if (e.Key == Key.A)
             {
-                SelectedVideoPath = GetFilePath();
-                AddPlayListItem(SelectedVideoPath, false);
+                AddPlayListItem(new FileOrFolderInfo(GetFilePath()), false);
             }
             //按Esc键退出全屏
             else if (e.Key == Key.Escape)
@@ -1606,7 +1573,14 @@ namespace E.Player
             //L键显示/隐藏播放列表
             else if (e.Key == Key.L)
             {
-                SwichPanMediaList();
+                if (PanMediaList.Visibility == Visibility.Visible)
+                {
+                    SwichPanels();
+                }
+                else
+                {
+                    ShowPanMediaList();
+                }
             }
             //Delete键删除视频
             else if (e.Key == Key.Delete)
@@ -1614,7 +1588,7 @@ namespace E.Player
                 RemoveMedia();
             }
 
-            if (!string.IsNullOrEmpty(PlayingVideoPath))
+            if (PlayingMedia != null)
             {
                 //按空格键播放和暂停
                 if (e.Key == Key.Space)
@@ -1637,20 +1611,20 @@ namespace E.Player
                     Next();
                 }
                 //按←→键改变进度
-                else if (e.Key == Key.Right && File.Exists(PlayingVideoPath))
+                else if (e.Key == Key.Right && File.Exists(PlayingMedia.Path))
                 {
                     Forward();
                 }
-                else if (e.Key == Key.Left && File.Exists(PlayingVideoPath))
+                else if (e.Key == Key.Left && File.Exists(PlayingMedia.Path))
                 {
                     Back();
                 }
                 //按[]键设置循环段开始与结束
-                else if (e.Key == Key.OemOpenBrackets && File.Exists(PlayingVideoPath))
+                else if (e.Key == Key.OemOpenBrackets && File.Exists(PlayingMedia.Path))
                 {
                     SetLoopStart();
                 }
-                else if (e.Key == Key.OemCloseBrackets && File.Exists(PlayingVideoPath))
+                else if (e.Key == Key.OemCloseBrackets && File.Exists(PlayingMedia.Path))
                 {
                     SetLoopEnd();
                 }
@@ -1764,12 +1738,9 @@ namespace E.Player
                 int n = ran.Next(0, LtbMedia.Items.Count);
                 //获取Item
                 ListBoxItem nextItem = LtbMedia.ItemContainerGenerator.ContainerFromIndex(n) as ListBoxItem;
-                //获取nextItem储存的路径信息
-                SelectedVideoPath = nextItem.Tag.ToString();
-
+                FileOrFolderInfo media = new FileOrFolderInfo(nextItem.Tag.ToString());
                 LtbMedia.SelectedIndex = n;
-                //播放下一个视频
-                PlayNewVideo(SelectedVideoPath);
+                PlayNewVideo(media);
                 IsPlaying = true;
             }
             RefreshTitle();
@@ -1783,8 +1754,45 @@ namespace E.Player
                 tempItem = LtbMedia.SelectedItem as ListBoxItem;
                 if (tempItem != null)
                 {
-                    SelectedVideoPath = tempItem.Tag.ToString();
-                    PlayNewVideo(SelectedVideoPath);
+                    FileOrFolderInfo media = new FileOrFolderInfo(tempItem.Tag.ToString());
+                    PlayNewVideo(media);
+                }
+            }
+        }
+        private void Grid_MouseEnter(object sender, MouseEventArgs e)
+        {
+            SwichPanControl();
+        }
+        private void PanControl_MouseLeave(object sender, MouseEventArgs e)
+        {
+            SwichPanControl();
+        }
+
+        private void JumpTime_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (JumpTime.Text != "")
+            {
+                try
+                {
+                    int t = int.Parse(JumpTime.Text);
+                    if (t > 0 && t < 1000)
+                    {
+                        TimeSpan ts = TimeSpan.FromMinutes(t);
+                        User.Default.jumpTime = t;
+                        SaveUserSettings();
+                        //显示消息
+                        // ShowMessage("已更改");
+                    }
+                    else
+                    {
+                        JumpTime.Text = User.Default.jumpTime.ToString();
+                        // ShowMessage("输入1~999整数");
+                    }
+                }
+                catch (Exception)
+                {
+                    JumpTime.Text = User.Default.jumpTime.ToString();
+                    // ShowMessage("输入整数");
                 }
             }
         }
@@ -1796,7 +1804,7 @@ namespace E.Player
         }
         private void BtnList_Click(object sender, RoutedEventArgs e)
         {
-            SwichPanMediaList();
+            ShowPanMediaList();
         }
         private void BtnControl_Click(object sender, RoutedEventArgs e)
         {
@@ -1804,26 +1812,20 @@ namespace E.Player
         }
         private void BtnSetting_Click(object sender, RoutedEventArgs e)
         {
-            SwichPanSetting();
+            ShowPanSetting();
         }
         private void BtnAbout_Click(object sender, RoutedEventArgs e)
         {
-            SwichPanAbout();
+            ShowPanAbout();
         }
 
         private void BtnOpen_Click(object sender, RoutedEventArgs e)
         {
-            //浏览文件
-            SelectedVideoPath = GetFilePath();
-            //在播放列表添加此媒体，播放
-            AddPlayListItem(SelectedVideoPath, true);
+            AddPlayListItem(new FileOrFolderInfo(GetFilePath()), true);
         }
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            //浏览文件
-            SelectedVideoPath = GetFilePath();
-            //在播放列表添加此媒体，不播放
-            AddPlayListItem(SelectedVideoPath, false);
+            AddPlayListItem(new FileOrFolderInfo(GetFilePath()), false);
         }
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
         {
@@ -2015,14 +2017,19 @@ namespace E.Player
             double temp = Math.Round(SldVolume.Value, 2);
             Media.Volume = temp;
             SldVolume.ToolTip = temp;
-            //显示消息
-            Message.Opacity = 1;
-            Message.Content = "当前音量：" + temp;
+            ShowMessage(FindResource("当前音量").ToString() + "：" + temp);
 
         }
         private void SldSpeed_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
 
+        }
+        private void SldSpeed_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            double temp = Math.Round(SldSpeed.Value, 2);
+            Media.SpeedRatio = temp;
+            SldSpeed.ToolTip = temp;
+            ShowMessage(FindResource("播放速度").ToString() + "：" + temp);
         }
 
         private void Item_Play_MouseDown(object sender, MouseButtonEventArgs e)
@@ -2032,8 +2039,7 @@ namespace E.Player
                 //获取当前选择的Item在PlayListBox的索引
                 ListBoxItem tempItem;
                 tempItem = LtbMedia.SelectedItem as ListBoxItem;
-                SelectedVideoPath = tempItem.Tag.ToString();
-                PlayNewVideo(SelectedVideoPath);
+                PlayNewVideo(new FileOrFolderInfo(tempItem.Tag.ToString()));
             }
         }
 
@@ -2096,12 +2102,12 @@ namespace E.Player
             if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
             {
                 //获取该文件路径
-                SelectedVideoPath = ((Array)e.Data.GetData(System.Windows.DataFormats.FileDrop)).GetValue(0).ToString();
+                FileOrFolderInfo media = new FileOrFolderInfo(((Array)e.Data.GetData(System.Windows.DataFormats.FileDrop)).GetValue(0).ToString());
                 //检测路径是否正确
-                if (IsPathRight(SelectedVideoPath))
+                if (IsPathRight(media.Path))
                 {
                     //在播放列表添加此媒体，不播放
-                    AddPlayListItem(SelectedVideoPath, false);
+                    AddPlayListItem(media, false);
                 }
             }
         }
@@ -2111,12 +2117,12 @@ namespace E.Player
             if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
             {
                 //获取该文件路径
-                SelectedVideoPath = ((Array)e.Data.GetData(System.Windows.DataFormats.FileDrop)).GetValue(0).ToString();
+                FileOrFolderInfo media = new FileOrFolderInfo(((Array)e.Data.GetData(System.Windows.DataFormats.FileDrop)).GetValue(0).ToString());
                 //检测路径是否正确
-                if (IsPathRight(SelectedVideoPath))
+                if (IsPathRight(media.Path))
                 {
                     //在播放列表添加此媒体，播放
-                    AddPlayListItem(SelectedVideoPath, true);
+                    AddPlayListItem(media, true);
                 }
             }
         }
@@ -2150,34 +2156,6 @@ namespace E.Player
             //ShowMessage("已更改");
         }
 
-        private void JumpTime_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (JumpTime.Text != "")
-            {
-                try
-                {
-                    int t = int.Parse(JumpTime.Text);
-                    if (t > 0 && t < 1000)
-                    {
-                        TimeSpan ts = TimeSpan.FromMinutes(t);
-                        User.Default.jumpTime = t;
-                        SaveUserSettings();
-                        //显示消息
-                        // ShowMessage("已更改");
-                    }
-                    else
-                    {
-                        JumpTime.Text = User.Default.jumpTime.ToString();
-                        // ShowMessage("输入1~999整数");
-                    }
-                }
-                catch (Exception)
-                {
-                    JumpTime.Text = User.Default.jumpTime.ToString();
-                    // ShowMessage("输入整数");
-                }
-            }
-        }
 
         //计时器事件
         private void Timer1_Tick(object sender, EventArgs e)

@@ -140,6 +140,7 @@
     <sys:String x:Key="开始点应靠前">Loop start point should be earlier than stop point</sys:String>
     <sys:String x:Key="结束点应靠后">Loop stop point should be later than start point</sys:String>
     <sys:String x:Key="已清除循环">Loop Cleared</sys:String>
+    <sys:String x:Key="已清空媒体列表">Clear Media List</sys:String>
 
     <sys:String x:Key="保留视频的翻转与旋转效果">Keep Transformation State</sys:String>
     <sys:String x:Key="退出时保留播放列表">Save Playlist</sys:String>

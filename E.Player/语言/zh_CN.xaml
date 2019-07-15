@@ -140,6 +140,7 @@
     <sys:String x:Key="开始点应靠前">循环开始点应当早于循环结束点</sys:String>
     <sys:String x:Key="结束点应靠后">循环结束点应当迟于循环开始点</sys:String>
     <sys:String x:Key="已清除循环">已清除循环</sys:String>
+    <sys:String x:Key="已清空媒体列表">已清空媒体列表</sys:String>
 
     <sys:String x:Key="保留视频的翻转与旋转效果">视频切换时保留翻转与旋转效果</sys:String>
     <sys:String x:Key="退出时保留播放列表">退出时保留播放列表</sys:String>
