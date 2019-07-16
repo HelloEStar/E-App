@@ -3,7 +3,7 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
 
-    <!--左侧区域-->
+    <!--菜单-->
     <sys:String x:Key="折叠">折叠</sys:String>
     <sys:String x:Key="书籍">书籍</sys:String>
     <sys:String x:Key="编辑">编辑</sys:String>
@@ -54,7 +54,7 @@
     <sys:String x:Key="开源+">GitHub开源地址 F5</sys:String>
     <sys:String x:Key="讨论+">QQ交流讨论群 F6</sys:String>
 
-    <!--中间区域-->
+    <!--面板-->
     <!--书籍页-->
     <!--<sys:String x:Key="卷册">卷册</sys:String>-->
     <sys:String x:Key="浏览">浏览</sys:String>

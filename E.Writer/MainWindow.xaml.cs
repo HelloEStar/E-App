@@ -643,6 +643,47 @@ namespace E.Writer
 
         //创建
         /// <summary>
+        /// 创建颜色
+        /// </summary>
+        /// <param name="text">ARGB色值，以点号分隔，0-255</param>
+        /// <returns></returns>
+        private static Color CreateColor(string text)
+        {
+            //MessageBox.Show(text);
+            try
+            {
+                string[] colors = text.Split('.');
+                byte red = byte.Parse(colors[0]);
+                byte green = byte.Parse(colors[1]);
+                byte blue = byte.Parse(colors[2]);
+                byte alpha = byte.Parse(colors[3]);
+                Color color = Color.FromArgb(alpha, red, green, blue);
+                return color;
+            }
+            catch (Exception)
+            {
+                Color color = Color.FromArgb(255, 125, 125, 125);
+                return color;
+            }
+        }
+        /// <summary>
+        /// 创建计时器
+        /// </summary>
+        private void CreateTimer()
+        {
+            //设置计时器1，默认每1分钟触发一次
+            AutoSaveTimer = new DispatcherTimer
+            { Interval = TimeSpan.FromMinutes(User.Default.autoSaveMinute) };
+            AutoSaveTimer.Tick += new EventHandler(TimerAutoSave_Tick);
+            AutoSaveTimer.Start();
+
+            //设置计时器2
+            AutoBackupTimer = new DispatcherTimer
+            { Interval = TimeSpan.FromMinutes(User.Default.autoBackupMinute) };
+            AutoBackupTimer.Tick += new EventHandler(TimerAutoBackup_Tick);
+            AutoBackupTimer.Start();
+        }
+        /// <summary>
         /// 创建
         /// </summary>
         private void Create()
@@ -864,47 +905,6 @@ namespace E.Writer
             SelectedNode = newFileNode;
             //刷新目录
             FilesTree.Items.Refresh();
-        }
-        /// <summary>
-        /// 创建颜色
-        /// </summary>
-        /// <param name="text">ARGB色值，以点号分隔，0-255</param>
-        /// <returns></returns>
-        private static Color CreateColor(string text)
-        {
-            //MessageBox.Show(text);
-            try
-            {
-                string[] colors = text.Split('.');
-                byte red = byte.Parse(colors[0]);
-                byte green = byte.Parse(colors[1]);
-                byte blue = byte.Parse(colors[2]);
-                byte alpha = byte.Parse(colors[3]);
-                Color color = Color.FromArgb(alpha, red, green, blue);
-                return color;
-            }
-            catch (Exception)
-            {
-                Color color = Color.FromArgb(255, 125, 125, 125);
-                return color;
-            }
-        }
-        /// <summary>
-        /// 创建计时器
-        /// </summary>
-        private void CreateTimer()
-        {
-            //设置计时器1，默认每1分钟触发一次
-            AutoSaveTimer = new DispatcherTimer
-            { Interval = TimeSpan.FromMinutes(User.Default.autoSaveMinute) };
-            AutoSaveTimer.Tick += new EventHandler(TimerAutoSave_Tick);
-            AutoSaveTimer.Start();
-
-            //设置计时器2
-            AutoBackupTimer = new DispatcherTimer
-            { Interval = TimeSpan.FromMinutes(User.Default.autoBackupMinute) };
-            AutoBackupTimer.Tick += new EventHandler(TimerAutoBackup_Tick);
-            AutoBackupTimer.Start();
         }
 
         //添加

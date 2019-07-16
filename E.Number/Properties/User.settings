@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="E.Number.Properties" GeneratedClassName="User">
+  <Profiles />
+  <Settings>
+    <Setting Name="ThemesDir" Type="System.String" Scope="User">
+      <Value Profile="(Default)">主题</Value>
+    </Setting>
+    <Setting Name="language" Type="System.String" Scope="User">
+      <Value Profile="(Default)">zh_CN</Value>
+    </Setting>
+    <Setting Name="ThemePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">主题\浅色主题.ini</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

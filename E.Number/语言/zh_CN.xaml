@@ -1,0 +1,51 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!--菜单-->
+    <sys:String x:Key="折叠">折叠</sys:String>
+    <sys:String x:Key="设置">设置</sys:String>
+    <sys:String x:Key="关于">关于</sys:String>
+
+    <sys:String x:Key="重置">重置</sys:String>
+    <sys:String x:Key="应用">应用</sys:String>
+    <sys:String x:Key="清空">清空</sys:String>
+    <sys:String x:Key="重置+">重置偏好设置</sys:String>
+    <sys:String x:Key="应用+">应用偏好设置</sys:String>
+    <sys:String x:Key="清空+">清空运行信息</sys:String>
+
+    <sys:String x:Key="官网">官网</sys:String>
+    <sys:String x:Key="主页">主页</sys:String>
+    <sys:String x:Key="下载">下载</sys:String>
+    <sys:String x:Key="反馈">反馈</sys:String>
+    <sys:String x:Key="开源">开源</sys:String>
+    <sys:String x:Key="讨论">讨论</sys:String>
+    <sys:String x:Key="官网+">官方网站 F1</sys:String>
+    <sys:String x:Key="主页+">应用主页 F2</sys:String>
+    <sys:String x:Key="下载+">下载新版 F3</sys:String>
+    <sys:String x:Key="反馈+">提交反馈 F4</sys:String>
+    <sys:String x:Key="开源+">GitHub开源地址 F5</sys:String>
+    <sys:String x:Key="讨论+">QQ交流讨论群 F6</sys:String>
+
+    <!--面板-->
+    <sys:String x:Key="语言">语言</sys:String>
+    <sys:String x:Key="主题">主题</sys:String>
+    <sys:String x:Key="名称">应用名称</sys:String>
+    <sys:String x:Key="说明">应用说明</sys:String>
+    <sys:String x:Key="作者">应用作者</sys:String>
+    <sys:String x:Key="版本">当前版本</sys:String>
+    <sys:String x:Key="日志">更新日志</sys:String>
+    <sys:String x:Key="赞助">赞助比特币</sys:String>
+    <sys:String x:Key="点复">点击复制</sys:String>
+
+    <!--提示消息-->
+    <sys:String x:Key="下一个主题的配置文件不存在">下一个主题的配置文件不存在</sys:String>
+    <sys:String x:Key="偏好主题的不存在">偏好主题的不存在，已载入默认主题</sys:String>
+    <sys:String x:Key="已清空运行信息">已清空运行信息，你需要重新启动软件</sys:String>
+    <sys:String x:Key="检测到新版本">检测到新版本</sys:String>
+    <sys:String x:Key="当前版本">当前版本</sys:String>
+
+    <sys:String x:Key="已重置">偏好设置已重置</sys:String>
+    <sys:String x:Key="已更改">偏好设置已更改</sys:String>
+    <sys:String x:Key="已载入">偏好设置已载入</sys:String>
+</ResourceDictionary>

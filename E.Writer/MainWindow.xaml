@@ -679,7 +679,7 @@
 
     <Grid x:Name="MainGrid">
         <DockPanel>
-            <!--左-->
+            <!--菜单-->
             <DockPanel x:Name="PanLeft" Background="{DynamicResource 二级背景颜色}" >
                 <StackPanel DockPanel.Dock="Top">
                     <Button x:Name="BtnFold" Content="{DynamicResource 折叠}" ToolTip="{DynamicResource 折叠}" Style="{DynamicResource 菜单按钮样式}" Click="BtnFold_Click" BorderThickness="4,0,0,0"/>
@@ -719,7 +719,7 @@
                     </WrapPanel>
                 </WrapPanel>
             </DockPanel>
-            <!--中-->
+            <!--面板-->
             <Grid x:Name="PanCenter" Background="{DynamicResource 二级背景颜色}" Width="240">
                 <DockPanel x:Name="CenterBookPage">
                     <ComboBox x:Name="Books" Style="{DynamicResource 下拉框样式}"  ToolTip="{DynamicResource 书史+}" DockPanel.Dock="Top"
@@ -818,7 +818,7 @@
                     </ScrollViewer>
                 </DockPanel>
             </Grid>
-            <!--右-->
+            <!--内容-->
             <DockPanel x:Name="PanRight" Background="{DynamicResource 二级背景颜色}" Margin="0">
                 <TextBox x:Name="TbxFileName" Style="{DynamicResource 文本输入框样式}" Margin="0" FontSize="20" Background="{x:Null}" DockPanel.Dock="Top"
                          GotFocus="TbxFileName_GotFocus" KeyUp="TbxFileName_KeyUp" BorderThickness="0" Height="40" Padding="5,7" TextChanged="TbxFileName_TextChanged"/>
