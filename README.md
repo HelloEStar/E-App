@@ -5,7 +5,7 @@ E App 是基于 .net.framework 4.7.2 开发的 Windows 10 WPF 解决方案，集
 你可以前往维基页面了解更多详细信息：[Github Wiki](https://github.com/HelloEStar/E.App/wiki)  
 * [E Writer 小说编辑器](https://github.com/HelloEStar/E.App/wiki/E-Writer) (正式版已发布)
 * [E Player 媒体播放器](https://github.com/HelloEStar/E.App/wiki/E-Player) (正式版已发布)
-* [E Number 随机数生成器](https://github.com/HelloEStar/E.App/wiki/E-Number) (测试版已发布)
+* [E Number 随机数生成器](https://github.com/HelloEStar/E.App/wiki/E-Number) (正式版已发布)
 * E Linker 关系编辑器 (计划开发中)
 * E Messager 信息收发器 (计划开发中)
 * [E Updater 软件更新器](https://github.com/HelloEStar/E.App/wiki/E-Updater) (测试版已发布)
