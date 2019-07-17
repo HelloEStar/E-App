@@ -258,7 +258,7 @@ namespace E.Writer
             if (!Directory.Exists(Settings.Default._lastBook))
             {
                 Settings.Default._lastBook = User.Default.BooksDir;
-                SaveAppSettings();
+                Settings.Default.Save();
             }
             //读取集合所有打开过的书籍路径的单字符串，并加入书籍列表
             if (Settings.Default._books != null && Settings.Default._books != "")
@@ -320,7 +320,7 @@ namespace E.Writer
                 //获取当前书籍（文件夹）的名字、路径、根目录
                 CurrentBook = new FileOrFolderInfo(folderBrowserDialog.SelectedPath);
                 Settings.Default._lastBook = CurrentBook.Path;
-                SaveAppSettings();
+                Settings.Default.Save();
                 //打开
                 OpenBook(CurrentBook);
             }
@@ -605,40 +605,30 @@ namespace E.Writer
             }
         }
         /// <summary>
-        /// 储存应用设置
-        /// </summary>
-        private void SaveAppSettings()
-        {
-            Settings.Default.Save();
-        }
-        /// <summary>
-        /// 保存用户设置
-        /// </summary>
-        private void SaveUserSettings()
-        {
-            User.Default.Save();
-        }
-        /// <summary>
         /// 保存书籍历史
         /// </summary>
         private void SaveBookHistory()
         {
-            if (Books.Items.Count > 0)
+            Settings.Default._books = "";
+            List<string> strs = new List<string>();
+            foreach (ComboBoxItem item in Books.Items)
             {
-                //记录最近打开过的书籍，将所有路径集合到一个字符串
-                Settings.Default._books = "";
-                foreach (ComboBoxItem item in Books.Items)
-                {
-                    Settings.Default._books += item.Tag.ToString() + "///";
-                }
-                Settings.Default._books = Settings.Default._books.Substring(0, Settings.Default._books.Length - 3);
+                strs.Add(item.Tag.ToString());
             }
+            Settings.Default._books = string.Join("///", strs);
+            Settings.Default.Save();
+        }
+        /// <summary>
+        /// 保存时间信息
+        /// </summary>
+        private void SaveTimeInfo()
+        {
             Settings.Default.thisEndTime = DateTime.Now;
             Settings.Default.lastStartTime = Settings.Default.thisStartTime;
             Settings.Default.lastEndTime = Settings.Default.thisEndTime;
             Settings.Default.thisTotalTime = Settings.Default.thisEndTime - Settings.Default.thisStartTime;
             Settings.Default.totalTime = Settings.Default.thisTotalTime + Settings.Default.totalTime;
-            SaveAppSettings();
+            Settings.Default.Save();
         }
 
         //创建
@@ -779,9 +769,8 @@ namespace E.Writer
             CurrentBook = new FileOrFolderInfo(path);
             //创建书籍文件夹
             Directory.CreateDirectory(CurrentBook.Path);
-            //记录
             Settings.Default._lastBook = CurrentBook.Path;
-            SaveAppSettings();
+            Settings.Default.Save();
             //打开
             OpenBook(CurrentBook);
         }
@@ -948,7 +937,7 @@ namespace E.Writer
                 {
                     //记录的书籍数+1
                     Settings.Default.bookCounts += 1;
-                    SaveAppSettings();
+                    Settings.Default.Save();
                 }
             }
         }
@@ -961,7 +950,7 @@ namespace E.Writer
             Settings.Default.runTimes += 1;
             //记录启动时间
             Settings.Default.thisStartTime = DateTime.Now;
-            SaveAppSettings();
+            Settings.Default.Save();
         }
 
         //移除
@@ -1487,7 +1476,7 @@ namespace E.Writer
                     }
                     Resources.MergedDictionaries.Add(langRd);
                     User.Default.language = language;
-                    SaveUserSettings();
+                    User.Default.Save();
                 }
             }
             catch (Exception e2)
@@ -1517,7 +1506,7 @@ namespace E.Writer
                         SetSkin(User.Default.ThemePath);
                         ShowMessage("偏好主题的不存在");
                     }
-                    SaveUserSettings();
+                    User.Default.Save();
                     break;
                 }
             }
@@ -1534,7 +1523,7 @@ namespace E.Writer
                     TbxFileContent.FontFamily = font;
                     //储存更改
                     User.Default.fontName = fontName;
-                    SaveUserSettings();
+                    User.Default.Save();
                     //EssayName.FontFamily = font;
                     break;
                 }
@@ -1559,7 +1548,7 @@ namespace E.Writer
                     {
                         //设为此主题
                         User.Default.ThemePath = ThemeItems[themeOrder].ToolTip.ToString();
-                        SaveUserSettings();
+                        User.Default.Save();
                         SetSkin(User.Default.ThemePath);
                     }
                     else
@@ -2724,7 +2713,7 @@ namespace E.Writer
                 {
                     CurrentBook = new FileOrFolderInfo(path);
                     Settings.Default._lastBook = CurrentBook.Path;
-                    SaveAppSettings();
+                    Settings.Default.Save();
                     OpenBook(CurrentBook);
                 }
                 else
@@ -3088,10 +3077,6 @@ namespace E.Writer
             LoadSettings();
             ShowMessage("已重置");
         }
-        private void BtnApply_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
         private void BtnClearRunInfo_Click(object sender, RoutedEventArgs e)
         {
             ResetAppSettings();
@@ -3167,49 +3152,49 @@ namespace E.Writer
         private void ShowRunInfo_Checked(object sender, RoutedEventArgs e)
         {
             User.Default.isShowRunInfo = true;
-            SaveUserSettings();
+            User.Default.Save();
             //显示消息
             ShowMessage("已更改");
         }
         private void ShowRunInfo_Unchecked(object sender, RoutedEventArgs e)
         {
             User.Default.isShowRunInfo = false;
-            SaveUserSettings();
+            User.Default.Save();
             //显示消息
             ShowMessage("已更改");
         }
         private void AutoOpenBook_Checked(object sender, RoutedEventArgs e)
         {
             User.Default.isAutoOpenBook = true;
-            SaveUserSettings();
+            User.Default.Save();
             //显示消息
             ShowMessage("已更改");
         }
         private void AutoOpenBook_Unchecked(object sender, RoutedEventArgs e)
         {
             User.Default.isAutoOpenBook = false;
-            SaveUserSettings();
+            User.Default.Save();
             //显示消息
             ShowMessage("已更改");
         }
         private void AutoCompletion_Checked(object sender, RoutedEventArgs e)
         {
             User.Default.isAutoCompletion = true;
-            SaveUserSettings();
+            User.Default.Save();
             //显示消息
             ShowMessage("已更改");
         }
         private void AutoCompletion_Unchecked(object sender, RoutedEventArgs e)
         {
             User.Default.isAutoCompletion = false;
-            SaveUserSettings();
+            User.Default.Save();
             //显示消息
             ShowMessage("已更改");
         }
         private void AutoIndentation_Checked(object sender, RoutedEventArgs e)
         {
             User.Default.isAutoIndentation = true;
-            SaveUserSettings();
+            User.Default.Save();
             AutoIndentations.IsEnabled = true;
             //显示消息
             ShowMessage("已更改");
@@ -3217,7 +3202,7 @@ namespace E.Writer
         private void AutoIndentation_Unchecked(object sender, RoutedEventArgs e)
         {
             User.Default.isAutoIndentation = false;
-            SaveUserSettings();
+            User.Default.Save();
             AutoIndentations.IsEnabled = false;
             //显示消息
             ShowMessage("已更改");
@@ -3232,7 +3217,7 @@ namespace E.Writer
                     if (t > 0 && t < 1000)
                     {
                         User.Default.autoIndentations = t;
-                        SaveUserSettings();
+                        User.Default.Save();
                         ShowMessage("已更改");
                     }
                     else
@@ -3251,21 +3236,21 @@ namespace E.Writer
         private void AutoSaveWhenSwitch_Checked(object sender, RoutedEventArgs e)
         {
             User.Default.isAutoSaveWhenSwitch = true;
-            SaveUserSettings();
+            User.Default.Save();
             //显示消息
             ShowMessage("已更改");
         }
         private void AutoSaveWhenSwitch_Unchecked(object sender, RoutedEventArgs e)
         {
             User.Default.isAutoSaveWhenSwitch = false;
-            SaveUserSettings();
+            User.Default.Save();
             //显示消息
             ShowMessage("已更改");
         }
         private void AutoSaveEvery_Checked(object sender, RoutedEventArgs e)
         {
             User.Default.isAutoSaveEvery = true;
-            SaveUserSettings();
+            User.Default.Save();
             AutoSaveTime.IsEnabled = true;
             //显示消息
             ShowMessage("已更改");
@@ -3273,7 +3258,7 @@ namespace E.Writer
         private void AutoSaveEvery_Unchecked(object sender, RoutedEventArgs e)
         {
             User.Default.isAutoSaveEvery = false;
-            SaveUserSettings();
+            User.Default.Save();
             AutoSaveTime.IsEnabled = false;
             //显示消息
             ShowMessage("已更改");
@@ -3289,7 +3274,7 @@ namespace E.Writer
                     {
                         TimeSpan ts = TimeSpan.FromMinutes(t);
                         User.Default.autoSaveMinute = t;
-                        SaveUserSettings();
+                        User.Default.Save();
                         AutoSaveTimer.Interval = ts;
                         ShowMessage("已更改");
                     }
@@ -3309,7 +3294,7 @@ namespace E.Writer
         private void AutoBackup_Checked(object sender, RoutedEventArgs e)
         {
             User.Default.isAutoBackup = true;
-            SaveUserSettings();
+            User.Default.Save();
             AutoBackupTime.IsEnabled = true;
             //显示消息
             ShowMessage("已更改");
@@ -3317,7 +3302,7 @@ namespace E.Writer
         private void AutoBackup_Unchecked(object sender, RoutedEventArgs e)
         {
             User.Default.isAutoBackup = false;
-            SaveUserSettings();
+            User.Default.Save();
             AutoBackupTime.IsEnabled = false;
             //显示消息
             ShowMessage("已更改");
@@ -3333,7 +3318,7 @@ namespace E.Writer
                     {
                         TimeSpan ts = TimeSpan.FromMinutes(t);
                         User.Default.autoBackupMinute = t;
-                        SaveUserSettings();
+                        User.Default.Save();
                         AutoBackupTimer.Interval = ts;
                         //显示消息
                         ShowMessage("已更改");
@@ -3361,7 +3346,7 @@ namespace E.Writer
                     if (i > 0 && i < 1000)
                     {
                         User.Default.fontSize = i;
-                        SaveUserSettings();
+                        User.Default.Save();
                         TbxFileContent.FontSize = i;
                         ShowMessage("已更改");
                     }

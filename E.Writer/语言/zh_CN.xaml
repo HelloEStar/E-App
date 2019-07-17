@@ -33,12 +33,10 @@
     <sys:String x:Key="重做+">重做 Ctrl+Y</sys:String>
     <sys:String x:Key="转繁+">转为繁体 Ctrl+Shift+K</sys:String>
     <sys:String x:Key="转简+">转为简体 Ctrl+Shift+J</sys:String>
-    
+
     <sys:String x:Key="重置">重置</sys:String>
-    <sys:String x:Key="应用">应用</sys:String>
     <sys:String x:Key="清空">清空</sys:String>
-    <sys:String x:Key="重置+">重置偏好设置</sys:String>
-    <sys:String x:Key="应用+">应用偏好设置</sys:String>
+    <sys:String x:Key="重置+">重置设置</sys:String>
     <sys:String x:Key="清空+">清空运行信息</sys:String>
 
     <sys:String x:Key="官网">官网</sys:String>

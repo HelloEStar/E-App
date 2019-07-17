@@ -43,10 +43,8 @@
     <sys:String x:Key="全屏+">FullScreen/Window M Mouse</sys:String>
 
     <sys:String x:Key="重置">Reset</sys:String>
-    <sys:String x:Key="应用">Apply</sys:String>
     <sys:String x:Key="重置+">Reset Settings</sys:String>
-    <sys:String x:Key="应用+">Apply Settings</sys:String>
-    
+
     <sys:String x:Key="官网">OffiWeb</sys:String>
     <sys:String x:Key="主页">AppInfo</sys:String>
     <sys:String x:Key="下载">Download</sys:String>

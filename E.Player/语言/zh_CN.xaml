@@ -43,9 +43,7 @@
     <sys:String x:Key="全屏+">全屏/退出全屏 鼠标中键</sys:String>
 
     <sys:String x:Key="重置">重置</sys:String>
-    <sys:String x:Key="应用">应用</sys:String>
     <sys:String x:Key="重置+">重置设置</sys:String>
-    <sys:String x:Key="应用+">应用设置</sys:String>
 
     <sys:String x:Key="官网">官网</sys:String>
     <sys:String x:Key="主页">主页</sys:String>

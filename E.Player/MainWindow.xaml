@@ -543,7 +543,6 @@
                 </WrapPanel>
                 <WrapPanel  x:Name="BtnsSetting" Visibility="Collapsed" Orientation="Vertical">
                     <Button x:Name="BtnReset" Content="{DynamicResource 重置}" ToolTip="{DynamicResource 重置+}" Style="{DynamicResource 工具按钮样式}" Click="BtnReset_Click"/>
-                    <Button x:Name="BtnApply" Content="{DynamicResource 应用}" ToolTip="{DynamicResource 应用+}" Style="{DynamicResource 工具按钮样式}" Click="BtnApply_Click"/>
                     <Button x:Name="BtnClearRunInfo" Content="{DynamicResource 清空}" ToolTip="{DynamicResource 清空+}" Style="{DynamicResource 工具按钮样式}" Click="BtnClearRunInfo_Click"/>
                 </WrapPanel>
                 <WrapPanel  x:Name="BtnsAbout" Visibility="Collapsed" Orientation="Vertical">

@@ -22,5 +22,17 @@ namespace E.Number.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Record {
+            get {
+                return ((string)(this["Record"]));
+            }
+            set {
+                this["Record"] = value;
+            }
+        }
     }
 }

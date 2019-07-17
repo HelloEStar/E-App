@@ -229,20 +229,6 @@ namespace E.Player
 
         //保存
         /// <summary>
-        /// 储存应用设置
-        /// </summary>
-        private void SaveAppSettings()
-        {
-            Settings.Default.Save();
-        }
-        /// <summary>
-        /// 保存用户设置
-        /// </summary>
-        private void SaveUserSettings()
-        {
-            User.Default.Save();
-        }
-        /// <summary>
         /// 保存播放列表
         /// </summary>
         private void SavePlaylist()
@@ -542,7 +528,7 @@ namespace E.Player
                     }
                     Resources.MergedDictionaries.Add(langRd);
                     User.Default.language = language;
-                    SaveUserSettings();
+                    User.Default.Save();
                 }
             }
             catch (Exception e2)
@@ -572,7 +558,7 @@ namespace E.Player
                         SetSkin(User.Default.ThemePath);
                         ShowMessage(FindResource("偏好主题的不存在").ToString());
                     }
-                    SaveUserSettings();
+                    User.Default.Save();
                     break;
                 }
             }
@@ -585,7 +571,7 @@ namespace E.Player
         private void SetPlayMode(int mode)
         {
             User.Default.playMode = mode;
-            SaveUserSettings();
+            User.Default.Save();
         }
         /// <summary>
         /// 切换下个主题显示
@@ -606,7 +592,7 @@ namespace E.Player
                     {
                         //设为此主题
                         User.Default.ThemePath = ThemeItems[themeOrder].ToolTip.ToString();
-                        SaveUserSettings();
+                        User.Default.Save();
                         SetSkin(User.Default.ThemePath);
                     }
                     else
@@ -719,7 +705,7 @@ namespace E.Player
         {
             User.Default.isLRFlip = false;
             User.Default.isUDFlip = false;
-            SaveUserSettings();
+            User.Default.Save();
             ScaleTransform scaleTransform = new ScaleTransform
             {
                 ScaleX = 1,
@@ -733,7 +719,7 @@ namespace E.Player
         private void ResetRotation()
         {
             User.Default.rotateTo = 0;
-            SaveUserSettings();
+            User.Default.Save();
             Media.LayoutTransform = new RotateTransform(0);
         }
 
@@ -1012,7 +998,7 @@ namespace E.Player
         private void SwichMenu()
         {
             User.Default.isShowMenu = !User.Default.isShowMenu;
-            SaveUserSettings();
+            User.Default.Save();
             if (User.Default.isShowMenu)
             {
                 PanMenu.Visibility = Visibility.Visible;
@@ -1423,7 +1409,7 @@ namespace E.Player
             {
                 User.Default.rotateTo = 0;
             }
-            SaveUserSettings();
+            User.Default.Save();
             Media.LayoutTransform = new RotateTransform(90 * User.Default.rotateTo);
             //显示消息
             ShowMessage(FindResource("已顺时针旋转90度").ToString());
@@ -1438,7 +1424,7 @@ namespace E.Player
             {
                 User.Default.rotateTo = 3;
             }
-            SaveUserSettings();
+            User.Default.Save();
             Media.LayoutTransform = new RotateTransform(90 * User.Default.rotateTo);
             //显示消息
             ShowMessage(FindResource("已逆时针旋转90度").ToString());
@@ -1496,7 +1482,7 @@ namespace E.Player
             {
                 SavePlaylist();
             }
-            SaveUserSettings();
+            User.Default.Save();
 
             //重置
             ResetFlip();
@@ -1779,7 +1765,7 @@ namespace E.Player
                     {
                         TimeSpan ts = TimeSpan.FromMinutes(t);
                         User.Default.jumpTime = t;
-                        SaveUserSettings();
+                        User.Default.Save();
                         //显示消息
                         // ShowMessage("已更改");
                     }
@@ -1918,10 +1904,6 @@ namespace E.Player
             ResetUserSettings();
             LoadSettings();
             ShowMessage(FindResource("已重置").ToString());
-        }
-        private void BtnApply_Click(object sender, RoutedEventArgs e)
-        {
-
         }
         private void BtnClearRunInfo_Click(object sender, RoutedEventArgs e)
         {
@@ -2130,28 +2112,28 @@ namespace E.Player
         private void KeepTrans_Checked(object sender, RoutedEventArgs e)
         {
             User.Default.isKeepTrans = true;
-            SaveUserSettings();
+            User.Default.Save();
             //显示消息
             //ShowMessage("已更改");
         }
         private void KeepTrans_Unchecked(object sender, RoutedEventArgs e)
         {
             User.Default.isKeepTrans = false;
-            SaveUserSettings();
+            User.Default.Save();
             //显示消息
             //ShowMessage("已更改");
         }
         private void SavePlaylist_Checked(object sender, RoutedEventArgs e)
         {
             User.Default.isSavePlaylist = true;
-            SaveUserSettings();
+            User.Default.Save();
             //显示消息
             //ShowMessage("已更改");
         }
         private void SavePlaylist_Unchecked(object sender, RoutedEventArgs e)
         {
             User.Default.isSavePlaylist = false;
-            SaveUserSettings();
+            User.Default.Save();
             //显示消息
             //ShowMessage("已更改");
         }

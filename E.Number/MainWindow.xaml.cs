@@ -17,6 +17,7 @@ using Settings = E.Number.Properties.Settings;
 using User = E.Number.Properties.User;
 using E.Utility;
 using System.Windows.Media;
+using System.Text.RegularExpressions;
 
 namespace E.Number
 {
@@ -146,25 +147,39 @@ namespace E.Number
                 CbbThemes.Items.Add(theme);
             }
         }
+        /// <summary>
+        /// 读取记录
+        /// </summary>
+        private void LoadRecords()
+        {
+            if (!string.IsNullOrEmpty(Settings.Default.Record))
+            {
+                string[] _myB = Regex.Split(Settings.Default.Record, "///");
+                foreach (string b in _myB)
+                {
+                    AddRecordItem(b);
+                }
+            }
+        }
 
         ///打开
 
         ///关闭
 
-        ///保存
+        //保存
         /// <summary>
-        /// 储存应用设置
+        /// 保存记录
         /// </summary>
-        private void SaveAppSettings()
+        private void SaveRecords()
         {
+            Settings.Default.Record = "";
+            List<string> strs = new List<string>();
+            foreach (ListBoxItem item in LtbRecord.Items)
+            {
+                strs.Add(item.Content.ToString());
+            }
+            Settings.Default.Record = string.Join("///", strs);
             Settings.Default.Save();
-        }
-        /// <summary>
-        /// 保存用户设置
-        /// </summary>
-        private void SaveUserSettings()
-        {
-            User.Default.Save();
         }
 
         ///创建
@@ -194,6 +209,16 @@ namespace E.Number
         }
 
         ///添加
+        private void AddRecordItem(string content)
+        {
+            ListBoxItem item = new ListBoxItem
+            {
+                FontSize = 20,
+                Content = content,
+                Style = (Style)FindResource("列表子项样式")
+            };
+            LtbRecord.Items.Add(item);
+        }
 
         ///移除
 
@@ -224,7 +249,7 @@ namespace E.Number
                     }
                     Resources.MergedDictionaries.Add(langRd);
                     User.Default.language = language;
-                    SaveUserSettings();
+                    User.Default.Save();
                 }
             }
             catch (Exception e2)
@@ -254,7 +279,7 @@ namespace E.Number
                         SetSkin(User.Default.ThemePath);
                         ShowMessage("偏好主题的不存在");
                     }
-                    SaveUserSettings();
+                    User.Default.Save();
                     break;
                 }
             }
@@ -278,7 +303,7 @@ namespace E.Number
                     {
                         //设为此主题
                         User.Default.ThemePath = ThemeItems[themeOrder].ToolTip.ToString();
-                        SaveUserSettings();
+                        User.Default.Save();
                         SetSkin(User.Default.ThemePath);
                     }
                     else
@@ -423,6 +448,7 @@ namespace E.Number
             LoadThemeItems();
 
             //载入设置
+            LoadRecords();
             LoadSettings();
 
             //初始化
@@ -431,6 +457,10 @@ namespace E.Number
 
             //提示消息
             ShowMessage("已载入");
+        }
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            SaveRecords();
         }
         private void TxtValue_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -496,13 +526,14 @@ namespace E.Number
 
         private void BtnClear_Click(object sender, RoutedEventArgs e)
         {
-            ResetAppSettings();
+            LtbRecord.Items.Clear();
         }
         private void BtnCreate_Click(object sender, RoutedEventArgs e)
         {
-            //CheckLength();
             Random rd = new Random();
-            TxtValue.Text = rd.Next(User.Default.Min, User.Default.Max).ToString();
+            int value =  rd.Next(User.Default.Min, User.Default.Max);
+            TxtValue.Text = value.ToString();
+            AddRecordItem(LtbRecord.Items.Count + 1 + ".    " + value);
         }
 
         private void BtnReset_Click(object sender, RoutedEventArgs e)
@@ -511,14 +542,10 @@ namespace E.Number
             LoadSettings();
             ShowMessage("已重置");
         }
-        private void BtnApply_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
 
         private void BitCoinAddress_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            System.Windows.Clipboard.SetDataObject(BitCoinAddress.Text, true);
+            Clipboard.SetDataObject(BitCoinAddress.Text, true);
             ShowMessage("已复制");
         }
         private void BtnHomePage_Click(object sender, RoutedEventArgs e)
@@ -579,7 +606,7 @@ namespace E.Number
             if (int.TryParse(TxtMinValue.Text, out int min))
             {
                 User.Default.Min = min;
-                SaveUserSettings();
+                User.Default.Save();
             }
             else
             {
@@ -591,7 +618,7 @@ namespace E.Number
             if (int.TryParse(TxtMaxValue.Text, out int max))
             {
                 User.Default.Max = max;
-                SaveUserSettings();
+                User.Default.Save();
             }
             else
             {

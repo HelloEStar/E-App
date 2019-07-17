@@ -8,12 +8,11 @@
     <sys:String x:Key="设置">Setting</sys:String>
     <sys:String x:Key="关于">About</sys:String>
 
-    <sys:String x:Key="重置">Reset</sys:String>
-    <sys:String x:Key="应用">Apply</sys:String>
     <sys:String x:Key="清空">Clear</sys:String>
+    <sys:String x:Key="清空+">Clear Records</sys:String>
+    
+    <sys:String x:Key="重置">Reset</sys:String>
     <sys:String x:Key="重置+">Reset Settings</sys:String>
-    <sys:String x:Key="应用+">Apply Settings</sys:String>
-    <sys:String x:Key="清空+">Clear Running Info</sys:String>
 
     <sys:String x:Key="官网">OffiWeb</sys:String>
     <sys:String x:Key="主页">AppInfo</sys:String>
@@ -31,6 +30,9 @@
     <!--面板-->
     <sys:String x:Key="语言">Language</sys:String>
     <sys:String x:Key="主题">Theme</sys:String>
+    <sys:String x:Key="最小">Min Value</sys:String>
+    <sys:String x:Key="最大">Max Value</sys:String>
+    
     <sys:String x:Key="名称">App Name</sys:String>
     <sys:String x:Key="说明">Description</sys:String>
     <sys:String x:Key="版本">Version</sys:String>
@@ -42,10 +44,7 @@
     <!--提示消息-->
     <sys:String x:Key="下一个主题的配置文件不存在">Next Theme's file isn't exist</sys:String>
     <sys:String x:Key="偏好主题的不存在">Theme isn't exist, default theme loaded</sys:String>
-    <sys:String x:Key="已清空运行信息">Running info cleared, you need restart E Player</sys:String>
-    <sys:String x:Key="检测到新版本">There is a newer version</sys:String>
-    <sys:String x:Key="当前版本">This Version</sys:String>
-    
+
     <sys:String x:Key="已重置">Preferences Reseted</sys:String>
     <sys:String x:Key="已更改">Preferences Changed</sys:String>
     <sys:String x:Key="已载入">Preferences Loaded</sys:String>
