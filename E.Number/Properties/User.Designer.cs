@@ -58,5 +58,29 @@ namespace E.Number.Properties {
                 this["ThemePath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Min {
+            get {
+                return ((int)(this["Min"]));
+            }
+            set {
+                this["Min"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int Max {
+            get {
+                return ((int)(this["Max"]));
+            }
+            set {
+                this["Max"] = value;
+            }
+        }
     }
 }

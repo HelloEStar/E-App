@@ -39,11 +39,6 @@ namespace E.Number
         /// </summary>
         private List<TextBlock> ThemeItems { get; set; } = new List<TextBlock>();
 
-        /// <summary>
-        /// 随机数范围
-        /// </summary>
-        private int min, max;
-
         #endregion 
 
         #region 方法
@@ -83,7 +78,12 @@ namespace E.Number
         /// </summary>
         private void LoadSettings()
         {
+            TxtMinValue.Text = User.Default.Min.ToString();
+            TxtMaxValue.Text = User.Default.Max.ToString();
 
+            //刷新选中项
+            SelectLanguageItem(User.Default.language);
+            SelectThemeItem(User.Default.ThemePath);
         }
         /// <summary>
         /// 创建语言选项
@@ -320,35 +320,6 @@ namespace E.Number
             Resources.Remove(colorName);
             Resources.Add(colorName, new SolidColorBrush(c));
         }
-        /// <summary>
-        /// 设置随机范围
-        /// </summary>
-        private void SetRange()
-        {
-            try
-            {
-                min = int.Parse(TxtMinValue.Text);
-                max = int.Parse(TxtMaxValue.Text);
-                if (min < max)
-                {
-                    BtnSetRange.IsEnabled = false;
-                    BtnCreate.IsEnabled = true;
-                    ShowMessage("已修改随机范围");
-                }
-                else
-                {
-                    BtnSetRange.IsEnabled = false;
-                    BtnCreate.IsEnabled = false;
-                    ShowMessage("随机范围错误");
-                }
-            }
-            catch
-            {
-                BtnSetRange.IsEnabled = false;
-                BtnCreate.IsEnabled = false;
-                ShowMessage("请输入数字字符");
-            }
-        }
 
         //重置
         /// <summary>
@@ -365,16 +336,6 @@ namespace E.Number
         private void ResetUserSettings()
         {
             User.Default.Reset();
-        }
-        /// <summary>
-        /// 重置随机范围
-        /// </summary>
-        public void ResetRange()
-        {
-            min = 0;
-            max = 100;
-            TxtMinValue.Text = min.ToString();
-            TxtMaxValue.Text = max.ToString();
         }
 
         ///选择
@@ -449,7 +410,6 @@ namespace E.Number
         }
         #endregion
 
-
         #region 事件
         //窗口事件
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -464,7 +424,6 @@ namespace E.Number
 
             //载入设置
             LoadSettings();
-            ResetRange();
 
             //初始化
             SetLanguage(User.Default.language);
@@ -473,9 +432,9 @@ namespace E.Number
             //提示消息
             ShowMessage("已载入");
         }
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void TxtValue_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            TxtValue.FontSize = GrdMain.ActualHeight - 70;
+            TxtValue.FontSize = TxtValue.ActualHeight/1.25f;
         }
 
         //按钮点击事件
@@ -492,38 +451,58 @@ namespace E.Number
                 BtnFold.BorderThickness = new Thickness(4, 0, 0, 0);
             }
         }
+        private void BtnRecord_Click(object sender, RoutedEventArgs e)
+        {
+            PanRecord.Visibility = Visibility.Visible;
+            PanSetting.Visibility = Visibility.Collapsed;
+            PanAbout.Visibility = Visibility.Collapsed;
+
+            BtnsRecord.Visibility = Visibility.Visible;
+            BtnsSetting.Visibility = Visibility.Collapsed;
+            BtnsAbout.Visibility = Visibility.Collapsed;
+
+            BtnRecord.BorderThickness = new Thickness(4, 0, 0, 0);
+            BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
+            BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
+        }
         private void BtnSetting_Click(object sender, RoutedEventArgs e)
         {
-            CenterSettingPage.Visibility = Visibility.Visible;
-            CenterAboutPage.Visibility = Visibility.Collapsed;
+            PanRecord.Visibility = Visibility.Collapsed;
+            PanSetting.Visibility = Visibility.Visible;
+            PanAbout.Visibility = Visibility.Collapsed;
 
+            BtnsRecord.Visibility = Visibility.Collapsed;
             BtnsSetting.Visibility = Visibility.Visible;
             BtnsAbout.Visibility = Visibility.Collapsed;
 
+            BtnRecord.BorderThickness = new Thickness(0, 0, 0, 0);
             BtnSetting.BorderThickness = new Thickness(4, 0, 0, 0);
             BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
         }
         private void BtnAbout_Click(object sender, RoutedEventArgs e)
         {
-            CenterSettingPage.Visibility = Visibility.Collapsed;
-            CenterAboutPage.Visibility = Visibility.Visible;
+            PanRecord.Visibility = Visibility.Collapsed;
+            PanSetting.Visibility = Visibility.Collapsed;
+            PanAbout.Visibility = Visibility.Visible;
 
+            BtnsRecord.Visibility = Visibility.Collapsed;
             BtnsSetting.Visibility = Visibility.Collapsed;
             BtnsAbout.Visibility = Visibility.Visible;
 
+            BtnRecord.BorderThickness = new Thickness(0, 0, 0, 0);
             BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
             BtnAbout.BorderThickness = new Thickness(4, 0, 0, 0);
         }
 
+        private void BtnClear_Click(object sender, RoutedEventArgs e)
+        {
+            ResetAppSettings();
+        }
         private void BtnCreate_Click(object sender, RoutedEventArgs e)
         {
             //CheckLength();
             Random rd = new Random();
-            TxtValue.Text = rd.Next(min, max).ToString();
-        }
-        private void BtnSetRange_Click(object sender, RoutedEventArgs e)
-        {
-            SetRange();
+            TxtValue.Text = rd.Next(User.Default.Min, User.Default.Max).ToString();
         }
 
         private void BtnReset_Click(object sender, RoutedEventArgs e)
@@ -535,10 +514,6 @@ namespace E.Number
         private void BtnApply_Click(object sender, RoutedEventArgs e)
         {
 
-        }
-        private void BtnClearRunInfo_Click(object sender, RoutedEventArgs e)
-        {
-            ResetAppSettings();
         }
 
         private void BitCoinAddress_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -601,26 +576,26 @@ namespace E.Number
 
         private void TxtMinValue_TextChanged(object sender, TextChangedEventArgs e)
         {
-            BtnSetRange.IsEnabled = true;
-            ShowMessage("修改随机范围");
+            if (int.TryParse(TxtMinValue.Text, out int min))
+            {
+                User.Default.Min = min;
+                SaveUserSettings();
+            }
+            else
+            {
+                TxtMinValue.Text = User.Default.Min.ToString();
+            }
         }
         private void TxtMaxValue_TextChanged(object sender, TextChangedEventArgs e)
         {
-            BtnSetRange.IsEnabled = true;
-            ShowMessage("修改随机范围");
-        }
-        private void TxtMaxValue_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
+            if (int.TryParse(TxtMaxValue.Text, out int max))
             {
-                SetRange();
+                User.Default.Max = max;
+                SaveUserSettings();
             }
-        }
-        private void TxtMinValue_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
+            else
             {
-                SetRange();
+                TxtMaxValue.Text = User.Default.Max.ToString();
             }
         }
         #endregion

@@ -4,6 +4,7 @@
 
     <!--菜单-->
     <sys:String x:Key="折叠">Fold</sys:String>
+    <sys:String x:Key="记录">Record</sys:String>
     <sys:String x:Key="设置">Setting</sys:String>
     <sys:String x:Key="关于">About</sys:String>
 
