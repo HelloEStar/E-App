@@ -4,6 +4,13 @@
              xmlns:local="clr-namespace:E.Updater"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <ResourceDictionary>
+            <!--这个节点是配置默认语言的-->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="语言\zh_CN.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
          
     </Application.Resources>
 </Application>

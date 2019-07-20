@@ -7,6 +7,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Windows.Media;
+using System.Text.RegularExpressions;
 
 using Application = System.Windows.Forms.Application;
 using MessageBox = System.Windows.MessageBox;
@@ -16,8 +18,6 @@ using MenuItem = System.Windows.Controls.MenuItem;
 using Settings = E.Number.Properties.Settings;
 using User = E.Number.Properties.User;
 using E.Utility;
-using System.Windows.Media;
-using System.Text.RegularExpressions;
 
 namespace E.Number
 {
@@ -182,7 +182,7 @@ namespace E.Number
             Settings.Default.Save();
         }
 
-        ///创建
+        //创建
         /// <summary>
         /// 创建颜色
         /// </summary>
@@ -208,7 +208,7 @@ namespace E.Number
             }
         }
 
-        ///添加
+        //添加
         private void AddRecordItem(string content)
         {
             ListBoxItem item = new ListBoxItem
@@ -363,6 +363,7 @@ namespace E.Number
             User.Default.Reset();
         }
 
+        //选择
         ///选择
         /// <summary>
         /// 设置语言选项

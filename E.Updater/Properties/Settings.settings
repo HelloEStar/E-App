@@ -3,42 +3,36 @@
   <Profiles />
   <Settings>
     <Setting Name="_EP" Type="System.String" Scope="User">
-      <Value Profile="(Default)">未指定</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="_EN" Type="System.String" Scope="User">
-      <Value Profile="(Default)">未指定</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="_EW" Type="System.String" Scope="User">
-      <Value Profile="(Default)">未指定</Value>
-    </Setting>
-    <Setting Name="_EL" Type="System.String" Scope="User">
-      <Value Profile="(Default)">未指定</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="_download" Type="System.String" Scope="User">
       <Value Profile="(Default)">Download</Value>
     </Setting>
     <Setting Name="_EU" Type="System.String" Scope="User">
-      <Value Profile="(Default)">未指定</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="_temp" Type="System.String" Scope="User">
       <Value Profile="(Default)">Temp</Value>
     </Setting>
-    <Setting Name="_EUDownload" Type="System.String" Scope="User">
+    <Setting Name="_EUDownload" Type="System.String" Scope="Application">
       <Value Profile="(Default)">http://estar.zone/download/</Value>
     </Setting>
-    <Setting Name="_EWDownload" Type="System.String" Scope="User">
+    <Setting Name="_EWDownload" Type="System.String" Scope="Application">
       <Value Profile="(Default)">http://estar.zone/download/186</Value>
     </Setting>
-    <Setting Name="_EPDownload" Type="System.String" Scope="User">
+    <Setting Name="_EPDownload" Type="System.String" Scope="Application">
       <Value Profile="(Default)">http://estar.zone/download/189</Value>
     </Setting>
-    <Setting Name="_ENDownload" Type="System.String" Scope="User">
+    <Setting Name="_ENDownload" Type="System.String" Scope="Application">
       <Value Profile="(Default)">http://estar.zone/download/190</Value>
     </Setting>
-    <Setting Name="_ELDownload" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://estar.zone/download/</Value>
-    </Setting>
-    <Setting Name="_LatestVersionInfo" Type="System.String" Scope="User">
+    <Setting Name="_LatestVersionInfo" Type="System.String" Scope="Application">
       <Value Profile="(Default)">http://estar.zone/wp-content/E.Updater_info.txt</Value>
     </Setting>
   </Settings>

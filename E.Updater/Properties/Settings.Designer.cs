@@ -25,7 +25,7 @@ namespace E.Updater.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("未指定")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string _EP {
             get {
                 return ((string)(this["_EP"]));
@@ -37,7 +37,7 @@ namespace E.Updater.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("未指定")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string _EN {
             get {
                 return ((string)(this["_EN"]));
@@ -49,25 +49,13 @@ namespace E.Updater.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("未指定")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string _EW {
             get {
                 return ((string)(this["_EW"]));
             }
             set {
                 this["_EW"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("未指定")]
-        public string _EL {
-            get {
-                return ((string)(this["_EL"]));
-            }
-            set {
-                this["_EL"] = value;
             }
         }
         
@@ -85,7 +73,7 @@ namespace E.Updater.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("未指定")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string _EU {
             get {
                 return ((string)(this["_EU"]));
@@ -107,75 +95,48 @@ namespace E.Updater.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://estar.zone/download/")]
         public string _EUDownload {
             get {
                 return ((string)(this["_EUDownload"]));
             }
-            set {
-                this["_EUDownload"] = value;
-            }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://estar.zone/download/186")]
         public string _EWDownload {
             get {
                 return ((string)(this["_EWDownload"]));
             }
-            set {
-                this["_EWDownload"] = value;
-            }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://estar.zone/download/189")]
         public string _EPDownload {
             get {
                 return ((string)(this["_EPDownload"]));
             }
-            set {
-                this["_EPDownload"] = value;
-            }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://estar.zone/download/190")]
         public string _ENDownload {
             get {
                 return ((string)(this["_ENDownload"]));
             }
-            set {
-                this["_ENDownload"] = value;
-            }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://estar.zone/download/")]
-        public string _ELDownload {
-            get {
-                return ((string)(this["_ELDownload"]));
-            }
-            set {
-                this["_ELDownload"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://estar.zone/wp-content/E.Updater_info.txt")]
         public string _LatestVersionInfo {
             get {
                 return ((string)(this["_LatestVersionInfo"]));
-            }
-            set {
-                this["_LatestVersionInfo"] = value;
             }
         }
     }
