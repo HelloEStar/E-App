@@ -21,7 +21,7 @@
       <Value Profile="(Default)">Temp</Value>
     </Setting>
     <Setting Name="_EUDownload" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">http://estar.zone/download/</Value>
+      <Value Profile="(Default)">http://estar.zone/download/603</Value>
     </Setting>
     <Setting Name="_EWDownload" Type="System.String" Scope="Application">
       <Value Profile="(Default)">http://estar.zone/download/186</Value>

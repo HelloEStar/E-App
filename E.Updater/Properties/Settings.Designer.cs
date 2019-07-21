@@ -97,7 +97,7 @@ namespace E.Updater.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://estar.zone/download/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://estar.zone/download/603")]
         public string _EUDownload {
             get {
                 return ((string)(this["_EUDownload"]));

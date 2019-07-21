@@ -1170,9 +1170,9 @@ namespace E.Updater
             string name = "E Updater " + EUNewVer + ".zip";
             string _bat = "Update.bat";
             //下载压缩包
-            //Download(Settings.Default._EUDownload, name);
+            Download(Settings.Default._EUDownload, name);
             //解压
-            //UnZip(Settings.Default._download + name, Settings.Default._temp);
+            UnZip(Settings.Default._download + name, Settings.Default._temp);
             //获取解压后所有文件的路径
             string _file1 = Settings.Default._temp + "\\E Updater.exe";
             string _file2 = Settings.Default._temp + "\\ICSharpCode.SharpZipLib.dll";
