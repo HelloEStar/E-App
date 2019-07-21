@@ -61,7 +61,7 @@ namespace E.Updater.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Download")]
+        [global::System.Configuration.DefaultSettingValueAttribute("下载")]
         public string _download {
             get {
                 return ((string)(this["_download"]));
@@ -133,7 +133,7 @@ namespace E.Updater.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://estar.zone/wp-content/E.Updater_info.txt")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://estar.zone/wp-content/E_Updater_info.txt")]
         public string _LatestVersionInfo {
             get {
                 return ((string)(this["_LatestVersionInfo"]));

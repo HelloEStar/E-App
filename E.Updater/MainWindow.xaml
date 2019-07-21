@@ -583,16 +583,16 @@
                                 <TextBlock x:Name="Lbl_EUNewVer" Text="未检测" Style="{DynamicResource 文本显示框样式}" Margin="5"/>
                             </StackPanel>
                             <DockPanel Height="40">
-                                <TextBox x:Name="TBx_EUPath" ToolTip="安装目录" IsReadOnly="True" Style="{DynamicResource 文本输入框样式}" MinWidth="150"/>
+                                <TextBox x:Name="TBx_EUPath" ToolTip="{DynamicResource 目录}" IsReadOnly="True" Style="{DynamicResource 文本输入框样式}" MinWidth="150"/>
                             </DockPanel>
                             <Grid>
                                 <WrapPanel HorizontalAlignment="Left" ItemHeight="30" ItemWidth="60">
-                                    <Button x:Name="Btn_EUBrowse" Content="浏览" Style="{DynamicResource 自由按钮样式}" Click="Btn_EUBrowse_Click"/>
-                                    <Button x:Name="Btn_EUInstall" Content="安装" Style="{DynamicResource 自由按钮样式}" Click="Btn_EUInstall_Click"/>
-                                    <Button x:Name="Btn_EUUninstall" Content="卸载" Style="{DynamicResource 自由按钮样式}" Click="Btn_EUUninstall_Click"/>
+                                    <Button x:Name="Btn_EUBrowse" Content="{DynamicResource 浏览}" Style="{DynamicResource 自由按钮样式}" Click="Btn_EUBrowse_Click" IsEnabled="False" Visibility="Collapsed"/>
+                                    <Button x:Name="Btn_EUInstall" Content="{DynamicResource 安装}" Style="{DynamicResource 自由按钮样式}" Click="Btn_EUInstall_Click"/>
+                                    <Button x:Name="Btn_EUUninstall" Content="{DynamicResource 卸载}" Style="{DynamicResource 自由按钮样式}" Click="Btn_EUUninstall_Click" IsEnabled="False" Visibility="Collapsed"/>
                                 </WrapPanel>
                                 <WrapPanel HorizontalAlignment="Right" ItemHeight="30" ItemWidth="60">
-                                    <Button x:Name="Btn_EURun" Content="启动" Style="{DynamicResource 自由按钮样式}" Click="Btn_EURun_Click"/>
+                                    <Button x:Name="Btn_EURun" Content="{DynamicResource 终止}" Style="{DynamicResource 自由按钮样式}" Click="Btn_EURun_Click"/>
                                 </WrapPanel>
                             </Grid>
                         </StackPanel>
@@ -604,16 +604,16 @@
                                 <TextBlock x:Name="Lbl_EWNewVer" Text="未检测" Style="{DynamicResource 文本显示框样式}" Margin="5"/>
                             </StackPanel>
                             <DockPanel Height="40">
-                                <TextBox x:Name="TBx_EWPath" ToolTip="安装目录" IsReadOnly="True" Style="{DynamicResource 文本输入框样式}" MinWidth="150"/>
+                                <TextBox x:Name="TBx_EWPath" ToolTip="{DynamicResource 目录}" IsReadOnly="True" Style="{DynamicResource 文本输入框样式}" MinWidth="150"/>
                             </DockPanel>
                             <Grid>
                                 <WrapPanel HorizontalAlignment="Left" ItemHeight="30" ItemWidth="60">
-                                    <Button x:Name="Btn_EWBrowse" Content="浏览" Style="{DynamicResource 自由按钮样式}" Click="Btn_EWBrowse_Click"/>
-                                    <Button x:Name="Btn_EWInstall" Content="安装" Style="{DynamicResource 自由按钮样式}" Click="Btn_EWInstall_Click"/>
-                                    <Button x:Name="Btn_EWUninstall" Content="卸载" Style="{DynamicResource 自由按钮样式}" Click="Btn_EWUninstall_Click"/>
+                                    <Button x:Name="Btn_EWBrowse" Content="{DynamicResource 浏览}" Style="{DynamicResource 自由按钮样式}" Click="Btn_EWBrowse_Click"/>
+                                    <Button x:Name="Btn_EWInstall" Content="{DynamicResource 安装}" Style="{DynamicResource 自由按钮样式}" Click="Btn_EWInstall_Click"/>
+                                    <Button x:Name="Btn_EWUninstall" Content="{DynamicResource 卸载}" Style="{DynamicResource 自由按钮样式}" Click="Btn_EWUninstall_Click"/>
                                 </WrapPanel>
                                 <WrapPanel HorizontalAlignment="Right" ItemHeight="30" ItemWidth="60">
-                                    <Button x:Name="Btn_EWRun" Content="启动" Style="{DynamicResource 自由按钮样式}" Click="Btn_EWRun_Click"/>
+                                    <Button x:Name="Btn_EWRun" Content="{DynamicResource 启动}" Style="{DynamicResource 自由按钮样式}" Click="Btn_EWRun_Click"/>
                                 </WrapPanel>
                             </Grid>
                         </StackPanel>
@@ -625,16 +625,16 @@
                                 <TextBlock x:Name="Lbl_EPNewVer" Text="未检测" Style="{DynamicResource 文本显示框样式}" Margin="5"/>
                             </StackPanel>
                             <DockPanel Height="40">
-                                <TextBox x:Name="TBx_EPPath" ToolTip="安装目录" IsReadOnly="True" Style="{DynamicResource 文本输入框样式}" MinWidth="150"/>
+                                <TextBox x:Name="TBx_EPPath" ToolTip="{DynamicResource 目录}" IsReadOnly="True" Style="{DynamicResource 文本输入框样式}" MinWidth="150"/>
                             </DockPanel>
                             <Grid>
                                 <WrapPanel HorizontalAlignment="Left" ItemHeight="30" ItemWidth="60">
-                                    <Button x:Name="Btn_EPBrowse" Content="浏览" Style="{DynamicResource 自由按钮样式}" Click="Btn_EPBrowse_Click"/>
-                                    <Button x:Name="Btn_EPInstall" Content="安装" Style="{DynamicResource 自由按钮样式}" Click="Btn_EPInstall_Click"/>
-                                    <Button x:Name="Btn_EPUninstall" Content="卸载" Style="{DynamicResource 自由按钮样式}" Click="Btn_EPUninstall_Click"/>
+                                    <Button x:Name="Btn_EPBrowse" Content="{DynamicResource 浏览}" Style="{DynamicResource 自由按钮样式}" Click="Btn_EPBrowse_Click"/>
+                                    <Button x:Name="Btn_EPInstall" Content="{DynamicResource 安装}" Style="{DynamicResource 自由按钮样式}" Click="Btn_EPInstall_Click"/>
+                                    <Button x:Name="Btn_EPUninstall" Content="{DynamicResource 卸载}" Style="{DynamicResource 自由按钮样式}" Click="Btn_EPUninstall_Click"/>
                                 </WrapPanel>
                                 <WrapPanel HorizontalAlignment="Right" ItemHeight="30" ItemWidth="60">
-                                    <Button x:Name="Btn_EPRun" Content="启动" Style="{DynamicResource 自由按钮样式}" Click="Btn_EPRun_Click"/>
+                                    <Button x:Name="Btn_EPRun" Content="{DynamicResource 启动}" Style="{DynamicResource 自由按钮样式}" Click="Btn_EPRun_Click"/>
                                 </WrapPanel>
                             </Grid>
                         </StackPanel>
@@ -646,16 +646,16 @@
                                 <TextBlock x:Name="Lbl_ENNewVer" Text="未检测" Style="{DynamicResource 文本显示框样式}" Margin="5"/>
                             </StackPanel>
                             <DockPanel Height="40">
-                                <TextBox x:Name="TBx_ENPath" ToolTip="安装目录" IsReadOnly="True" Style="{DynamicResource 文本输入框样式}" MinWidth="150"/>
+                                <TextBox x:Name="TBx_ENPath" ToolTip="{DynamicResource 目录}" IsReadOnly="True" Style="{DynamicResource 文本输入框样式}" MinWidth="150"/>
                             </DockPanel>
                             <Grid>
                                 <WrapPanel HorizontalAlignment="Left" ItemHeight="30" ItemWidth="60">
-                                    <Button x:Name="Btn_ENBrowse" Content="浏览" Style="{DynamicResource 自由按钮样式}" Click="Btn_ENBrowse_Click"/>
-                                    <Button x:Name="Btn_ENInstall" Content="安装" Style="{DynamicResource 自由按钮样式}" Click="Btn_ENInstall_Click"/>
-                                    <Button x:Name="Btn_ENUninstall" Content="卸载" Style="{DynamicResource 自由按钮样式}" Click="Btn_ENUninstall_Click"/>
+                                    <Button x:Name="Btn_ENBrowse" Content="{DynamicResource 浏览}" Style="{DynamicResource 自由按钮样式}" Click="Btn_ENBrowse_Click"/>
+                                    <Button x:Name="Btn_ENInstall" Content="{DynamicResource 安装}" Style="{DynamicResource 自由按钮样式}" Click="Btn_ENInstall_Click"/>
+                                    <Button x:Name="Btn_ENUninstall" Content="{DynamicResource 卸载}" Style="{DynamicResource 自由按钮样式}" Click="Btn_ENUninstall_Click"/>
                                 </WrapPanel>
                                 <WrapPanel HorizontalAlignment="Right" ItemHeight="30" ItemWidth="60">
-                                    <Button x:Name="Btn_ENRun" Content="启动" Style="{DynamicResource 自由按钮样式}" Click="Btn_ENRun_Click"/>
+                                    <Button x:Name="Btn_ENRun" Content="{DynamicResource 启动}" Style="{DynamicResource 自由按钮样式}" Click="Btn_ENRun_Click"/>
                                 </WrapPanel>
                             </Grid>
                         </StackPanel>

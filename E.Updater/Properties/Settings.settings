@@ -12,7 +12,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="_download" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Download</Value>
+      <Value Profile="(Default)">下载</Value>
     </Setting>
     <Setting Name="_EU" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -33,7 +33,7 @@
       <Value Profile="(Default)">http://estar.zone/download/190</Value>
     </Setting>
     <Setting Name="_LatestVersionInfo" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">http://estar.zone/wp-content/E.Updater_info.txt</Value>
+      <Value Profile="(Default)">http://estar.zone/wp-content/E_Updater_info.txt</Value>
     </Setting>
   </Settings>
 </SettingsFile>

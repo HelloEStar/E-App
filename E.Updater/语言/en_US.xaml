@@ -41,6 +41,15 @@
     <sys:String x:Key="赞助">Sponsor BitCoin</sys:String>
     <sys:String x:Key="点复">Click to Copy</sys:String>
 
+    <!--内容-->
+    <sys:String x:Key="浏览">Browse</sys:String>
+    <sys:String x:Key="安装">Install</sys:String>
+    <sys:String x:Key="更新">Update</sys:String>
+    <sys:String x:Key="卸载">Uninstall</sys:String>
+    <sys:String x:Key="启动">Run</sys:String>
+    <sys:String x:Key="终止">Stop</sys:String>
+    <sys:String x:Key="目录">Install Directory</sys:String>
+
     <!--提示消息-->
     <sys:String x:Key="下一个主题的配置文件不存在">Next Theme's file isn't exist</sys:String>
     <sys:String x:Key="偏好主题的不存在">Theme isn't exist, default theme loaded</sys:String>
@@ -48,4 +57,7 @@
     <sys:String x:Key="已重置">Preferences Reseted</sys:String>
     <sys:String x:Key="已更改">Preferences Changed</sys:String>
     <sys:String x:Key="已载入">Preferences Loaded</sys:String>
+
+    <sys:String x:Key="网络连接成功">Connect to Internet Success</sys:String>
+    <sys:String x:Key="网络连接失败">Connect to Internet Failed</sys:String>
 </ResourceDictionary>
