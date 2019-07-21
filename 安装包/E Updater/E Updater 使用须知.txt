@@ -1,23 +1,18 @@
 ***** 软件信息 *****
 【名称】E Updater
 【功能】安装管理E系列软件
-【开发者】E
 【运行需求】Windows操作系统  net.framework 4.7.1
+【开发者】E
 
 ***** 用户协议 *****
 请不要将此软件用作商业用途
 请不要对此软件进行反编译等行为
 
 ***** 相关链接 *****
-【软件详情】http://estar.zone/introduction/e-updater/
 【个人站点】http://estar.zone/
+【软件主页】http://estar.zone/introduction/e-writer/
 【交流QQ群】279807070
 
 ***** 赞助方式 *****
-【比特币地址】1L1r6KTeankSsVWonWYxvewuM49VoNc9Xm
+【比特币地址】19LHHVQzWJo8DemsanJhSZ4VNRtknyzR1q
 如果你觉得好用就发个红包打赏我吧（づ￣3￣）づ╭❤～
-
-***** 更新日志 *****
-版本：0.1.0.0   时间：2019/4/1 9:00
-新增功能：
-检测更新E系列软件；
