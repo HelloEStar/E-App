@@ -2,81 +2,70 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <!--菜单-->
-    <sys:String x:Key="折叠">Fold</sys:String>
-    <sys:String x:Key="书籍">Book</sys:String>
+    <!--菜单栏-->
+    <sys:String x:Key="文件">File</sys:String>
     <sys:String x:Key="编辑">Edit</sys:String>
     <sys:String x:Key="设置">Setting</sys:String>
     <sys:String x:Key="关于">About</sys:String>
 
-    <sys:String x:Key="打开">Open</sys:String>
-    <sys:String x:Key="关闭">Close</sys:String>
-    <sys:String x:Key="创建">Create</sys:String>
-    <sys:String x:Key="保存">Save</sys:String>
-    <sys:String x:Key="另存">SaveAs</sys:String>
-    <sys:String x:Key="导出">Export</sys:String>
-    <sys:String x:Key="信息">Info</sys:String>
-    <sys:String x:Key="打开+">Open Book Ctrl+O</sys:String>
-    <sys:String x:Key="关闭+">Close Book Ctrl+Q</sys:String>
-    <sys:String x:Key="创建+">Create Panel Ctrl+B</sys:String>
-    <sys:String x:Key="保存+">Save Essay Ctrl+S</sys:String>
-    <sys:String x:Key="另存+">Save Essay As Ctrl+Shift+S</sys:String>
-    <sys:String x:Key="导出+">Export Book Ctrl+E</sys:String>
-    <sys:String x:Key="信息+">Book Info Ctrl+M</sys:String>
-
-    <sys:String x:Key="撤销">Undo</sys:String>
-    <sys:String x:Key="重做">Redo</sys:String>
-    <sys:String x:Key="转繁">ToTrad</sys:String>
-    <sys:String x:Key="转简">ToSimp</sys:String>
-    <sys:String x:Key="撤销+">Undo Ctrl+Z</sys:String>
-    <sys:String x:Key="重做+">Redo Ctrl+Y</sys:String>
-    <sys:String x:Key="转繁+">To Traditional Ctrl+Shift+K</sys:String>
-    <sys:String x:Key="转简+">To Simplified Ctrl+Shift+J</sys:String>
-
-    <sys:String x:Key="重置">Reset</sys:String>
-    <sys:String x:Key="清空">Clear</sys:String>
-    <sys:String x:Key="重置+">Reset Settings</sys:String>
-    <sys:String x:Key="清空+">Clear Running Info</sys:String>
-
-    <sys:String x:Key="官网">OffiWeb</sys:String>
-    <sys:String x:Key="主页">AppInfo</sys:String>
-    <sys:String x:Key="下载">Download</sys:String>
-    <sys:String x:Key="反馈">Feedback</sys:String>
-    <sys:String x:Key="开源">OpenSource</sys:String>
-    <sys:String x:Key="讨论">Discuss</sys:String>
-    <sys:String x:Key="官网+">Official Website F1</sys:String>
-    <sys:String x:Key="主页+">APP Main Page F2</sys:String>
-    <sys:String x:Key="下载+">Download Page F3</sys:String>
-    <sys:String x:Key="反馈+">Feedback Page F4</sys:String>
-    <sys:String x:Key="开源+">GitHub Open Source Page F5</sys:String>
-    <sys:String x:Key="讨论+">QQ Discuss Group F6</sys:String>
-
-    <!--面板-->
+    <!--工具栏-->
     <!--书籍页-->
+    <sys:String x:Key="书史+">Books Open History</sys:String>
+    <sys:String x:Key="打开">Open</sys:String>
+    <sys:String x:Key="打开+">Open Book Ctrl+O</sys:String>
+    <sys:String x:Key="创建">Create</sys:String>
+    <sys:String x:Key="创建+">Create Panel Ctrl+B</sys:String>
+    <sys:String x:Key="关闭">Close</sys:String>
+    <sys:String x:Key="关闭+">Close Book Ctrl+Q</sys:String>
+    <sys:String x:Key="删除">Delete</sys:String>
+    <sys:String x:Key="删除+">Delete Target Delete</sys:String>
+    <sys:String x:Key="保存">Save</sys:String>
+    <sys:String x:Key="保存+">Save Essay Ctrl+S</sys:String>
+    <sys:String x:Key="另存">SaveAs</sys:String>
+    <sys:String x:Key="另存+">Save Essay As Ctrl+Shift+S</sys:String>
+    <sys:String x:Key="导出">Export</sys:String>
+    <sys:String x:Key="导出+">Export Book Ctrl+E</sys:String>
+    <sys:String x:Key="信息">Info</sys:String>
+    <sys:String x:Key="信息+">Book Info Ctrl+M</sys:String>
+    <sys:String x:Key="展开">Expand</sys:String>
+    <sys:String x:Key="展开+">Expand TreeView Ctrl+I</sys:String>
+    <sys:String x:Key="收起">Collapse</sys:String>
+    <sys:String x:Key="收起+">Collapse TreeView Ctrl+U</sys:String>
+    <sys:String x:Key="刷新">Refresh</sys:String>
+    <sys:String x:Key="刷新+">Refresh TreeView Ctrl+R</sys:String>
     <sys:String x:Key="浏览">Browser</sys:String>
+    <sys:String x:Key="浏览+">Change Target Location</sys:String>
+    <sys:String x:Key="对象位置">Object Path</sys:String>
+    <sys:String x:Key="对象名称">Object Name</sys:String>
     <sys:String x:Key="创书">+ Book</sys:String>
     <sys:String x:Key="创卷">+ Chapter</sys:String>
     <sys:String x:Key="创文">+ Essay</sys:String>
-    <sys:String x:Key="展开">Expand</sys:String>
-    <sys:String x:Key="收起">Collapse</sys:String>
-    <sys:String x:Key="刷新">Refresh</sys:String>
-    <sys:String x:Key="删除">Delete</sys:String>
-    <sys:String x:Key="书史+">Books Open History</sys:String>
-    <sys:String x:Key="浏览+">Change Target Location</sys:String>
-    <sys:String x:Key="展开+">Expand TreeView Ctrl+I</sys:String>
-    <sys:String x:Key="收起+">Collapse TreeView Ctrl+U</sys:String>
-    <sys:String x:Key="刷新+">Refresh TreeView Ctrl+R</sys:String>
-    <sys:String x:Key="删除+">Delete Target Delete</sys:String>
 
     <!--编辑页-->
+    <sys:String x:Key="撤重">Undo and Redo</sys:String>
+    <sys:String x:Key="撤销">Undo</sys:String>
+    <sys:String x:Key="撤销+">Undo Ctrl+Z</sys:String>
+    <sys:String x:Key="重做">Redo</sys:String>
+    <sys:String x:Key="重做+">Redo Ctrl+Y</sys:String>
+    <sys:String x:Key="转换">Simplified and Traditional Conversion</sys:String>
+    <sys:String x:Key="转繁">ToTrad</sys:String>
+    <sys:String x:Key="转繁+">To Traditional Ctrl+Shift+K</sys:String>
+    <sys:String x:Key="转简">ToSimp</sys:String>
+    <sys:String x:Key="转简+">To Simplified Ctrl+Shift+J</sys:String>
     <sys:String x:Key="查换">Find and Replace</sys:String>
+    <sys:String x:Key="查换+">Find and Replace Ctrl+F</sys:String>
     <sys:String x:Key="查内">Find Content</sys:String>
     <sys:String x:Key="换内">Replace Content</sys:String>
     <sys:String x:Key="查下">Find Next</sys:String>
     <sys:String x:Key="换下">Replace Next</sys:String>
     <sys:String x:Key="换全">Replace All</sys:String>
-    <sys:String x:Key="查换+">Find and Replace Ctrl+F</sys:String>
+
     <!--设置页-->
+    <sys:String x:Key="重置">Reset</sys:String>
+    <sys:String x:Key="清空">Clear</sys:String>
+    <sys:String x:Key="重置+">Reset Settings</sys:String>
+    <sys:String x:Key="清空+">Clear Running Info</sys:String>
+    
     <sys:String x:Key="语言">Language</sys:String>
     <sys:String x:Key="主题">Theme</sys:String>
     <sys:String x:Key="字体">Font Family</sys:String>
@@ -85,7 +74,6 @@
     <sys:String x:Key="启动">Boot</sys:String>
     <sys:String x:Key="补全">Complementy</sys:String>
     <sys:String x:Key="缩进">Indentation</sys:String>
-    <!--<sys:String x:Key="保存">Save</sys:String>-->
     <sys:String x:Key="备份">Backup</sys:String>
     <sys:String x:Key="显示运行信息">Show running info</sys:String>
     <sys:String x:Key="自动检查更新">Check new version</sys:String>
@@ -95,28 +83,31 @@
     <sys:String x:Key="间隔时间自动保存">Auto save every timespan</sys:String>
     <sys:String x:Key="文章切换时自动保存">Auto save when swich file</sys:String>
     <sys:String x:Key="间隔时间自动备份">Auto backup every timespan</sys:String>
+
     <!--信息页-->
+    <sys:String x:Key="官网">Official Website</sys:String>
+    <sys:String x:Key="开源">Open Source Page</sys:String>
+    <sys:String x:Key="讨论">Discuss Group</sys:String>
+    <sys:String x:Key="前往">Go to</sys:String>
+    
     <sys:String x:Key="名称">App Name</sys:String>
     <sys:String x:Key="说明">Description</sys:String>
     <sys:String x:Key="版本">Version</sys:String>
     <sys:String x:Key="作者">Developer</sys:String>
     <sys:String x:Key="日志">Update Log</sys:String>
     <sys:String x:Key="赞助">Sponsor BitCoin</sys:String>
-    <sys:String x:Key="点复">Click to Copy</sys:String>
+    <sys:String x:Key="复制">Copy</sys:String>
     
     <!--内容-->
     <sys:String x:Key="欢迎使用">Welcome to</sys:String>
     <sys:String x:Key="启动次数">Start up counts</sys:String>
-    <sys:String x:Key="启动时间">Start up time</sys:String>
-    <sys:String x:Key="上次启动时间">Last start up time</sys:String>
-    <sys:String x:Key="上次关闭时间">Last close up time</sys:String>
-    <sys:String x:Key="总运行时长">Totally Running time</sys:String>
     <sys:String x:Key="行">Row</sys:String>
     <sys:String x:Key="列">Col</sys:String>
     <sys:String x:Key="字数">Word counts</sys:String>
     <sys:String x:Key="全书字数">Totally Word counts</sys:String>
 
     <!--提示-->
+    <sys:String x:Key="用户协议">User Agreement</sys:String>
     <sys:String x:Key="提示">Help</sys:String>
     <sys:String x:Key="创建或打开以开始">Open or create a book to start</sys:String>
     <sys:String x:Key="未打开任何书籍">Didn't open any book</sys:String>
@@ -172,7 +163,7 @@
 
     <sys:String x:Key="下一个主题的配置文件不存在">Next Theme's file isn't exist</sys:String>
     <sys:String x:Key="偏好主题的不存在">Theme isn't exist, default theme loaded</sys:String>
-    <sys:String x:Key="已清空运行信息">Running info cleared, you need restart E Player</sys:String>
+    <sys:String x:Key="已清空运行信息">Running info cleared, do you want to close now?</sys:String>
     
     <sys:String x:Key="已重置">Preferences Reseted</sys:String>
     <sys:String x:Key="已更改">Preferences Changed</sys:String>

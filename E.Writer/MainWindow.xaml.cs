@@ -42,6 +42,10 @@ namespace E.Writer
         /// 应用信息
         /// </summary>
         private AppInfo AppInfo { get; set; }
+        /// <summary>
+        /// 当前菜单
+        /// </summary>
+        private Menu CurrentMenu { get; set; } = Menu.文件;
 
         /// <summary>
         /// 语言列表
@@ -116,17 +120,22 @@ namespace E.Writer
             AssemblyDescriptionAttribute description = (AssemblyDescriptionAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyDescriptionAttribute));
             AssemblyCompanyAttribute company = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyCompanyAttribute));
             AssemblyCopyrightAttribute copyright = (AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyCopyrightAttribute));
-            Stream src = System.Windows.Application.GetResourceStream(new Uri("/文档/更新日志.txt", UriKind.Relative)).Stream;
-            string updateNote = new StreamReader(src, Encoding.UTF8).ReadToEnd();
-            string homePage = "http://estar.zone";
-            string infoPage = "http://estar.zone/introduction/e-writer/";
-            string downloadPage = "http://estar.zone/introduction/e-writer/";
+
+            Uri uri0 = new Uri("/文档/用户协议.md", UriKind.Relative);
+            Stream src0 = System.Windows.Application.GetResourceStream(uri0).Stream;
+            string userAgreement = new StreamReader(src0, Encoding.UTF8).ReadToEnd();
+
+            Uri uri = new Uri("/文档/更新日志.md", UriKind.Relative);
+            Stream src = System.Windows.Application.GetResourceStream(uri).Stream;
+            string updateNote = new StreamReader(src, Encoding.UTF8).ReadToEnd().Replace("### ", "");
+
+            string homePage = "https://github.com/HelloEStar/E.App/wiki/E-Writer";
             string gitHubPage = "https://github.com/HelloEStar/E.App";
             string qqGroupLink = "http://jq.qq.com/?_wv=1027&k=5TQxcvR";
             string qqGroupNumber = "279807070";
             string bitCoinAddress = "19LHHVQzWJo8DemsanJhSZ4VNRtknyzR1q";
-            AppInfo = new AppInfo(product.Product, description.Description, company.Company, copyright.Copyright, new Version(Application.ProductVersion), updateNote,
-                                  homePage, infoPage, downloadPage, gitHubPage, qqGroupLink, qqGroupNumber, bitCoinAddress);
+            AppInfo = new AppInfo(product.Product, description.Description, company.Company, copyright.Copyright, userAgreement, new Version(Application.ProductVersion), updateNote,
+                                  homePage, gitHubPage, qqGroupLink, qqGroupNumber, bitCoinAddress);
         }
         /// <summary>
         /// 载入偏好设置
@@ -207,16 +216,12 @@ namespace E.Writer
                     //若是主题配置文件
                     if (tmp2 == "主题")
                     {
-                        string tmp3 = INIOperator.ReadIniKeys("文件", "版本", s);
-                        if (tmp3 == AppInfo.Version.ToString())
+                        TextBlock theme = new TextBlock
                         {
-                            TextBlock theme = new TextBlock
-                            {
-                                Text = Path.GetFileNameWithoutExtension(s),
-                                ToolTip = s
-                            };
-                            ThemeItems.Add(theme);
-                        }
+                            Text = Path.GetFileNameWithoutExtension(s),
+                            ToolTip = s
+                        };
+                        ThemeItems.Add(theme);
                     }
                 }
             }
@@ -618,18 +623,6 @@ namespace E.Writer
             Settings.Default._books = string.Join("///", strs);
             Settings.Default.Save();
         }
-        /// <summary>
-        /// 保存时间信息
-        /// </summary>
-        private void SaveTimeInfo()
-        {
-            Settings.Default.thisEndTime = DateTime.Now;
-            Settings.Default.lastStartTime = Settings.Default.thisStartTime;
-            Settings.Default.lastEndTime = Settings.Default.thisEndTime;
-            Settings.Default.thisTotalTime = Settings.Default.thisEndTime - Settings.Default.thisStartTime;
-            Settings.Default.totalTime = Settings.Default.thisTotalTime + Settings.Default.totalTime;
-            Settings.Default.Save();
-        }
 
         //创建
         /// <summary>
@@ -681,18 +674,15 @@ namespace E.Writer
             if (PanCenter.Visibility == Visibility.Collapsed)
             {
                 PanCenter.Visibility = Visibility.Visible;
-                BtnFold.BorderThickness = new Thickness(4, 0, 0, 0);
             }
 
             if (PanCreate.Visibility == Visibility.Visible)
             {
                 PanCreate.Visibility = Visibility.Collapsed;
-                BtnCrete.BorderThickness = new Thickness(0, 0, 0, 0);
             }
             else
             {
                 PanCreate.Visibility = Visibility.Visible;
-                BtnCrete.BorderThickness = new Thickness(4, 0, 0, 0);
             }
 
             //获取上级目录
@@ -948,8 +938,6 @@ namespace E.Writer
         {
             //运行次数+1
             Settings.Default.runTimes += 1;
-            //记录启动时间
-            Settings.Default.thisStartTime = DateTime.Now;
             Settings.Default.Save();
         }
 
@@ -1458,6 +1446,70 @@ namespace E.Writer
 
         //设置
         /// <summary>
+        /// 设置菜单
+        /// </summary>
+        /// <param name="menu"></param>
+        private void SetMenu(Menu menu)
+        {
+            switch (menu)
+            {
+                case Menu.无:
+                    PanCenter.Visibility = Visibility.Collapsed;
+                    BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
+                    break;
+                case Menu.文件:
+                    PanCenter.Visibility = Visibility.Visible;
+                    CenterBookPage.Visibility = Visibility.Visible;
+                    CenterEditPage.Visibility = Visibility.Collapsed;
+                    CenterSettingPage.Visibility = Visibility.Collapsed;
+                    CenterAboutPage.Visibility = Visibility.Collapsed;
+                    BtnFile.BorderThickness = new Thickness(4, 0, 0, 0);
+                    BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
+                    break;
+                case Menu.编辑:
+                    PanCenter.Visibility = Visibility.Visible;
+                    CenterBookPage.Visibility = Visibility.Collapsed;
+                    CenterEditPage.Visibility = Visibility.Visible;
+                    CenterSettingPage.Visibility = Visibility.Collapsed;
+                    CenterAboutPage.Visibility = Visibility.Collapsed;
+                    BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnEdit.BorderThickness = new Thickness(4, 0, 0, 0);
+                    BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
+                    break;
+                case Menu.设置:
+                    PanCenter.Visibility = Visibility.Visible;
+                    CenterBookPage.Visibility = Visibility.Collapsed;
+                    CenterEditPage.Visibility = Visibility.Collapsed;
+                    CenterSettingPage.Visibility = Visibility.Visible;
+                    CenterAboutPage.Visibility = Visibility.Collapsed;
+                    BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnSetting.BorderThickness = new Thickness(4, 0, 0, 0);
+                    BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
+                    break;
+                case Menu.关于:
+                    PanCenter.Visibility = Visibility.Visible;
+                    CenterBookPage.Visibility = Visibility.Collapsed;
+                    CenterEditPage.Visibility = Visibility.Collapsed;
+                    CenterSettingPage.Visibility = Visibility.Collapsed;
+                    CenterAboutPage.Visibility = Visibility.Visible;
+                    BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnAbout.BorderThickness = new Thickness(4, 0, 0, 0);
+                    break;
+                default:
+                    break;
+            }
+            CurrentMenu = menu;
+        }
+        /// <summary>
         /// 设置语言显示
         /// </summary>
         /// <param name="language">语言简拼</param>
@@ -1645,7 +1697,9 @@ namespace E.Writer
         private void ResetAppSettings()
         {
             Settings.Default.Reset();
-            ShowMessage("已清空运行信息", true);
+            string str = FindResource("已清空运行信息").ToString();
+            MessageBoxResult result = MessageBox.Show(str, FindResource("提示").ToString(), MessageBoxButton.YesNo);
+            if(result == MessageBoxResult.Yes) Close();
         }
         /// <summary>
         /// 重置用户设置
@@ -1770,6 +1824,16 @@ namespace E.Writer
 
         //检查
         /// <summary>
+        /// 检查用户协议
+        /// </summary>
+        /// <returns></returns>
+        private bool CheckUserAgreement()
+        {
+            string str = AppInfo.UserAgreement + "\n\n你需要同意此协议才能使用本软件，是否同意？";
+            MessageBoxResult result = MessageBox.Show(str, FindResource("用户协议").ToString(), MessageBoxButton.YesNo);
+            return (result == MessageBoxResult.Yes);
+        }
+        /// <summary>
         /// 检查文件夹
         /// </summary>
         private void CheckFolders()
@@ -1857,7 +1921,6 @@ namespace E.Writer
         {
             BtnOpenBook.IsEnabled = true;
             BtnCreateBook.IsEnabled = true;
-            BtnFold.IsEnabled = true;
             BtnToSimplified.IsEnabled = false;
             BtnToTraditional.IsEnabled = false;
 
@@ -1942,9 +2005,10 @@ namespace E.Writer
         /// </summary>
         public void RefreshTitle()
         {
+            string str = AppInfo.Name + " " + AppInfo.VersionShort;
             if (CurrentBook == null)
             {
-                Main.Title = AppInfo.Name + " " + AppInfo.Version;
+                Main.Title = str;
             }
             else
             {
@@ -1952,22 +2016,22 @@ namespace E.Writer
                 {
                     if (CurrentEssay == null)
                     {
-                        Main.Title = AppInfo.Name + " - " + CurrentBook.Name;
+                        Main.Title = str + " - " + CurrentBook.Name;
                     }
                     else
                     {
-                        Main.Title = AppInfo.Name + " - " + CurrentBook.Name + @"\" + CurrentEssay.Name;
+                        Main.Title = str + " - " + CurrentBook.Name + @"\" + CurrentEssay.Name;
                     }
                 }
                 else
                 {
                     if (CurrentEssay == null)
                     {
-                        Main.Title = AppInfo.Name + " - " + CurrentBook.Name + @"\" + CurrentChapter.Path.Replace(CurrentBook.Path + @"\", "");
+                        Main.Title = str + " - " + CurrentBook.Name + @"\" + CurrentChapter.Path.Replace(CurrentBook.Path + @"\", "");
                     }
                     else
                     {
-                        Main.Title = AppInfo.Name + " - " + CurrentBook.Name + @"\" + CurrentEssay.Path.Replace(CurrentBook.Path + @"\", "");
+                        Main.Title = str + " - " + CurrentBook.Name + @"\" + CurrentEssay.Path.Replace(CurrentBook.Path + @"\", "");
                     }
                 }
             }
@@ -1994,11 +2058,19 @@ namespace E.Writer
         /// </summary>
         private void ShowAppInfo()
         {
+            TxtHomePage.Text = AppInfo.HomePage;
+            TxtHomePage.ToolTip = AppInfo.HomePage;
+            TxtGitHubPage.Text = AppInfo.GitHubPage;
+            TxtGitHubPage.ToolTip = AppInfo.GitHubPage;
+            TxtQQGroup.Text = AppInfo.QQGroupNumber;
+            TxtQQGroup.ToolTip = AppInfo.QQGroupLink;
+            TxtBitCoinAddress.Text = AppInfo.BitCoinAddress;
+            TxtBitCoinAddress.ToolTip = AppInfo.BitCoinAddress;
+
             ThisName.Text = AppInfo.Name;
             Description.Text = AppInfo.Description;
             Developer.Text = AppInfo.Company;
             Version.Text = AppInfo.Version.ToString();
-            BitCoinAddress.Text = AppInfo.BitCoinAddress;
             UpdateNote.Text = AppInfo.UpdateNote;
         }
         /// <summary>
@@ -2006,30 +2078,8 @@ namespace E.Writer
         /// </summary>
         private void ShowRunInfo()
         {
-            //若第一次运行软件，提示消息
-            if (Settings.Default.runTimes == 1)
-            {
-                TbxFileName.Text = FindResource("欢迎使用") + " " + AppInfo.Name;
-                //显示运行记录
-                TbxFileContent.Text = FindResource("启动次数") + "：" + Settings.Default.runTimes + Environment.NewLine +
-                                   FindResource("启动时间") + "：" + Settings.Default.thisStartTime;
-            }
-            else
-            {
-                TbxFileName.Text = FindResource("欢迎使用") + " " + AppInfo.Name;
-                int d = Settings.Default.totalTime.Days;
-                int h = Settings.Default.totalTime.Hours;
-                int m = Settings.Default.totalTime.Minutes;
-                int s = Settings.Default.totalTime.Seconds;
-                string t = d + "天" + h + "时" + m + "分" + s + "秒";
-                //显示运行记录
-                TbxFileContent.Text = FindResource("启动次数") + "：" + Settings.Default.runTimes + Environment.NewLine +
-                                   FindResource("启动时间") + "：" + Settings.Default.thisStartTime + Environment.NewLine +
-                                   Environment.NewLine +
-                                   FindResource("上次启动时间") + "：" + Settings.Default.lastStartTime + Environment.NewLine +
-                                   FindResource("上次关闭时间") + "：" + Settings.Default.lastEndTime + Environment.NewLine +
-                                   FindResource("总运行时长") + "：" + t;
-            }
+            TbxFileName.Text = FindResource("欢迎使用") + " " + AppInfo.Name;
+            TbxFileContent.Text = FindResource("启动次数") + "：" + Settings.Default.runTimes;
             TbxFileName.IsEnabled = false;
             TbxFileContent.IsEnabled = false;
         }
@@ -2277,6 +2327,7 @@ namespace E.Writer
             //载入并显示应用信息
             LoadAppInfo();
             ShowAppInfo();
+            AddRunTime();
 
             //载入下拉菜单项
             LoadLanguageItems();
@@ -2286,7 +2337,6 @@ namespace E.Writer
 
             //载入设置
             LoadSettings();
-            AddRunTime();
 
             //初始化
             SetLanguage(User.Default.language);
@@ -2321,6 +2371,17 @@ namespace E.Writer
 
             //提示消息
             ShowMessage("已载入");
+
+            //检查用户协议
+            if (Settings.Default.runTimes == 1)
+            {
+                if (!CheckUserAgreement())
+                {
+                    Settings.Default.Reset();
+                    Close();
+                    return;
+                }
+            }
         }
         private void Main_Closing(object sender, CancelEventArgs e)
         {
@@ -2472,14 +2533,8 @@ namespace E.Writer
             if (e.Key == Key.F1)
             { Process.Start("explorer.exe", AppInfo.HomePage); }
             else if (e.Key == Key.F2)
-            { Process.Start("explorer.exe", AppInfo.InfoPage); }
-            else if (e.Key == Key.F3)
-            { Process.Start("explorer.exe", AppInfo.DownloadPage); }
-            else if (e.Key == Key.F4)
-            { Process.Start("explorer.exe", AppInfo.FeedbackPage); }
-            else if (e.Key == Key.F8)
             { Process.Start("explorer.exe", AppInfo.GitHubPage); }
-            else if (e.Key == Key.F6)
+            else if (e.Key == Key.F3)
             { Process.Start("explorer.exe", AppInfo.QQGroupLink); }
         }
 
@@ -2724,87 +2779,53 @@ namespace E.Writer
             }
         }
 
-        //按钮点击事件
-        private void BtnFold_Click(object sender, RoutedEventArgs e)
-        {
-            if (PanCenter.Visibility == Visibility.Visible)
-            {
-                PanCenter.Visibility = Visibility.Collapsed;
-                BtnFold.BorderThickness = new Thickness(0, 0, 0, 0);
-            }
-            else
-            {
-                PanCenter.Visibility = Visibility.Visible;
-                BtnFold.BorderThickness = new Thickness(4, 0, 0, 0);
-            }
-        }
         private void BtnFile_Click(object sender, RoutedEventArgs e)
         {
-            CenterBookPage.Visibility = Visibility.Visible;
-            CenterEditPage.Visibility = Visibility.Collapsed;
-            CenterSettingPage.Visibility = Visibility.Collapsed;
-            CenterAboutPage.Visibility = Visibility.Collapsed;
-
-            BtnsFile.Visibility = Visibility.Visible;
-            BtnsEdit.Visibility = Visibility.Collapsed;
-            BtnsSetting.Visibility = Visibility.Collapsed;
-            BtnsAbout.Visibility = Visibility.Collapsed;
-
-            BtnFile.BorderThickness = new Thickness(4, 0, 0, 0);
-            BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
-            BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
-            BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
+            switch (CurrentMenu)
+            {
+                case Menu.文件:
+                    SetMenu(Menu.无);
+                    break;
+                default:
+                    SetMenu(Menu.文件);
+                    break;
+            }
         }
         private void BtnEdit_Click(object sender, RoutedEventArgs e)
         {
-            CenterBookPage.Visibility = Visibility.Collapsed;
-            CenterEditPage.Visibility = Visibility.Visible;
-            CenterSettingPage.Visibility = Visibility.Collapsed;
-            CenterAboutPage.Visibility = Visibility.Collapsed;
-
-            BtnsFile.Visibility = Visibility.Collapsed;
-            BtnsEdit.Visibility = Visibility.Visible;
-            BtnsSetting.Visibility = Visibility.Collapsed;
-            BtnsAbout.Visibility = Visibility.Collapsed;
-
-            BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
-            BtnEdit.BorderThickness = new Thickness(4, 0, 0, 0);
-            BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
-            BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
+            switch (CurrentMenu)
+            {
+                case Menu.编辑:
+                    SetMenu(Menu.无);
+                    break;
+                default:
+                    SetMenu(Menu.编辑);
+                    break;
+            }
         }
         private void BtnSetting_Click(object sender, RoutedEventArgs e)
         {
-            CenterBookPage.Visibility = Visibility.Collapsed;
-            CenterEditPage.Visibility = Visibility.Collapsed;
-            CenterSettingPage.Visibility = Visibility.Visible;
-            CenterAboutPage.Visibility = Visibility.Collapsed;
-
-            BtnsFile.Visibility = Visibility.Collapsed;
-            BtnsEdit.Visibility = Visibility.Collapsed;
-            BtnsSetting.Visibility = Visibility.Visible;
-            BtnsAbout.Visibility = Visibility.Collapsed;
-
-            BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
-            BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
-            BtnSetting.BorderThickness = new Thickness(4, 0, 0, 0);
-            BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
+            switch (CurrentMenu)
+            {
+                case Menu.设置:
+                    SetMenu(Menu.无);
+                    break;
+                default:
+                    SetMenu(Menu.设置);
+                    break;
+            }
         }
         private void BtnAbout_Click(object sender, RoutedEventArgs e)
         {
-            CenterBookPage.Visibility = Visibility.Collapsed;
-            CenterEditPage.Visibility = Visibility.Collapsed;
-            CenterSettingPage.Visibility = Visibility.Collapsed;
-            CenterAboutPage.Visibility = Visibility.Visible;
-
-            BtnsFile.Visibility = Visibility.Collapsed;
-            BtnsEdit.Visibility = Visibility.Collapsed;
-            BtnsSetting.Visibility = Visibility.Collapsed;
-            BtnsAbout.Visibility = Visibility.Visible;
-
-            BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
-            BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
-            BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
-            BtnAbout.BorderThickness = new Thickness(4, 0, 0, 0);
+            switch (CurrentMenu)
+            {
+                case Menu.关于:
+                    SetMenu(Menu.无);
+                    break;
+                default:
+                    SetMenu(Menu.关于);
+                    break;
+            }
         }
 
         private void BtnOpenBook_Click(object sender, RoutedEventArgs e)
@@ -3082,26 +3103,14 @@ namespace E.Writer
             ResetAppSettings();
         }
 
-        private void BitCoinAddress_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void BtnBitCoinAddress_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Clipboard.SetDataObject(BitCoinAddress.Text, true);
+            System.Windows.Clipboard.SetDataObject(TxtBitCoinAddress.Text, true);
             ShowMessage("已复制");
         }
         private void BtnHomePage_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("explorer.exe", AppInfo.HomePage);
-        }
-        private void BtnInfoPage_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("explorer.exe", AppInfo.InfoPage);
-        }
-        private void BtnDownloadPage_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("explorer.exe", AppInfo.DownloadPage);
-        }
-        private void BtnFeedbackPage_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("explorer.exe", AppInfo.FeedbackPage);
         }
         private void BtnGitHubPage_Click(object sender, RoutedEventArgs e)
         {
@@ -3382,7 +3391,6 @@ namespace E.Writer
         #endregion
     }
 
-
     /// <summary>
     /// 书籍的节点
     /// </summary>
@@ -3417,5 +3425,14 @@ namespace E.Writer
                 }
             }
         }
+    }
+
+    public enum Menu 
+    {
+        无,
+        文件,
+        编辑,
+        设置,
+        关于
     }
 }

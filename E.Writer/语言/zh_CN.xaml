@@ -3,81 +3,69 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
 
-    <!--菜单-->
-    <sys:String x:Key="折叠">折叠</sys:String>
-    <sys:String x:Key="书籍">书籍</sys:String>
+    <!--菜单栏-->
+    <sys:String x:Key="文件">文件</sys:String>
     <sys:String x:Key="编辑">编辑</sys:String>
     <sys:String x:Key="设置">设置</sys:String>
     <sys:String x:Key="关于">关于</sys:String>
 
-    <sys:String x:Key="打开">打开</sys:String>
-    <sys:String x:Key="关闭">关闭</sys:String>
-    <sys:String x:Key="创建">创建</sys:String>
-    <sys:String x:Key="保存">保存</sys:String>
-    <sys:String x:Key="另存">另存</sys:String>
-    <sys:String x:Key="导出">导出</sys:String>
-    <sys:String x:Key="信息">信息</sys:String>
-    <sys:String x:Key="打开+">打开书籍 Ctrl+O</sys:String>
-    <sys:String x:Key="关闭+">关闭书籍 Ctrl+Q</sys:String>
-    <sys:String x:Key="创建+">创建面板 Ctrl+B</sys:String>
-    <sys:String x:Key="保存+">保存文章 Ctrl+S</sys:String>
-    <sys:String x:Key="另存+">另存文章 Ctrl+Shift+S</sys:String>
-    <sys:String x:Key="导出+">导出全文 Ctrl+E</sys:String>
-    <sys:String x:Key="信息+">书籍信息 Ctrl+M</sys:String>
-
-    <sys:String x:Key="撤销">撤销</sys:String>
-    <sys:String x:Key="重做">重做</sys:String>
-    <sys:String x:Key="转繁">转繁</sys:String>
-    <sys:String x:Key="转简">转简</sys:String>
-    <sys:String x:Key="撤销+">撤销 Ctrl+Z</sys:String>
-    <sys:String x:Key="重做+">重做 Ctrl+Y</sys:String>
-    <sys:String x:Key="转繁+">转为繁体 Ctrl+Shift+K</sys:String>
-    <sys:String x:Key="转简+">转为简体 Ctrl+Shift+J</sys:String>
-
-    <sys:String x:Key="重置">重置</sys:String>
-    <sys:String x:Key="清空">清空</sys:String>
-    <sys:String x:Key="重置+">重置设置</sys:String>
-    <sys:String x:Key="清空+">清空运行信息</sys:String>
-
-    <sys:String x:Key="官网">官网</sys:String>
-    <sys:String x:Key="主页">主页</sys:String>
-    <sys:String x:Key="下载">下载</sys:String>
-    <sys:String x:Key="反馈">反馈</sys:String>
-    <sys:String x:Key="开源">开源</sys:String>
-    <sys:String x:Key="讨论">讨论</sys:String>
-    <sys:String x:Key="官网+">官方网站 F1</sys:String>
-    <sys:String x:Key="主页+">应用主页 F2</sys:String>
-    <sys:String x:Key="下载+">下载新版 F3</sys:String>
-    <sys:String x:Key="反馈+">提交反馈 F4</sys:String>
-    <sys:String x:Key="开源+">GitHub开源地址 F5</sys:String>
-    <sys:String x:Key="讨论+">QQ交流讨论群 F6</sys:String>
-
-    <!--面板-->
+    <!--工具栏-->
     <!--书籍页-->
-    <!--<sys:String x:Key="卷册">卷册</sys:String>-->
+    <sys:String x:Key="书史+">书籍打开历史</sys:String>
+    <sys:String x:Key="打开">打开</sys:String>
+    <sys:String x:Key="打开+">打开书籍 Ctrl+O</sys:String>
+    <sys:String x:Key="创建">创建</sys:String>
+    <sys:String x:Key="创建+">创建面板 Ctrl+B</sys:String>
+    <sys:String x:Key="关闭">关闭</sys:String>
+    <sys:String x:Key="关闭+">关闭书籍 Ctrl+Q</sys:String>
+    <sys:String x:Key="删除">删除</sys:String>
+    <sys:String x:Key="删除+">删除对象 Delete</sys:String>
+    <sys:String x:Key="保存">保存</sys:String>
+    <sys:String x:Key="保存+">保存文章 Ctrl+S</sys:String>
+    <sys:String x:Key="另存">另存</sys:String>
+    <sys:String x:Key="另存+">另存文章 Ctrl+Shift+S</sys:String>
+    <sys:String x:Key="导出">导出</sys:String>
+    <sys:String x:Key="导出+">导出全文 Ctrl+E</sys:String>
+    <sys:String x:Key="信息">信息</sys:String>
+    <sys:String x:Key="信息+">书籍信息 Ctrl+M</sys:String>
+    <sys:String x:Key="展开">展开</sys:String>
+    <sys:String x:Key="展开+">展开目录 Ctrl+I</sys:String>
+    <sys:String x:Key="收起">收起</sys:String>
+    <sys:String x:Key="收起+">收起目录 Ctrl+U</sys:String>
+    <sys:String x:Key="刷新">刷新</sys:String>
+    <sys:String x:Key="刷新+">刷新目录 Ctrl+R</sys:String>
     <sys:String x:Key="浏览">浏览</sys:String>
+    <sys:String x:Key="浏览+">更改创建对象的存放位置</sys:String>
+    <sys:String x:Key="对象位置">对象位置</sys:String>
+    <sys:String x:Key="对象名称">对象名称</sys:String>
     <sys:String x:Key="创书">创建书籍</sys:String>
     <sys:String x:Key="创卷">创建卷册</sys:String>
     <sys:String x:Key="创文">创建文章</sys:String>
-    <sys:String x:Key="展开">展开</sys:String>
-    <sys:String x:Key="收起">收起</sys:String>
-    <sys:String x:Key="刷新">刷新</sys:String>
-    <sys:String x:Key="删除">删除</sys:String>
-    <sys:String x:Key="书史+">书籍打开历史</sys:String>
-    <sys:String x:Key="浏览+">更改创建对象的存放位置</sys:String>
-    <sys:String x:Key="展开+">展开目录 Ctrl+I</sys:String>
-    <sys:String x:Key="收起+">收起目录 Ctrl+U</sys:String>
-    <sys:String x:Key="刷新+">刷新目录 Ctrl+R</sys:String>
-    <sys:String x:Key="删除+">删除目标 Delete</sys:String>
+
     <!--编辑页-->
+    <sys:String x:Key="撤重">撤销重做</sys:String>
+    <sys:String x:Key="撤销">撤销</sys:String>
+    <sys:String x:Key="撤销+">撤销 Ctrl+Z</sys:String>
+    <sys:String x:Key="重做">重做</sys:String>
+    <sys:String x:Key="重做+">重做 Ctrl+Y</sys:String>
+    <sys:String x:Key="转换">简繁转换</sys:String>
+    <sys:String x:Key="转繁">转繁</sys:String>
+    <sys:String x:Key="转繁+">转为繁体 Ctrl+Shift+K</sys:String>
+    <sys:String x:Key="转简">转简</sys:String>
+    <sys:String x:Key="转简+">转为简体 Ctrl+Shift+J</sys:String>
     <sys:String x:Key="查换">查找替换</sys:String>
+    <sys:String x:Key="查换+">查找替换 Ctrl+F</sys:String>
     <sys:String x:Key="查内">查找内容</sys:String>
     <sys:String x:Key="换内">替换内容</sys:String>
     <sys:String x:Key="查下">查找下一个</sys:String>
     <sys:String x:Key="换下">替换下一个</sys:String>
     <sys:String x:Key="换全">替换全部</sys:String>
-    <sys:String x:Key="查换+">查找替换 Ctrl+F</sys:String>
+    
     <!--设置页-->
+    <sys:String x:Key="重置">重置</sys:String>
+    <sys:String x:Key="清空">清空</sys:String>
+    <sys:String x:Key="重置+">重置设置</sys:String>
+    <sys:String x:Key="清空+">清空运行信息</sys:String>
     <sys:String x:Key="语言">语言</sys:String>
     <sys:String x:Key="主题">主题</sys:String>
     <sys:String x:Key="字体">字体</sys:String>
@@ -86,7 +74,6 @@
     <sys:String x:Key="启动">启动</sys:String>
     <sys:String x:Key="补全">补全</sys:String>
     <sys:String x:Key="缩进">缩进</sys:String>
-    <!--<sys:String x:Key="保存">保存</sys:String>-->
     <sys:String x:Key="备份">备份</sys:String>
     <sys:String x:Key="显示运行信息">显示运行信息</sys:String>
     <sys:String x:Key="自动检查更新">检查更新</sys:String>
@@ -96,28 +83,30 @@
     <sys:String x:Key="间隔时间自动保存">间隔时间自动保存</sys:String>
     <sys:String x:Key="文章切换时自动保存">文章切换时自动保存</sys:String>
     <sys:String x:Key="间隔时间自动备份">间隔时间自动备份</sys:String>
+    
     <!--信息页-->
+    <sys:String x:Key="官网">官方网站</sys:String>
+    <sys:String x:Key="开源">开源地址</sys:String>
+    <sys:String x:Key="讨论">讨论群聊</sys:String>
+    <sys:String x:Key="前往">前往</sys:String>
     <sys:String x:Key="名称">应用名称</sys:String>
     <sys:String x:Key="说明">应用说明</sys:String>
     <sys:String x:Key="作者">应用作者</sys:String>
     <sys:String x:Key="版本">当前版本</sys:String>
     <sys:String x:Key="日志">更新日志</sys:String>
     <sys:String x:Key="赞助">赞助比特币</sys:String>
-    <sys:String x:Key="点复">点击复制</sys:String>
+    <sys:String x:Key="复制">复制</sys:String>
 
     <!--右侧区域-->
     <sys:String x:Key="欢迎使用">欢迎使用</sys:String>
     <sys:String x:Key="启动次数">启动次数</sys:String>
-    <sys:String x:Key="启动时间">启动时间</sys:String>
-    <sys:String x:Key="上次启动时间">上次启动时间</sys:String>
-    <sys:String x:Key="上次关闭时间">上次关闭时间</sys:String>
-    <sys:String x:Key="总运行时长">总运行时长</sys:String>
     <sys:String x:Key="行">行</sys:String>
     <sys:String x:Key="列">列</sys:String>
     <sys:String x:Key="字数">字数</sys:String>
     <sys:String x:Key="全书字数">全书字数</sys:String>
 
     <!--提示消息-->
+    <sys:String x:Key="用户协议">用户协议</sys:String>
     <sys:String x:Key="提示">提示</sys:String>
     <sys:String x:Key="创建或打开以开始">创建或打开一本书籍以开始</sys:String>
     <sys:String x:Key="未打开任何书籍">当前没有打开任何书籍</sys:String>
@@ -173,7 +162,7 @@
 
     <sys:String x:Key="下一个主题的配置文件不存在">下一个主题的配置文件不存在</sys:String>
     <sys:String x:Key="偏好主题的不存在">偏好主题的不存在，已载入默认主题</sys:String>
-    <sys:String x:Key="已清空运行信息">已清空运行信息，你需要重新启动软件</sys:String>
+    <sys:String x:Key="已清空运行信息">已清空运行信息，是否关闭软件？</sys:String>
     
     <sys:String x:Key="已重置">偏好设置已重置</sys:String>
     <sys:String x:Key="已更改">偏好设置已更改</sys:String>

@@ -5,24 +5,6 @@
     <Setting Name="runTimes" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="thisStartTime" Type="System.DateTime" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="thisEndTime" Type="System.DateTime" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="thisTotalTime" Type="System.TimeSpan" Scope="User">
-      <Value Profile="(Default)">00:00:00</Value>
-    </Setting>
-    <Setting Name="lastStartTime" Type="System.DateTime" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="lastEndTime" Type="System.DateTime" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="totalTime" Type="System.TimeSpan" Scope="User">
-      <Value Profile="(Default)">00:00:00</Value>
-    </Setting>
     <Setting Name="bookCounts" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>

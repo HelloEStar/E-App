@@ -28,9 +28,17 @@ namespace E.Utility
         /// </summary>
         public string Copyright { get; }
         /// <summary>
+        /// 用户协议
+        /// </summary>
+        public string UserAgreement { get; }
+        /// <summary>
         /// 当前版本
         /// </summary>
         public Version Version { get; }
+        /// <summary>
+        /// 当前版本短写
+        /// </summary>
+        public string VersionShort { get { return Version.Major + "." + Version.Minor + "." + Version.Build; } }
         /// <summary>
         /// 更新日志
         /// </summary>
@@ -40,18 +48,6 @@ namespace E.Utility
         /// 主页链接
         /// </summary>
         public string HomePage { get; }
-        /// <summary>
-        /// 信息链接
-        /// </summary>
-        public string InfoPage { get; }
-        /// <summary>
-        /// 下载链接
-        /// </summary>
-        public string DownloadPage { get; }
-        /// <summary>
-        /// 反馈链接
-        /// </summary>
-        public string FeedbackPage { get; }
         /// <summary>
         /// GitHub链接
         /// </summary>
@@ -69,48 +65,23 @@ namespace E.Utility
         /// </summary>
         public string BitCoinAddress { get; }
 
-        public AppInfo(string name, string description, string company, string copyright, Version version, string updateNote, 
-                       string homePage, string infoPage, string downloadPage, string gitHubPage, string qqGroupLink, string qqGroupNumber, string bitCoinAddress)
+        public AppInfo(string name, string description, string company, string copyright, string userAgreement, Version version, string updateNote, 
+                       string homePage, string gitHubPage, string qqGroupLink, string qqGroupNumber, string bitCoinAddress)
         {
             Name = name;
             Description = description;
             Company = company;
             Copyright = copyright;
+            UserAgreement = userAgreement;
             Version = version;
             UpdateNote = updateNote;
 
             HomePage = homePage;
-            InfoPage = infoPage;
-            DownloadPage = downloadPage;
             GitHubPage = gitHubPage;
             QQGroupLink = qqGroupLink;
             QQGroupNumber = qqGroupNumber;
             BitCoinAddress = bitCoinAddress;
         }
-
-        //public struct UpdateNote
-        //{
-        //    /// <summary>
-        //    /// 版本号
-        //    /// </summary>
-        //    public Version Version { get; set; }
-        //    /// <summary>
-        //    /// 发布日期
-        //    /// </summary>
-        //    public DateTime Time { get; set; }
-        //    /// <summary>
-        //    /// 新增功能
-        //    /// </summary>
-        //    public string[] Features { get; set; }
-        //    /// <summary>
-        //    /// 优化调整
-        //    /// </summary>
-        //    public string[] Optimizations { get; set; }
-        //    /// <summary>
-        //    /// 问题修复
-        //    /// </summary>
-        //    public string[] Fixs { get; set; }
-        //}
     }
 
     /// <summary>

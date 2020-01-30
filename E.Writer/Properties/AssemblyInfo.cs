@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("E Writer")]
 [assembly: AssemblyDescription("这是一个小巧又强大的码字工具。")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("E Star")]
+[assembly: AssemblyCompany("益菌@浮泽工作室")]
 [assembly: AssemblyProduct("E Writer")]
-[assembly: AssemblyCopyright("Copyright ©  2018 菌临天下工作室")]
+[assembly: AssemblyCopyright("Copyright ©  2020 浮泽工作室")]
 [assembly: AssemblyTrademark("E Writer")]
 [assembly: AssemblyCulture("")]
 
@@ -51,7 +51,7 @@ using System.Windows;
 // 可以指定所有值，也可以使用以下所示的 "*" 预置版本号和修订号
 // 方法是按如下所示使用“*”: :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.1927")]
-[assembly: AssemblyFileVersion("1.0.0.1927")]
+[assembly: AssemblyVersion("1.1.0.20030")]
+[assembly: AssemblyFileVersion("1.1.0.20030")]
 [assembly: NeutralResourcesLanguage("zh")]
 
