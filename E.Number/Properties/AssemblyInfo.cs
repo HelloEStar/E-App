@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("E Number")]
 [assembly: AssemblyDescription("这是一个随机数生成器。")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("菌临天下工作室")]
+[assembly: AssemblyCompany("益菌@浮泽工作室")]
 [assembly: AssemblyProduct("E Number")]
-[assembly: AssemblyCopyright("Copyright ©  2018 菌临天下工作室")]
+[assembly: AssemblyCopyright("Copyright ©  2018 浮泽工作室")]
 [assembly: AssemblyTrademark("E Number")]
 [assembly: AssemblyCulture("")]
 
@@ -51,5 +51,5 @@ using System.Windows;
 // 可以指定所有值，也可以使用以下所示的 "*" 预置版本号和修订号
 // 方法是按如下所示使用“*”: :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.1929")]
-[assembly: AssemblyFileVersion("1.0.0.1929")]
+[assembly: AssemblyVersion("1.1.0.20033")]
+[assembly: AssemblyFileVersion("1.1.0.20033")]

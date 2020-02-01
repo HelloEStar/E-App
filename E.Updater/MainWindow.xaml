@@ -527,9 +527,6 @@
                     </WrapPanel>
                     <WrapPanel  x:Name="BtnsAbout" Orientation="Vertical" Visibility="Collapsed">
                         <Button x:Name="BtnHomePage" Content="{DynamicResource 官网}" ToolTip="{DynamicResource 官网+}" Style="{DynamicResource 工具按钮样式}" Click="BtnHomePage_Click"/>
-                        <Button x:Name="BtnInfoPage" Content="{DynamicResource 主页}" ToolTip="{DynamicResource 主页+}" Style="{DynamicResource 工具按钮样式}" Click="BtnInfoPage_Click" />
-                        <Button x:Name="BtnDownloadPage" Content="{DynamicResource 下载}" ToolTip="{DynamicResource 下载+}" Style="{DynamicResource 工具按钮样式}" Click="BtnDownloadPage_Click"/>
-                        <Button x:Name="BtnFeedbackPage" Content="{DynamicResource 反馈}" ToolTip="{DynamicResource 反馈+}" Style="{DynamicResource 工具按钮样式}" Click="BtnFeedbackPage_Click"/>
                         <Button x:Name="BtnGitHubPage" Content="{DynamicResource 开源}" ToolTip="{DynamicResource 开源+}" Style="{DynamicResource 工具按钮样式}" Click="BtnGitHubPage_Click"/>
                         <Button x:Name="BtnQQGroup" Content="{DynamicResource 讨论}" ToolTip="{DynamicResource 讨论+}" Style="{DynamicResource 工具按钮样式}" Click="BtnQQGroup_Click"/>
                     </WrapPanel>

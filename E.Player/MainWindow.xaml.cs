@@ -650,13 +650,6 @@ namespace E.Player
             SetTheme(index);
         }
         /// <summary>
-        /// 设置播放模式
-        /// </summary>
-        private void SetPlayMode(int index)
-        {
-            Settings.Default.PlayMode = index;
-        }
-        /// <summary>
         /// 重置主题颜色
         /// </summary>
         /// <param name="themePath">主题文件路径</param>
@@ -684,6 +677,13 @@ namespace E.Player
         {
             Resources.Remove(colorName);
             Resources.Add(colorName, new SolidColorBrush(c));
+        }
+        /// <summary>
+        /// 设置播放模式
+        /// </summary>
+        private void SetPlayMode(int index)
+        {
+            Settings.Default.PlayMode = index;
         }
 
         /// <summary>
@@ -1034,13 +1034,13 @@ namespace E.Player
         /// <summary>
         /// 显示消息
         /// </summary>
-        /// <param name="tip">资源名</param>
+        /// <param name="message">资源名</param>
         /// <param name="newBox">是否弹出对话框</param>
-        private void ShowMessage(string tip, bool newBox = false)
+        private void ShowMessage(string message, bool newBox = false)
         {
             if (newBox)
             {
-                MessageBox.Show(tip.ToString());
+                MessageBox.Show(message.ToString());
             }
             else
             {
@@ -1056,7 +1056,7 @@ namespace E.Player
                     //为元素设置BeginAnimation方法。
                     LblMessage.BeginAnimation(OpacityProperty, doubleAnimation);
 
-                    LblMessage.Content = tip;
+                    LblMessage.Content = message;
                 }
             }
         }
@@ -1859,8 +1859,7 @@ namespace E.Player
             if (CbbLanguages.SelectedItem != null)
             {
                 ComboBoxItem cbi = CbbLanguages.SelectedItem as ComboBoxItem;
-                ResourceDictionary rd = cbi.Tag as ResourceDictionary;
-                if (rd != null)
+                if (cbi.Tag is ResourceDictionary rd)
                 {
                     //主窗口更改语言
                     if (Resources.MergedDictionaries.Count > 0)

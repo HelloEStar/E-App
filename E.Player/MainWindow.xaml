@@ -726,7 +726,7 @@
         <DockPanel>
             <!--菜单栏-->
             <Grid x:Name="PanMenu" Style="{DynamicResource 菜单栏样式}" >
-                <StackPanel DockPanel.Dock="Top">
+                <StackPanel>
                     <Button x:Name="BtnFile" Content="{DynamicResource 文件}" ToolTip="{DynamicResource 文件+}" Style="{DynamicResource 菜单按钮样式}" Click="BtnFile_Click" BorderThickness="4,0,0,0"/>
                     <Button x:Name="BtnEdit" Content="{DynamicResource 编辑}" ToolTip="{DynamicResource 编辑+}" Style="{DynamicResource 菜单按钮样式}" Click="BtnEdit_Click"/>
                     <Button x:Name="BtnSetting" Content="{DynamicResource 设置}" ToolTip="{DynamicResource 设置+}" Style="{DynamicResource 菜单按钮样式}" Click="BtnSetting_Click"/>

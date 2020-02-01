@@ -2,50 +2,52 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <!--菜单-->
-    <sys:String x:Key="折叠">Fold</sys:String>
+    <!--菜单栏-->
     <sys:String x:Key="记录">Record</sys:String>
+    <sys:String x:Key="生成">Random</sys:String>
+    <sys:String x:Key="文件">File</sys:String>
+    <sys:String x:Key="文件+">File List F</sys:String>
+    <sys:String x:Key="编辑">Edit</sys:String>
+    <sys:String x:Key="编辑+">Edit Panel</sys:String>
     <sys:String x:Key="设置">Setting</sys:String>
+    <sys:String x:Key="设置+">Setting Panel</sys:String>
     <sys:String x:Key="关于">About</sys:String>
+    <sys:String x:Key="关于+">About Panel</sys:String>
 
+    <!--工具栏-->
+    <!--文件页-->
     <sys:String x:Key="清空">Clear</sys:String>
     <sys:String x:Key="清空+">Clear Records</sys:String>
-    
-    <sys:String x:Key="重置">Reset</sys:String>
-    <sys:String x:Key="重置+">Reset Settings</sys:String>
-
-    <sys:String x:Key="官网">OffiWeb</sys:String>
-    <sys:String x:Key="主页">AppInfo</sys:String>
-    <sys:String x:Key="下载">Download</sys:String>
-    <sys:String x:Key="反馈">Feedback</sys:String>
-    <sys:String x:Key="开源">OpenSource</sys:String>
-    <sys:String x:Key="讨论">Discuss</sys:String>
-    <sys:String x:Key="官网+">Official Website F1</sys:String>
-    <sys:String x:Key="主页+">APP Main Page F2</sys:String>
-    <sys:String x:Key="下载+">Download Page F3</sys:String>
-    <sys:String x:Key="反馈+">Feedback Page F4</sys:String>
-    <sys:String x:Key="开源+">GitHub Open Source Page F5</sys:String>
-    <sys:String x:Key="讨论+">QQ Discuss Group F6</sys:String>
-
-    <!--面板-->
+    <!--编辑页-->
+    <!--设置页-->
     <sys:String x:Key="语言">Language</sys:String>
     <sys:String x:Key="主题">Theme</sys:String>
     <sys:String x:Key="最小">Min Value</sys:String>
     <sys:String x:Key="最大">Max Value</sys:String>
-    
+    <sys:String x:Key="保存">Save</sys:String>
+    <sys:String x:Key="保存+">Save Settings</sys:String>
+    <sys:String x:Key="重置">Reset</sys:String>
+    <sys:String x:Key="重置+">Reset Settings</sys:String>
+
+    <!--信息页-->
+    <sys:String x:Key="官网">Official Website</sys:String>
+    <sys:String x:Key="开源">Open Source Page</sys:String>
+    <sys:String x:Key="讨论">Discuss Group</sys:String>
+    <sys:String x:Key="前往">Go to</sys:String>
     <sys:String x:Key="名称">App Name</sys:String>
     <sys:String x:Key="说明">Description</sys:String>
     <sys:String x:Key="版本">Version</sys:String>
     <sys:String x:Key="作者">Developer</sys:String>
     <sys:String x:Key="日志">Update Log</sys:String>
     <sys:String x:Key="赞助">Sponsor BitCoin</sys:String>
-    <sys:String x:Key="点复">Click to Copy</sys:String>
+    <sys:String x:Key="复制">Copy</sys:String>
 
     <!--提示消息-->
     <sys:String x:Key="下一个主题的配置文件不存在">Next Theme's file isn't exist</sys:String>
     <sys:String x:Key="偏好主题的不存在">Theme isn't exist, default theme loaded</sys:String>
+    <sys:String x:Key="范围错误">Min must smaller than Max</sys:String>
 
-    <sys:String x:Key="已重置">Preferences Reseted</sys:String>
-    <sys:String x:Key="已更改">Preferences Changed</sys:String>
-    <sys:String x:Key="已载入">Preferences Loaded</sys:String>
+    <sys:String x:Key="已重置">Settings Reseted</sys:String>
+    <sys:String x:Key="已保存">Settings Saved</sys:String>
+    <sys:String x:Key="已载入">Settings Loaded</sys:String>
 </ResourceDictionary>

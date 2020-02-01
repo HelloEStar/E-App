@@ -86,17 +86,22 @@ namespace E.Updater
             AssemblyDescriptionAttribute description = (AssemblyDescriptionAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyDescriptionAttribute));
             AssemblyCompanyAttribute company = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyCompanyAttribute));
             AssemblyCopyrightAttribute copyright = (AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyCopyrightAttribute));
-            Stream src = System.Windows.Application.GetResourceStream(new Uri("/文档/更新日志.txt", UriKind.Relative)).Stream;
-            string updateNote = new StreamReader(src, Encoding.UTF8).ReadToEnd();
-            string homePage = "http://estar.zone";
-            string infoPage = "http://estar.zone/introduction/e-number/";
-            string downloadPage = "http://estar.zone/introduction/e-number/";
+
+            Uri uri0 = new Uri("/文档/用户协议.md", UriKind.Relative);
+            Stream src0 = System.Windows.Application.GetResourceStream(uri0).Stream;
+            string userAgreement = new StreamReader(src0, Encoding.UTF8).ReadToEnd();
+
+            Uri uri = new Uri("/文档/更新日志.md", UriKind.Relative);
+            Stream src = System.Windows.Application.GetResourceStream(uri).Stream;
+            string updateNote = new StreamReader(src, Encoding.UTF8).ReadToEnd().Replace("### ", "");
+
+            string homePage = "https://github.com/HelloEStar/E.App/wiki/" + product.Product.Replace(" ", "-");
             string gitHubPage = "https://github.com/HelloEStar/E.App";
             string qqGroupLink = "http://jq.qq.com/?_wv=1027&k=5TQxcvR";
             string qqGroupNumber = "279807070";
             string bitCoinAddress = "19LHHVQzWJo8DemsanJhSZ4VNRtknyzR1q";
-            AppInfo = new AppInfo(product.Product, description.Description, company.Company, copyright.Copyright, new Version(Application.ProductVersion), updateNote,
-                                  homePage, infoPage, downloadPage, gitHubPage, qqGroupLink, qqGroupNumber, bitCoinAddress);
+            AppInfo = new AppInfo(product.Product, description.Description, company.Company, copyright.Copyright, userAgreement, new Version(Application.ProductVersion), updateNote,
+                                  homePage, gitHubPage, qqGroupLink, qqGroupNumber, bitCoinAddress);
         }
         /// <summary>
         /// 载入偏好设置
@@ -1076,18 +1081,6 @@ namespace E.Updater
         private void BtnHomePage_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("explorer.exe", AppInfo.HomePage);
-        }
-        private void BtnInfoPage_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("explorer.exe", AppInfo.InfoPage);
-        }
-        private void BtnDownloadPage_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("explorer.exe", AppInfo.DownloadPage);
-        }
-        private void BtnFeedbackPage_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("explorer.exe", AppInfo.FeedbackPage);
         }
         private void BtnGitHubPage_Click(object sender, RoutedEventArgs e)
         {
