@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Reflection;
+using System.Windows;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -64,6 +65,8 @@ namespace E.Utility
         /// 比特币地址
         /// </summary>
         public string BitCoinAddress { get; }
+
+        public string ThemeFolder { get; } = "主题";
 
         public AppInfo(string name, string description, string company, string copyright, string userAgreement, Version version, string updateNote, 
                        string homePage, string gitHubPage, string qqGroupLink, string qqGroupNumber, string bitCoinAddress)
@@ -211,8 +214,7 @@ namespace E.Utility
             try
             {
                 var netstatus = string.Empty;
-                var connection = 0;
-                if (!InternetGetConnectedState(out connection, 0)) return false;
+                if (!InternetGetConnectedState(out int connection, 0)) return false;
                 if ((connection & INTERNET_CONNECTION_PROXY) != 0)
                     netstatus += " 采用代理上网  \n";
                 if ((connection & INTERNET_CONNECTION_MODEM) != 0)
@@ -260,5 +262,14 @@ namespace E.Utility
             Name = System.IO.Path.GetFileName(path);
             //Name = System.IO.Path.GetDirectoryName(path);
         }
+    }
+
+    public enum MenuTool
+    {
+        无,
+        文件,
+        编辑,
+        设置,
+        关于
     }
 }

@@ -1189,9 +1189,8 @@ namespace E.Writer
         /// <returns>所有txt文件数量</returns>
         private static int GetFileCounts(string _path)
         {
-            int n = 0;
             string[] _files = Directory.GetFiles(_path);
-            n = _files.Count();
+            int n = _files.Count();
             string[] _dirs = Directory.GetDirectories(_path);
             foreach (var _dir in _dirs)
             {
@@ -1313,9 +1312,8 @@ namespace E.Writer
         /// <returns>繁体文字内容</returns>
         private static string GetTraditional(string simplifiedChinese)
         {
-            string traditionalChinese = string.Empty;
             System.Globalization.CultureInfo vCultureInfo = new System.Globalization.CultureInfo("zh-CN", false);
-            traditionalChinese = Microsoft.VisualBasic.Strings.StrConv(simplifiedChinese, Microsoft.VisualBasic.VbStrConv.TraditionalChinese, vCultureInfo.LCID);
+            string traditionalChinese = Microsoft.VisualBasic.Strings.StrConv(simplifiedChinese, Microsoft.VisualBasic.VbStrConv.TraditionalChinese, vCultureInfo.LCID);
             return traditionalChinese;
         }
         /// <summary>
@@ -1325,9 +1323,8 @@ namespace E.Writer
         /// <returns>简体文字内容</returns>
         private static string GetSimplified(string traditionalChinese)
         {
-            string simplifiedChinese = string.Empty;
             System.Globalization.CultureInfo vCultureInfo = new System.Globalization.CultureInfo("zh-CN", false);
-            simplifiedChinese = Microsoft.VisualBasic.Strings.StrConv(traditionalChinese, Microsoft.VisualBasic.VbStrConv.SimplifiedChinese, vCultureInfo.LCID);
+            string simplifiedChinese = Microsoft.VisualBasic.Strings.StrConv(traditionalChinese, Microsoft.VisualBasic.VbStrConv.SimplifiedChinese, vCultureInfo.LCID);
             return simplifiedChinese;
         }
         /// <summary>
@@ -2006,9 +2003,9 @@ namespace E.Writer
         public void RefreshTitle()
         {
             string str = AppInfo.Name + " " + AppInfo.VersionShort;
+            Main.Title = str;
             if (CurrentBook == null)
             {
-                Main.Title = str;
             }
             else
             {
@@ -2016,22 +2013,22 @@ namespace E.Writer
                 {
                     if (CurrentEssay == null)
                     {
-                        Main.Title = str + " - " + CurrentBook.Name;
+                        Main.Title += " - " + CurrentBook.Name;
                     }
                     else
                     {
-                        Main.Title = str + " - " + CurrentBook.Name + @"\" + CurrentEssay.Name;
+                        Main.Title += " - " + CurrentBook.Name + @"\" + CurrentEssay.Name;
                     }
                 }
                 else
                 {
                     if (CurrentEssay == null)
                     {
-                        Main.Title = str + " - " + CurrentBook.Name + @"\" + CurrentChapter.Path.Replace(CurrentBook.Path + @"\", "");
+                        Main.Title += " - " + CurrentBook.Name + @"\" + CurrentChapter.Path.Replace(CurrentBook.Path + @"\", "");
                     }
                     else
                     {
-                        Main.Title = str + " - " + CurrentBook.Name + @"\" + CurrentEssay.Path.Replace(CurrentBook.Path + @"\", "");
+                        Main.Title += " - " + CurrentBook.Name + @"\" + CurrentEssay.Path.Replace(CurrentBook.Path + @"\", "");
                     }
                 }
             }
@@ -3069,8 +3066,6 @@ namespace E.Writer
                 if (TbxFileContent.Text.Contains(TextFind.Text))
                 {
                     int i = Regex.Matches(TbxFileContent.Text, TextFind.Text).Count;
-                    int j = TextFind.Text.Length;
-                    int k = TextReplace.Text.Length;
                     ReplaceText = TextReplace.Text;
                     CurrentFindText = TextFind.Text;
                     //移除、插入、高亮

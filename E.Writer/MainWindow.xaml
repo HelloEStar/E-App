@@ -114,7 +114,7 @@
         <Style x:Key="标题标签样式" TargetType="Label">
             <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
             <Setter Property="Height" Value="30"/>
-            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Margin" Value="5"/>
             <Setter Property="Padding" Value="0"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="FontWeight" Value="Bold"/>
@@ -128,7 +128,7 @@
         <!--检查框样式-->
         <Style x:Key="检查框样式" TargetType="CheckBox">
             <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
-            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Margin" Value="5"/>
             <Setter Property="Padding" Value="5"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
@@ -142,7 +142,7 @@
             <Setter Property="Background" Value="{DynamicResource 一级背景颜色}"/>
             <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
             <Setter Property="Height" Value="30"/>
-            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Margin" Value="5"/>
             <Setter Property="Padding" Value="5"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -279,7 +279,7 @@
             <Setter Property="CaretBrush" Value="{DynamicResource 一级字体颜色}"/>
             <Setter Property="Background" Value="{DynamicResource 三级背景颜色}"/>
             <Setter Property="Height" Value="30"/>
-            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Margin" Value="5"/>
             <Setter Property="Padding" Value="5"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -290,7 +290,7 @@
             <Setter Property="Foreground" Value="{DynamicResource 二级字体颜色}"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Margin" Value="5"/>
         </Style>
 
         <!--流式面板样式-->

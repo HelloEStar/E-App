@@ -89,7 +89,6 @@
     <sys:String x:Key="开源">Open Source Page</sys:String>
     <sys:String x:Key="讨论">Discuss Group</sys:String>
     <sys:String x:Key="前往">Go to</sys:String>
-    
     <sys:String x:Key="名称">App Name</sys:String>
     <sys:String x:Key="说明">Description</sys:String>
     <sys:String x:Key="版本">Version</sys:String>
