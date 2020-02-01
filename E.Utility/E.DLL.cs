@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Reflection;
-using System.Windows;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -264,6 +263,9 @@ namespace E.Utility
         }
     }
 
+    /// <summary>
+    /// 菜单工具栏
+    /// </summary>
     public enum MenuTool
     {
         无,

@@ -101,11 +101,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\User.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>User.settings</DependentUpon>
-    </Compile>
     <Compile Include="Settings.cs" />
     <Page Include="语言\en_US.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -146,10 +141,6 @@
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="Properties\User.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>User.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

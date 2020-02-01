@@ -162,12 +162,9 @@
 
     <sys:String x:Key="下一个主题的配置文件不存在">Next Theme's file isn't exist</sys:String>
     <sys:String x:Key="偏好主题的不存在">Theme isn't exist, default theme loaded</sys:String>
-    <sys:String x:Key="已清空运行信息">Running info cleared, do you want to close now?</sys:String>
-    
-    <sys:String x:Key="已重置">Preferences Reseted</sys:String>
-    <sys:String x:Key="已更改">Preferences Changed</sys:String>
-    <sys:String x:Key="已载入">Preferences Loaded</sys:String>
-    <sys:String x:Key="输入1~999整数">Please input integer from 1 to 999</sys:String>
-    <sys:String x:Key="输入整数">Please input integer</sys:String>
+
+    <sys:String x:Key="已重置">Settings Reseted</sys:String>
+    <sys:String x:Key="已保存">Settings Saved</sys:String>
+    <sys:String x:Key="已载入">Settings Loaded</sys:String>
     
 </ResourceDictionary>

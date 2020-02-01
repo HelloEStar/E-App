@@ -162,12 +162,9 @@
 
     <sys:String x:Key="下一个主题的配置文件不存在">下一个主题的配置文件不存在</sys:String>
     <sys:String x:Key="偏好主题的不存在">偏好主题的不存在，已载入默认主题</sys:String>
-    <sys:String x:Key="已清空运行信息">已清空运行信息，是否关闭软件？</sys:String>
-    
-    <sys:String x:Key="已重置">偏好设置已重置</sys:String>
-    <sys:String x:Key="已更改">偏好设置已更改</sys:String>
-    <sys:String x:Key="已载入">偏好设置已载入</sys:String>
-    <sys:String x:Key="输入1~999整数">请输入1~999整数</sys:String>
-    <sys:String x:Key="输入整数">请输入整数</sys:String>
 
+    <sys:String x:Key="已重置">设置已重置</sys:String>
+    <sys:String x:Key="已保存">设置已保存</sys:String>
+    <sys:String x:Key="已载入">设置已载入</sys:String>
+    
 </ResourceDictionary>

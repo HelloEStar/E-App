@@ -50,17 +50,15 @@ namespace E.Player
         /// 应用信息
         /// </summary>
         private AppInfo AppInfo { get; set; }
+
         /// <summary>
         /// 当前菜单
         /// </summary>
         private MenuTool CurrentMenuTool { get; set; } = MenuTool.文件;
-
         /// <summary>
         /// 播放中的媒体
         /// </summary>
-        //private FileOrFolderInfo PlayingMedia { get; set; }
         private Uri CurrentMedia { get => MetMedia.Source; }
-
         /// <summary>
         /// 是否正在播放
         /// </summary>
@@ -125,7 +123,7 @@ namespace E.Player
             Stream src = System.Windows.Application.GetResourceStream(uri).Stream;
             string updateNote = new StreamReader(src, Encoding.UTF8).ReadToEnd().Replace("### ", "");
 
-            string homePage = "https://github.com/HelloEStar/E.App/wiki/E-Player";
+            string homePage = "https://github.com/HelloEStar/E.App/wiki/" + product.Product.Replace(" ", "-");
             string gitHubPage = "https://github.com/HelloEStar/E.App";
             string qqGroupLink = "http://jq.qq.com/?_wv=1027&k=5TQxcvR";
             string qqGroupNumber = "279807070";
@@ -134,7 +132,7 @@ namespace E.Player
                                   homePage, gitHubPage, qqGroupLink, qqGroupNumber, bitCoinAddress);
         }
         /// <summary>
-        /// 创建语言选项
+        /// 载入语言选项
         /// </summary>
         private void LoadLanguageItems()
         {
@@ -189,7 +187,7 @@ namespace E.Player
         /// <summary>
         /// 载入媒体记录
         /// </summary>
-        private void LoadVideos()
+        private void LoadVideoItems()
         {
             //读取一个字符串，并加入播放列表
             if (!string.IsNullOrEmpty(Settings.Default.FileList))
@@ -209,23 +207,38 @@ namespace E.Player
             }
         }
 
-        //保存
+        //打开
         /// <summary>
-        /// 保存播放列表
+        /// 打开媒体
         /// </summary>
-        private void SavePlaylist()
+        private void OpenMedia()
         {
-            Settings.Default.FileList = "";
-            if (LtbFile.Items.Count > 0)
+            string path = GetFilePath();
+            if (File.Exists(path))
             {
-                List<string> medias = new List<string>();
-                foreach (ListBoxItem item in LtbFile.Items)
-                {
-                    medias.Add(item.Tag.ToString());
-                }
-                Settings.Default.FileList = string.Join("///", medias);
+                Uri uir = new Uri(path);
+                AddPlayListItem(uir, true);
             }
         }
+
+        //关闭
+        /// <summary>
+        /// 关闭媒体
+        /// </summary>
+        private void CloseMedia()
+        {
+            MetMedia.Close();
+            MetMedia.Source = null;
+            IsPlaying = false;
+            ImgCover.IsEnabled = false;
+            LblAllTime.Content = "00:00:00";
+
+            BtnPlay.Content = FindResource("播放");
+
+            RefreshBtnsState();
+        }
+
+        //保存
         /// <summary>
         /// 保存应用设置
         /// </summary>
@@ -263,6 +276,22 @@ namespace E.Player
 
             Settings.Default.Save();
             ShowMessage(FindResource("已保存").ToString());
+        }
+        /// <summary>
+        /// 保存播放列表
+        /// </summary>
+        private void SavePlaylist()
+        {
+            Settings.Default.FileList = "";
+            if (LtbFile.Items.Count > 0)
+            {
+                List<string> medias = new List<string>();
+                foreach (ListBoxItem item in LtbFile.Items)
+                {
+                    medias.Add(item.Tag.ToString());
+                }
+                Settings.Default.FileList = string.Join("///", medias);
+            }
         }
 
         //创建
@@ -306,37 +335,6 @@ namespace E.Player
                 Color color = Color.FromArgb(255, 125, 125, 125);
                 return color;
             }
-        }
-
-        //打开
-        /// <summary>
-        /// 打开媒体
-        /// </summary>
-        private void OpenMedia()
-        {
-            string path = GetFilePath();
-            if (File.Exists(path))
-            {
-                Uri uir = new Uri(path);
-                AddPlayListItem(uir, true);
-            }
-        }
-
-        //关闭
-        /// <summary>
-        /// 关闭媒体
-        /// </summary>
-        private void CloseMedia()
-        {
-            MetMedia.Close();
-            MetMedia.Source = null;
-            IsPlaying = false;
-            ImgCover.IsEnabled = false;
-            LblAllTime.Content = "00:00:00";
-
-            BtnPlay.Content = FindResource("播放");
-
-            RefreshBtnsState();
         }
 
         //添加
@@ -475,6 +473,8 @@ namespace E.Player
             }
         }
 
+        ///删除
+        
         //清空
         /// <summary>
         /// 清空媒体
@@ -680,11 +680,12 @@ namespace E.Player
         /// </summary>
         /// <param name="colorName"></param>
         /// <param name="c"></param>
-        public void SetColor(string colorName, Color c)
+        private void SetColor(string colorName, Color c)
         {
             Resources.Remove(colorName);
             Resources.Add(colorName, new SolidColorBrush(c));
         }
+
         /// <summary>
         /// 设置媒体并播放
         /// </summary>
@@ -825,29 +826,35 @@ namespace E.Player
             Settings.Default.Save();
             ShowMessage(FindResource("已重置").ToString());
         }
-        /// <summary>
-        /// 翻转归位
-        /// </summary>
-        private void ResetFlip()
-        {
-            Settings.Default.FlipLR = false;
-            Settings.Default.FlipUD = false;
-            ScaleTransform scaleTransform = new ScaleTransform
-            {
-                ScaleX = 1,
-                ScaleY = 1
-            };
-            MetMedia.LayoutTransform = scaleTransform;
-        }
-        /// <summary>
-        /// 旋转归位
-        /// </summary>
-        private void ResetRotation()
-        {
-            Settings.Default.Rotation = 0;
-        }
+
+        ///选择
 
         //检查
+        /// <summary>
+        /// 用户是否同意
+        /// </summary>
+        /// <returns></returns>
+        private bool IsUserAgree()
+        {
+            string str = AppInfo.UserAgreement + "\n\n你需要同意此协议才能使用本软件，是否同意？";
+            MessageBoxResult result = MessageBox.Show(str, FindResource("用户协议").ToString(), MessageBoxButton.YesNo);
+            return (result == MessageBoxResult.Yes);
+        }
+        /// <summary>
+        /// 检查用户协议
+        /// </summary>
+        private void CheckUserAgreement()
+        {
+            Settings.Default.RunCount += 1;
+            if (Settings.Default.RunCount == 1)
+            {
+                if (!IsUserAgree())
+                {
+                    Settings.Default.RunCount = 0;
+                    Close();
+                }
+            }
+        }
         /// <summary>
         /// 检测路径是否正确
         /// </summary>
@@ -879,29 +886,28 @@ namespace E.Player
                 return false;
             }
         }
-        /// <summary>
-        /// 用户是否同意
-        /// </summary>
-        /// <returns></returns>
-        private bool IsUserAgree()
-        {
-            string str = AppInfo.UserAgreement + "\n\n你需要同意此协议才能使用本软件，是否同意？";
-            MessageBoxResult result = MessageBox.Show(str, FindResource("用户协议").ToString(), MessageBoxButton.YesNo);
-            return (result == MessageBoxResult.Yes);
-        }
-        /// <summary>
-        /// 检查用户协议
-        /// </summary>
-        private void CheckUserAgreement()
-        {
-            if (!IsUserAgree())
-            {
-                Settings.Default.RunCount = 0;
-                Close();
-            }
-        }
 
         //刷新
+        /// <summary>
+        /// 刷新软件信息
+        /// </summary>
+        private void RefreshAppInfo()
+        {
+            TxtHomePage.Text = AppInfo.HomePage;
+            TxtHomePage.ToolTip = AppInfo.HomePage;
+            TxtGitHubPage.Text = AppInfo.GitHubPage;
+            TxtGitHubPage.ToolTip = AppInfo.GitHubPage;
+            TxtQQGroup.Text = AppInfo.QQGroupNumber;
+            TxtQQGroup.ToolTip = AppInfo.QQGroupLink;
+            TxtBitCoinAddress.Text = AppInfo.BitCoinAddress;
+            TxtBitCoinAddress.ToolTip = AppInfo.BitCoinAddress;
+
+            TxtThisName.Text = AppInfo.Name;
+            TxtDescription.Text = AppInfo.Description;
+            TxtDeveloper.Text = AppInfo.Company;
+            TxtVersion.Text = AppInfo.Version.ToString();
+            TxtUpdateNote.Text = AppInfo.UpdateNote;
+        }
         /// <summary>
         /// 更改主窗口右键菜单和窗口控件状态
         /// </summary>
@@ -1026,26 +1032,6 @@ namespace E.Player
 
         //显示
         /// <summary>
-        /// 显示软件信息
-        /// </summary>
-        private void ShowAppInfo()
-        {
-            TxtHomePage.Text = AppInfo.HomePage;
-            TxtHomePage.ToolTip = AppInfo.HomePage;
-            TxtGitHubPage.Text = AppInfo.GitHubPage;
-            TxtGitHubPage.ToolTip = AppInfo.GitHubPage;
-            TxtQQGroup.Text = AppInfo.QQGroupNumber;
-            TxtQQGroup.ToolTip = AppInfo.QQGroupLink;
-            TxtBitCoinAddress.Text = AppInfo.BitCoinAddress;
-            TxtBitCoinAddress.ToolTip = AppInfo.BitCoinAddress;
-
-            TxtThisName.Text = AppInfo.Name;
-            TxtDescription.Text = AppInfo.Description;
-            TxtDeveloper.Text = AppInfo.Company;
-            TxtVersion.Text = AppInfo.Version.ToString();
-            TxtUpdateNote.Text = AppInfo.UpdateNote;
-        }
-        /// <summary>
         /// 显示消息
         /// </summary>
         /// <param name="tip">资源名</param>
@@ -1098,6 +1084,8 @@ namespace E.Player
                 ImgCover.IsEnabled = false;
             }
         }
+
+        ///隐藏
 
         //切换
         /// <summary>
@@ -1409,30 +1397,24 @@ namespace E.Player
         //主窗口
         private void Main_Loaded(object sender, RoutedEventArgs e)
         {
-            CreateTimer();
-
-            //载入并显示应用信息
+            //载入
             LoadAppInfo();
-            ShowAppInfo();
-
-            //载入控件子项
             LoadLanguageItems();
             LoadThemeItems();
-            LoadVideos();
+            LoadVideoItems();
+
+            ///初始化
+            CreateTimer();
 
             //刷新
-            LblMessage.Opacity = 0;
+            RefreshAppInfo();
             RefreshBtnsState();
             RefreshTitle();
             RefreshRotation();
             RefreshFlip();
 
             //检查用户协议
-            Settings.Default.RunCount += 1;
-            if (Settings.Default.RunCount == 1)
-            {
-                CheckUserAgreement();
-            }
+            CheckUserAgreement();
         }
         private void Main_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -1442,10 +1424,6 @@ namespace E.Player
                 SavePlaylist();
             }
             SaveSettings();
-
-            //重置
-            ResetFlip();
-            ResetRotation();
         }
         private void Main_KeyUp(object sender, KeyEventArgs e)
         {
@@ -1868,11 +1846,11 @@ namespace E.Player
             TxtJumpTime.Text = Settings.Default.JumpTime.ToString();
         }
         ///设置
-        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        private void BtnSaveSettings_Click(object sender, RoutedEventArgs e)
         {
             SaveSettings();
         }
-        private void BtnReset_Click(object sender, RoutedEventArgs e)
+        private void BtnResetSettings_Click(object sender, RoutedEventArgs e)
         {
             ResetSettings();
         }

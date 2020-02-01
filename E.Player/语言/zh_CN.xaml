@@ -138,9 +138,9 @@
     <sys:String x:Key="结束点应靠后">循环结束点应当迟于循环开始点</sys:String>
     <sys:String x:Key="已清除循环">已清除循环</sys:String>
     <sys:String x:Key="已清空媒体列表">已清空媒体列表</sys:String>
-    
-    <sys:String x:Key="已重置">偏好设置已重置</sys:String>
-    <sys:String x:Key="已保存">偏好设置已保存</sys:String>
-    <sys:String x:Key="已载入">偏好设置已载入</sys:String>
+
+    <sys:String x:Key="已重置">设置已重置</sys:String>
+    <sys:String x:Key="已保存">设置已保存</sys:String>
+    <sys:String x:Key="已载入">设置已载入</sys:String>
 
 </ResourceDictionary>

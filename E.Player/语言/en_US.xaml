@@ -138,9 +138,9 @@
     <sys:String x:Key="结束点应靠后">Loop stop point should be later than start point</sys:String>
     <sys:String x:Key="已清除循环">Loop Cleared</sys:String>
     <sys:String x:Key="已清空媒体列表">Clear Media List</sys:String>
-    
-    <sys:String x:Key="已重置">Preferences Reseted</sys:String>
-    <sys:String x:Key="已保存">Preferences Saved</sys:String>
-    <sys:String x:Key="已载入">Preferences Loaded</sys:String>
+
+    <sys:String x:Key="已重置">Settings Reseted</sys:String>
+    <sys:String x:Key="已保存">Settings Saved</sys:String>
+    <sys:String x:Key="已载入">Settings Loaded</sys:String>
 
 </ResourceDictionary>

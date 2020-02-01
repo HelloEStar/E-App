@@ -26,24 +26,24 @@ namespace E.Writer.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int runTimes {
+        public int RunCount {
             get {
-                return ((int)(this["runTimes"]));
+                return ((int)(this["RunCount"]));
             }
             set {
-                this["runTimes"] = value;
+                this["RunCount"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int bookCounts {
+        public int BookCount {
             get {
-                return ((int)(this["bookCounts"]));
+                return ((int)(this["BookCount"]));
             }
             set {
-                this["bookCounts"] = value;
+                this["BookCount"] = value;
             }
         }
         
@@ -62,12 +62,216 @@ namespace E.Writer.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string _lastBook {
+        public string LastBookPath {
             get {
-                return ((string)(this["_lastBook"]));
+                return ((string)(this["LastBookPath"]));
             }
             set {
-                this["_lastBook"] = value;
+                this["LastBookPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Language {
+            get {
+                return ((int)(this["Language"]));
+            }
+            set {
+                this["Language"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("书籍")]
+        public string BooksDir {
+            get {
+                return ((string)(this["BooksDir"]));
+            }
+            set {
+                this["BooksDir"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("备份")]
+        public string BackupDir {
+            get {
+                return ((string)(this["BackupDir"]));
+            }
+            set {
+                this["BackupDir"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Theme {
+            get {
+                return ((int)(this["Theme"]));
+            }
+            set {
+                this["Theme"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("243")]
+        public int DirWidth {
+            get {
+                return ((int)(this["DirWidth"]));
+            }
+            set {
+                this["DirWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsAutoOpenBook {
+            get {
+                return ((bool)(this["IsAutoOpenBook"]));
+            }
+            set {
+                this["IsAutoOpenBook"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsAutoSaveWhenSwitch {
+            get {
+                return ((bool)(this["IsAutoSaveWhenSwitch"]));
+            }
+            set {
+                this["IsAutoSaveWhenSwitch"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsAutoSaveEveryMinutes {
+            get {
+                return ((bool)(this["IsAutoSaveEveryMinutes"]));
+            }
+            set {
+                this["IsAutoSaveEveryMinutes"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int AutoSaveMinute {
+            get {
+                return ((int)(this["AutoSaveMinute"]));
+            }
+            set {
+                this["AutoSaveMinute"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsAutoIndentation {
+            get {
+                return ((bool)(this["IsAutoIndentation"]));
+            }
+            set {
+                this["IsAutoIndentation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("4")]
+        public int AutoIndentations {
+            get {
+                return ((int)(this["AutoIndentations"]));
+            }
+            set {
+                this["AutoIndentations"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Microsoft YaHei")]
+        public string FontFamily {
+            get {
+                return ((string)(this["FontFamily"]));
+            }
+            set {
+                this["FontFamily"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("12")]
+        public int FontSize {
+            get {
+                return ((int)(this["FontSize"]));
+            }
+            set {
+                this["FontSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsAutoCompletion {
+            get {
+                return ((bool)(this["IsAutoCompletion"]));
+            }
+            set {
+                this["IsAutoCompletion"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsShowRunInfo {
+            get {
+                return ((bool)(this["IsShowRunInfo"]));
+            }
+            set {
+                this["IsShowRunInfo"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsAutoBackup {
+            get {
+                return ((bool)(this["IsAutoBackup"]));
+            }
+            set {
+                this["IsAutoBackup"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int AutoBackupMinute {
+            get {
+                return ((int)(this["AutoBackupMinute"]));
+            }
+            set {
+                this["AutoBackupMinute"] = value;
             }
         }
     }
