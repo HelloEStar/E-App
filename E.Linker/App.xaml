@@ -1,9 +1,15 @@
 ﻿<Application x:Class="E.Linker.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:E.Linker"
-             StartupUri="MainWindow.xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <!--这个节点是配置默认语言的-->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="zh_CN.xaml"/>
+                <ResourceDictionary Source="SharedResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

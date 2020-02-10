@@ -9,9 +9,7 @@
         mc:Ignorable="d"
         Title="E Number" Height="450" Width="800" MinWidth="600" MinHeight="450" Icon="图片/E Number.ico" BorderThickness="0" WindowStartupLocation="CenterScreen" Loaded="Main_Loaded" Closing="Main_Closing" KeyUp="Main_KeyUp">
 
-    <!--自定义控件模板-->
     <Window.Resources>
-        <!--设置-->
         <Properties:Settings x:Key="Settings" />
     </Window.Resources>
 

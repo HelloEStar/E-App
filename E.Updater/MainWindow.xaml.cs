@@ -41,14 +41,11 @@ namespace E.Updater
         /// 应用信息
         /// </summary>
         private AppInfo AppInfo { get; set; }
+
         /// <summary>
-        /// 语言列表
+        /// 当前菜单
         /// </summary>
-        private List<ItemInfo> LanguageItems { get; set; } = new List<ItemInfo>();
-        /// <summary>
-        /// 主题集合
-        /// </summary>
-        private List<TextBlock> ThemeItems { get; set; } = new List<TextBlock>();
+        private MenuTool CurrentMenuTool { get; set; } = MenuTool.文件;
 
         //当前版本
         private Version EUThisVer { get; set; }
@@ -77,6 +74,7 @@ namespace E.Updater
         }
 
         //载入
+        //载入
         /// <summary>
         /// 载入应用信息
         /// </summary>
@@ -104,29 +102,27 @@ namespace E.Updater
                                   homePage, gitHubPage, qqGroupLink, qqGroupNumber, bitCoinAddress);
         }
         /// <summary>
-        /// 载入偏好设置
-        /// </summary>
-        private void LoadSettings()
-        {
-            //刷新选中项
-            SelectLanguageItem(User.Default.language);
-            SelectThemeItem(User.Default.ThemePath);
-        }
-        /// <summary>
-        /// 创建语言选项
+        /// 载入语言选项
         /// </summary>
         private void LoadLanguageItems()
         {
-            LanguageItems.Clear();
-            ItemInfo zh_CN = new ItemInfo("中文（默认）", "zh_CN");
-            ItemInfo en_US = new ItemInfo("English", "en_US");
-            LanguageItems.Add(zh_CN);
-            LanguageItems.Add(en_US);
+            List<LanguageItem> LanguageItems = new List<LanguageItem>()
+            {
+                new LanguageItem("中文（默认）", "zh_CN"),
+                new LanguageItem("English", "en_US"),
+            };
 
-            //绑定数据，真正的赋值
-            CbbLanguages.ItemsSource = LanguageItems;
-            CbbLanguages.DisplayMemberPath = "Name";
-            CbbLanguages.SelectedValuePath = "Value";
+            CbbLanguages.Items.Clear();
+            foreach (LanguageItem item in LanguageItems)
+            {
+                ComboBoxItem cbi = new ComboBoxItem
+                {
+                    Content = item.Name,
+                    ToolTip = item.Value,
+                    Tag = item.RD
+                };
+                CbbLanguages.Items.Add(cbi);
+            }
         }
         /// <summary>
         /// 载入所有可用主题
@@ -134,43 +130,28 @@ namespace E.Updater
         private void LoadThemeItems()
         {
             //创建皮肤文件夹
-            if (!Directory.Exists(User.Default.ThemesDir))
-            { Directory.CreateDirectory(User.Default.ThemesDir); }
+            if (!Directory.Exists(AppInfo.ThemeFolder))
+            { Directory.CreateDirectory(AppInfo.ThemeFolder); }
 
-            string[] _mySkins = Directory.GetFiles(User.Default.ThemesDir);
-            ThemeItems.Clear();
-            foreach (string s in _mySkins)
+            CbbThemes.Items.Clear();
+            string[] _mySkins = Directory.GetFiles(AppInfo.ThemeFolder);
+            foreach (string item in _mySkins)
             {
-                string tmp = Path.GetExtension(s);
+                string tmp = Path.GetExtension(item);
                 if (tmp == ".ini" || tmp == ".INI")
                 {
-                    string tmp2 = INIOperator.ReadIniKeys("文件", "类型", s);
+                    string tmp2 = INIOperator.ReadIniKeys("文件", "类型", item);
                     //若是主题配置文件
                     if (tmp2 == "主题")
                     {
-                        string tmp3 = INIOperator.ReadIniKeys("文件", "版本", s);
-                        if (tmp3 == AppInfo.Version.ToString())
+                        ComboBoxItem cbi = new ComboBoxItem
                         {
-                            TextBlock theme = new TextBlock
-                            {
-                                Text = Path.GetFileNameWithoutExtension(s),
-                                ToolTip = s
-                            };
-                            ThemeItems.Add(theme);
-                        }
+                            Content = Path.GetFileNameWithoutExtension(item),
+                            ToolTip = item
+                        };
+                        CbbThemes.Items.Add(cbi);
                     }
                 }
-            }
-
-            CbbThemes.Items.Clear();
-            foreach (TextBlock item in ThemeItems)
-            {
-                TextBlock theme = new TextBlock()
-                {
-                    Text = item.Text,
-                    ToolTip = item.ToolTip
-                };
-                CbbThemes.Items.Add(theme);
             }
         }
 
@@ -214,6 +195,17 @@ namespace E.Updater
                 }
             }
         }
+
+
+        /// <summary>
+        /// 保存应用设置
+        /// </summary>
+        private void SaveSettings()
+        {
+            Settings.Default.Save();
+            ShowMessage(FindResource("已保存").ToString());
+        }
+
 
         //创建
         /// <summary>
@@ -352,91 +344,98 @@ namespace E.Updater
         }
 
         //设置
+        //设置
         /// <summary>
-        /// 设置语言显示
+        /// 设置菜单
         /// </summary>
-        /// <param name="language">语言简拼</param>
-        private void SetLanguage(string language)
+        /// <param name="menu"></param>
+        private void SetMenuTool(MenuTool menu)
         {
-            try
+            switch (menu)
             {
-                ResourceDictionary langRd;
-                langRd = System.Windows.Application.LoadComponent(new Uri(@"语言/" + language + ".xaml", UriKind.Relative)) as ResourceDictionary;
-                if (langRd != null)
-                {
-                    //主窗口更改语言
-                    if (Resources.MergedDictionaries.Count > 0)
-                    {
-                        Resources.MergedDictionaries.Clear();
-                    }
-                    Resources.MergedDictionaries.Add(langRd);
-                    User.Default.language = language;
-                    User.Default.Save();
-                }
+                case MenuTool.无:
+                    //PanFile.Visibility = Visibility.Collapsed;
+                    //PanEdit.Visibility = Visibility.Collapsed;
+                    PanSetting.Visibility = Visibility.Collapsed;
+                    PanAbout.Visibility = Visibility.Collapsed;
+                    //BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
+                    //BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
+                    break;
+                case MenuTool.文件:
+                    //PanFile.Visibility = Visibility.Visible;
+                    //PanEdit.Visibility = Visibility.Collapsed;
+                    PanSetting.Visibility = Visibility.Collapsed;
+                    PanAbout.Visibility = Visibility.Collapsed;
+                    //BtnFile.BorderThickness = new Thickness(4, 0, 0, 0);
+                    //BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
+                    break;
+                case MenuTool.编辑:
+                    //PanFile.Visibility = Visibility.Collapsed;
+                    //PanEdit.Visibility = Visibility.Visible;
+                    PanSetting.Visibility = Visibility.Collapsed;
+                    PanAbout.Visibility = Visibility.Collapsed;
+                    //BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
+                    //BtnEdit.BorderThickness = new Thickness(4, 0, 0, 0);
+                    BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
+                    break;
+                case MenuTool.设置:
+                    //PanFile.Visibility = Visibility.Collapsed;
+                    //PanEdit.Visibility = Visibility.Collapsed;
+                    PanSetting.Visibility = Visibility.Visible;
+                    PanAbout.Visibility = Visibility.Collapsed;
+                    //BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
+                    //BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnSetting.BorderThickness = new Thickness(4, 0, 0, 0);
+                    BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
+                    break;
+                case MenuTool.关于:
+                    //PanFile.Visibility = Visibility.Collapsed;
+                    //PanEdit.Visibility = Visibility.Collapsed;
+                    PanSetting.Visibility = Visibility.Collapsed;
+                    PanAbout.Visibility = Visibility.Visible;
+                    //BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
+                    //BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnAbout.BorderThickness = new Thickness(4, 0, 0, 0);
+                    break;
+                default:
+                    break;
             }
-            catch (Exception e2)
-            {
-                MessageBox.Show(e2.Message);
-            }
+            CurrentMenuTool = menu;
         }
         /// <summary>
-        /// 切换主题显示
+        /// 设置语言选项
         /// </summary>
-        private void SetTheme(string themePath)
+        /// <param name="language">语言简拼</param>
+        private void SetLanguage(int index)
         {
-            foreach (TextBlock theme in ThemeItems)
-            {
-                if (theme.ToolTip.ToString() == themePath)
-                {
-                    if (File.Exists(themePath))
-                    {
-                        SetSkin(themePath);
-                        User.Default.ThemePath = themePath;
-                    }
-                    else
-                    {
-                        ThemeItems.Remove(theme);
-                        //设为默认主题
-                        User.Default.ThemePath = User.Default.ThemePath;
-                        SetSkin(User.Default.ThemePath);
-                        ShowMessage("偏好主题的不存在");
-                    }
-                    User.Default.Save();
-                    break;
-                }
-            }
+            Settings.Default.Language = index;
+        }
+        /// <summary>
+        /// 设置主题选项
+        /// </summary>
+        /// <param name="themePath">主题路径</param>
+        private void SetTheme(int index)
+        {
+            Settings.Default.Theme = index;
         }
         /// <summary>
         /// 切换下个主题显示
         /// </summary>
         private void SetNextTheme()
         {
-            foreach (TextBlock theme in ThemeItems)
+            int index = Settings.Default.Theme;
+            index++;
+            if (index > CbbThemes.Items.Count - 1)
             {
-                if (theme.ToolTip.ToString() == User.Default.ThemePath)
-                {
-                    int themeOrder = ThemeItems.IndexOf(theme);
-                    int themeCounts = ThemeItems.Count;
-                    if (themeOrder + 1 < themeCounts)
-                    { themeOrder += 1; }
-                    else
-                    { themeOrder = 0; }
-                    if (File.Exists(ThemeItems[themeOrder].ToolTip.ToString()))
-                    {
-                        //设为此主题
-                        User.Default.ThemePath = ThemeItems[themeOrder].ToolTip.ToString();
-                        User.Default.Save();
-                        SetSkin(User.Default.ThemePath);
-                    }
-                    else
-                    {
-                        ShowMessage("下一个主题的配置文件不存在");
-                        ThemeItems.Remove(ThemeItems[themeOrder]);
-                    }
-                    break;
-                }
+                index = 0;
             }
-
+            SetTheme(index);
         }
         /// <summary>
         /// 重置主题颜色
@@ -462,7 +461,7 @@ namespace E.Updater
         /// </summary>
         /// <param name="colorName"></param>
         /// <param name="c"></param>
-        private void SetColor(string colorName, Color c)
+        public void SetColor(string colorName, Color c)
         {
             Resources.Remove(colorName);
             Resources.Add(colorName, new SolidColorBrush(c));
@@ -472,51 +471,13 @@ namespace E.Updater
         /// <summary>
         /// 重置应用设置
         /// </summary>
-        private void ResetAppSettings()
+        private void ResetSettings()
         {
             Settings.Default.Reset();
-            ShowMessage("已清空运行信息", true);
-        }
-        /// <summary>
-        /// 重置用户设置
-        /// </summary>
-        private void ResetUserSettings()
-        {
-            User.Default.Reset();
+            ShowMessage(FindResource("已重置").ToString());
         }
 
         //选择
-        ///选择
-        /// <summary>
-        /// 设置语言选项
-        /// </summary>
-        /// <param name="language">语言简拼</param>
-        private void SelectLanguageItem(string language)
-        {
-            foreach (ItemInfo ci in LanguageItems)
-            {
-                if (ci.Value == language)
-                {
-                    CbbLanguages.SelectedItem = ci;
-                    break;
-                }
-            }
-        }
-        /// <summary>
-        /// 设置主题选项
-        /// </summary>
-        /// <param name="themePath">主题路径</param>
-        private void SelectThemeItem(string themePath)
-        {
-            foreach (TextBlock item in CbbThemes.Items)
-            {
-                if (item.ToolTip.ToString() == themePath)
-                {
-                    CbbThemes.SelectedItem = item;
-                    break;
-                }
-            }
-        }
 
         //检查
         private void RefreshAllAppsIsRunning()
@@ -628,6 +589,35 @@ namespace E.Updater
         }
 
         //刷新
+        //刷新
+        /// <summary>
+        /// 刷新软件信息
+        /// </summary>
+        private void RefreshAppInfo()
+        {
+            TxtHomePage.Text = AppInfo.HomePage;
+            TxtHomePage.ToolTip = AppInfo.HomePage;
+            TxtGitHubPage.Text = AppInfo.GitHubPage;
+            TxtGitHubPage.ToolTip = AppInfo.GitHubPage;
+            TxtQQGroup.Text = AppInfo.QQGroupNumber;
+            TxtQQGroup.ToolTip = AppInfo.QQGroupLink;
+            TxtBitCoinAddress.Text = AppInfo.BitCoinAddress;
+            TxtBitCoinAddress.ToolTip = AppInfo.BitCoinAddress;
+
+            TxtThisName.Text = AppInfo.Name;
+            TxtDescription.Text = AppInfo.Description;
+            TxtDeveloper.Text = AppInfo.Company;
+            TxtVersion.Text = AppInfo.Version.ToString();
+            TxtUpdateNote.Text = AppInfo.UpdateNote;
+        }
+        /// <summary>
+        /// 刷新主窗口标题
+        /// </summary>
+        public void RefreshTitle()
+        {
+            string str = AppInfo.Name + " " + AppInfo.VersionShort;
+            Main.Title = str;
+        }
         /// <summary>
         /// 刷新
         /// </summary>
@@ -719,12 +709,12 @@ namespace E.Updater
         /// </summary>
         private void ShowAppInfo()
         {
-            ThisName.Text = AppInfo.Name;
-            Description.Text = AppInfo.Description;
-            Developer.Text = AppInfo.Company;
-            Version.Text = AppInfo.Version.ToString();
-            BitCoinAddress.Text = AppInfo.BitCoinAddress;
-            UpdateNote.Text = AppInfo.UpdateNote;
+            TxtThisName.Text = AppInfo.Name;
+            TxtDescription.Text = AppInfo.Description;
+            TxtDeveloper.Text = AppInfo.Company;
+            TxtVersion.Text = AppInfo.Version.ToString();
+            TxtBitCoinAddress.Text = AppInfo.BitCoinAddress;
+            TxtUpdateNote.Text = AppInfo.UpdateNote;
         }
         /// <summary>
         /// 检测所有目录是否存在
@@ -988,28 +978,84 @@ namespace E.Updater
 
         }
 
+        //切换
+        /// <summary>
+        /// 切换工具面板
+        /// </summary>
+        private void SwitchMenuToolFile()
+        {
+            switch (CurrentMenuTool)
+            {
+                case MenuTool.文件:
+                    SetMenuTool(MenuTool.无);
+                    break;
+                default:
+                    SetMenuTool(MenuTool.文件);
+                    break;
+            }
+        }
+        /// <summary>
+        /// 切换编辑面板
+        /// </summary>
+        private void SwitchMenuToolEdit()
+        {
+            switch (CurrentMenuTool)
+            {
+                case MenuTool.编辑:
+                    SetMenuTool(MenuTool.无);
+                    break;
+                default:
+                    SetMenuTool(MenuTool.编辑);
+                    break;
+            }
+        }
+        /// <summary>
+        /// 切换设置面板
+        /// </summary>
+        private void SwitchMenuToolSetting()
+        {
+            switch (CurrentMenuTool)
+            {
+                case MenuTool.设置:
+                    SetMenuTool(MenuTool.无);
+                    break;
+                default:
+                    SetMenuTool(MenuTool.设置);
+                    break;
+            }
+        }
+        /// <summary>
+        /// 切换关于面板
+        /// </summary>
+        private void SwitchMenuToolAbout()
+        {
+            switch (CurrentMenuTool)
+            {
+                case MenuTool.关于:
+                    SetMenuTool(MenuTool.无);
+                    break;
+                default:
+                    SetMenuTool(MenuTool.关于);
+                    break;
+            }
+        }
 
         #region 事件
         //窗口激活
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //载入并显示应用信息
+            //载入
             LoadAppInfo();
-            ShowAppInfo();
-
-            //载入下拉菜单项
             LoadLanguageItems();
             LoadThemeItems();
 
-            //载入设置
-            LoadSettings();
-
-            //初始化
-            SetLanguage(User.Default.language);
-            SetTheme(User.Default.ThemePath);
+            //刷新
+            RefreshAppInfo();
+            RefreshTitle();
 
             Settings.Default._EU = Application.StartupPath;
             Settings.Default.Save();
+
             //提示消息
             ShowMessage("已载入");
 
@@ -1026,56 +1072,62 @@ namespace E.Updater
             Refresh();
         }
 
-        private void BtnFold_Click(object sender, RoutedEventArgs e)
+
+
+        ///设置
+        private void BtnSaveSettings_Click(object sender, RoutedEventArgs e)
         {
-            if (PanCenter.Visibility == Visibility.Visible)
+            SaveSettings();
+        }
+        private void BtnResetSettings_Click(object sender, RoutedEventArgs e)
+        {
+            ResetSettings();
+        }
+        private void CbbLanguages_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CbbLanguages.SelectedItem != null)
             {
-                PanCenter.Visibility = Visibility.Collapsed;
-                BtnFold.BorderThickness = new Thickness(0, 0, 0, 0);
+                ComboBoxItem cbi = CbbLanguages.SelectedItem as ComboBoxItem;
+                if (cbi.Tag is ResourceDictionary rd)
+                {
+                    //主窗口更改语言
+                    if (Resources.MergedDictionaries.Count > 0)
+                    {
+                        Resources.MergedDictionaries.Clear();
+                    }
+                    Resources.MergedDictionaries.Add(rd);
+                }
+                else
+                {
+                    CbbLanguages.Items.Remove(cbi);
+                    //设为默认主题
+                    SetLanguage(0);
+                }
             }
-            else
+        }
+        private void CbbThemes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CbbThemes.SelectedItem != null)
             {
-                PanCenter.Visibility = Visibility.Visible;
-                BtnFold.BorderThickness = new Thickness(4, 0, 0, 0);
+                ComboBoxItem cbi = CbbThemes.SelectedItem as ComboBoxItem;
+                string themePath = cbi.ToolTip.ToString();
+                if (File.Exists(themePath))
+                {
+                    SetSkin(themePath);
+                }
+                else
+                {
+                    CbbThemes.Items.Remove(cbi);
+                    //设为默认主题
+                    SetTheme(0);
+                }
             }
         }
-        private void BtnSetting_Click(object sender, RoutedEventArgs e)
+
+        ///关于
+        private void BtnBitCoinAddress_Click(object sender, RoutedEventArgs e)
         {
-            PanSetting.Visibility = Visibility.Visible;
-            PanAbout.Visibility = Visibility.Collapsed;
-
-            BtnsSetting.Visibility = Visibility.Visible;
-            BtnsAbout.Visibility = Visibility.Collapsed;
-
-            BtnSetting.BorderThickness = new Thickness(4, 0, 0, 0);
-            BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
-        }
-        private void BtnAbout_Click(object sender, RoutedEventArgs e)
-        {
-            PanSetting.Visibility = Visibility.Collapsed;
-            PanAbout.Visibility = Visibility.Visible;
-
-            BtnsSetting.Visibility = Visibility.Collapsed;
-            BtnsAbout.Visibility = Visibility.Visible;
-
-            BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
-            BtnAbout.BorderThickness = new Thickness(4, 0, 0, 0);
-        }
-
-        private void BtnReset_Click(object sender, RoutedEventArgs e)
-        {
-            ResetUserSettings();
-            LoadSettings();
-            ShowMessage("已重置");
-        }
-        private void BtnRefresh_Click(object sender, RoutedEventArgs e)
-        {
-            Refresh(true);
-        }
-
-        private void BitCoinAddress_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            Clipboard.SetDataObject(BitCoinAddress.Text, true);
+            System.Windows.Clipboard.SetDataObject(TxtBitCoinAddress.Text, true);
             ShowMessage("已复制");
         }
         private void BtnHomePage_Click(object sender, RoutedEventArgs e)
@@ -1091,33 +1143,7 @@ namespace E.Updater
             Process.Start("explorer.exe", AppInfo.QQGroupLink);
         }
 
-        //设置更改事件
-        private void CbbLanguages_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-            if (CbbLanguages.SelectedValue != null)
-            {
-                string langName = CbbLanguages.SelectedValue.ToString();
-                SetLanguage(langName);
-            }
-        }
-        private void CbbThemes_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (CbbThemes.SelectedItem != null)
-            {
-                TextBlock item = CbbThemes.SelectedItem as TextBlock;
-                string tmp = item.ToolTip.ToString();
-                if (File.Exists(tmp))
-                {
-                    SetTheme(tmp);
-                    ShowMessage("已更改");
-                }
-                else
-                {
-                    CbbThemes.Items.Remove(CbbThemes.SelectedItem);
-                    ShowMessage("该主题的配置文件不存在");
-                }
-            }
-        }
+
 
         //浏览
         private void Btn_EUBrowse_Click(object sender, RoutedEventArgs e)
