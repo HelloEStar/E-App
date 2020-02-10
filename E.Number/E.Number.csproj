@@ -168,7 +168,7 @@
     <Resource Include="图片\E Number.ico" />
   </ItemGroup>
   <ItemGroup />
-  <Import Project="..\E.Utility\E.Utility.projitems" Label="Shared" />
+  <Import Project="..\SharedProject\SharedProject.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
     <ItemGroup>

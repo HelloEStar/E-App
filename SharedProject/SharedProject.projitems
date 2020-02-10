@@ -3,22 +3,20 @@
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <HasSharedItems>true</HasSharedItems>
-    <SharedGUID>927e48c9-7f26-4556-b4f8-c65efbf383de</SharedGUID>
+    <SharedGUID>fd904394-84be-4e96-aae0-27d882bca533</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>E.Utility</Import_RootNamespace>
+    <Import_RootNamespace>SharedProject</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)E.Utility.cs" />
-  </ItemGroup>
-  <ItemGroup>
+    <Resource Include="$(MSBuildThisFileDirectory)ICSharpCode.SharpZipLib.dll" />
     <Resource Include="$(MSBuildThisFileDirectory)Tags.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="$(MSBuildThisFileDirectory)ICSharpCode.SharpZipLib.dll" />
+    <Compile Include="$(MSBuildThisFileDirectory)SharedClass.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="$(MSBuildThisFileDirectory)MyStyle.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)SharedResources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -15,17 +15,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E.Linker", "E.Linker\E.Link
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E.Role", "E.Role\E.Role.csproj", "{79907FED-116D-42D5-9B9D-F9C9AAA4D497}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "E.Utility", "E.Utility\E.Utility.shproj", "{927E48C9-7F26-4556-B4F8-C65EFBF383DE}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedProject", "SharedProject\SharedProject.shproj", "{FD904394-84BE-4E96-AAE0-27D882BCA533}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		E.Utility\E.Utility.projitems*{16c7420b-b47a-4ba8-865e-cb8cd91e065e}*SharedItemsImports = 4
-		E.Utility\E.Utility.projitems*{3abae54a-6bec-48df-8661-eff05ae1b347}*SharedItemsImports = 4
-		E.Utility\E.Utility.projitems*{5c87b096-9dcd-46b1-b683-a0fb47dbe2e8}*SharedItemsImports = 4
-		E.Utility\E.Utility.projitems*{79907fed-116d-42d5-9b9d-f9c9aaa4d497}*SharedItemsImports = 4
-		E.Utility\E.Utility.projitems*{927e48c9-7f26-4556-b4f8-c65efbf383de}*SharedItemsImports = 13
-		E.Utility\E.Utility.projitems*{988c0ad6-7dd4-43aa-bb4b-20b95332892b}*SharedItemsImports = 4
-		E.Utility\E.Utility.projitems*{f7551c37-d58c-49af-990a-ff2f17e89642}*SharedItemsImports = 4
+		SharedProject\SharedProject.projitems*{16c7420b-b47a-4ba8-865e-cb8cd91e065e}*SharedItemsImports = 4
+		SharedProject\SharedProject.projitems*{3abae54a-6bec-48df-8661-eff05ae1b347}*SharedItemsImports = 4
+		SharedProject\SharedProject.projitems*{5c87b096-9dcd-46b1-b683-a0fb47dbe2e8}*SharedItemsImports = 4
+		SharedProject\SharedProject.projitems*{79907fed-116d-42d5-9b9d-f9c9aaa4d497}*SharedItemsImports = 4
+		SharedProject\SharedProject.projitems*{988c0ad6-7dd4-43aa-bb4b-20b95332892b}*SharedItemsImports = 4
+		SharedProject\SharedProject.projitems*{f7551c37-d58c-49af-990a-ff2f17e89642}*SharedItemsImports = 4
+		SharedProject\SharedProject.projitems*{fd904394-84be-4e96-aae0-27d882bca533}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

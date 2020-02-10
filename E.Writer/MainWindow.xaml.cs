@@ -27,7 +27,7 @@ using Button = System.Windows.Controls.Button;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 using Settings = E.Writer.Properties.Settings;
-using E.Utility;
+using SharedProject;
 
 namespace E.Writer
 {

@@ -8,7 +8,7 @@
             <!--这个节点是配置默认语言的-->
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="语言\zh_CN.xaml"/>
-                <ResourceDictionary Source="语言\MyStyle.xaml"/>
+                <ResourceDictionary Source="SharedResources.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
         </ResourceDictionary>

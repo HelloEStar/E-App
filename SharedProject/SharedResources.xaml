@@ -1,9 +1,8 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:E.Utility">
+    xmlns:share="clr-namespace:SharedProject">
 
-    <!--自定义控件模板-->
     <!--颜色-->
     <SolidColorBrush x:Key="一级字体颜色" Color="Black" />
     <SolidColorBrush x:Key="二级字体颜色" Color="#FF3C3C3C" />
@@ -707,4 +706,8 @@
         </Setter>
     </Style>
 
+
+    <!--时间间隔转换器-->
+    <share:TimeSpanDoubleConverter x:Key="时间间隔转换器"/>
+    <share:VisibilityBoolConverter x:Key="可见性布尔转换器"/>
 </ResourceDictionary>

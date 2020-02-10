@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows;
+using System.Windows.Data;
 
-namespace E.Utility
+namespace SharedProject
 {
     /// <summary>
     /// 应用信息
@@ -260,6 +263,45 @@ namespace E.Utility
             Path = path;
             Name = System.IO.Path.GetFileName(path);
             //Name = System.IO.Path.GetDirectoryName(path);
+        }
+    }
+
+    public class TimeSpanDoubleConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((TimeSpan)value).TotalSeconds;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return TimeSpan.FromSeconds((double)value);
+        }
+    }
+    public class VisibilityBoolConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (bool)value ? Visibility.Visible : Visibility.Collapsed;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((Visibility)value) == Visibility.Visible;
+        }
+    }
+
+    public class LanguageItem : ResourceDictionary
+    {
+        public string Name { get; set; }
+        public string Value { get; set; }
+        public ResourceDictionary RD { get; set; }
+
+        public LanguageItem(string name, string value)
+        {
+            Name = name;
+            Value = value;
+            Uri uri = new Uri(@"语言\" + value + ".xaml", UriKind.Relative);
+            ResourceDictionary rd = Application.LoadComponent(uri) as ResourceDictionary;
+            RD = rd;
         }
     }
 

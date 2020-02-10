@@ -26,7 +26,7 @@ using TextBox = System.Windows.Controls.TextBox;
 
 using Settings = E.Updater.Properties.Settings;
 using User = E.Updater.Properties.User;
-using E.Utility;
+using SharedProject;
 using System.Windows.Input;
 
 namespace E.Updater

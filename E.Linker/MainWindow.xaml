@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:E.Linker"
+        xmlns:share="clr-namespace:SharedProject"
         mc:Ignorable="d"
         Title="E Linker" Height="600" Width="800">
     <Grid>

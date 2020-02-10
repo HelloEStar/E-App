@@ -17,7 +17,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using E.Utility;
+using SharedProject;
 using Application = System.Windows.Forms.Application;
 using MessageBox = System.Windows.MessageBox;
 using Settings = E.Role.Properties.Settings;
@@ -1139,44 +1139,5 @@ namespace E.Role
     {
         Two,
         Four
-    }
-
-    public class TimeSpanDoubleConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return ((TimeSpan)value).TotalSeconds;
-        }
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return TimeSpan.FromSeconds((double)value);
-        }
-    }
-    public class VisibilityBoolConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return (bool)value ? Visibility.Visible : Visibility.Collapsed;
-        }
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return ((Visibility)value) == Visibility.Visible;
-        }
-    }
-
-    public class LanguageItem : ResourceDictionary
-    {
-        public string Name { get; set; }
-        public string Value { get; set; }
-        public ResourceDictionary RD { get; set; }
-
-        public LanguageItem(string name, string value)
-        {
-            Name = name;
-            Value = value;
-            Uri uri = new Uri(@"语言\" + value + ".xaml", UriKind.Relative);
-            ResourceDictionary rd = System.Windows.Application.LoadComponent(uri) as ResourceDictionary;
-            RD = rd;
-        }
     }
 }

@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Data;
 using System.Globalization;
 using System.Windows.Media.Animation;
-using E.Utility;
+using SharedProject;
 using Application = System.Windows.Forms.Application;
 using MessageBox = System.Windows.MessageBox;
 using Settings = E.Number.Properties.Settings;
@@ -659,33 +659,5 @@ namespace E.Number
             }
         }
         #endregion
-    }
-
-    public class TimeSpanDoubleConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return ((TimeSpan)value).TotalSeconds;
-        }
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return TimeSpan.FromSeconds((double)value);
-        }
-    }
-
-    public class LanguageItem : ResourceDictionary
-    {
-        public string Name { get; set; }
-        public string Value { get; set; }
-        public ResourceDictionary RD { get; set; }
-
-        public LanguageItem(string name, string value)
-        {
-            Name = name;
-            Value = value;
-            Uri uri = new Uri(@"语言\" + value + ".xaml", UriKind.Relative);
-            ResourceDictionary rd = System.Windows.Application.LoadComponent(uri) as ResourceDictionary;
-            RD = rd;
-        }
     }
 }
