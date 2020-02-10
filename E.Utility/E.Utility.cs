@@ -67,7 +67,7 @@ namespace E.Utility
 
         public string ThemeFolder { get; } = "主题";
 
-        public AppInfo(string name, string description, string company, string copyright, string userAgreement, Version version, string updateNote, 
+        public AppInfo(string name, string description, string company, string copyright, string userAgreement, Version version, string updateNote,
                        string homePage, string gitHubPage, string qqGroupLink, string qqGroupNumber, string bitCoinAddress)
         {
             Name = name;

@@ -113,12 +113,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <ProjectReference Include="..\E.Utility\E.Utility.csproj">
-      <Project>{B60DEF26-A70F-412B-99A9-3DAF1E156C16}</Project>
-      <Name>E.Utility</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <Import Project="..\E.Utility\E.Utility.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
     <ItemGroup>

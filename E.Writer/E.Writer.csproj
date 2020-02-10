@@ -101,7 +101,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Settings.cs" />
     <Page Include="语言\en_US.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -171,12 +170,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\E.Utility\E.Utility.csproj">
-      <Project>{b60def26-a70f-412b-99a9-3daf1e156c16}</Project>
-      <Name>E.Utility</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <Import Project="..\E.Utility\E.Utility.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
     <ItemGroup>

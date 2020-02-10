@@ -75,7 +75,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>.\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\E.Utility\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -182,12 +182,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\E.Utility\E.Utility.csproj">
-      <Project>{b60def26-a70f-412b-99a9-3daf1e156c16}</Project>
-      <Name>E.Utility</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <Import Project="..\E.Utility\E.Utility.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
     <ItemGroup>
