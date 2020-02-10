@@ -299,7 +299,7 @@ namespace SharedProject
         {
             Name = name;
             Value = value;
-            Uri uri = new Uri(@"语言\" + value + ".xaml", UriKind.Relative);
+            Uri uri = new Uri(value + ".xaml", UriKind.Relative);
             ResourceDictionary rd = Application.LoadComponent(uri) as ResourceDictionary;
             RD = rd;
         }

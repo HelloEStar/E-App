@@ -3148,7 +3148,7 @@ namespace E.Writer
         {
             Name = name;
             Value = value;
-            Uri uri = new Uri(@"语言\" + value + ".xaml", UriKind.Relative);
+            Uri uri = new Uri(value + ".xaml", UriKind.Relative);
             ResourceDictionary rd = System.Windows.Application.LoadComponent(uri) as ResourceDictionary;
             RD = rd;
         }
