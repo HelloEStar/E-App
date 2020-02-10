@@ -20,6 +20,11 @@ namespace E.Player
         {
             base.OnStartup(e);
             AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
+
+            //MainWindow;
+            MainWindow window = new MainWindow(e.Args);
+            window.Show();
+            MainWindow = window;
         }
 
         private static Assembly OnResolveAssembly(object sender, ResolveEventArgs args)

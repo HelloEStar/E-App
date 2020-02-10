@@ -103,6 +103,27 @@ namespace E.Player
             SetTheme(theme);
             SetLanguage(language);
         }
+        /// <summary>
+        /// 带传入参数的构造器
+        /// </summary>
+        public MainWindow(string[] args) : this()
+        {
+            if (args.Length >0)
+            {
+                for (int i = 0; i < args.Length; i++)
+                {
+                    Uri uir = new Uri(args[i]);
+                    if (i == 0)
+                    {
+                        OpenMedia(args[0]);
+                    }
+                    else
+                    {
+                        AddPlayListItem(uir, false);
+                    }
+                }
+            }
+        }
 
         //载入
         /// <summary>
@@ -214,6 +235,17 @@ namespace E.Player
         private void OpenMedia()
         {
             string path = GetFilePath();
+            if (File.Exists(path))
+            {
+                Uri uir = new Uri(path);
+                AddPlayListItem(uir, true);
+            }
+        }
+        /// <summary>
+        /// 打开媒体
+        /// </summary>
+        public void OpenMedia(string path)
+        {
             if (File.Exists(path))
             {
                 Uri uir = new Uri(path);
