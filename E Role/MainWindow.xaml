@@ -33,9 +33,9 @@
             <Grid x:Name="PanFile" Style="{DynamicResource 工具栏样式}" >
                 <DockPanel>
                     <WrapPanel Style="{DynamicResource 水平流式面板样式}" DockPanel.Dock="Bottom" Height="90" ItemWidth="Auto">
-                        <Button x:Name="BtnCreate" Content="{DynamicResource 生成}" Style="{DynamicResource 自由按钮样式}"  ToolTip="{DynamicResource 生成+}" Click="BtnCreate_Click" Width="240" />
-                        <Button x:Name="BtnRemove" Content="{DynamicResource 移除}" Style="{DynamicResource 自由按钮样式}"  ToolTip="{DynamicResource 移除+}" Click="BtnRemove_Click" Width="120" />
-                        <Button x:Name="BtnClear" Content="{DynamicResource 清空}" Style="{DynamicResource 自由按钮样式}"  ToolTip="{DynamicResource 清空+}" Click="BtnClear_Click" Width="120"/>
+                        <Button x:Name="BtnCreate" Content="{DynamicResource 生成}" Style="{DynamicResource 自由按钮样式}" Click="BtnCreate_Click" Width="240" />
+                        <Button x:Name="BtnRemove" Content="{DynamicResource 移除}" Style="{DynamicResource 自由按钮样式}" Click="BtnRemove_Click" Width="120" />
+                        <Button x:Name="BtnClear" Content="{DynamicResource 清空}" Style="{DynamicResource 自由按钮样式}" Click="BtnClear_Click" Width="120"/>
                         <Button x:Name="BtnExport" Content="{DynamicResource 导出当前}" Style="{DynamicResource 自由按钮样式}"  ToolTip="{DynamicResource 导出当前+}" Click="BtnExport_Click" Width="120" />
                         <Button x:Name="BtnExportAll" Content="{DynamicResource 导出全部}" Style="{DynamicResource 自由按钮样式}"  ToolTip="{DynamicResource 导出全部+}" Click="BtnExportAll_Click" Width="120" />
                     </WrapPanel>
@@ -49,8 +49,8 @@
             <Grid x:Name="PanSetting" Style="{DynamicResource 工具栏样式}" Visibility="Collapsed">
                 <DockPanel>
                     <WrapPanel Style="{DynamicResource 水平流式面板样式}" DockPanel.Dock="Bottom" ItemWidth="120">
-                        <Button x:Name="BtnSaveSettings" Content="{DynamicResource 保存}" ToolTip="{DynamicResource 重置+}" Style="{DynamicResource 自由按钮样式}" Click="BtnSaveSettings_Click"/>
-                        <Button x:Name="BtnResetSettings" Content="{DynamicResource 重置}" ToolTip="{DynamicResource 重置+}" Style="{DynamicResource 自由按钮样式}" Click="BtnResetSettings_Click"/>
+                        <Button x:Name="BtnSaveSettings" Content="{DynamicResource 保存}" Style="{DynamicResource 自由按钮样式}" Click="BtnSaveSettings_Click"/>
+                        <Button x:Name="BtnResetSettings" Content="{DynamicResource 重置}" Style="{DynamicResource 自由按钮样式}" Click="BtnResetSettings_Click"/>
                     </WrapPanel>
 
                     <ScrollViewer>

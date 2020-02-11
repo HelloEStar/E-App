@@ -22,10 +22,10 @@
             <!--菜单栏-->
             <Grid x:Name="PanMenu" Style="{DynamicResource 菜单栏样式}" >
                 <StackPanel>
-                    <Button x:Name="BtnFile" Content="{DynamicResource 文件}" ToolTip="{DynamicResource 文件+}" Style="{DynamicResource 菜单按钮样式}" Click="BtnFile_Click" BorderThickness="4,0,0,0"/>
-                    <Button x:Name="BtnEdit" Content="{DynamicResource 编辑}" ToolTip="{DynamicResource 编辑+}" Style="{DynamicResource 菜单按钮样式}" Click="BtnEdit_Click"/>
-                    <Button x:Name="BtnSetting" Content="{DynamicResource 设置}" ToolTip="{DynamicResource 设置+}" Style="{DynamicResource 菜单按钮样式}" Click="BtnSetting_Click"/>
-                    <Button x:Name="BtnAbout" Content="{DynamicResource 关于}" ToolTip="{DynamicResource 关于+}" Style="{DynamicResource 菜单按钮样式}" Click="BtnAbout_Click"/>
+                    <Button x:Name="BtnFile" Content="{DynamicResource 文件}" Style="{DynamicResource 菜单按钮样式}" Click="BtnFile_Click" BorderThickness="4,0,0,0"/>
+                    <Button x:Name="BtnEdit" Content="{DynamicResource 编辑}" Style="{DynamicResource 菜单按钮样式}" Click="BtnEdit_Click"/>
+                    <Button x:Name="BtnSetting" Content="{DynamicResource 设置}" Style="{DynamicResource 菜单按钮样式}" Click="BtnSetting_Click"/>
+                    <Button x:Name="BtnAbout" Content="{DynamicResource 关于}" Style="{DynamicResource 菜单按钮样式}" Click="BtnAbout_Click"/>
                 </StackPanel>
             </Grid>
 
@@ -34,10 +34,10 @@
             <Grid x:Name="PanFile" Style="{DynamicResource 工具栏样式}" >
                 <DockPanel>
                     <WrapPanel Style="{DynamicResource 水平流式面板样式}" DockPanel.Dock="Top">
-                        <Button x:Name="BtnOpen" Content="{DynamicResource 打开}" ToolTip="{DynamicResource 打开+}" Style="{DynamicResource 自由按钮样式}" Click="BtnOpen_Click"/>
-                        <Button x:Name="BtnAdd" Content="{DynamicResource 添加}" ToolTip="{DynamicResource 添加+}" Style="{DynamicResource 自由按钮样式}" Click="BtnAdd_Click"/>
-                        <Button x:Name="BtnRemove" Content="{DynamicResource 删除}" ToolTip="{DynamicResource 删除+}" Style="{DynamicResource 自由按钮样式}" Click="BtnDelete_Click"/>
-                        <Button x:Name="BtnClear" Content="{DynamicResource 清空}" ToolTip="{DynamicResource 清空+}" Style="{DynamicResource 自由按钮样式}" Click="BtnClear_Click"/>
+                        <Button x:Name="BtnOpen" Content="{DynamicResource 打开}" Style="{DynamicResource 自由按钮样式}" Click="BtnOpen_Click"/>
+                        <Button x:Name="BtnAdd" Content="{DynamicResource 添加}" Style="{DynamicResource 自由按钮样式}" Click="BtnAdd_Click"/>
+                        <Button x:Name="BtnRemove" Content="{DynamicResource 删除}" Style="{DynamicResource 自由按钮样式}" Click="BtnDelete_Click"/>
+                        <Button x:Name="BtnClear" Content="{DynamicResource 清空}" Style="{DynamicResource 自由按钮样式}" Click="BtnClear_Click"/>
                     </WrapPanel>
                     <ListBox x:Name="LtbFile" KeyUp="LtbFile_KeyUp" Drop="LtbFile_Drop" PreviewMouseMove="LtbFile_PreviewMouseMove" PreviewDrop="LtbFile_PreviewDrop" PreviewMouseLeftButtonDown="LtbFile_PreviewMouseLeftButtonDown" Background="{x:Null}" BorderThickness="0"/>
                 </DockPanel>
@@ -93,8 +93,8 @@
             <Grid  x:Name="PanSetting" Style="{DynamicResource 工具栏样式}" Visibility="Collapsed">
                 <DockPanel>
                     <WrapPanel Style="{DynamicResource 水平流式面板样式}" DockPanel.Dock="Bottom" ItemWidth="120">
-                        <Button x:Name="BtnSaveSettings" Content="{DynamicResource 保存}" ToolTip="{DynamicResource 重置+}" Style="{DynamicResource 自由按钮样式}" Click="BtnSaveSettings_Click"/>
-                        <Button x:Name="BtnResetSettings" Content="{DynamicResource 重置}" ToolTip="{DynamicResource 重置+}" Style="{DynamicResource 自由按钮样式}" Click="BtnResetSettings_Click"/>
+                        <Button x:Name="BtnSaveSettings" Content="{DynamicResource 保存}" Style="{DynamicResource 自由按钮样式}" Click="BtnSaveSettings_Click"/>
+                        <Button x:Name="BtnResetSettings" Content="{DynamicResource 重置}" Style="{DynamicResource 自由按钮样式}" Click="BtnResetSettings_Click"/>
                     </WrapPanel>
 
                     <ScrollViewer>

@@ -31,7 +31,7 @@
             <Grid x:Name="PanFile" Style="{DynamicResource 工具栏样式}" >
                 <DockPanel>
                     <WrapPanel Style="{DynamicResource 水平流式面板样式}" DockPanel.Dock="Bottom" ItemWidth="240">
-                        <Button x:Name="BtnClear"  Style="{DynamicResource 自由按钮样式}" Content="{DynamicResource 清空}" ToolTip="{DynamicResource 清空+}" Click="BtnClear_Click"/>
+                        <Button x:Name="BtnClear"  Style="{DynamicResource 自由按钮样式}" Content="{DynamicResource 清空}" Click="BtnClear_Click"/>
                     </WrapPanel>
                     <ListBox x:Name="LtbRecord" Background="{x:Null}" BorderThickness="0"/>
                 </DockPanel>
@@ -43,8 +43,8 @@
             <Grid x:Name="PanSetting" Style="{DynamicResource 工具栏样式}" Visibility="Collapsed" >
                 <DockPanel>
                     <WrapPanel Style="{DynamicResource 水平流式面板样式}" DockPanel.Dock="Bottom" ItemWidth="120">
-                        <Button x:Name="BtnSaveSettings" Content="{DynamicResource 保存}" ToolTip="{DynamicResource 重置+}" Style="{DynamicResource 自由按钮样式}" Click="BtnSaveSettings_Click"/>
-                        <Button x:Name="BtnResetSettings" Content="{DynamicResource 重置}" ToolTip="{DynamicResource 重置+}" Style="{DynamicResource 自由按钮样式}" Click="BtnResetSettings_Click"/>
+                        <Button x:Name="BtnSaveSettings" Content="{DynamicResource 保存}" Style="{DynamicResource 自由按钮样式}" Click="BtnSaveSettings_Click"/>
+                        <Button x:Name="BtnResetSettings" Content="{DynamicResource 重置}" Style="{DynamicResource 自由按钮样式}" Click="BtnResetSettings_Click"/>
                     </WrapPanel>
 
                     <ScrollViewer>

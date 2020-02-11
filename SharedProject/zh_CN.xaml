@@ -10,6 +10,25 @@
     <sys:String x:Key="关于">关于</sys:String>
 
     <!--工具栏-->
+    <!--工具栏 文件页-->
+    <sys:String x:Key="打开">打开</sys:String>
+    <sys:String x:Key="创建">创建</sys:String>
+    <sys:String x:Key="关闭">关闭</sys:String>
+    <sys:String x:Key="删除">删除</sys:String>
+    <sys:String x:Key="保存">保存</sys:String>
+    <sys:String x:Key="另存">另存</sys:String>
+    <sys:String x:Key="导出">导出</sys:String>
+    <sys:String x:Key="信息">信息</sys:String>
+    <sys:String x:Key="展开">展开</sys:String>
+    <sys:String x:Key="收起">收起</sys:String>
+    <sys:String x:Key="刷新">刷新</sys:String>
+    <sys:String x:Key="浏览">浏览</sys:String>
+    <!--工具栏 编辑页-->
+    <sys:String x:Key="撤重">撤销重做</sys:String>
+    <sys:String x:Key="撤销">撤销</sys:String>
+    <sys:String x:Key="撤销+">撤销 Ctrl+Z</sys:String>
+    <sys:String x:Key="重做">重做</sys:String>
+    <sys:String x:Key="重做+">重做 Ctrl+Y</sys:String>
     <!--工具栏 设置页-->
     <sys:String x:Key="重置">重置</sys:String>
     <sys:String x:Key="清空">清空</sys:String>
@@ -45,42 +64,24 @@
 
     <!--Writer-->
     <!--工具栏 文件页-->
-    <sys:String x:Key="书史+">书籍打开历史</sys:String>
-    <sys:String x:Key="打开">打开</sys:String>
-    <sys:String x:Key="打开+">打开书籍 Ctrl+O</sys:String>
-    <sys:String x:Key="创建">创建</sys:String>
-    <sys:String x:Key="创建+">创建面板 Ctrl+B</sys:String>
-    <sys:String x:Key="关闭">关闭</sys:String>
-    <sys:String x:Key="关闭+">关闭书籍 Ctrl+Q</sys:String>
-    <sys:String x:Key="删除">删除</sys:String>
-    <sys:String x:Key="删除+">删除对象 Delete</sys:String>
-    <sys:String x:Key="保存">保存</sys:String>
-    <sys:String x:Key="保存+">保存文章 Ctrl+S</sys:String>
-    <sys:String x:Key="另存">另存</sys:String>
-    <sys:String x:Key="另存+">另存文章 Ctrl+Shift+S</sys:String>
-    <sys:String x:Key="导出">导出</sys:String>
-    <sys:String x:Key="导出+">导出全文 Ctrl+E</sys:String>
-    <sys:String x:Key="信息">信息</sys:String>
-    <sys:String x:Key="信息+">书籍信息 Ctrl+M</sys:String>
-    <sys:String x:Key="展开">展开</sys:String>
-    <sys:String x:Key="展开+">展开目录 Ctrl+I</sys:String>
-    <sys:String x:Key="收起">收起</sys:String>
-    <sys:String x:Key="收起+">收起目录 Ctrl+U</sys:String>
-    <sys:String x:Key="刷新">刷新</sys:String>
-    <sys:String x:Key="刷新+">刷新目录 Ctrl+R</sys:String>
-    <sys:String x:Key="浏览">浏览</sys:String>
-    <sys:String x:Key="浏览+">更改创建对象的存放位置</sys:String>
+    <sys:String x:Key="书籍历史">书籍历史</sys:String>
+    <sys:String x:Key="打开书籍+">打开书籍 Ctrl+O</sys:String>
+    <sys:String x:Key="创建对象+">创建对象 Ctrl+B</sys:String>
+    <sys:String x:Key="关闭书籍+">关闭书籍 Ctrl+Q</sys:String>
+    <sys:String x:Key="删除对象+">删除对象 Delete</sys:String>
+    <sys:String x:Key="保存文章+">保存文章 Ctrl+S</sys:String>
+    <sys:String x:Key="另存文章+">另存文章 Ctrl+Shift+S</sys:String>
+    <sys:String x:Key="导出全文+">导出全文 Ctrl+E</sys:String>
+    <sys:String x:Key="书籍信息+">书籍信息 Ctrl+M</sys:String>
+    <sys:String x:Key="展开目录+">展开目录 Ctrl+I</sys:String>
+    <sys:String x:Key="收起目录+">收起目录 Ctrl+U</sys:String>
+    <sys:String x:Key="刷新目录+">刷新目录 Ctrl+R</sys:String>
     <sys:String x:Key="对象位置">对象位置</sys:String>
     <sys:String x:Key="对象名称">对象名称</sys:String>
     <sys:String x:Key="创书">创建书籍</sys:String>
     <sys:String x:Key="创卷">创建卷册</sys:String>
     <sys:String x:Key="创文">创建文章</sys:String>
     <!--编辑页-->
-    <sys:String x:Key="撤重">撤销重做</sys:String>
-    <sys:String x:Key="撤销">撤销</sys:String>
-    <sys:String x:Key="撤销+">撤销 Ctrl+Z</sys:String>
-    <sys:String x:Key="重做">重做</sys:String>
-    <sys:String x:Key="重做+">重做 Ctrl+Y</sys:String>
     <sys:String x:Key="转换">简繁转换</sys:String>
     <sys:String x:Key="转繁">转繁</sys:String>
     <sys:String x:Key="转繁+">转为繁体 Ctrl+Shift+K</sys:String>
