@@ -2,13 +2,13 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
+    <!--共用部分-->
     <!--菜单栏-->
     <sys:String x:Key="文件">文件</sys:String>
     <sys:String x:Key="记录">记录</sys:String>
     <sys:String x:Key="编辑">编辑</sys:String>
     <sys:String x:Key="设置">设置</sys:String>
     <sys:String x:Key="关于">关于</sys:String>
-
     <!--工具栏-->
     <sys:String x:Key="打开">打开</sys:String>
     <sys:String x:Key="添加">添加</sys:String>
@@ -47,7 +47,6 @@
     <sys:String x:Key="赞助">赞助比特币</sys:String>
     <sys:String x:Key="前往">前往</sys:String>
     <sys:String x:Key="复制">复制</sys:String>
-
     <!--提示消息-->
     <sys:String x:Key="提示">提示</sys:String>
     <sys:String x:Key="欢迎使用">欢迎使用</sys:String>
@@ -178,7 +177,6 @@
     <sys:String x:Key="没有找到该内容">没有找到该内容</sys:String>
     <sys:String x:Key="请输入要查找的内容">请输入要查找的内容</sys:String>
     <sys:String x:Key="共计？处">共计 {0} 处</sys:String>
-
 
     <!--updater-->
     <sys:String x:Key="安装">安装</sys:String>

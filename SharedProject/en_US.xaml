@@ -2,13 +2,13 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
+    <!--共用部分-->
     <!--菜单栏-->
     <sys:String x:Key="文件">File</sys:String>
     <sys:String x:Key="记录">Record</sys:String>
     <sys:String x:Key="编辑">Edit</sys:String>
     <sys:String x:Key="设置">Setting</sys:String>
     <sys:String x:Key="关于">About</sys:String>
-
     <!--工具栏-->
     <sys:String x:Key="打开">Open</sys:String>
     <sys:String x:Key="添加">Add</sys:String>
@@ -47,7 +47,6 @@
     <sys:String x:Key="赞助">Sponsor BitCoin</sys:String>
     <sys:String x:Key="前往">Go to</sys:String>
     <sys:String x:Key="复制">Copy</sys:String>
-
     <!--提示消息-->
     <sys:String x:Key="提示">Help</sys:String>
     <sys:String x:Key="欢迎使用">Welcome to</sys:String>

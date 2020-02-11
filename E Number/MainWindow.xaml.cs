@@ -214,7 +214,37 @@ namespace E.Number
 
         ///选择
 
-        ///检查
+        //检查
+        /// <summary>
+        /// 用户是否同意
+        /// </summary>
+        /// <returns></returns>
+        private bool IsUserAgree()
+        {
+            string str = AppInfo.UserAgreement + "\n\n你需要同意此协议才能使用本软件，是否同意？";
+            MessageBoxResult result = MessageBox.Show(str, FindResource("用户协议").ToString(), MessageBoxButton.YesNo);
+            return (result == MessageBoxResult.Yes);
+        }
+        /// <summary>
+        /// 检查用户协议
+        /// </summary>
+        private void CheckUserAgreement()
+        {
+            Settings.Default.RunCount += 1;
+            if (Settings.Default.RunCount == 1)
+            {
+                if (!IsUserAgree())
+                {
+                    Settings.Default.RunCount = 0;
+                    Close();
+                }
+            }
+        }
+        /// <summary>
+        /// 检测名字是否合法字符
+        /// </summary>
+        /// <param name="name">名字</param>
+        /// <returns>是否合法字符</returns>
 
         //刷新
         /// <summary>
@@ -333,8 +363,8 @@ namespace E.Number
             RefreshAppInfo(); 
             RefreshTitle();
 
-            //提示消息
-            ShowMessage(FindResource("已载入").ToString());
+            //检查用户协议
+            CheckUserAgreement();
         }
         private void Main_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {

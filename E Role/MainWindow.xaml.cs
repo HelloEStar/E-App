@@ -527,6 +527,31 @@ namespace E.Role
 
         //检查
         /// <summary>
+        /// 用户是否同意
+        /// </summary>
+        /// <returns></returns>
+        private bool IsUserAgree()
+        {
+            string str = AppInfo.UserAgreement + "\n\n你需要同意此协议才能使用本软件，是否同意？";
+            MessageBoxResult result = MessageBox.Show(str, FindResource("用户协议").ToString(), MessageBoxButton.YesNo);
+            return (result == MessageBoxResult.Yes);
+        }
+        /// <summary>
+        /// 检查用户协议
+        /// </summary>
+        private void CheckUserAgreement()
+        {
+            Settings.Default.RunCount += 1;
+            if (Settings.Default.RunCount == 1)
+            {
+                if (!IsUserAgree())
+                {
+                    Settings.Default.RunCount = 0;
+                    Close();
+                }
+            }
+        }
+        /// <summary>
         /// 检查范围是否正确
         /// </summary>
         private bool CheckIsCorrectRange()
@@ -705,8 +730,8 @@ namespace E.Role
             RefreshAppInfo();
             RefreshTitle();
 
-            //提示消息
-            ShowMessage(FindResource("已载入").ToString());
+            //检查用户协议
+            CheckUserAgreement();
         }
         private void Main_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {

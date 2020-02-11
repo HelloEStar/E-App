@@ -331,9 +331,34 @@ namespace E.Updater
             ShowMessage(FindResource("已重置").ToString());
         }
 
-        //选择
+        ///选择
 
         //检查
+        /// <summary>
+        /// 用户是否同意
+        /// </summary>
+        /// <returns></returns>
+        private bool IsUserAgree()
+        {
+            string str = AppInfo.UserAgreement + "\n\n你需要同意此协议才能使用本软件，是否同意？";
+            MessageBoxResult result = MessageBox.Show(str, FindResource("用户协议").ToString(), MessageBoxButton.YesNo);
+            return (result == MessageBoxResult.Yes);
+        }
+        /// <summary>
+        /// 检查用户协议
+        /// </summary>
+        private void CheckUserAgreement()
+        {
+            Settings.Default.RunCount += 1;
+            if (Settings.Default.RunCount == 1)
+            {
+                if (!IsUserAgree())
+                {
+                    Settings.Default.RunCount = 0;
+                    Close();
+                }
+            }
+        }
         private void RefreshAllAppsIsRunning()
         {
             if (IsRunning(Settings.Default._EW + "\\E Writer.exe"))
@@ -890,8 +915,8 @@ namespace E.Updater
             Settings.Default._EU = Application.StartupPath;
             Settings.Default.Save();
 
-            //提示消息
-            ShowMessage("已载入");
+            //检查用户协议
+            CheckUserAgreement();
 
             //Thread th = new Thread(new ThreadStart(Refresh));
             //th.Start(true);
