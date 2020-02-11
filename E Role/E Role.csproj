@@ -7,7 +7,7 @@
     <ProjectGuid>{79907FED-116D-42D5-9B9D-F9C9AAA4D497}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>E.Role</RootNamespace>
-    <AssemblyName>E.Role</AssemblyName>
+    <AssemblyName>E Role</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29001.49
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E.Writer", "E.Writer\E.Writer.csproj", "{F7551C37-D58C-49AF-990A-FF2F17E89642}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E Writer", "E Writer\E Writer.csproj", "{F7551C37-D58C-49AF-990A-FF2F17E89642}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E.Updater", "E.Updater\E.Updater.csproj", "{988C0AD6-7DD4-43AA-BB4B-20B95332892B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E Updater", "E Updater\E Updater.csproj", "{988C0AD6-7DD4-43AA-BB4B-20B95332892B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E.Player", "E.Player\E.Player.csproj", "{5C87B096-9DCD-46B1-B683-A0FB47DBE2E8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E Player", "E Player\E Player.csproj", "{5C87B096-9DCD-46B1-B683-A0FB47DBE2E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E.Number", "E.Number\E.Number.csproj", "{16C7420B-B47A-4BA8-865E-CB8CD91E065E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E Number", "E Number\E Number.csproj", "{16C7420B-B47A-4BA8-865E-CB8CD91E065E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E.Linker", "E.Linker\E.Linker.csproj", "{3ABAE54A-6BEC-48DF-8661-EFF05AE1B347}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E Linker", "E Linker\E Linker.csproj", "{3ABAE54A-6BEC-48DF-8661-EFF05AE1B347}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E.Role", "E.Role\E.Role.csproj", "{79907FED-116D-42D5-9B9D-F9C9AAA4D497}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E Role", "E Role\E Role.csproj", "{79907FED-116D-42D5-9B9D-F9C9AAA4D497}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedProject", "SharedProject\SharedProject.shproj", "{FD904394-84BE-4E96-AAE0-27D882BCA533}"
 EndProject
