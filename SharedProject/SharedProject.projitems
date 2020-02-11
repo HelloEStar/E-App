@@ -31,10 +31,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)Themes\浅色主题.ini">
+    <Content Include="$(MSBuildThisFileDirectory)Themes\亮色.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="$(MSBuildThisFileDirectory)Themes\深色主题.ini">
+    <Content Include="$(MSBuildThisFileDirectory)Themes\深色.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

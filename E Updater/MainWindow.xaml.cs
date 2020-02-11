@@ -902,7 +902,7 @@ namespace E.Updater
 
         #region 事件
         //主窗口
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void Main_Loaded(object sender, RoutedEventArgs e)
         {
             //载入
             LanguageHelper.LoadLanguageItems(CbbLanguages);
@@ -922,11 +922,11 @@ namespace E.Updater
             //th.Start(true);
             Refresh(true);
         }
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Main_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-
+            SaveSettings();
         }
-        private void Window_GotFocus(object sender, RoutedEventArgs e)
+        private void Main_GotFocus(object sender, RoutedEventArgs e)
         {
             Refresh();
         }

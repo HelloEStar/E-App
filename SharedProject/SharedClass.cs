@@ -259,18 +259,18 @@ namespace SharedProject
         /// <param name="themePath">主题文件路径</param>
         public static void SetColors(ResourceDictionary resource, string themePath)
         {
-            SetColor(resource, "一级字体颜色", Create(INIOperator.ReadIniKeys("字体", "一级字体", themePath)));
-            SetColor(resource, "二级字体颜色", Create(INIOperator.ReadIniKeys("字体", "二级字体", themePath)));
-            SetColor(resource, "三级字体颜色", Create(INIOperator.ReadIniKeys("字体", "三级字体", themePath)));
+            SetColor(resource, "一级字体颜色", Create(INIOperator.ReadIniKeys("Font", "Level_1", themePath)));
+            SetColor(resource, "二级字体颜色", Create(INIOperator.ReadIniKeys("Font", "Level_2", themePath)));
+            SetColor(resource, "三级字体颜色", Create(INIOperator.ReadIniKeys("Font", "Level_3", themePath)));
 
-            SetColor(resource, "一级背景颜色", Create(INIOperator.ReadIniKeys("背景", "一级背景", themePath)));
-            SetColor(resource, "二级背景颜色", Create(INIOperator.ReadIniKeys("背景", "二级背景", themePath)));
-            SetColor(resource, "三级背景颜色", Create(INIOperator.ReadIniKeys("背景", "三级背景", themePath)));
+            SetColor(resource, "一级背景颜色", Create(INIOperator.ReadIniKeys("Background", "Level_1", themePath)));
+            SetColor(resource, "二级背景颜色", Create(INIOperator.ReadIniKeys("Background", "Level_2", themePath)));
+            SetColor(resource, "三级背景颜色", Create(INIOperator.ReadIniKeys("Background", "Level_3", themePath)));
 
-            SetColor(resource, "一级边框颜色", Create(INIOperator.ReadIniKeys("边框", "一级边框", themePath)));
+            SetColor(resource, "一级边框颜色", Create(INIOperator.ReadIniKeys("Border", "Level_1", themePath)));
 
-            SetColor(resource, "有焦点选中颜色", Create(INIOperator.ReadIniKeys("高亮", "有焦点选中", themePath)));
-            SetColor(resource, "无焦点选中颜色", Create(INIOperator.ReadIniKeys("高亮", "无焦点选中", themePath)));
+            SetColor(resource, "有焦点选中颜色", Create(INIOperator.ReadIniKeys("Highlight", "Focused", themePath)));
+            SetColor(resource, "无焦点选中颜色", Create(INIOperator.ReadIniKeys("Highlight", "UnFocused", themePath)));
         }
     }
 
@@ -316,18 +316,18 @@ namespace SharedProject
         {
             //创建皮肤文件夹
             if (!Directory.Exists(AppInfo.ThemeFolder))
-            { Directory.CreateDirectory(AppInfo.ThemeFolder); }
+            { return; }
 
             cbb.Items.Clear();
-            string[] _mySkins = Directory.GetFiles(AppInfo.ThemeFolder);
-            foreach (string item in _mySkins)
+            string[] themes = Directory.GetFiles(AppInfo.ThemeFolder);
+            foreach (string item in themes)
             {
                 string tmp = Path.GetExtension(item);
                 if (tmp == ".ini" || tmp == ".INI")
                 {
-                    string tmp2 = INIOperator.ReadIniKeys("文件", "类型", item);
+                    string tmp2 = INIOperator.ReadIniKeys("File", "Type", item);
                     //若是主题配置文件
-                    if (tmp2 == "主题")
+                    if (tmp2 == "Theme")
                     {
                         ComboBoxItem cbi = new ComboBoxItem
                         {

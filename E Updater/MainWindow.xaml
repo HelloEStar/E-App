@@ -8,7 +8,7 @@
         xmlns:Properties="clr-namespace:E.Updater.Properties"
         mc:Ignorable="d"
         Name="Main" Title="E Updater" Height="515" Width="560" MinWidth="560" MinHeight="500"  Icon="Resources/E Updater.ico"
-        WindowStartupLocation="CenterScreen" Closing="Window_Closing" Loaded="Window_Loaded" GotFocus="Window_GotFocus">
+        WindowStartupLocation="CenterScreen" Closing="Main_Closing" Loaded="Main_Loaded" GotFocus="Main_GotFocus">
 
     <Window.Resources>
         <Properties:Settings x:Key="Settings" />

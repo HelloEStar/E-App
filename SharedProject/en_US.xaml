@@ -34,6 +34,8 @@
     <sys:String x:Key="清空">Clear</sys:String>
     <sys:String x:Key="语言">Language</sys:String>
     <sys:String x:Key="主题">Theme</sys:String>
+    <sys:String x:Key="亮">Light</sys:String>
+    <sys:String x:Key="暗">Dark</sys:String>
     <sys:String x:Key="最小">Min Value</sys:String>
     <sys:String x:Key="最大">Max Value</sys:String>
     <sys:String x:Key="官网">Official Website</sys:String>

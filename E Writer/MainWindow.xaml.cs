@@ -2067,8 +2067,6 @@ namespace E.Writer
         /// </summary>
         private void Backup()
         {
-            //await Task.Run(() =>
-            //{
             if (Settings.Default.IsAutoBackup == true)
             {
                 if (CurrentBook != null && Directory.Exists(CurrentBook.Path))
@@ -2083,11 +2081,9 @@ namespace E.Writer
                     Directory.CreateDirectory(_path);
                     CopyDirectory(CurrentBook.Path, _path);
                     //显示消息
-                    //Dispatcher.BeginInvoke(new Action(delegate { HelpMessage.Content = "书籍已自动备份于 " + DateTime.Now.ToLongTimeString().ToString(); }));
                     ShowMessage(FindResource("已自动备份于").ToString() + DateTime.Now.ToLongTimeString().ToString());
                 }
             }
-            //});
         }
         #endregion 
 
