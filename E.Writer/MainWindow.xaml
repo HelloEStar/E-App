@@ -7,8 +7,8 @@
         xmlns:share="clr-namespace:SharedProject"
         xmlns:Properties="clr-namespace:E.Writer.Properties"
         mc:Ignorable="d"
-        Title="E Writer" Height="800" Width="1000" MinWidth="600" MinHeight="580" AllowDrop="True" WindowStartupLocation="CenterScreen" Foreground="Black" Background="Black" Icon="图片/E Writer.ico"
-        KeyUp="Main_KeyUp" Loaded="Main_Loaded" Closing="Main_Closing" >
+        Title="E Writer" Height="800" Width="1000" MinWidth="600" MinHeight="580" AllowDrop="True" WindowStartupLocation="CenterScreen" Foreground="Black" Background="Black" 
+        KeyUp="Main_KeyUp" Loaded="Main_Loaded" Closing="Main_Closing" Icon="Resources/E Writer.ico" >
 
     <!--自定义控件模板-->
     <Window.Resources>

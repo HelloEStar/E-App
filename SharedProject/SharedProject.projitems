@@ -9,8 +9,8 @@
     <Import_RootNamespace>SharedProject</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Resource Include="$(MSBuildThisFileDirectory)ICSharpCode.SharpZipLib.dll" />
-    <Resource Include="$(MSBuildThisFileDirectory)Tags.dll" />
+    <Resource Include="$(MSBuildThisFileDirectory)Dlls\ICSharpCode.SharpZipLib.dll" />
+    <Resource Include="$(MSBuildThisFileDirectory)Dlls\Tags.dll" />
     <Resource Include="$(MSBuildThisFileDirectory)UserAgreement.md" />
   </ItemGroup>
   <ItemGroup>
@@ -29,5 +29,16 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Themes\浅色主题.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)Themes\深色主题.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Dlls\" />
   </ItemGroup>
 </Project>

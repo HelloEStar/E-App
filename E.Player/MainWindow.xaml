@@ -7,7 +7,7 @@
         xmlns:Properties="clr-namespace:E.Player.Properties"
         xmlns:share="clr-namespace:SharedProject"
         mc:Ignorable="d"
-        Title="E Player" Height="706" Width="1242" MinWidth="986" MinHeight="550" AllowDrop="True"  Icon="图片/E Player.ico" WindowStartupLocation="CenterScreen"
+        Title="E Player" Height="706" Width="1242" MinWidth="986" MinHeight="550" AllowDrop="True"  Icon="Resources/E Player.ico" WindowStartupLocation="CenterScreen"
         Loaded="Main_Loaded" Closing="Main_Closing" KeyUp="Main_KeyUp" MouseUp="Main_MouseUp">
 
     <!--自定义控件模板-->

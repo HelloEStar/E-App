@@ -3046,20 +3046,4 @@ namespace E.Writer
             }
         }
     }
-
-    public class LanguageItem : ResourceDictionary
-    {
-        public string Name { get; set; }
-        public string Value { get; set; }
-        public ResourceDictionary RD { get; set; }
-
-        public LanguageItem(string name, string value)
-        {
-            Name = name;
-            Value = value;
-            Uri uri = new Uri(value + ".xaml", UriKind.Relative);
-            ResourceDictionary rd = System.Windows.Application.LoadComponent(uri) as ResourceDictionary;
-            RD = rd;
-        }
-    }
 }

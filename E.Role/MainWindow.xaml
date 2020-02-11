@@ -7,7 +7,7 @@
         xmlns:share="clr-namespace:SharedProject"
         xmlns:Properties="clr-namespace:E.Role.Properties"
         mc:Ignorable="d"
-        Title="E Role" Height="400" Width="600" MinWidth="600" MinHeight="350" Icon="图片/E Role.ico" BorderThickness="0" WindowStartupLocation="CenterScreen" Loaded="Main_Loaded" Closing="Main_Closing" KeyUp="Main_KeyUp">
+        Title="E Role" Height="400" Width="600" MinWidth="600" MinHeight="350" Icon="Resources/E Role.ico" BorderThickness="0" WindowStartupLocation="CenterScreen" Loaded="Main_Loaded" Closing="Main_Closing" KeyUp="Main_KeyUp">
 
     <!--自定义控件模板-->
     <Window.Resources>

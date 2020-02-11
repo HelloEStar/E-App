@@ -69,7 +69,7 @@ namespace SharedProject
         /// </summary>
         public string BitCoinAddress { get; }
 
-        public string ThemeFolder { get; } = "主题";
+        public string ThemeFolder { get; } = "Themes";
 
         public AppInfo()
         {
@@ -82,7 +82,7 @@ namespace SharedProject
             Stream src0 = Application.GetResourceStream(uri0).Stream;
             string userAgreement = new StreamReader(src0, Encoding.UTF8).ReadToEnd();
 
-            Uri uri = new Uri("ReleaseNotes.md", UriKind.Relative);
+            Uri uri = new Uri("Resources/ReleaseNotes.md", UriKind.Relative);
             Stream src = Application.GetResourceStream(uri).Stream;
             string updateNote = new StreamReader(src, Encoding.UTF8).ReadToEnd().Replace("### ", "");
 
@@ -385,7 +385,7 @@ namespace SharedProject
         {
             Name = name;
             Value = value;
-            Uri uri = new Uri(value + ".xaml", UriKind.Relative);
+            Uri uri = new Uri( value + ".xaml", UriKind.Relative);
             ResourceDictionary rd = Application.LoadComponent(uri) as ResourceDictionary;
             RD = rd;
         }

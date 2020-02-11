@@ -7,7 +7,7 @@
         xmlns:share="clr-namespace:SharedProject"
         xmlns:Properties="clr-namespace:E.Number.Properties"
         mc:Ignorable="d"
-        Title="E Number" Height="450" Width="800" MinWidth="600" MinHeight="450" Icon="图片/E Number.ico" BorderThickness="0" WindowStartupLocation="CenterScreen" Loaded="Main_Loaded" Closing="Main_Closing" KeyUp="Main_KeyUp">
+        Title="E Number" Height="450" Width="800" MinWidth="600" MinHeight="450" Icon="Resources/E Number.ico" BorderThickness="0" WindowStartupLocation="CenterScreen" Loaded="Main_Loaded" Closing="Main_Closing" KeyUp="Main_KeyUp">
 
     <Window.Resources>
         <Properties:Settings x:Key="Settings" />
