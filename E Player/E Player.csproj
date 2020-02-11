@@ -70,7 +70,7 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="Tags">
-      <HintPath>dll\Tags.dll</HintPath>
+      <HintPath>..\SharedProject\Dlls\Tags.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />

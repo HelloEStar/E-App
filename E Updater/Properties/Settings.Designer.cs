@@ -25,78 +25,6 @@ namespace E.Updater.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string _EP {
-            get {
-                return ((string)(this["_EP"]));
-            }
-            set {
-                this["_EP"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string _EN {
-            get {
-                return ((string)(this["_EN"]));
-            }
-            set {
-                this["_EN"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string _EW {
-            get {
-                return ((string)(this["_EW"]));
-            }
-            set {
-                this["_EW"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("下载")]
-        public string _download {
-            get {
-                return ((string)(this["_download"]));
-            }
-            set {
-                this["_download"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string _EU {
-            get {
-                return ((string)(this["_EU"]));
-            }
-            set {
-                this["_EU"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Temp")]
-        public string _temp {
-            get {
-                return ((string)(this["_temp"]));
-            }
-            set {
-                this["_temp"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int Language {
             get {
@@ -128,6 +56,18 @@ namespace E.Updater.Properties {
             }
             set {
                 this["RunCount"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Paths {
+            get {
+                return ((string)(this["Paths"]));
+            }
+            set {
+                this["Paths"] = value;
             }
         }
     }

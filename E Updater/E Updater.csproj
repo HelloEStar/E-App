@@ -99,11 +99,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppInfoItem.xaml.cs">
+      <DependentUpon>AppInfoItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\User.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>User.settings</DependentUpon>
     </Compile>
+    <Page Include="AppInfoItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -164,6 +171,18 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\E Updater.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\E Number.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\E Player.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\E Role.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\E Writer.ico" />
   </ItemGroup>
   <Import Project="..\SharedProject\SharedProject.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -74,6 +74,8 @@ namespace SharedProject
 
         public static string ThemeFolder { get; } = "Themes";
         public static string BackupFolder { get; } = "Backups";
+        public static string DownloadFolder { get; } = "Downloads";
+        public static string TempFolder { get; } = "TempFiles";
 
         public AppInfo()
         {

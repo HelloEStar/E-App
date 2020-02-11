@@ -13,7 +13,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using MessageBox = System.Windows.MessageBox;
 using Application = System.Windows.Forms.Application;
 using Button = System.Windows.Controls.Button;
-
+using Label = System.Windows.Controls.Label;
 using Settings = E.Updater.Properties.Settings;
 using SharedProject;
 using System.Text.RegularExpressions;
@@ -35,22 +35,6 @@ namespace E.Updater
         /// 当前菜单
         /// </summary>
         private MenuTool CurrentMenuTool { get; set; } = MenuTool.文件;
-
-        //当前版本
-        private Version EUThisVer { get; set; }
-        private Version EWThisVer { get; set; }
-        private Version EPThisVer { get; set; }
-        private Version ENThisVer { get; set; }
-        //最新版本
-        private Version EUNewVer { get; set; }
-        private Version EWNewVer { get; set; }
-        private Version EPNewVer { get; set; }
-        private Version ENNewVer { get; set; }
-        //模块状态
-        private InstallState EUState { get; set; }
-        private InstallState EWState { get; set; }
-        private InstallState EPState { get; set; }
-        private InstallState ENState { get; set; }
         #endregion
 
         #region 方法
@@ -71,7 +55,7 @@ namespace E.Updater
         /// </summary>
         /// <param name="btn"></param>
         /// <param name="path"></param>
-        private void Start(string path)
+        private void Run(string path)
         {
             Process pr = new Process();
             if (File.Exists(path))
@@ -106,7 +90,7 @@ namespace E.Updater
             }
         }
 
-
+        //
         /// <summary>
         /// 保存应用设置
         /// </summary>
@@ -128,16 +112,6 @@ namespace E.Updater
         ///删除
 
         //获取
-        /// <summary>
-        /// 获取所有软件当前版本信息
-        /// </summary>
-        private void GetAllThisVersion()
-        {
-            EUThisVer = GetThisVersion(Settings.Default._EU, "\\E Updater.exe");
-            EWThisVer = GetThisVersion(Settings.Default._EW, "\\E Writer.exe");
-            EPThisVer = GetThisVersion(Settings.Default._EP, "\\E Player.exe");
-            ENThisVer = GetThisVersion(Settings.Default._EN, "\\E Number.exe");
-        }
         /// <summary>
         /// 检测指定目录是否有可执行文件，并获取其版本信息
         /// </summary>
@@ -165,49 +139,6 @@ namespace E.Updater
             }
         }
         /// <summary>
-        /// 获取所有软件最新版本信息
-        /// </summary>
-        /// <returns>所有软件新版本信息</returns>
-        private void GetAllNewVersion()
-        {
-            try
-            {
-                //从网络获取数据
-                WebClient webClient = new WebClient();
-                Stream st = webClient.OpenRead(Settings.Default._LatestVersionInfo);
-                StreamReader stw = new StreamReader(st, Encoding.UTF8);
-                string info = stw.ReadToEnd().Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
-                stw.Close();
-                st.Close();
-
-                string[] infos = info.Split(';');
-                foreach (string items in infos)
-                {
-                    string[] item = items.Split(':');
-                    switch (item[0])
-                    {
-                        case "EU":
-                            EUNewVer = new Version(item[1]);
-                            break;
-                        case "EW":
-                            EWNewVer = new Version(item[1]);
-                            break;
-                        case "EP":
-                            EPNewVer = new Version(item[1]);
-                            break;
-                        case "EN":
-                            ENNewVer = new Version(item[1]);
-                            break;
-                    }
-                }
-                ShowMessage("已获取最新版本信息");
-            }
-            catch (Exception)
-            {
-                ShowMessage("获取最新版本信息时出现错误");
-            }
-        }
-        /// <summary>
         /// 浏览
         /// </summary>
         private string GetFolderPath()
@@ -228,7 +159,10 @@ namespace E.Updater
                 return null;
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         private List<string> GetDownloadLinks()
         {
             List<string> strs = new List<string>();
@@ -390,33 +324,6 @@ namespace E.Updater
                 }
             }
         }
-        private void RefreshAllAppsIsRunning()
-        {
-            if (IsRunning(Settings.Default._EW + "\\E Writer.exe"))
-            {
-                Btn_EWRun.Content = FindResource("终止");
-            }
-            else
-            {
-                Btn_EWRun.Content = FindResource("启动");
-            }
-            if (IsRunning(Settings.Default._EP + "\\E Player.exe"))
-            {
-                Btn_EPRun.Content = FindResource("终止");
-            }
-            else
-            {
-                Btn_EPRun.Content = FindResource("启动");
-            }
-            if (IsRunning(Settings.Default._EN + "\\E Number.exe"))
-            {
-                Btn_ENRun.Content = FindResource("终止");
-            }
-            else
-            {
-                Btn_ENRun.Content = FindResource("启动");
-            }
-        }
         /// <summary>
         /// 检测指定软件是否运行
         /// </summary>
@@ -445,58 +352,6 @@ namespace E.Updater
             }
         }
 
-        /// <summary>
-        /// 对比所有软件当前版本与最新版本信息
-        /// </summary>
-        private void RefreshAllAppsState()
-        {
-            EUState = GetState(EUNewVer, EUThisVer, Settings.Default._EU) ;
-            EWState = GetState(EWNewVer, EWThisVer, Settings.Default._EW);
-            EPState = GetState(EPNewVer, EPThisVer, Settings.Default._EP);
-            ENState = GetState(ENNewVer, ENThisVer, Settings.Default._EN);
-        }
-        /// <summary>
-        /// 对比指定软件当前版本与最新版本信息
-        /// </summary>
-        /// <param name="newVer"></param>
-        /// <param name="thisVer"></param>
-        /// <param name="path"></param>
-        private InstallState GetState(Version newVer, Version thisVer, string path)
-        {
-            InstallState state;
-            if (!Directory.Exists(path))
-            {
-                state = InstallState.未指定安装目录;
-            }
-            else
-            {
-                if (thisVer == null)
-                {
-                    state = InstallState.未找到可执行文件;
-                }
-                else
-                {
-                    state = InstallState.已安装旧版本;
-                    if (newVer != null)
-                    {
-                        int hasNewVersion = newVer.CompareTo(thisVer);
-                        if (hasNewVersion == 1)
-                        {
-                            state = InstallState.已安装旧版本;
-                        }
-                        else
-                        {
-                            state = InstallState.已安装最新版本;
-                        }
-                    }
-                    else
-                    {
-                        ShowMessage("未检测到新版本");
-                    }
-                }
-            }
-            return state;
-        }
 
         //刷新
         /// <summary>
@@ -533,85 +388,18 @@ namespace E.Updater
         /// <param name="isCheckNew"></param>
         private void Refresh(bool isCheckNew = false)
         {
-            //载入目录
-            ShowAllPath();
-
-            //获取版本信息
-            GetAllThisVersion();
-            ShowAllThisVersion();
             if (isCheckNew)
             {
                 if (NetHelper.IsOnLine())
                 {
                     ShowMessage(FindResource("网络连接成功").ToString());
-                    GetAllNewVersion();
-                    ShowAllNewVersion();
                 }
                 else
                 {
                     ShowMessage(FindResource("网络连接失败").ToString());
                 }
             }
-
-            //对比版本
-            RefreshAllAppsState();
-            //设置UI按钮
-            RefreshAllBtnsState();
-            RefreshAllAppsIsRunning();
         }
-        /// <summary>
-        /// 设置所有UI按钮状态
-        /// </summary>
-        private void RefreshAllBtnsState()
-        {
-            RefreshBtnState(EUState, Btn_EUBrowse, Btn_EURun, Btn_EUInstall, Btn_EUUninstall);
-            RefreshBtnState(EWState, Btn_EWBrowse, Btn_EWRun, Btn_EWInstall, Btn_EWUninstall);
-            RefreshBtnState(EPState, Btn_EPBrowse, Btn_EPRun, Btn_EPInstall, Btn_EPUninstall);
-            RefreshBtnState(ENState, Btn_ENBrowse, Btn_ENRun, Btn_ENInstall, Btn_ENUninstall);
-        }
-        /// <summary>
-        /// 设置UI按钮状态
-        /// </summary>
-        /// <param name="state"></param>
-        /// <param name="bro"></param>
-        /// <param name="run"></param>
-        /// <param name="ins"></param>
-        /// <param name="uni"></param>
-        private void RefreshBtnState(InstallState state, Button bro, Button run, Button ins, Button uni)
-        {
-            switch (state)
-            {
-                case InstallState.未指定安装目录:
-                    bro.IsEnabled = true;
-                    ins.IsEnabled = false;
-                    ins.Content = FindResource("安装");
-                    uni.IsEnabled = false;
-                    run.IsEnabled = false;
-                    break;
-                case InstallState.未找到可执行文件:
-                    bro.IsEnabled = true;
-                    ins.IsEnabled = true;
-                    ins.Content = FindResource("安装");
-                    uni.IsEnabled = false;
-                    run.IsEnabled = false;
-                    break;
-                case InstallState.已安装旧版本:
-                    bro.IsEnabled = true;
-                    ins.IsEnabled = true;
-                    ins.Content = FindResource("更新");
-                    uni.IsEnabled = true;
-                    run.IsEnabled = true;
-                    break;
-                case InstallState.已安装最新版本:
-                    bro.IsEnabled = true;
-                    ins.IsEnabled = false;
-                    ins.Content = FindResource("更新");
-                    uni.IsEnabled = true;
-                    run.IsEnabled = true;
-                    break;
-            }
-        }
-
         //显示
         /// <summary>
         /// 显示消息
@@ -621,92 +409,6 @@ namespace E.Updater
         private void ShowMessage(string message, bool newBox = false)
         {
             MessageHelper.ShowMessage(LblMessage, message, newBox);
-        }
-        /// <summary>
-        /// 检测所有目录是否存在
-        /// </summary>
-        private void ShowAllPath()
-        {
-            TBx_EUPath.Text = Settings.Default._EU;
-            TBx_EWPath.Text = Settings.Default._EW;
-            TBx_EPPath.Text = Settings.Default._EP;
-            TBx_ENPath.Text = Settings.Default._EN;
-        }
-        /// <summary>
-        /// 显示最新版本信息
-        /// </summary>
-        private void ShowAllNewVersion()
-        {
-            if (EUNewVer != null)
-            {
-                Lbl_EUNewVer.Text = "最新版本：" + EUNewVer.ToString();
-            }
-            else
-            {
-                Lbl_EUNewVer.Text = "无最新版本";
-            }
-            if (EWNewVer != null)
-            {
-                Lbl_EWNewVer.Text = "最新版本：" + EWNewVer.ToString();
-            }
-            else
-            {
-                Lbl_EWNewVer.Text = "无最新版本";
-            }
-            if (EPNewVer != null)
-            {
-                Lbl_EPNewVer.Text = "最新版本：" + EPNewVer.ToString();
-            }
-            else
-            {
-                Lbl_EPNewVer.Text = "无最新版本";
-            }
-            if (ENNewVer != null)
-            {
-                Lbl_ENNewVer.Text = "最新版本：" + ENNewVer.ToString();
-            }
-            else
-            {
-                Lbl_ENNewVer.Text = "无最新版本";
-            }
-        }
-        /// <summary>
-        /// 显示当前版本信息
-        /// </summary>
-        private void ShowAllThisVersion()
-        {
-            if (EUThisVer != null)
-            {
-                Lbl_EUThisVer.Text = "当前版本：" + EUThisVer.ToString();
-            }
-            else
-            {
-                Lbl_EUThisVer.Text = "未安装任何版本";
-            }
-            if (EWThisVer != null)
-            {
-                Lbl_EWThisVer.Text = "当前版本：" + EWThisVer.ToString();
-            }
-            else
-            {
-                Lbl_EWThisVer.Text = "未安装任何版本";
-            }
-            if (EPThisVer != null)
-            {
-                Lbl_EPThisVer.Text = "当前版本：" + EPThisVer.ToString();
-            }
-            else
-            {
-                Lbl_EPThisVer.Text = "未安装任何版本";
-            }
-            if (ENThisVer != null)
-            {
-                Lbl_ENThisVer.Text = "当前版本：" + ENThisVer.ToString();
-            }
-            else
-            {
-                Lbl_ENThisVer.Text = "未安装任何版本";
-            }
         }
 
         //其它
@@ -722,10 +424,10 @@ namespace E.Updater
             {
                 WebClient webClient = new WebClient();
                 //确保下载文件夹存在
-                if (!Directory.Exists(Settings.Default._download))
-                { Directory.CreateDirectory(Settings.Default._download); }
+                if (!Directory.Exists(AppInfo.DownloadFolder))
+                { Directory.CreateDirectory(AppInfo.DownloadFolder); }
                 //设置存储路径
-                string address = Settings.Default._download + @"\" + name;
+                string address = AppInfo.DownloadFolder + @"\" + name;
                 if (!File.Exists(address))
                 {
                     //开始下载
@@ -733,7 +435,7 @@ namespace E.Updater
                     ShowMessage(name + "下载成功");
                     if (MessageBox.Show(name + " 已完成下载，是否打开下载文件夹", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
-                        Process.Start("explorer.exe", Settings.Default._download);
+                        Process.Start("explorer.exe", AppInfo.DownloadFolder);
                     }
                 }
                 else
@@ -745,7 +447,7 @@ namespace E.Updater
                         ShowMessage(name + "下载成功");
                         if (MessageBox.Show(name + " 已完成下载，是否打开下载文件夹", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                         {
-                            Process.Start("explorer.exe", Settings.Default._download);
+                            Process.Start("explorer.exe", AppInfo.DownloadFolder);
                         }
                     }
                 }
@@ -834,7 +536,7 @@ namespace E.Updater
             if (Directory.Exists(dir))
             {
                 Download(download, name);
-                UnZip(Settings.Default._download + "\\" + name, dir);
+                UnZip(AppInfo.DownloadFolder + "\\" + name, dir);
 
                 ShowMessage(Path.GetFileNameWithoutExtension(name) + "已安装", false);
                 Refresh();
@@ -944,14 +646,9 @@ namespace E.Updater
             RefreshAppInfo();
             RefreshTitle();
 
-            Settings.Default._EU = Application.StartupPath;
-            Settings.Default.Save();
-
             //检查用户协议
             CheckUserAgreement();
 
-            //Thread th = new Thread(new ThreadStart(Refresh));
-            //th.Start(true);
             Refresh(true);
         }
         private void Main_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -1055,51 +752,18 @@ namespace E.Updater
         {
 
         }
-        private void Btn_EWBrowse_Click(object sender, RoutedEventArgs e)
-        {
-            string path = GetFolderPath();
-            if (path != null)
-            {
-                Settings.Default._EW = path;
-                Settings.Default.Save();
-                //更新UI
-                Refresh();
-            }
-        }
-        private void Btn_EPBrowse_Click(object sender, RoutedEventArgs e)
-        {
-            string path = GetFolderPath();
-            if (path != null)
-            {
-                Settings.Default._EP = path;
-                Settings.Default.Save();
-                //更新UI
-                Refresh();
-            }
-        }
-        private void Btn_ENBrowse_Click(object sender, RoutedEventArgs e)
-        {
-            string path = GetFolderPath();
-            if (path != null)
-            {
-                Settings.Default._EN = path;
-                Settings.Default.Save();
-                //更新UI
-                Refresh();
-            }
-        }
         private void Btn_EUInstall_Click(object sender, RoutedEventArgs e)
         {
             //创建的压缩文件名称
-            string name = "E Updater " + EUNewVer + ".zip";
+            string name = "E Updater " + "" + ".zip";
             string _bat = "Update.bat";
             //下载压缩包
-            Download(Settings.Default._EUDownload, name);
+            Download(AppInfo.DownloadFolder, name);
             //解压
-            UnZip(Settings.Default._download + name, Settings.Default._temp);
+            UnZip(AppInfo.DownloadFolder + name, AppInfo.TempFolder);
             //获取解压后所有文件的路径
-            string _file1 = Settings.Default._temp + "\\E Updater.exe";
-            string _file2 = Settings.Default._temp + "\\ICSharpCode.SharpZipLib.dll";
+            string _file1 = AppInfo.TempFolder + "\\E Updater.exe";
+            string _file2 = AppInfo.TempFolder + "\\ICSharpCode.SharpZipLib.dll";
             //创建批处理命令
             FileStream fs = new FileStream(_bat, FileMode.Create, FileAccess.Write);
             StreamWriter sw = new StreamWriter(fs);
@@ -1120,52 +784,18 @@ namespace E.Updater
         }
         private void Btn_EWInstall_Click(object sender, RoutedEventArgs e)
         {
-            if (EWNewVer != null)
-            {
-                Install("E Writer " + EWNewVer + ".zip", Settings.Default._EW, Settings.Default._EWDownload);
-            }
-            else
-            {
-                ShowMessage("版本检测失败，请刷新后再试");
-            }
-        }
-        private void Btn_EPInstall_Click(object sender, RoutedEventArgs e)
-        {
-            if (EPNewVer != null)
-            {
-                Install("E Player " + EPNewVer + ".zip", Settings.Default._EP, Settings.Default._EPDownload);
-            }
-            else
-            {
-                ShowMessage("版本检测失败，请刷新后再试");
-            }
-        }
-        private void Btn_ENInstall_Click(object sender, RoutedEventArgs e)
-        {
-            if (ENNewVer != null)
-            {
-                Install("E Number " + ENNewVer + ".zip", Settings.Default._EN, Settings.Default._ENDownload);
-}
-            else
+            Install("E Writer " + "" + ".zip", "", AppInfo.DownloadFolder);
+         
             {
                 ShowMessage("版本检测失败，请刷新后再试");
             }
         }
         private void Btn_EUUninstall_Click(object sender, RoutedEventArgs e)
         {
-            //Uninstall("EU", Settings.Default._EU);
         }
         private void Btn_EWUninstall_Click(object sender, RoutedEventArgs e)
         {
-            Uninstall("E Writer.exe", Settings.Default._EW);
-        }
-        private void Btn_EPUninstall_Click(object sender, RoutedEventArgs e)
-        {
-            Uninstall("E Player.exe", Settings.Default._EP);
-        }
-        private void Btn_ENUninstall_Click(object sender, RoutedEventArgs e)
-        {
-            Uninstall("E Number.exe", Settings.Default._EN);
+            Uninstall("E Writer.exe", "");
         }
         private void Btn_EURun_Click(object sender, RoutedEventArgs e)
         {
@@ -1173,67 +803,16 @@ namespace E.Updater
         }
         private void Btn_EWRun_Click(object sender, RoutedEventArgs e)
         {
-            string path = Settings.Default._EW + "\\E Writer.exe";
+            string path = "\\E Writer.exe";
             if (IsRunning(path))
             {
                 Stop(path);
             }
             else
             {
-                Start(path);
+                Run(path);
             }
-            RefreshAllAppsIsRunning();
-        }
-        private void Btn_EPRun_Click(object sender, RoutedEventArgs e)
-        {
-            string path = Settings.Default._EP + "\\E Player.exe";
-            if (IsRunning(path))
-            {
-                Stop(path);
-            }
-            else
-            {
-                Start(path);
-            }
-            RefreshAllAppsIsRunning();
-        }
-        private void Btn_ENRun_Click(object sender, RoutedEventArgs e)
-        {
-            string path = Settings.Default._EN + "\\E Number.exe";
-            if (IsRunning(path))
-            {
-                Stop(path);
-            }
-            else
-            {
-                Start(path);
-            }
-            RefreshAllAppsIsRunning();
-        }
-        private void Lbl_EU_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            Process.Start("explorer.exe", "http://estar.zone/introduction/e-updater/");
-        }
-        private void Lbl_EW_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            Process.Start("explorer.exe", "http://estar.zone/introduction/e-writer/");
-        }
-        private void Lbl_EP_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            Process.Start("explorer.exe", "http://estar.zone/introduction/e-player/");
-        }
-        private void Lbl_EN_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            Process.Start("explorer.exe", "http://estar.zone/introduction/e-number/");
         }
         #endregion
-
-        private enum InstallState
-        {
-            未指定安装目录,
-            未找到可执行文件,
-            已安装旧版本,
-            已安装最新版本,
-        }
     }
 }
