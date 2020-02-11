@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Reflection;
 using System.IO;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -9,11 +7,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Media;
 using System.Text.RegularExpressions;
-using System.Windows.Data;
-using System.Globalization;
 using System.Windows.Media.Animation;
 using SharedProject;
-using Application = System.Windows.Forms.Application;
 using MessageBox = System.Windows.MessageBox;
 using Settings = E.Number.Properties.Settings;
 
@@ -28,7 +23,7 @@ namespace E.Number
         /// <summary>
         /// 应用信息
         /// </summary>
-        private AppInfo AppInfo { get; set; }
+        private AppInfo AppInfo { get; } = new AppInfo();
 
         /// <summary>
         /// 当前菜单
@@ -48,32 +43,6 @@ namespace E.Number
         }
 
         //载入
-        /// <summary>
-        /// 载入应用信息
-        /// </summary>
-        private void LoadAppInfo()
-        {
-            AssemblyProductAttribute product = (AssemblyProductAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyProductAttribute));
-            AssemblyDescriptionAttribute description = (AssemblyDescriptionAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyDescriptionAttribute));
-            AssemblyCompanyAttribute company = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyCompanyAttribute));
-            AssemblyCopyrightAttribute copyright = (AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyCopyrightAttribute));
-
-            Uri uri0 = new Uri("/文档/用户协议.md", UriKind.Relative);
-            Stream src0 = System.Windows.Application.GetResourceStream(uri0).Stream;
-            string userAgreement = new StreamReader(src0, Encoding.UTF8).ReadToEnd();
-
-            Uri uri = new Uri("/文档/更新日志.md", UriKind.Relative);
-            Stream src = System.Windows.Application.GetResourceStream(uri).Stream;
-            string updateNote = new StreamReader(src, Encoding.UTF8).ReadToEnd().Replace("### ", "");
-
-            string homePage = "https://github.com/HelloEStar/E.App/wiki/" + product.Product.Replace(" ", "-");
-            string gitHubPage = "https://github.com/HelloEStar/E.App";
-            string qqGroupLink = "http://jq.qq.com/?_wv=1027&k=5TQxcvR";
-            string qqGroupNumber = "279807070";
-            string bitCoinAddress = "19LHHVQzWJo8DemsanJhSZ4VNRtknyzR1q";
-            AppInfo = new AppInfo(product.Product, description.Description, company.Company, copyright.Copyright, userAgreement, new Version(Application.ProductVersion), updateNote,
-                                  homePage, gitHubPage, qqGroupLink, qqGroupNumber, bitCoinAddress);
-        }
         /// <summary>
         /// 载入语言选项
         /// </summary>
@@ -169,31 +138,7 @@ namespace E.Number
             Settings.Default.Record = string.Join("///", strs);
         }
 
-        //创建
-        /// <summary>
-        /// 创建颜色
-        /// </summary>
-        /// <param name="text">ARGB色值，以点号分隔，0-255</param>
-        /// <returns></returns>
-        private static Color CreateColor(string text)
-        {
-            //MessageBox.Show(text);
-            try
-            {
-                string[] colors = text.Split('.');
-                byte red = byte.Parse(colors[0]);
-                byte green = byte.Parse(colors[1]);
-                byte blue = byte.Parse(colors[2]);
-                byte alpha = byte.Parse(colors[3]);
-                Color color = Color.FromArgb(alpha, red, green, blue);
-                return color;
-            }
-            catch (Exception)
-            {
-                Color color = Color.FromArgb(255, 125, 125, 125);
-                return color;
-            }
-        }
+        ///创建
 
         //添加
         private void AddRecordItem(string content)
@@ -308,35 +253,6 @@ namespace E.Number
                 index = 0;
             }
             SetTheme(index);
-        }
-        /// <summary>
-        /// 重置主题颜色
-        /// </summary>
-        /// <param name="themePath">主题文件路径</param>
-        private void SetSkin(string themePath)
-        {
-            SetColor("一级字体颜色", CreateColor(INIOperator.ReadIniKeys("字体", "一级字体", themePath)));
-            SetColor("二级字体颜色", CreateColor(INIOperator.ReadIniKeys("字体", "二级字体", themePath)));
-            SetColor("三级字体颜色", CreateColor(INIOperator.ReadIniKeys("字体", "三级字体", themePath)));
-
-            SetColor("一级背景颜色", CreateColor(INIOperator.ReadIniKeys("背景", "一级背景", themePath)));
-            SetColor("二级背景颜色", CreateColor(INIOperator.ReadIniKeys("背景", "二级背景", themePath)));
-            SetColor("三级背景颜色", CreateColor(INIOperator.ReadIniKeys("背景", "三级背景", themePath)));
-
-            SetColor("一级边框颜色", CreateColor(INIOperator.ReadIniKeys("边框", "一级边框", themePath)));
-
-            SetColor("有焦点选中颜色", CreateColor(INIOperator.ReadIniKeys("高亮", "有焦点选中", themePath)));
-            SetColor("无焦点选中颜色", CreateColor(INIOperator.ReadIniKeys("高亮", "无焦点选中", themePath)));
-        }
-        /// <summary>
-        /// 设置颜色
-        /// </summary>
-        /// <param name="colorName"></param>
-        /// <param name="c"></param>
-        public void SetColor(string colorName, Color c)
-        {
-            Resources.Remove(colorName);
-            Resources.Add(colorName, new SolidColorBrush(c));
         }
 
         //重置
@@ -483,7 +399,6 @@ namespace E.Number
         private void Main_Loaded(object sender, RoutedEventArgs e)
         {
             //载入
-            LoadAppInfo();
             LoadLanguageItems();
             LoadThemeItems();
             LoadRecordItems();
@@ -583,7 +498,7 @@ namespace E.Number
                 string themePath = cbi.ToolTip.ToString();
                 if (File.Exists(themePath))
                 {
-                    SetSkin(themePath);
+                    ColorHelper.SetTheme(Resources, themePath);
                 }
                 else
                 {

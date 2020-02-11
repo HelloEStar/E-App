@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace SharedProject
 {
@@ -54,7 +55,7 @@ namespace SharedProject
         /// <summary>
         /// GitHub链接
         /// </summary>
-        public string GitHubPage { get; }
+        public string GitHubPage { get; } 
         /// <summary>
         /// 官方Q群
         /// </summary>
@@ -70,15 +71,33 @@ namespace SharedProject
 
         public string ThemeFolder { get; } = "主题";
 
-        public AppInfo(string name, string description, string company, string copyright, string userAgreement, Version version, string updateNote,
-                       string homePage, string gitHubPage, string qqGroupLink, string qqGroupNumber, string bitCoinAddress)
+        public AppInfo()
         {
-            Name = name;
-            Description = description;
-            Company = company;
-            Copyright = copyright;
+            AssemblyProductAttribute product = (AssemblyProductAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyProductAttribute));
+            AssemblyDescriptionAttribute description = (AssemblyDescriptionAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyDescriptionAttribute));
+            AssemblyCompanyAttribute company = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyCompanyAttribute));
+            AssemblyCopyrightAttribute copyright = (AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyCopyrightAttribute));
+
+            Uri uri0 = new Uri("UserAgreement.md", UriKind.Relative);
+            Stream src0 = Application.GetResourceStream(uri0).Stream;
+            string userAgreement = new StreamReader(src0, Encoding.UTF8).ReadToEnd();
+
+            Uri uri = new Uri("ReleaseNotes.md", UriKind.Relative);
+            Stream src = Application.GetResourceStream(uri).Stream;
+            string updateNote = new StreamReader(src, Encoding.UTF8).ReadToEnd().Replace("### ", "");
+
+            string homePage = "https://github.com/HelloEStar/E.App/wiki/" + product.Product.Replace(" ", "-");
+            string gitHubPage = "https://github.com/HelloEStar/E.App";
+            string qqGroupLink = "http://jq.qq.com/?_wv=1027&k=5TQxcvR";
+            string qqGroupNumber = "279807070";
+            string bitCoinAddress = "19LHHVQzWJo8DemsanJhSZ4VNRtknyzR1q";
+
+            Name = product.Product;
+            Description = description.Description;
+            Company = company.Company;
+            Copyright = copyright.Copyright;
             UserAgreement = userAgreement;
-            Version = version;
+            Version = new Version(System.Windows.Forms.Application.ProductVersion);
             UpdateNote = updateNote;
 
             HomePage = homePage;
@@ -190,6 +209,64 @@ namespace SharedProject
         }
     }
 
+    public class ColorHelper
+    {
+        /// <summary>
+        /// 创建颜色
+        /// </summary>
+        /// <param name="text">ARGB色值，以点号分隔，0-255</param>
+        /// <returns></returns>
+        public static Color Create(string text)
+        {
+            try
+            {
+                string[] colors = text.Split('.');
+                byte red = byte.Parse(colors[0]);
+                byte green = byte.Parse(colors[1]);
+                byte blue = byte.Parse(colors[2]);
+                byte alpha = byte.Parse(colors[3]);
+                Color color = Color.FromArgb(alpha, red, green, blue);
+                return color;
+            }
+            catch (Exception)
+            {
+                Color color = Color.FromArgb(255, 125, 125, 125);
+                return color;
+            }
+        }
+
+        /// <summary>
+        /// 设置颜色
+        /// </summary>
+        /// <param name="colorName"></param>
+        /// <param name="c"></param>
+        public static void SetColor(ResourceDictionary resource, string colorName, Color c)
+        {
+            resource.Remove(colorName);
+            resource.Add(colorName, new SolidColorBrush(c));
+        }
+
+        /// <summary>
+        /// 设置主题
+        /// </summary>
+        /// <param name="themePath">主题文件路径</param>
+        public static void SetTheme(ResourceDictionary resource, string themePath)
+        {
+            SetColor(resource, "一级字体颜色", Create(INIOperator.ReadIniKeys("字体", "一级字体", themePath)));
+            SetColor(resource, "二级字体颜色", Create(INIOperator.ReadIniKeys("字体", "二级字体", themePath)));
+            SetColor(resource, "三级字体颜色", Create(INIOperator.ReadIniKeys("字体", "三级字体", themePath)));
+
+            SetColor(resource, "一级背景颜色", Create(INIOperator.ReadIniKeys("背景", "一级背景", themePath)));
+            SetColor(resource, "二级背景颜色", Create(INIOperator.ReadIniKeys("背景", "二级背景", themePath)));
+            SetColor(resource, "三级背景颜色", Create(INIOperator.ReadIniKeys("背景", "三级背景", themePath)));
+
+            SetColor(resource, "一级边框颜色", Create(INIOperator.ReadIniKeys("边框", "一级边框", themePath)));
+
+            SetColor(resource, "有焦点选中颜色", Create(INIOperator.ReadIniKeys("高亮", "有焦点选中", themePath)));
+            SetColor(resource, "无焦点选中颜色", Create(INIOperator.ReadIniKeys("高亮", "无焦点选中", themePath)));
+        }
+    }
+
     /// <summary>
     /// 网络帮助器
     /// </summary>
@@ -266,6 +343,9 @@ namespace SharedProject
         }
     }
 
+    /// <summary>
+    /// 时间间隔-浮点 转换器
+    /// </summary>
     public class TimeSpanDoubleConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -277,6 +357,9 @@ namespace SharedProject
             return TimeSpan.FromSeconds((double)value);
         }
     }
+    /// <summary>
+    /// 可见性-布尔 转换器
+    /// </summary>
     public class VisibilityBoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -289,6 +372,9 @@ namespace SharedProject
         }
     }
 
+    /// <summary>
+    /// 语言项
+    /// </summary>
     public class LanguageItem : ResourceDictionary
     {
         public string Name { get; set; }

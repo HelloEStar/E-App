@@ -1,25 +1,124 @@
-﻿<Window x:Class="E.Linker.MainWindow"
+﻿<Window x:Name="Main" x:Class="E.Linker.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:E.Linker"
         xmlns:share="clr-namespace:SharedProject"
+        xmlns:Properties="clr-namespace:E.Linker.Properties"
         mc:Ignorable="d"
-        Title="E Linker" Height="600" Width="800">
-    <Grid>
-        <StackPanel HorizontalAlignment="Left" Height="128" Margin="10,10,0,0" VerticalAlignment="Top" Width="80">
-            <Button Content="添加节点" VerticalAlignment="Top" Height="30"/>
-            <Button Content="链接节点" VerticalAlignment="Top" Height="30"/>
-            <Button Content="编辑节点" VerticalAlignment="Top" Height="30"/>
-            <Button Content="删除节点" VerticalAlignment="Top" Height="30"/>
-        </StackPanel>
-        <Grid x:Name="Node" HorizontalAlignment="Left" Height="145" Margin="209,33,0,0" VerticalAlignment="Top" Width="100" Background="#FFDEDEDE">
-            <TextBox Height="25" Margin="10,46,10,0" TextWrapping="Wrap" Text="姓名" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
-            <TextBox Height="25" Margin="10,76,10,0" TextWrapping="Wrap" Text="生日" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
-            <TextBox Height="25" Margin="10,106,10,0" TextWrapping="Wrap" Text="性别" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
-            <Grid x:Name="Move" Height="31" Margin="10,10,10,0" VerticalAlignment="Top" Background="#FFB3EAFF"/>
-        </Grid>
+        Title="E Linker" Height="450" Width="800">
+    
+    <Window.Resources>
+        <Properties:Settings x:Key="Settings" />
+    </Window.Resources>
 
+    <Grid x:Name="GrdMain">
+        <DockPanel>
+            <!--菜单栏-->
+            <Grid x:Name="PanMenu" Style="{DynamicResource 菜单栏样式}" >
+                <DockPanel>
+                    <StackPanel>
+                        <Button x:Name="BtnFile" Content="{DynamicResource 记录}" Style="{DynamicResource 菜单按钮样式}" Click="BtnFile_Click" BorderThickness="4,0,0,0"/>
+                        <Button x:Name="BtnSetting" Content="{DynamicResource 设置}" Style="{DynamicResource 菜单按钮样式}" Click="BtnSetting_Click"/>
+                        <Button x:Name="BtnAbout" Content="{DynamicResource 关于}" Style="{DynamicResource 菜单按钮样式}" Click="BtnAbout_Click"/>
+                    </StackPanel>
+                </DockPanel>
+            </Grid>
+
+            <!--工具栏-->
+            <!--工具栏 文件-->
+            <Grid x:Name="PanFile" Style="{DynamicResource 工具栏样式}" >
+                <DockPanel>
+                    <WrapPanel Style="{DynamicResource 水平流式面板样式}" DockPanel.Dock="Bottom" ItemWidth="240">
+                        <Button x:Name="BtnClear"  Style="{DynamicResource 自由按钮样式}" Content="{DynamicResource 清空}" ToolTip="{DynamicResource 清空+}" Click="BtnClear_Click"/>
+                    </WrapPanel>
+                    <ListBox x:Name="LtbRecord" Background="{x:Null}" BorderThickness="0"/>
+                </DockPanel>
+            </Grid>
+            <!--工具栏 编辑-->
+            <!--<Grid x:Name="PanEdit" Style="{DynamicResource 工具栏样式}" >
+            </Grid>-->
+            <!--工具栏 设置-->
+            <Grid x:Name="PanSetting" Style="{DynamicResource 工具栏样式}" Visibility="Collapsed" >
+                <DockPanel>
+                    <WrapPanel Style="{DynamicResource 水平流式面板样式}" DockPanel.Dock="Bottom" ItemWidth="120">
+                        <Button x:Name="BtnSaveSettings" Content="{DynamicResource 保存}" ToolTip="{DynamicResource 重置+}" Style="{DynamicResource 自由按钮样式}" Click="BtnSaveSettings_Click"/>
+                        <Button x:Name="BtnResetSettings" Content="{DynamicResource 重置}" ToolTip="{DynamicResource 重置+}" Style="{DynamicResource 自由按钮样式}" Click="BtnResetSettings_Click"/>
+                    </WrapPanel>
+
+                    <ScrollViewer>
+                        <StackPanel DockPanel.Dock="Top">
+                            <Label Content="{DynamicResource 语言}" Style="{DynamicResource 标题标签样式}"/>
+                            <ComboBox x:Name="CbbLanguages" Style="{DynamicResource 下拉框样式}" SelectionChanged="CbbLanguages_SelectionChanged"
+                                      SelectedIndex="{Binding Source={StaticResource Settings}, Path=Default.Language,Mode=TwoWay}"/>
+
+                            <Label Content="{DynamicResource 主题}" Style="{DynamicResource 标题标签样式}"/>
+                            <ComboBox x:Name="CbbThemes" Style="{DynamicResource 下拉框样式}" SelectionChanged="CbbThemes_SelectionChanged"
+                                      SelectedIndex="{Binding Source={StaticResource Settings}, Path=Default.Theme,Mode=TwoWay}"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </DockPanel>
+            </Grid>
+            <!--工具栏 关于-->
+            <Grid x:Name="PanAbout" Style="{DynamicResource 工具栏样式}" Visibility="Collapsed">
+                <Grid Style="{DynamicResource 工具栏样式}">
+                    <ScrollViewer>
+                        <StackPanel DockPanel.Dock="Top">
+                            <DockPanel>
+                                <Button x:Name="BtnHomePage" Content="{DynamicResource 前往}" ToolTip="F1" Style="{DynamicResource 自由按钮样式}" Click="BtnHomePage_Click" DockPanel.Dock="Right" Width="80"/>
+                                <Label Content="{DynamicResource 官网}" Style="{DynamicResource 标题标签样式}"/>
+                            </DockPanel>
+                            <TextBlock x:Name="TxtHomePage" Text="?" Style="{DynamicResource 文本显示框样式}"/>
+
+                            <DockPanel>
+                                <Button x:Name="BtnGitHubPage" Content="{DynamicResource 前往}" ToolTip="F2" Style="{DynamicResource 自由按钮样式}" Click="BtnGitHubPage_Click" DockPanel.Dock="Right" Width="80"/>
+                                <Label Content="{DynamicResource 开源}" Style="{DynamicResource 标题标签样式}"/>
+                            </DockPanel>
+                            <TextBlock x:Name="TxtGitHubPage" Text="?" Style="{DynamicResource 文本显示框样式}"/>
+
+                            <DockPanel>
+                                <Button x:Name="BtnQQGroup" Content="{DynamicResource 前往}" ToolTip="F3" Style="{DynamicResource 自由按钮样式}" Click="BtnQQGroup_Click" DockPanel.Dock="Right" Width="80"/>
+                                <Label Content="{DynamicResource 讨论}" Style="{DynamicResource 标题标签样式}"/>
+                            </DockPanel>
+                            <TextBlock x:Name="TxtQQGroup" Text="?" Style="{DynamicResource 文本显示框样式}"/>
+
+                            <DockPanel>
+                                <Button x:Name="BtnBitCoinAddress" Content="{DynamicResource 复制}" Style="{DynamicResource 自由按钮样式}" Click="BtnBitCoinAddress_Click" DockPanel.Dock="Right" Width="80"/>
+                                <Label Content="{DynamicResource 赞助}"  Style="{DynamicResource 标题标签样式}"/>
+                            </DockPanel>
+                            <TextBlock x:Name="TxtBitCoinAddress" Text="?" Style="{DynamicResource 文本显示框样式}"/>
+
+                            <Label Content="{DynamicResource 名称}" Style="{DynamicResource 标题标签样式}"/>
+                            <TextBlock x:Name="TxtThisName" Text="?" Style="{DynamicResource 文本显示框样式}"/>
+                            <Label Content="{DynamicResource 说明}" Style="{DynamicResource 标题标签样式}"/>
+                            <TextBlock x:Name="TxtDescription" Text="?" Style="{DynamicResource 文本显示框样式}"/>
+                            <Label Content="{DynamicResource 作者}" Style="{DynamicResource 标题标签样式}"/>
+                            <TextBlock x:Name="TxtDeveloper" Text="?" Style="{DynamicResource 文本显示框样式}"/>
+                            <Label Content="{DynamicResource 版本}"  Style="{DynamicResource 标题标签样式}"/>
+                            <TextBlock x:Name="TxtVersion" Text="?" Style="{DynamicResource 文本显示框样式}"/>
+                            <Label Content="{DynamicResource 日志}" Style="{DynamicResource 标题标签样式}"/>
+
+                            <TextBlock x:Name="TxtUpdateNote" Text="?" Style="{DynamicResource 文本显示框样式}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+
+            </Grid>
+
+            <!--工作区-->
+            <Grid x:Name="PanWorkArea" Style="{DynamicResource 工作区样式}">
+                <DockPanel>
+                    <Label x:Name="LblMessage" Content="帮助消息" Style="{DynamicResource 自由标签样式}" DockPanel.Dock="Top" VerticalAlignment="Top" HorizontalContentAlignment="Center" Margin="10,0"/>
+                </DockPanel>
+            </Grid>
+        </DockPanel>
+
+        <DockPanel x:Name="Move">
+
+            <DockPanel x:Name="Node">
+
+            </DockPanel>
+        </DockPanel>
     </Grid>
 </Window>

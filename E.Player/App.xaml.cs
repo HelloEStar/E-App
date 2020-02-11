@@ -33,7 +33,8 @@ namespace E.Player
             var executingAssemblyName = executingAssembly.GetName();
             var resName = executingAssemblyName.Name + ".resources";
 
-            AssemblyName assemblyName = new AssemblyName(args.Name); string path = "";
+            AssemblyName assemblyName = new AssemblyName(args.Name);
+            string path;
             if (resName == assemblyName.Name)
             {
                 path = executingAssemblyName.Name + ".g.resources"; ;

@@ -11,6 +11,7 @@
   <ItemGroup>
     <Resource Include="$(MSBuildThisFileDirectory)ICSharpCode.SharpZipLib.dll" />
     <Resource Include="$(MSBuildThisFileDirectory)Tags.dll" />
+    <Resource Include="$(MSBuildThisFileDirectory)UserAgreement.md" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)SharedClass.cs" />

@@ -143,7 +143,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="文档\测试版更新日志.txt" />
     <None Include="Properties\User.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>User.Designer.cs</LastGenOutput>
@@ -154,10 +153,6 @@
     <Content Include="主题\深色主题.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="文档\E_Updater_info.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="文档\更新日志.txt" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="图片\E Updater.ico" />

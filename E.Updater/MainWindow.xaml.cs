@@ -1,33 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Net;
 using System.Diagnostics;
-using System.Reflection;
-using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Input;
 using ICSharpCode.SharpZipLib.Zip;
-using ICSharpCode.SharpZipLib.Zip.Compression;
-using ICSharpCode.SharpZipLib.Zip.Compression.Streams;   
-
-using Clipboard = System.Windows.Clipboard;
 using MessageBox = System.Windows.MessageBox;
 using Application = System.Windows.Forms.Application;
 using Button = System.Windows.Controls.Button;
-using TextBox = System.Windows.Controls.TextBox;
 
 using Settings = E.Updater.Properties.Settings;
-using User = E.Updater.Properties.User;
 using SharedProject;
-using System.Windows.Input;
 
 namespace E.Updater
 {
@@ -40,7 +28,7 @@ namespace E.Updater
         /// <summary>
         /// 应用信息
         /// </summary>
-        private AppInfo AppInfo { get; set; }
+        private AppInfo AppInfo { get; } = new AppInfo();
 
         /// <summary>
         /// 当前菜单
@@ -74,33 +62,6 @@ namespace E.Updater
         }
 
         //载入
-        //载入
-        /// <summary>
-        /// 载入应用信息
-        /// </summary>
-        private void LoadAppInfo()
-        {
-            AssemblyProductAttribute product = (AssemblyProductAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyProductAttribute));
-            AssemblyDescriptionAttribute description = (AssemblyDescriptionAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyDescriptionAttribute));
-            AssemblyCompanyAttribute company = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyCompanyAttribute));
-            AssemblyCopyrightAttribute copyright = (AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyCopyrightAttribute));
-
-            Uri uri0 = new Uri("/文档/用户协议.md", UriKind.Relative);
-            Stream src0 = System.Windows.Application.GetResourceStream(uri0).Stream;
-            string userAgreement = new StreamReader(src0, Encoding.UTF8).ReadToEnd();
-
-            Uri uri = new Uri("/文档/更新日志.md", UriKind.Relative);
-            Stream src = System.Windows.Application.GetResourceStream(uri).Stream;
-            string updateNote = new StreamReader(src, Encoding.UTF8).ReadToEnd().Replace("### ", "");
-
-            string homePage = "https://github.com/HelloEStar/E.App/wiki/" + product.Product.Replace(" ", "-");
-            string gitHubPage = "https://github.com/HelloEStar/E.App";
-            string qqGroupLink = "http://jq.qq.com/?_wv=1027&k=5TQxcvR";
-            string qqGroupNumber = "279807070";
-            string bitCoinAddress = "19LHHVQzWJo8DemsanJhSZ4VNRtknyzR1q";
-            AppInfo = new AppInfo(product.Product, description.Description, company.Company, copyright.Copyright, userAgreement, new Version(Application.ProductVersion), updateNote,
-                                  homePage, gitHubPage, qqGroupLink, qqGroupNumber, bitCoinAddress);
-        }
         /// <summary>
         /// 载入语言选项
         /// </summary>
@@ -207,33 +168,9 @@ namespace E.Updater
         }
 
 
-        //创建
-        /// <summary>
-        /// 创建颜色
-        /// </summary>
-        /// <param name="text">ARGB色值，以点号分隔，0-255</param>
-        /// <returns></returns>
-        private static Color CreateColor(string text)
-        {
-            //MessageBox.Show(text);
-            try
-            {
-                string[] colors = text.Split('.');
-                byte red = byte.Parse(colors[0]);
-                byte green = byte.Parse(colors[1]);
-                byte blue = byte.Parse(colors[2]);
-                byte alpha = byte.Parse(colors[3]);
-                Color color = Color.FromArgb(alpha, red, green, blue);
-                return color;
-            }
-            catch (Exception)
-            {
-                Color color = Color.FromArgb(255, 125, 125, 125);
-                return color;
-            }
-        }
+        ///创建
 
-        //添加
+        ///添加
 
         ///移除
 
@@ -344,7 +281,6 @@ namespace E.Updater
         }
 
         //设置
-        //设置
         /// <summary>
         /// 设置菜单
         /// </summary>
@@ -436,35 +372,6 @@ namespace E.Updater
                 index = 0;
             }
             SetTheme(index);
-        }
-        /// <summary>
-        /// 重置主题颜色
-        /// </summary>
-        /// <param name="themePath">主题文件路径</param>
-        private void SetSkin(string themePath)
-        {
-            SetColor("一级字体颜色", CreateColor(INIOperator.ReadIniKeys("字体", "一级字体", themePath)));
-            SetColor("二级字体颜色", CreateColor(INIOperator.ReadIniKeys("字体", "二级字体", themePath)));
-            SetColor("三级字体颜色", CreateColor(INIOperator.ReadIniKeys("字体", "三级字体", themePath)));
-
-            SetColor("一级背景颜色", CreateColor(INIOperator.ReadIniKeys("背景", "一级背景", themePath)));
-            SetColor("二级背景颜色", CreateColor(INIOperator.ReadIniKeys("背景", "二级背景", themePath)));
-            SetColor("三级背景颜色", CreateColor(INIOperator.ReadIniKeys("背景", "三级背景", themePath)));
-
-            SetColor("一级边框颜色", CreateColor(INIOperator.ReadIniKeys("边框", "一级边框", themePath)));
-
-            SetColor("有焦点选中颜色", CreateColor(INIOperator.ReadIniKeys("高亮", "有焦点选中", themePath)));
-            SetColor("无焦点选中颜色", CreateColor(INIOperator.ReadIniKeys("高亮", "无焦点选中", themePath)));
-        }
-        /// <summary>
-        /// 设置颜色
-        /// </summary>
-        /// <param name="colorName"></param>
-        /// <param name="c"></param>
-        public void SetColor(string colorName, Color c)
-        {
-            Resources.Remove(colorName);
-            Resources.Add(colorName, new SolidColorBrush(c));
         }
 
         //重置
@@ -589,7 +496,6 @@ namespace E.Updater
         }
 
         //刷新
-        //刷新
         /// <summary>
         /// 刷新软件信息
         /// </summary>
@@ -704,18 +610,6 @@ namespace E.Updater
         }
 
         //显示
-        /// <summary>
-        /// 显示软件信息
-        /// </summary>
-        private void ShowAppInfo()
-        {
-            TxtThisName.Text = AppInfo.Name;
-            TxtDescription.Text = AppInfo.Description;
-            TxtDeveloper.Text = AppInfo.Company;
-            TxtVersion.Text = AppInfo.Version.ToString();
-            TxtBitCoinAddress.Text = AppInfo.BitCoinAddress;
-            TxtUpdateNote.Text = AppInfo.UpdateNote;
-        }
         /// <summary>
         /// 检测所有目录是否存在
         /// </summary>
@@ -907,7 +801,8 @@ namespace E.Updater
                         //将解压后的文件放到带时间戳的文件夹里
                     }
                     if (!directoryName.EndsWith("\\"))
-                    { directoryName += "\\"; }
+                    {
+                    }
                     if (fileName != String.Empty)
                     {
                         using (FileStream streamWriter = File.Create(unZipDir + theEntry.Name))
@@ -1041,11 +936,10 @@ namespace E.Updater
         }
 
         #region 事件
-        //窗口激活
+        //主窗口
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //载入
-            LoadAppInfo();
             LoadLanguageItems();
             LoadThemeItems();
 
@@ -1072,8 +966,17 @@ namespace E.Updater
             Refresh();
         }
 
+        //菜单栏
+        private void BtnSetting_Click(object sender, RoutedEventArgs e)
+        {
+            SwitchMenuToolSetting();
+        }
+        private void BtnAbout_Click(object sender, RoutedEventArgs e)
+        {
+            SwitchMenuToolAbout();
+        }
 
-
+        //工具栏
         ///设置
         private void BtnSaveSettings_Click(object sender, RoutedEventArgs e)
         {
@@ -1113,7 +1016,7 @@ namespace E.Updater
                 string themePath = cbi.ToolTip.ToString();
                 if (File.Exists(themePath))
                 {
-                    SetSkin(themePath);
+                    ColorHelper.SetTheme(Resources, themePath);
                 }
                 else
                 {
@@ -1330,5 +1233,11 @@ namespace E.Updater
             已安装旧版本,
             已安装最新版本,
         }
+
+        private void BtnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
     }
 }

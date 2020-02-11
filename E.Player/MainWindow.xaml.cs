@@ -1,33 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Threading;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.IO;
-using System.Windows.Forms.Integration;
 using System.Text.RegularExpressions;
-using System.Runtime.InteropServices;
-using System.Net;
 using System.Diagnostics;
-using System.Reflection;
 using System.Drawing.Imaging;
+using System.Windows.Media.Animation;
 using Tags.ID3;
-
-using Application = System.Windows.Forms.Application;
 using MessageBox = System.Windows.MessageBox;
-using ContextMenu = System.Windows.Controls.ContextMenu;
-using MenuItem = System.Windows.Controls.MenuItem;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using DragEventArgs = System.Windows.DragEventArgs;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
@@ -35,8 +22,6 @@ using Path = System.IO.Path;
 
 using Settings = E.Player.Properties.Settings;
 using SharedProject;
-using System.Globalization;
-using System.Windows.Media.Animation;
 
 namespace E.Player
 {
@@ -49,7 +34,7 @@ namespace E.Player
         /// <summary>
         /// 应用信息
         /// </summary>
-        private AppInfo AppInfo { get; set; }
+        private AppInfo AppInfo { get; } = new AppInfo();
 
         /// <summary>
         /// 当前菜单
@@ -126,32 +111,6 @@ namespace E.Player
         }
 
         //载入
-        /// <summary>
-        /// 载入应用信息
-        /// </summary>
-        private void LoadAppInfo()
-        {
-            AssemblyProductAttribute product = (AssemblyProductAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyProductAttribute));
-            AssemblyDescriptionAttribute description = (AssemblyDescriptionAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyDescriptionAttribute));
-            AssemblyCompanyAttribute company = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyCompanyAttribute));
-            AssemblyCopyrightAttribute copyright = (AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyCopyrightAttribute));
-
-            Uri uri0 = new Uri("/文档/用户协议.md", UriKind.Relative);
-            Stream src0 = System.Windows.Application.GetResourceStream(uri0).Stream;
-            string userAgreement = new StreamReader(src0, Encoding.UTF8).ReadToEnd();
-
-            Uri uri = new Uri("/文档/更新日志.md", UriKind.Relative);
-            Stream src = System.Windows.Application.GetResourceStream(uri).Stream;
-            string updateNote = new StreamReader(src, Encoding.UTF8).ReadToEnd().Replace("### ", "");
-
-            string homePage = "https://github.com/HelloEStar/E.App/wiki/" + product.Product.Replace(" ", "-");
-            string gitHubPage = "https://github.com/HelloEStar/E.App";
-            string qqGroupLink = "http://jq.qq.com/?_wv=1027&k=5TQxcvR";
-            string qqGroupNumber = "279807070";
-            string bitCoinAddress = "19LHHVQzWJo8DemsanJhSZ4VNRtknyzR1q";
-            AppInfo = new AppInfo(product.Product, description.Description, company.Company, copyright.Copyright, userAgreement, new Version(Application.ProductVersion), updateNote,
-                                  homePage, gitHubPage, qqGroupLink, qqGroupNumber, bitCoinAddress);
-        }
         /// <summary>
         /// 载入语言选项
         /// </summary>
@@ -343,30 +302,6 @@ namespace E.Player
             { Interval = TimeSpan.FromSeconds(0.05) };
             timerSldTime.Tick += new EventHandler(TimerSldTime_Tick);
             timerSldTime.Start();
-        }
-        /// <summary>
-        /// 创建颜色
-        /// </summary>
-        /// <param name="text">ARGB色值，以点号分隔，0-255</param>
-        /// <returns></returns>
-        private static Color CreateColor(string text)
-        {
-            //MessageBox.Show(text);
-            try
-            {
-                string[] colors = text.Split('.');
-                byte red = byte.Parse(colors[0]);
-                byte green = byte.Parse(colors[1]);
-                byte blue = byte.Parse(colors[2]);
-                byte alpha = byte.Parse(colors[3]);
-                Color color = Color.FromArgb(alpha, red, green, blue);
-                return color;
-            }
-            catch (Exception)
-            {
-                Color color = Color.FromArgb(255, 125, 125, 125);
-                return color;
-            }
         }
 
         //添加
@@ -680,35 +615,6 @@ namespace E.Player
                 index = 0;
             }
             SetTheme(index);
-        }
-        /// <summary>
-        /// 重置主题颜色
-        /// </summary>
-        /// <param name="themePath">主题文件路径</param>
-        private void SetSkin(string themePath)
-        {
-            SetColor("一级字体颜色", CreateColor(INIOperator.ReadIniKeys("字体", "一级字体", themePath)));
-            SetColor("二级字体颜色", CreateColor(INIOperator.ReadIniKeys("字体", "二级字体", themePath)));
-            SetColor("三级字体颜色", CreateColor(INIOperator.ReadIniKeys("字体", "三级字体", themePath)));
-
-            SetColor("一级背景颜色", CreateColor(INIOperator.ReadIniKeys("背景", "一级背景", themePath)));
-            SetColor("二级背景颜色", CreateColor(INIOperator.ReadIniKeys("背景", "二级背景", themePath)));
-            SetColor("三级背景颜色", CreateColor(INIOperator.ReadIniKeys("背景", "三级背景", themePath)));
-
-            SetColor("一级边框颜色", CreateColor(INIOperator.ReadIniKeys("边框", "一级边框", themePath)));
-
-            SetColor("有焦点选中颜色", CreateColor(INIOperator.ReadIniKeys("高亮", "有焦点选中", themePath)));
-            SetColor("无焦点选中颜色", CreateColor(INIOperator.ReadIniKeys("高亮", "无焦点选中", themePath)));
-        }
-        /// <summary>
-        /// 设置颜色
-        /// </summary>
-        /// <param name="colorName"></param>
-        /// <param name="c"></param>
-        private void SetColor(string colorName, Color c)
-        {
-            Resources.Remove(colorName);
-            Resources.Add(colorName, new SolidColorBrush(c));
         }
         /// <summary>
         /// 设置播放模式
@@ -1430,7 +1336,6 @@ namespace E.Player
         private void Main_Loaded(object sender, RoutedEventArgs e)
         {
             //载入
-            LoadAppInfo();
             LoadLanguageItems();
             LoadThemeItems();
             LoadVideoItems();
@@ -1916,7 +1821,7 @@ namespace E.Player
                 string themePath = cbi.ToolTip.ToString();
                 if (File.Exists(themePath))
                 {
-                    SetSkin(themePath);
+                    ColorHelper.SetTheme(Resources, themePath);
                 }
                 else
                 {

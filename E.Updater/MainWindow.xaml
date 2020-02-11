@@ -43,12 +43,6 @@
                             <Label Content="{DynamicResource 主题}" Style="{DynamicResource 标题标签样式}"/>
                             <ComboBox x:Name="CbbThemes" Style="{DynamicResource 下拉框样式}" SelectionChanged="CbbThemes_SelectionChanged"
                                       SelectedIndex="{Binding Source={StaticResource Settings}, Path=Default.Theme,Mode=TwoWay}"/>
-
-                            <Label Content="{DynamicResource 最小}" Style="{DynamicResource 标题标签样式}"/>
-                            <TextBox x:Name="TxtMinValue" Style="{DynamicResource 文本输入框样式}" TextChanged="TxtMinValue_TextChanged" Loaded="TxtMinValue_Loaded"/>
-
-                            <Label Content="{DynamicResource 最大}" Style="{DynamicResource 标题标签样式}"/>
-                            <TextBox x:Name="TxtMaxValue" Style="{DynamicResource 文本输入框样式}" TextChanged="TxtMaxValue_TextChanged" Loaded="TxtMaxValue_Loaded"/>
                         </StackPanel>
                     </ScrollViewer>
                 </DockPanel>
@@ -103,7 +97,7 @@
             <DockPanel Background="{DynamicResource 三级背景颜色}">
                 <Grid Height="30" VerticalAlignment="Top" Background="{DynamicResource 二级背景颜色}" DockPanel.Dock="Bottom">
                     <TextBlock x:Name="Lbl_Message" Text="提示" Style="{DynamicResource 文本显示框样式}"/>
-                    <Button x:Name="Btn_Refresh" Content="刷新"  Style="{DynamicResource 自由按钮样式}" Click="BtnRefresh_Click" HorizontalAlignment="Right" Width="60"/>
+                    <Button x:Name="Btn_Refresh" Content="刷新" Style="{DynamicResource 自由按钮样式}" Click="BtnRefresh_Click" HorizontalAlignment="Right" Width="60"/>
                 </Grid>
                 <ScrollViewer>
                     <StackPanel>

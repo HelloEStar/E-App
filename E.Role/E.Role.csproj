@@ -98,8 +98,7 @@
     <Content Include="主题\深色主题.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="文档\更新日志.md" />
-    <Resource Include="文档\用户协议.md" />
+    <Resource Include="ReleaseNotes.md" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
