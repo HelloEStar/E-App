@@ -9,10 +9,9 @@
     <sys:String x:Key="设置">Setting</sys:String>
     <sys:String x:Key="关于">About</sys:String>
 
-
     <!--工具栏-->
-    <!--工具栏 文件页-->
     <sys:String x:Key="打开">Open</sys:String>
+    <sys:String x:Key="添加">Add</sys:String>
     <sys:String x:Key="创建">Create</sys:String>
     <sys:String x:Key="关闭">Close</sys:String>
     <sys:String x:Key="删除">Delete</sys:String>
@@ -24,20 +23,19 @@
     <sys:String x:Key="收起">Collapse</sys:String>
     <sys:String x:Key="刷新">Refresh</sys:String>
     <sys:String x:Key="浏览">Browser</sys:String>
-    <!--工具栏 编辑页-->
+    <sys:String x:Key="生成">Generate</sys:String>
+    <sys:String x:Key="移除">Remove</sys:String>
     <sys:String x:Key="撤重">Undo and Redo</sys:String>
     <sys:String x:Key="撤销">Undo</sys:String>
     <sys:String x:Key="撤销+">Undo Ctrl+Z</sys:String>
     <sys:String x:Key="重做">Redo</sys:String>
     <sys:String x:Key="重做+">Redo Ctrl+Y</sys:String>
-    <!--工具栏 设置页-->
     <sys:String x:Key="重置">Reset</sys:String>
     <sys:String x:Key="清空">Clear</sys:String>
     <sys:String x:Key="语言">Language</sys:String>
     <sys:String x:Key="主题">Theme</sys:String>
     <sys:String x:Key="最小">Min Value</sys:String>
     <sys:String x:Key="最大">Max Value</sys:String>
-    <!--工具栏 信息页-->
     <sys:String x:Key="官网">Official Website</sys:String>
     <sys:String x:Key="开源">Open Source Page</sys:String>
     <sys:String x:Key="讨论">Discuss Group</sys:String>
@@ -52,19 +50,15 @@
 
     <!--提示消息-->
     <sys:String x:Key="提示">Help</sys:String>
+    <sys:String x:Key="欢迎使用">Welcome to</sys:String>
     <sys:String x:Key="用户协议">User Agreement</sys:String>
     <sys:String x:Key="已重置">Settings Reseted</sys:String>
     <sys:String x:Key="已保存">Settings Saved</sys:String>
     <sys:String x:Key="已载入">Settings Loaded</sys:String>
     <sys:String x:Key="已复制">Copy to clipboard</sys:String>
     <sys:String x:Key="已更改">Settings Changed</sys:String>
-    <sys:String x:Key="下一个主题的配置文件不存在">Next Theme's file isn't exist</sys:String>
-    <sys:String x:Key="偏好主题的不存在">Theme isn't exist, default theme loaded</sys:String>
-
-
-
+    
     <!--Writer-->
-    <!--工具栏 文件页-->
     <sys:String x:Key="书籍历史">Books History</sys:String>
     <sys:String x:Key="打开书籍+">Open Book Ctrl+O</sys:String>
     <sys:String x:Key="创建对象+">Create Object Ctrl+B</sys:String>
@@ -82,7 +76,6 @@
     <sys:String x:Key="创书">+ Book</sys:String>
     <sys:String x:Key="创卷">+ Chapter</sys:String>
     <sys:String x:Key="创文">+ Essay</sys:String>
-    <!--编辑页-->
     <sys:String x:Key="转换">Simplified and Traditional Conversion</sys:String>
     <sys:String x:Key="转繁">ToTrad</sys:String>
     <sys:String x:Key="转繁+">To Traditional Ctrl+Shift+K</sys:String>
@@ -95,7 +88,6 @@
     <sys:String x:Key="查下">Find Next</sys:String>
     <sys:String x:Key="换下">Replace Next</sys:String>
     <sys:String x:Key="换全">Replace All</sys:String>
-    <!--设置页-->
     <sys:String x:Key="字体">Font Family</sys:String>
     <sys:String x:Key="字号">Font Size</sys:String>
     <sys:String x:Key="界面">UI</sys:String>
@@ -103,6 +95,46 @@
     <sys:String x:Key="补全">Complementy</sys:String>
     <sys:String x:Key="缩进">Indentation</sys:String>
     <sys:String x:Key="备份">Backup</sys:String>
+    
+    <sys:String x:Key="创建或打开以开始">Open or create a book to start</sys:String>
+    <sys:String x:Key="双击或按回车键打开该卷册">Double click or press enter to Open this chapter</sys:String>
+    <sys:String x:Key="双击或按回车键打开该文章">Double click or press enter to Open this essay</sys:String>
+    <sys:String x:Key="未打开任何书籍">Didn't open any book</sys:String>
+    <sys:String x:Key="未选中任何文章">Didn't select any essay</sys:String>
+    <sys:String x:Key="已打开文章">Essay opened</sys:String>
+    <sys:String x:Key="已打开卷册">Chapter opened</sys:String>
+    <sys:String x:Key="已打开书籍">Book opened</sys:String>
+    <sys:String x:Key="此文章不存在">This essay isn't exist</sys:String>
+    <sys:String x:Key="此卷册不存在">This chapter isn't exist</sys:String>
+    <sys:String x:Key="此书籍不存在">This book isn't exist</sys:String>
+    <sys:String x:Key="文章重命名成功">Essay rename successfully, list reloaded</sys:String>
+    <sys:String x:Key="卷册重命名成功">Chapter rename successfully，list reloaded</sys:String>
+    <sys:String x:Key="已删除文章">Essay deleted</sys:String>
+    <sys:String x:Key="已删除卷册">Chapter deleted</sys:String>
+    <sys:String x:Key="已关闭书籍">Book Closed</sys:String>
+    <sys:String x:Key="已关闭卷册">Chapter Closed</sys:String>
+    <sys:String x:Key="已关闭文章">Essay Closed</sys:String>
+    <sys:String x:Key="请输入书籍名">Please input book name</sys:String>
+    <sys:String x:Key="请输入卷册名">Please input chapter name</sys:String>
+    <sys:String x:Key="请输入文章名">Please input essay name</sys:String>
+    <sys:String x:Key="请勿把书籍创建在书籍内">Do not create book inside a book</sys:String>
+    <sys:String x:Key="请勿把卷册创建在书籍外">Do not create chapter outside a book</sys:String>
+    <sys:String x:Key="请勿把文章创建在书籍外">Do not create essay outside a book</sys:String>
+    <sys:String x:Key="同名书籍已存在">The book is exist</sys:String>
+    <sys:String x:Key="同名卷册已存在">The chapter is exist</sys:String>
+    <sys:String x:Key="同名文章已存在">The essay is exist</sys:String>
+    <sys:String x:Key="全书字数">Totally Word counts</sys:String>
+    <sys:String x:Key="子卷册数">Chapters counts</sys:String>
+    <sys:String x:Key="总文章数">Essays counts</sys:String>
+    <sys:String x:Key="字数">Word counts</sys:String>
+
+    <sys:String x:Key="书籍备份中">In back up...</sys:String>
+    <sys:String x:Key="正在读取文本">Getting text, please wait a moment...</sys:String>
+    <sys:String x:Key="正在编辑">Editing...</sys:String>
+    <sys:String x:Key="正在导出txt">Exporting....</sys:String>
+    <sys:String x:Key="行">Row</sys:String>
+    <sys:String x:Key="列">Col</sys:String>
+    
     <sys:String x:Key="显示运行信息">Show running info</sys:String>
     <sys:String x:Key="自动检查更新">Check new version</sys:String>
     <sys:String x:Key="自动打开书籍">Open last book</sys:String>
@@ -111,53 +143,21 @@
     <sys:String x:Key="间隔时间自动保存">Auto save every timespan</sys:String>
     <sys:String x:Key="文章切换时自动保存">Auto save when swich file</sys:String>
     <sys:String x:Key="间隔时间自动备份">Auto backup every timespan</sys:String>
-    <!--右侧区域-->
-    <sys:String x:Key="欢迎使用">Welcome to</sys:String>
     <sys:String x:Key="启动次数">Start up counts</sys:String>
-    <sys:String x:Key="行">Row</sys:String>
-    <sys:String x:Key="列">Col</sys:String>
-    <sys:String x:Key="字数">Word counts</sys:String>
-    <sys:String x:Key="全书字数">Totally Word counts</sys:String>
-    <!--提示消息-->
-    <sys:String x:Key="创建或打开以开始">Open or create a book to start</sys:String>
-    <sys:String x:Key="未打开任何书籍">Didn't open any book</sys:String>
-    <sys:String x:Key="书籍备份中">In back up...</sys:String>
-    <sys:String x:Key="双击或按回车键打开该卷册">Double click or press enter to Open this chapter</sys:String>
-    <sys:String x:Key="双击或按回车键打开该文章">Double click or press enter to Open this essay</sys:String>
-    <sys:String x:Key="当前未选中任何文章">Didn't select any essay</sys:String>
     <sys:String x:Key="请选择一本书籍">Please select a book</sys:String>
-    <sys:String x:Key="正在读取文本">Getting text, please wait a moment...</sys:String>
-    <sys:String x:Key="已打开文章">Essay opened</sys:String>
-    <sys:String x:Key="已打开卷册">Chapter opened</sys:String>
-    <sys:String x:Key="已打开书籍">Book opened</sys:String>
     <sys:String x:Key="已自动打开书籍">Book opened automatically</sys:String>
-    <sys:String x:Key="此文章不存在">This essay isn't exist</sys:String>
-    <sys:String x:Key="此卷册不存在">This chapter isn't exist</sys:String>
-    <sys:String x:Key="此书籍不存在">This book isn't exist</sys:String>
+    <sys:String x:Key="自动打开书籍失败">Book opened automatically failed</sys:String>
     <sys:String x:Key="创建时间">Create time</sys:String>
-    <sys:String x:Key="子卷册数">Chapters counts</sys:String>
-    <sys:String x:Key="总文章数">Essays counts</sys:String>
-    <sys:String x:Key="总字数">Words counts</sys:String>
-
     <sys:String x:Key="重命名不能为空">Rename should not be noname</sys:String>
     <sys:String x:Key="重命名中不能含有以下字符">Rename should not contains these characters</sys:String>
-    <sys:String x:Key="文章重命名成功">Essay rename successfully, list reloaded</sys:String>
-    <sys:String x:Key="卷册重命名成功">Chapter rename successfully，list reloaded</sys:String>
     <sys:String x:Key="在此处重命名">Rename here, press enter to apply</sys:String>
     <sys:String x:Key="当前书籍">This Book</sys:String>
     <sys:String x:Key="书籍位置">Book Path</sys:String>
-    <sys:String x:Key="请选择一个项目再删除">Please select a chapter or essay</sys:String>
-    <sys:String x:Key="已删除文章">Essay deleted</sys:String>
-    <sys:String x:Key="已删除卷册">Chapter deleted</sys:String>
-    <sys:String x:Key="已关闭书籍">Book Closed</sys:String>
-    <sys:String x:Key="已关闭卷册">Chapter Closed</sys:String>
-    <sys:String x:Key="已关闭文章">Essay Closed</sys:String>
+    <sys:String x:Key="请选择目标">Please select target</sys:String>
     <sys:String x:Key="目录已重新导入">List Reloaded</sys:String>
     <sys:String x:Key="选择一个项目显示路径">Select a chapter or essay to show path</sys:String>
     <sys:String x:Key="删除此书的打开纪录">Delete the opening record of this book</sys:String>
     <sys:String x:Key="最近打开过的书籍列表">The recently opening record of books</sys:String>
-
-    <sys:String x:Key="正在编辑">editing...</sys:String>
     <sys:String x:Key="控制字数">The number of words cannot exceed 100,000</sys:String>
     <sys:String x:Key="保存成功">Saved</sys:String>
     <sys:String x:Key="保存失败">Save failed, target path doesn't exist</sys:String>
@@ -167,11 +167,16 @@
     <sys:String x:Key="文章还未保存">Essay hasn't saved, need save?</sys:String>
     <sys:String x:Key="选择导出目录">Select the path of export</sys:String>
     <sys:String x:Key="导出路径已存在">The same name file is exist, Whether to cover?</sys:String>
-    <sys:String x:Key="正在导出txt">Exporting....</sys:String>
     <sys:String x:Key="导出成功">Exported, the counts of words are</sys:String>
     <sys:String x:Key="已取消导出">Export cancelled</sys:String>
-
-
+    
+    <sys:String x:Key="请设置存放位置">Please set place path</sys:String>
+    <sys:String x:Key="名称中不能含有以下字符">Name should not contain</sys:String>
+    <sys:String x:Key="所有位置已查找完毕">All locations have been replaced, Press again to find from the beginning</sys:String>
+    <sys:String x:Key="所有位置已替换完毕">All locations have been replaced</sys:String>
+    <sys:String x:Key="没有找到该内容">Content not found</sys:String>
+    <sys:String x:Key="请输入要查找的内容">Please input content</sys:String>
+    <sys:String x:Key="共计？处">Totally {0}</sys:String>
 
     <!--updater-->
     <sys:String x:Key="安装">Install</sys:String>
@@ -182,17 +187,9 @@
     <sys:String x:Key="网络连接成功">Connect to Internet Success</sys:String>
     <sys:String x:Key="网络连接失败">Connect to Internet Failed</sys:String>
 
-
-
     <!--role-->
-    <sys:String x:Key="生成">Create</sys:String>
-    <sys:String x:Key="生成+">Create a Role</sys:String>
-    <sys:String x:Key="移除">Remove</sys:String>
-    <sys:String x:Key="移除+">Remove Selected</sys:String>
     <sys:String x:Key="导出当前">Export Selected</sys:String>
-    <sys:String x:Key="导出当前+">Export Selected Role</sys:String>
     <sys:String x:Key="导出全部">Export All</sys:String>
-    <sys:String x:Key="导出全部+">Export All Roles</sys:String>
     <sys:String x:Key="姓氏">Surname</sys:String>
     <sys:String x:Key="名字">Name</sys:String>
     <sys:String x:Key="生日">Birthday</sys:String>
@@ -211,12 +208,7 @@
     <sys:String x:Key="身高范围错误">Height min value must smaller than max value</sys:String>
     <sys:String x:Key="体重范围错误">Weight min value must smaller than max value</sys:String>
 
-    
-
-
     <!--player-->
-    <sys:String x:Key="添加">Add</sys:String>
-    <sys:String x:Key="添加+">Add A</sys:String>
     <sys:String x:Key="屏幕模式">Screeen Mode</sys:String>
     <sys:String x:Key="全屏">FullScreen</sys:String>
     <sys:String x:Key="全屏+">FullScreeen/Window Mode M-Mouse</sys:String>

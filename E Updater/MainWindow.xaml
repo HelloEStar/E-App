@@ -96,10 +96,10 @@
 
             <!--工作区-->
             <DockPanel Background="{DynamicResource 三级背景颜色}">
-                <Grid Height="30" VerticalAlignment="Top" Background="{DynamicResource 二级背景颜色}" DockPanel.Dock="Bottom">
-                    <TextBlock x:Name="Lbl_Message" Text="提示" Style="{DynamicResource 文本显示框样式}"/>
-                    <Button x:Name="Btn_Refresh" Content="刷新" Style="{DynamicResource 自由按钮样式}" Click="BtnRefresh_Click" HorizontalAlignment="Right" Width="60"/>
-                </Grid>
+                <DockPanel DockPanel.Dock="Bottom" Height="30" Background="{DynamicResource 二级背景颜色}">
+                    <Button x:Name="Btn_Refresh" Content="刷新" Style="{DynamicResource 自由按钮样式}" Click="BtnRefresh_Click" HorizontalAlignment="Right" Width="60" DockPanel.Dock="Right"/>
+                    <Label x:Name="LblMessage" Content="提示" Style="{DynamicResource 自由标签样式}"/>
+                </DockPanel>
                 <ScrollViewer>
                     <StackPanel>
                         <StackPanel Background="{DynamicResource 二级背景颜色}">

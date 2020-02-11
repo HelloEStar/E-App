@@ -149,7 +149,7 @@ namespace E.Writer
             TvwBook.Items.Clear();
             ScanBookPath(CurrentBook.Path);
             //提示消息
-            ShowMessage("目录已重新导入");
+            ShowMessage(FindResource("目录已重新导入").ToString());
         }
 
         //打开
@@ -211,11 +211,11 @@ namespace E.Writer
                 RefreshBtnsState();
                 ReloadTvwBook();
 
-                ShowMessage("已打开书籍", " " + book.Name);
+                ShowMessage(FindResource("已打开书籍").ToString() + "：" + book.Name);
             }
             else
             {
-                ShowMessage("此书籍不存在", true);
+                ShowMessage(FindResource("此书籍不存在").ToString(), true);
             }
         }
         /// <summary>
@@ -235,11 +235,11 @@ namespace E.Writer
                 RefreshTitle();
                 RefreshBtnsState();
 
-                ShowMessage("已打开卷册", " " + CurrentChapter.Name);
+                ShowMessage(FindResource("已打开卷册").ToString() + "：" + CurrentChapter.Name);
             }
             else
             {
-                ShowMessage("此卷册不存在", true);
+                ShowMessage(FindResource("此卷册不存在").ToString(), true);
             }
         }
         /// <summary>
@@ -259,7 +259,7 @@ namespace E.Writer
                     CurrentChapter = null;
                 }
 
-                ShowMessage("正在读取文本");
+                ShowMessage(FindResource("正在读取文本").ToString());
                 RefreshWindow();
 
                 //创建读取文件
@@ -280,11 +280,11 @@ namespace E.Writer
                 RefreshBtnsState();
                 RefreshTitle();
 
-                ShowMessage("已打开文章", " " + CurrentEssay.Name);
+                ShowMessage(FindResource("已打开文章").ToString() + "：" + CurrentEssay.Name);
             }
             else
             {
-                ShowMessage("此文章不存在", true);
+                ShowMessage(FindResource("此文章不存在").ToString(), true);
             }
         }
         /// <summary>
@@ -324,11 +324,11 @@ namespace E.Writer
                 ReloadTvwBook();
 
                 //显示消息
-                ShowMessage("已自动打开书籍", " " + CurrentBook.Name);
+                ShowMessage(FindResource("已自动打开书籍").ToString() + "：" + CurrentBook.Name);
             }
             else
             {
-                ShowMessage("自动打开书籍失败", true);
+                ShowMessage(FindResource("自动打开书籍失败").ToString(), true);
             }
         }
 
@@ -343,14 +343,14 @@ namespace E.Writer
                 CloseChapter();
                 Backup();
 
-                TxtFileName.Text = FindResource("欢迎使用") + " " + AppInfo.Name;
+                TxtFileName.Text = FindResource("欢迎使用") + "：" + AppInfo.Name;
                 TxtFileName.ToolTip = null;
                 TxtFileContent.Text = FindResource("创建或打开以开始").ToString();
                 TxtWordCount.ToolTip = null;
                 TxtWordCount.Text = FindResource("字数") + "：0";
                 TvwBook.ToolTip = FindResource("创建或打开以开始");
 
-                ShowMessage("已关闭书籍", " " + CurrentBook.Name);
+                ShowMessage(FindResource("已关闭书籍").ToString() +"：" + CurrentBook.Name);
                 CurrentBook = null;
                 RefreshBtnsState();
                 RefreshTitle();
@@ -391,7 +391,7 @@ namespace E.Writer
                 TxtWordCount.Text = FindResource("字数") + "：0";
                 TxtWordCount.ToolTip = null;
 
-                ShowMessage("已关闭文章", " " + CurrentEssay.Name);
+                ShowMessage(FindResource("已关闭文章").ToString() + "：" + CurrentEssay.Name);
                 CurrentEssay = null;
                 if (CurrentChapter != null)
                 {
@@ -437,11 +437,11 @@ namespace E.Writer
                     fs.Close();
                     IsSaved = true;
                     //显示消息
-                    ShowMessage("保存成功");
+                    ShowMessage(FindResource("保存成功").ToString());
                 }
                 else
                 {
-                    ShowMessage("保存失败");
+                    ShowMessage(FindResource("保存失败").ToString());
                 }
                 RefreshTitle();
             }
@@ -471,7 +471,7 @@ namespace E.Writer
                         };
                         st.Close();
                         //显示消息
-                        ShowMessage("另存为成功");
+                        ShowMessage(FindResource("另存为成功").ToString());
                     }
                 }
                 RefreshTitle();
@@ -541,9 +541,9 @@ namespace E.Writer
 
             if (TxtCreatePath.Text == null || TxtCreatePath.Text == "")
             {
-                BtnCreateBook.ToolTip = "请设置存放位置";
-                BtnCreateChapter.ToolTip = "请设置存放位置";
-                BtnCreateEssay.ToolTip = "请设置存放位置";
+                BtnCreateBook.ToolTip = FindResource("请设置存放位置").ToString();
+                BtnCreateChapter.ToolTip = FindResource("请设置存放位置").ToString();
+                BtnCreateEssay.ToolTip = FindResource("请设置存放位置").ToString();
             }
             else
             {
@@ -561,17 +561,17 @@ namespace E.Writer
         {
             if (TxtCreatePath.Text == null || TxtCreatePath.Text == "")
             {
-                MessageBox.Show("请设置存放位置");
+                ShowMessage(FindResource("请设置存放位置").ToString(),true);
                 return;
             }
             if (TxtCreateName.Text == null || TxtCreateName.Text == "")
             {
-                MessageBox.Show("请输入书籍名");
+                ShowMessage(FindResource("请输入书籍名").ToString(), true);
                 return;
             }
             if (!CheckIsRightName(TxtCreateName.Text))
             {
-                MessageBox.Show("名称中不能含有以下字符 \\ | / < > \" ? * : ");
+                ShowMessage(FindResource("名称中不能含有以下字符").ToString() + " \\ | / < > \" ? * : ", true);
                 return;
             }
 
@@ -580,13 +580,13 @@ namespace E.Writer
             {
                 if (path.Contains(CurrentBook.Path) && Path.GetDirectoryName(path) != Path.GetDirectoryName(CurrentBook.Path))
                 {
-                    MessageBox.Show("请勿把新书籍创建在另一个书籍里");
+                    ShowMessage(FindResource("请勿把书籍创建在书籍内").ToString(), true);
                     return;
                 }
             }
             if (Directory.Exists(path))
             {
-                MessageBox.Show("同名书籍已存在，请换个名字");
+                ShowMessage(FindResource("同名书籍已存在").ToString(), true);
                 return;
             }
 
@@ -609,29 +609,29 @@ namespace E.Writer
         {
             if (TxtCreatePath.Text == null || TxtCreatePath.Text == "")
             {
-                MessageBox.Show("请设置存放位置");
+                ShowMessage(FindResource("请设置存放位置").ToString(), true);
                 return;
             }
             if (TxtCreateName.Text == null || TxtCreateName.Text == "")
             {
-                MessageBox.Show("请输入卷册名");
+                ShowMessage(FindResource("请输入卷册名").ToString(), true);
                 return;
             }
             if (!CheckIsRightName(TxtCreateName.Text))
             {
-                MessageBox.Show("名称中不能含有以下字符 \\ | / < > \" ? * : ");
+                ShowMessage(FindResource("名称中不能含有以下字符").ToString() + " \\ | / < > \" ? * : ", true);
                 return;
             }
 
             string path = BtnCreateChapter.ToolTip.ToString();
             if (!path.Contains(CurrentBook.Path) || path == CurrentBook.Path)
             {
-                MessageBox.Show("请勿把卷册创建在书籍外");
+                ShowMessage(FindResource("请勿把卷册创建在书籍外").ToString(), true);
                 return;
             }
             if (Directory.Exists(path))
             {
-                MessageBox.Show("同名卷册已存在，请换个名字");
+                ShowMessage(FindResource("同名卷册已存在").ToString(), true);
                 return;
             }
 
@@ -668,29 +668,29 @@ namespace E.Writer
         {
             if (TxtCreatePath.Text == null || TxtCreatePath.Text == "")
             {
-                MessageBox.Show("请设置存放位置");
+                ShowMessage(FindResource("请设置存放位置").ToString(), true);
                 return;
             }
             if (TxtCreateName.Text == null || TxtCreateName.Text == "")
             {
-                MessageBox.Show("请输入文章名");
+                ShowMessage(FindResource("请输入文章名").ToString(), true);
                 return;
             }
             if (!CheckIsRightName(TxtCreateName.Text))
             {
-                MessageBox.Show("名称中不能含有以下字符 \\ | / < > \" ? * : ");
+                ShowMessage(FindResource("名称中不能含有以下字符").ToString() + " \\ | / < > \" ? * : ", true);
                 return;
             }
 
             string path = BtnCreateEssay.ToolTip.ToString();
             if (!path.Contains(CurrentBook.Path) || path.Replace(".txt", "") == CurrentBook.Path)
             {
-                MessageBox.Show("请勿把文章创建在书籍外");
+                ShowMessage(FindResource("请勿把文章创建在书籍外").ToString(), true);
                 return;
             }
             if (File.Exists(path))
             {
-                MessageBox.Show("同名文章已存在，请换个名字");
+                ShowMessage(FindResource("同名文章已存在").ToString(), true);
                 return;
             }
 
@@ -701,7 +701,7 @@ namespace E.Writer
             }
             File.Create(path).Close();
             CurrentEssay = new FileOrFolderInfo(path);
-            TxtHelpMessage.Text = "已创建文章 " + CurrentEssay.Name;
+            LblMessage.Content = "已创建文章 " + CurrentEssay.Name;
             OpenEssay(path);
             RefreshBtnsState();
             RefreshTitle();
@@ -842,7 +842,7 @@ namespace E.Writer
                 else
                 {
                     //显示消息
-                    ShowMessage("请选择一个项目再删除");
+                    ShowMessage(FindResource("请选择目标").ToString());
                 }
             }
             else
@@ -870,14 +870,14 @@ namespace E.Writer
                         }
                     }
 
-                    TxtFileName.Text = FindResource("欢迎使用") + " " + AppInfo.Name;
+                    TxtFileName.Text = FindResource("欢迎使用") + "：" + AppInfo.Name;
                     TxtFileName.ToolTip = null;
                     TxtFileContent.Text = FindResource("创建或打开以开始").ToString();
                     TxtWordCount.ToolTip = null;
                     TxtWordCount.Text = FindResource("字数") + "：0";
                     TvwBook.ToolTip = FindResource("创建或打开以开始");
 
-                    ShowMessage("已删除书籍" + CurrentBook.Name);
+                    ShowMessage(FindResource("已删除书籍").ToString() + CurrentBook.Name);
                     CurrentBook = null;
                     CurrentChapter = null;
                     CurrentEssay = null;
@@ -899,7 +899,7 @@ namespace E.Writer
             //获取对应文件路径
             string _path = SelectedNode.ToolTip.ToString();
             string name = SelectedNode.Header.ToString();
-            MessageBoxResult result = MessageBox.Show("是否删除卷册 " + name + " ？", "删除项目", MessageBoxButton.YesNo);
+            MessageBoxResult result = MessageBox.Show("是否删除卷册：" + name + " ？", "删除项目", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
                 Directory.Delete(_path, true);
@@ -911,7 +911,7 @@ namespace E.Writer
                     {
                         CurrentEssay = null;
                         CurrentChapter = null;
-                        TxtFileName.Text = FindResource("当前未选中任何文章").ToString();
+                        TxtFileName.Text = FindResource("未选中任何文章").ToString();
                         TxtFileName.ToolTip = null;
                         TxtFileContent.Text = null;
                         TxtFileName.IsEnabled = false;
@@ -920,7 +920,7 @@ namespace E.Writer
                         RefreshTitle();
                     }
                 }
-                ShowMessage("已删除卷册", " " + name);
+                ShowMessage(FindResource("已删除卷册").ToString() + "：" + name);
             }
         }
         /// <summary>
@@ -931,7 +931,7 @@ namespace E.Writer
             //获取对应文件路径
             string _path = SelectedNode.ToolTip.ToString();
             string name = SelectedNode.Header.ToString();
-            MessageBoxResult result = MessageBox.Show("是否删除文章 " + name +" ？", "删除项目", MessageBoxButton.YesNo);
+            MessageBoxResult result = MessageBox.Show("是否删除文章：" + name +" ？", "删除项目", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
                 RemoveFolderNode(SelectedNode);
@@ -941,7 +941,7 @@ namespace E.Writer
                 {
                     if (_path == CurrentEssay.Path)
                     {
-                        TxtFileName.Text = FindResource("当前未选中任何文章").ToString();
+                        TxtFileName.Text = FindResource("未选中任何文章").ToString();
                         TxtFileName.ToolTip = null;
                         TxtFileContent.Text = null;
                         TxtFileName.IsEnabled = false;
@@ -960,7 +960,7 @@ namespace E.Writer
                         RefreshTitle();
                     }
                 }
-                ShowMessage("已删除文章", " " + name);
+                ShowMessage(FindResource("已删除文章").ToString() + "：" + name);
             }
         }
 
@@ -989,7 +989,7 @@ namespace E.Writer
                 TxtFileContent.Text = FindResource("创建时间") + "：" + Directory.GetCreationTime(CurrentBook.Path) + Environment.NewLine +
                                    FindResource("子卷册数") + "：" + GetDirCounts(CurrentBook.Path) + Environment.NewLine +
                                    FindResource("总文章数") + "：" + GetFileCounts(CurrentBook.Path) + Environment.NewLine +
-                                   FindResource("总字数") + "：" + GetBookWords(CurrentBook.Path, "");
+                                   FindResource("全书字数") + "：" + GetBookWords(CurrentBook.Path, "");
                 CloseChapter();
             }
         }
@@ -1005,7 +1005,7 @@ namespace E.Writer
                 TxtFileContent.Text = FindResource("创建时间") + "：" + Directory.GetCreationTime(CurrentChapter.Path) + Environment.NewLine +
                                    FindResource("子卷册数") + "：" + GetDirCounts(CurrentChapter.Path) + Environment.NewLine +
                                    FindResource("总文章数") + "：" + GetFileCounts(CurrentChapter.Path) + Environment.NewLine +
-                                   FindResource("总字数") + "：" + GetBookWords(CurrentChapter.Path, "");
+                                   FindResource("全书字数") + "：" + GetBookWords(CurrentChapter.Path, "");
                 CloseEssay();
             }
         }
@@ -1443,7 +1443,7 @@ namespace E.Writer
                     finish:;
                     }
                     else
-                    { ShowMessage("双击或按回车键打开该文章"); }
+                    { ShowMessage(FindResource("双击或按回车键打开该文章").ToString()); }
                 }
                 //如果选中的节点是文件夹
                 else if (SelectedNode.IsFile == false)
@@ -1458,7 +1458,7 @@ namespace E.Writer
                         OpenChapter(SelectedNode.ToolTip.ToString());
                     }
                     else
-                    { ShowMessage("双击或按回车键打开该卷册"); }
+                    { ShowMessage(FindResource("双击或按回车键打开该卷册").ToString()); }
                 }
             }
         }
@@ -1547,7 +1547,7 @@ namespace E.Writer
                     }
                     else
                     {
-                        ShowMessage("已取消导出");
+                        ShowMessage(FindResource("已取消导出").ToString());
                     }
                 }
                 else
@@ -1568,7 +1568,7 @@ namespace E.Writer
             else
             {
                 TvwBook.ToolTip = FindResource("创建或打开以开始");
-                TxtHelpMessage.Text = FindResource("创建或打开以开始").ToString();
+                LblMessage.Content = FindResource("创建或打开以开始").ToString();
             }
         }
         /// <summary>
@@ -1841,36 +1841,7 @@ namespace E.Writer
         /// <param name="newBox">是否弹出对话框</param>
         private void ShowMessage(string message, bool newBox = false)
         {
-            if (TxtHelpMessage == null)
-            {
-                return;
-            }
-
-            if (newBox)
-            {
-                MessageBox.Show(message);
-            }
-            else
-            {
-                TxtHelpMessage.Text = message;
-            }
-        }
-        /// <summary>
-        /// 显示更多消息
-        /// </summary>
-        /// <param name="resourceName">资源名</param>
-        /// <param name="moreText">附加信息</param>
-        /// <param name="newBox">是否弹出对话框</param>
-        private void ShowMessage(string resourceName, string moreText, bool newBox = false)
-        {
-            if (newBox)
-            {
-                MessageBox.Show(FindResource(resourceName) + moreText);
-            }
-            else
-            {
-                TxtHelpMessage.Text = FindResource(resourceName) + moreText;
-            }
+            MessageHelper.ShowMessage(LblMessage, message, newBox);
         }
         /// <summary>
         /// 展开目录
@@ -2028,7 +1999,7 @@ namespace E.Writer
         private void Export(string _output)
         {
             //显示消息
-            ShowMessage("正在导出txt");
+            ShowMessage(FindResource("正在导出txt").ToString());
             RefreshWindow();
 
             File.CreateText(_output).Close();
@@ -2074,7 +2045,7 @@ namespace E.Writer
             fs.Close();
 
             //显示消息
-            ShowMessage("导出成功", " " + l);
+            ShowMessage(FindResource("导出成功").ToString() + "：" + l);
             Process.Start(Path.GetDirectoryName(_output));
         }
         /// <summary>
@@ -2102,7 +2073,7 @@ namespace E.Writer
             {
                 if (CurrentBook != null && Directory.Exists(CurrentBook.Path))
                 {
-                    ShowMessage("书籍备份中");
+                    ShowMessage(FindResource("书籍备份中").ToString());
                     RefreshWindow();
                     string _path = Settings.Default.BackupDir + @"\" + CurrentBook.Name;
                     //删除上个备份
@@ -2113,7 +2084,7 @@ namespace E.Writer
                     CopyDirectory(CurrentBook.Path, _path);
                     //显示消息
                     //Dispatcher.BeginInvoke(new Action(delegate { HelpMessage.Content = "书籍已自动备份于 " + DateTime.Now.ToLongTimeString().ToString(); }));
-                    ShowMessage("已自动备份于", DateTime.Now.ToLongTimeString().ToString());
+                    ShowMessage(FindResource("已自动备份于").ToString() + DateTime.Now.ToLongTimeString().ToString());
                 }
             }
             //});
@@ -2283,7 +2254,7 @@ namespace E.Writer
             {
                 SaveFile();
                 //显示消息
-                ShowMessage("已自动保存于", DateTime.Now.ToLongTimeString().ToString());
+                ShowMessage(FindResource("已自动保存于").ToString() + DateTime.Now.ToLongTimeString().ToString());
             }
         }
         private void TimerAutoBackup_Tick(object sender, EventArgs e)
@@ -2394,9 +2365,9 @@ namespace E.Writer
         {
             if (TxtCreatePath.Text == null || TxtCreatePath.Text == "")
             {
-                BtnCreateBook.ToolTip = "请设置存放位置";
-                BtnCreateChapter.ToolTip = "请设置存放位置";
-                BtnCreateEssay.ToolTip = "请设置存放位置";
+                BtnCreateBook.ToolTip = FindResource("请设置存放位置").ToString();
+                BtnCreateChapter.ToolTip = FindResource("请设置存放位置").ToString();
+                BtnCreateEssay.ToolTip = FindResource("请设置存放位置").ToString();
             }
             else
             {
@@ -2409,9 +2380,9 @@ namespace E.Writer
         {
             if (TxtCreateName.Text == null || TxtCreateName.Text == "")
             {
-                BtnCreateBook.ToolTip = "请输入书籍名称";
-                BtnCreateChapter.ToolTip = "请输入卷册名称";
-                BtnCreateEssay.ToolTip = "请输入文章名称";
+                BtnCreateBook.ToolTip = FindResource("请输入书籍名称").ToString();
+                BtnCreateChapter.ToolTip = FindResource("请输入卷册名称").ToString() ;
+                BtnCreateEssay.ToolTip = FindResource("请输入文章名称").ToString();
             }
             else
             {
@@ -2437,7 +2408,7 @@ namespace E.Writer
                 else
                 {
                     CbbBooks.Items.Remove(cbi);
-                    ShowMessage("此书籍不存在", true);
+                    ShowMessage(FindResource("此书籍不存在").ToString(), true);
                 }
             }
         }
@@ -2503,7 +2474,8 @@ namespace E.Writer
                 if (TxtFileContent.Text.Contains(TxtFind.Text))
                 {
                     //获取总个数
-                    TxtFindAmount.Text = "共计" + Regex.Matches(TxtFileContent.Text, TxtFind.Text).Count.ToString() + "处";
+                    int i = Regex.Matches(TxtFileContent.Text, TxtFind.Text).Count;
+                    TxtFindAmount.Text = string.Format(FindResource("共计？处").ToString(), i);
                     int j = TxtFind.Text.Length;
                     //检测是否同个内容第一次按下
                     if (CurrentFindText != TxtFind.Text)
@@ -2532,22 +2504,22 @@ namespace E.Writer
                         }
                         else
                         {
-                            MessageBox.Show("所有位置已查找完毕，再按一次将从头查找");
+                            ShowMessage(FindResource("所有位置已查找完毕，再按一次将从头查找").ToString(), true);
                             NextStartIndex = 0;
                         }
                     }
                 }
                 else
                 {
-                    MessageBox.Show("没有找到该内容");
-                    TxtFindAmount.Text = "共计0处";
+                    ShowMessage(FindResource("没有找到该内容").ToString(), true);
+                    TxtFindAmount.Text = string.Format(FindResource("共计？处").ToString(), 0);
                     NextStartIndex = 0;
                 }
             }
             else
             {
-                MessageBox.Show("请输入要查找的内容");
-                TxtFindAmount.Text = "共计0处";
+                ShowMessage(FindResource("请输入要查找的内容").ToString(), true);
+                TxtFindAmount.Text = string.Format(FindResource("共计？处").ToString(), 0);
                 NextStartIndex = 0;
             }
         }
@@ -2593,7 +2565,7 @@ namespace E.Writer
                         }
                         else
                         {
-                            MessageBox.Show("所有位置已替换完毕");
+                            ShowMessage(FindResource("所有位置已替换完毕").ToString(), true);
                             NextStartIndex = 0;
                         }
                     }
@@ -2602,15 +2574,15 @@ namespace E.Writer
                 }
                 else
                 {
-                    MessageBox.Show("没有找到该内容");
-                    TxtFindAmount.Text = "共计0处";
+                    ShowMessage(FindResource("没有找到该内容").ToString(), true);
+                    TxtFindAmount.Text = string.Format(FindResource("共计？处").ToString(), 0);
                     NextStartIndex = 0;
                 }
             }
             else
             {
-                MessageBox.Show("请输入要查找的内容");
-                TxtFindAmount.Text = "共计0处";
+                ShowMessage(FindResource("请输入要查找的内容").ToString(), true);
+                TxtFindAmount.Text = string.Format(FindResource("共计？处").ToString(), 0);
                 NextStartIndex = 0;
             }
         }
@@ -2628,19 +2600,19 @@ namespace E.Writer
                     //移除、插入、高亮
                     TxtFileContent.Focus();
                     TxtFileContent.Text = TxtFileContent.Text.Replace(CurrentFindText, ReplaceText);
-                    MessageBox.Show("全部内容已替换完毕，共计" + i + "处");
-                    TxtFindAmount.Text = "共计0处";
+                    ShowMessage(FindResource("全部内容已替换完毕").ToString() + string.Format(FindResource("共计？处").ToString(), i), true);
+                    TxtFindAmount.Text = string.Format(FindResource("共计？处").ToString(), 0);
                 }
                 else
                 {
-                    MessageBox.Show("没有找到该内容");
-                    TxtFindAmount.Text = "共计0处";
+                    ShowMessage(FindResource("没有找到该内容").ToString(), true);
+                    TxtFindAmount.Text = string.Format(FindResource("共计？处").ToString(), 0);
                 }
             }
             else
             {
-                MessageBox.Show("请输入要查找的内容");
-                TxtFindAmount.Text = "共计0处";
+                ShowMessage(FindResource("请输入要查找的内容").ToString(), true);
+                TxtFindAmount.Text = string.Format(FindResource("共计？处").ToString(), 0);
             }
         }
         ///设置
@@ -2747,7 +2719,7 @@ namespace E.Writer
         private void BtnBitCoinAddress_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Clipboard.SetDataObject(TxtBitCoinAddress.Text, true);
-            ShowMessage("已复制");
+            ShowMessage(FindResource("已复制").ToString());
         }
         private void BtnHomePage_Click(object sender, RoutedEventArgs e)
         {
@@ -2772,7 +2744,7 @@ namespace E.Writer
         }
         private void TxtFileName_GotFocus(object sender, RoutedEventArgs e)
         {
-            ShowMessage("在此处重命名");
+            ShowMessage(FindResource("在此处重命名").ToString());
         }
         private void TxtFileName_KeyUp(object sender, KeyEventArgs e)
         {
@@ -2808,7 +2780,7 @@ namespace E.Writer
                             ReloadTvwBook();
 
                             //显示消息
-                            ShowMessage("文章重命名成功");
+                            ShowMessage(FindResource("文章重命名成功").ToString());
                         }
                         else if (CurrentChapter != null)
                         {
@@ -2817,7 +2789,7 @@ namespace E.Writer
                             //更新卷册名称和路径
                             string name = TxtFileName.Text;
                             CurrentChapter = new FileOrFolderInfo(Path.GetDirectoryName(CurrentChapter.Path) + @"\" + name);
-                            //MessageBox.Show(System.IO.Path.GetDirectoryName(_CurrentChapter.Name));
+                            //ShowMessage(System.IO.Path.GetDirectoryName(_CurrentChapter.Name));
                             Directory.CreateDirectory(CurrentChapter.Path);
                             if (_old != CurrentChapter.Path)
                             {
@@ -2830,15 +2802,15 @@ namespace E.Writer
                                 ReloadTvwBook();
 
                                 //显示消息
-                                ShowMessage("卷册重命名成功");
+                                ShowMessage(FindResource("卷册重命名成功").ToString());
                             }
                         }
                     }
                     else
-                        ShowMessage("重命名中不能含有以下字符", " \\ | / < > \" ? * :");
+                        ShowMessage(FindResource("重命名中不能含有以下字符").ToString() + " \\ | / < > \" ? * :");
                 }
                 else
-                    ShowMessage("重命名不能为空");
+                    ShowMessage(FindResource("重命名不能为空").ToString());
             }
         }
         private void TxtFileContent_TextChanged(object sender, TextChangedEventArgs e)
@@ -2853,11 +2825,11 @@ namespace E.Writer
                 TxtWordCount.Text = FindResource("字数").ToString() + "：" + w;
                 TxtWordCount.ToolTip = FindResource("全书字数").ToString() + "：" + GetBookWords(CurrentBook.Path, CurrentEssay.Path);
                 //显示消息
-                ShowMessage("正在编辑");
+                ShowMessage(FindResource("正在编辑").ToString());
                 IsSaved = false;
                 if (w > 100000)
                 {
-                    ShowMessage("控制字数", true);
+                    ShowMessage(FindResource("控制字数").ToString(), true);
                 }
                 RefreshTitle();
             }

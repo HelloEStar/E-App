@@ -558,6 +558,15 @@ namespace E.Updater
 
         //显示
         /// <summary>
+        /// 显示消息
+        /// </summary>
+        /// <param name="resourceName">资源名</param>
+        /// <param name="newBox">是否弹出对话框</param>
+        private void ShowMessage(string message, bool newBox = false)
+        {
+            MessageHelper.ShowMessage(LblMessage, message, newBox);
+        }
+        /// <summary>
         /// 检测所有目录是否存在
         /// </summary>
         private void ShowAllPath()
@@ -641,22 +650,6 @@ namespace E.Updater
             else
             {
                 Lbl_ENThisVer.Text = "未安装任何版本";
-            }
-        }
-        /// <summary>
-        /// 显示消息
-        /// </summary>
-        /// <param name="resourceName">资源名</param>
-        /// <param name="newBox">是否弹出对话框</param>
-        private void ShowMessage(string message, bool newBox = false)
-        {
-            if (newBox)
-            {
-                MessageBox.Show(message);
-            }
-            else
-            {
-                Lbl_Message.Text = message;
             }
         }
 
@@ -978,7 +971,7 @@ namespace E.Updater
         private void BtnBitCoinAddress_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Clipboard.SetDataObject(TxtBitCoinAddress.Text, true);
-            ShowMessage("已复制");
+            ShowMessage(FindResource("已复制").ToString());
         }
         private void BtnHomePage_Click(object sender, RoutedEventArgs e)
         {

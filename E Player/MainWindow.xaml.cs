@@ -919,31 +919,11 @@ namespace E.Player
         /// <summary>
         /// 显示消息
         /// </summary>
-        /// <param name="message">资源名</param>
+        /// <param name="resourceName">资源名</param>
         /// <param name="newBox">是否弹出对话框</param>
         private void ShowMessage(string message, bool newBox = false)
         {
-            if (newBox)
-            {
-                MessageBox.Show(message.ToString());
-            }
-            else
-            {
-                if (LblMessage != null)
-                {
-                    //实例化一个DoubleAnimation类。
-                    DoubleAnimation doubleAnimation = new DoubleAnimation
-                    {
-                        From = 1,
-                        To = 0,
-                        Duration = new Duration(TimeSpan.FromSeconds(3))
-                    };
-                    //为元素设置BeginAnimation方法。
-                    LblMessage.BeginAnimation(OpacityProperty, doubleAnimation);
-
-                    LblMessage.Content = message;
-                }
-            }
+            MessageHelper.ShowMessage(LblMessage, message, newBox);
         }
         /// <summary>
         /// 创建mp3封面
@@ -1782,7 +1762,7 @@ namespace E.Player
         private void BtnBitCoinAddress_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Clipboard.SetDataObject(TxtBitCoinAddress.Text, true);
-            ShowMessage("已复制");
+            ShowMessage(FindResource("已复制").ToString());
         }
         private void BtnHomePage_Click(object sender, RoutedEventArgs e)
         {

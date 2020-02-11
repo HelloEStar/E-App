@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace SharedProject
 {
@@ -72,6 +73,7 @@ namespace SharedProject
         public string BitCoinAddress { get; }
 
         public static string ThemeFolder { get; } = "Themes";
+        public static string BackupFolder { get; } = "Backups";
 
         public AppInfo()
         {
@@ -339,6 +341,41 @@ namespace SharedProject
         }
     }
 
+    /// <summary>
+    /// 消息助手
+    /// </summary>
+    public class MessageHelper
+    {
+        /// <summary>
+        /// 显示消息
+        /// </summary>
+        /// <param name="resourceName">资源名</param>
+        /// <param name="newBox">是否弹出对话框</param>
+        public static void ShowMessage(Label lbl, string message, bool newBox = false)
+        {
+            if (newBox)
+            {
+                MessageBox.Show(message);
+            }
+            else
+            {
+                if (lbl != null)
+                {
+                    //实例化一个DoubleAnimation类。
+                    DoubleAnimation doubleAnimation = new DoubleAnimation
+                    {
+                        From = 1,
+                        To = 0,
+                        Duration = new Duration(TimeSpan.FromSeconds(3))
+                    };
+                    //为元素设置BeginAnimation方法。
+                    lbl.BeginAnimation(UIElement.OpacityProperty, doubleAnimation);
+
+                    lbl.Content = message;
+                }
+            }
+        }
+    }
 
     /// <summary>
     /// 网络助手

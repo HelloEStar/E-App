@@ -588,28 +588,7 @@ namespace E.Role
         /// <param name="newBox">是否弹出对话框</param>
         private void ShowMessage(string message, bool newBox = false)
         {
-
-            if (newBox)
-            {
-                MessageBox.Show(message);
-            }
-            else
-            {
-                if (LblMessage != null)
-                {
-                    //实例化一个DoubleAnimation类。
-                    DoubleAnimation doubleAnimation = new DoubleAnimation
-                    {
-                        From = 1,
-                        To = 0,
-                        Duration = new Duration(TimeSpan.FromSeconds(3))
-                    };
-                    //为元素设置BeginAnimation方法。
-                    LblMessage.BeginAnimation(OpacityProperty, doubleAnimation);
-
-                    LblMessage.Content = message;
-                }
-            }
+            MessageHelper.ShowMessage(LblMessage, message, newBox);
         }
         /// <summary>
         /// 显示角色

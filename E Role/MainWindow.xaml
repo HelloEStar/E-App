@@ -36,8 +36,8 @@
                         <Button x:Name="BtnCreate" Content="{DynamicResource 生成}" Style="{DynamicResource 自由按钮样式}" Click="BtnCreate_Click" Width="240" />
                         <Button x:Name="BtnRemove" Content="{DynamicResource 移除}" Style="{DynamicResource 自由按钮样式}" Click="BtnRemove_Click" Width="120" />
                         <Button x:Name="BtnClear" Content="{DynamicResource 清空}" Style="{DynamicResource 自由按钮样式}" Click="BtnClear_Click" Width="120"/>
-                        <Button x:Name="BtnExport" Content="{DynamicResource 导出当前}" Style="{DynamicResource 自由按钮样式}"  ToolTip="{DynamicResource 导出当前+}" Click="BtnExport_Click" Width="120" />
-                        <Button x:Name="BtnExportAll" Content="{DynamicResource 导出全部}" Style="{DynamicResource 自由按钮样式}"  ToolTip="{DynamicResource 导出全部+}" Click="BtnExportAll_Click" Width="120" />
+                        <Button x:Name="BtnExport" Content="{DynamicResource 导出当前}" Style="{DynamicResource 自由按钮样式}" Click="BtnExport_Click" Width="120" />
+                        <Button x:Name="BtnExportAll" Content="{DynamicResource 导出全部}" Style="{DynamicResource 自由按钮样式}" Click="BtnExportAll_Click" Width="120" />
                     </WrapPanel>
                     <ListBox x:Name="LtbRecord" Background="{x:Null}" BorderThickness="0" KeyUp="LtbRecord_KeyUp"/>
                 </DockPanel>

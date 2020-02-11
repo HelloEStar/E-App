@@ -34,9 +34,9 @@
             <Grid x:Name="PanFile" Style="{DynamicResource 工具栏样式}" >
                 <DockPanel>
                     <WrapPanel Style="{DynamicResource 水平流式面板样式}" DockPanel.Dock="Top">
-                        <Button x:Name="BtnOpen" Content="{DynamicResource 打开}" Style="{DynamicResource 自由按钮样式}" Click="BtnOpen_Click"/>
-                        <Button x:Name="BtnAdd" Content="{DynamicResource 添加}" Style="{DynamicResource 自由按钮样式}" Click="BtnAdd_Click"/>
-                        <Button x:Name="BtnRemove" Content="{DynamicResource 删除}" Style="{DynamicResource 自由按钮样式}" Click="BtnDelete_Click"/>
+                        <Button x:Name="BtnOpen" Content="{DynamicResource 打开}" ToolTip="O" Style="{DynamicResource 自由按钮样式}" Click="BtnOpen_Click"/>
+                        <Button x:Name="BtnAdd" Content="{DynamicResource 添加}" ToolTip="A" Style="{DynamicResource 自由按钮样式}" Click="BtnAdd_Click"/>
+                        <Button x:Name="BtnRemove" Content="{DynamicResource 删除}" ToolTip="Delete" Style="{DynamicResource 自由按钮样式}" Click="BtnDelete_Click"/>
                         <Button x:Name="BtnClear" Content="{DynamicResource 清空}" Style="{DynamicResource 自由按钮样式}" Click="BtnClear_Click"/>
                     </WrapPanel>
                     <ListBox x:Name="LtbFile" KeyUp="LtbFile_KeyUp" Drop="LtbFile_Drop" PreviewMouseMove="LtbFile_PreviewMouseMove" PreviewDrop="LtbFile_PreviewDrop" PreviewMouseLeftButtonDown="LtbFile_PreviewMouseLeftButtonDown" Background="{x:Null}" BorderThickness="0"/>
