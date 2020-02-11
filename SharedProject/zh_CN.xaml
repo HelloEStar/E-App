@@ -2,27 +2,49 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-
     <!--菜单栏-->
     <sys:String x:Key="文件">文件</sys:String>
     <sys:String x:Key="记录">记录</sys:String>
     <sys:String x:Key="编辑">编辑</sys:String>
     <sys:String x:Key="设置">设置</sys:String>
     <sys:String x:Key="关于">关于</sys:String>
-    <sys:String x:Key="文件+">文件列表 F</sys:String>
-    <sys:String x:Key="编辑+">编辑面板</sys:String>
-    <sys:String x:Key="设置+">设置面板</sys:String>
-    <sys:String x:Key="关于+">关于面板</sys:String>
 
-    
-    
-    
-    
-    
-    
-    
     <!--工具栏-->
-    <!--文件页-->
+    <!--工具栏 设置页-->
+    <sys:String x:Key="重置">重置</sys:String>
+    <sys:String x:Key="清空">清空</sys:String>
+    <sys:String x:Key="语言">语言</sys:String>
+    <sys:String x:Key="主题">主题</sys:String>
+    <sys:String x:Key="最小">最小值</sys:String>
+    <sys:String x:Key="最大">最大值</sys:String>
+    <!--工具栏 信息页-->
+    <sys:String x:Key="官网">官方网站</sys:String>
+    <sys:String x:Key="开源">开源地址</sys:String>
+    <sys:String x:Key="讨论">讨论群聊</sys:String>
+    <sys:String x:Key="名称">应用名称</sys:String>
+    <sys:String x:Key="说明">应用说明</sys:String>
+    <sys:String x:Key="作者">应用作者</sys:String>
+    <sys:String x:Key="版本">当前版本</sys:String>
+    <sys:String x:Key="日志">更新日志</sys:String>
+    <sys:String x:Key="赞助">赞助比特币</sys:String>
+    <sys:String x:Key="前往">前往</sys:String>
+    <sys:String x:Key="复制">复制</sys:String>
+
+    <!--提示消息-->
+    <sys:String x:Key="提示">提示</sys:String>
+    <sys:String x:Key="用户协议">用户协议</sys:String>
+    <sys:String x:Key="已重置">设置已重置</sys:String>
+    <sys:String x:Key="已保存">设置已保存</sys:String>
+    <sys:String x:Key="已载入">设置已载入</sys:String>
+    <sys:String x:Key="已复制">已复制到剪贴板</sys:String>
+    <sys:String x:Key="已更改">偏好设置已更改</sys:String>
+    <sys:String x:Key="下一个主题的配置文件不存在">下一个主题的配置文件不存在</sys:String>
+    <sys:String x:Key="偏好主题的不存在">偏好主题的不存在，已载入默认主题</sys:String>
+
+
+
+    <!--Writer-->
+    <!--工具栏 文件页-->
     <sys:String x:Key="书史+">书籍打开历史</sys:String>
     <sys:String x:Key="打开">打开</sys:String>
     <sys:String x:Key="打开+">打开书籍 Ctrl+O</sys:String>
@@ -53,7 +75,6 @@
     <sys:String x:Key="创书">创建书籍</sys:String>
     <sys:String x:Key="创卷">创建卷册</sys:String>
     <sys:String x:Key="创文">创建文章</sys:String>
-
     <!--编辑页-->
     <sys:String x:Key="撤重">撤销重做</sys:String>
     <sys:String x:Key="撤销">撤销</sys:String>
@@ -72,14 +93,7 @@
     <sys:String x:Key="查下">查找下一个</sys:String>
     <sys:String x:Key="换下">替换下一个</sys:String>
     <sys:String x:Key="换全">替换全部</sys:String>
-    
     <!--设置页-->
-    <sys:String x:Key="重置">重置</sys:String>
-    <sys:String x:Key="清空">清空</sys:String>
-    <sys:String x:Key="重置+">重置设置</sys:String>
-    <sys:String x:Key="清空+">清空运行信息</sys:String>
-    <sys:String x:Key="语言">语言</sys:String>
-    <sys:String x:Key="主题">主题</sys:String>
     <sys:String x:Key="字体">字体</sys:String>
     <sys:String x:Key="字号">字号</sys:String>
     <sys:String x:Key="界面">界面</sys:String>
@@ -95,20 +109,6 @@
     <sys:String x:Key="间隔时间自动保存">间隔时间自动保存</sys:String>
     <sys:String x:Key="文章切换时自动保存">文章切换时自动保存</sys:String>
     <sys:String x:Key="间隔时间自动备份">间隔时间自动备份</sys:String>
-    
-    <!--信息页-->
-    <sys:String x:Key="官网">官方网站</sys:String>
-    <sys:String x:Key="开源">开源地址</sys:String>
-    <sys:String x:Key="讨论">讨论群聊</sys:String>
-    <sys:String x:Key="前往">前往</sys:String>
-    <sys:String x:Key="名称">应用名称</sys:String>
-    <sys:String x:Key="说明">应用说明</sys:String>
-    <sys:String x:Key="作者">应用作者</sys:String>
-    <sys:String x:Key="版本">当前版本</sys:String>
-    <sys:String x:Key="日志">更新日志</sys:String>
-    <sys:String x:Key="赞助">赞助比特币</sys:String>
-    <sys:String x:Key="复制">复制</sys:String>
-
     <!--右侧区域-->
     <sys:String x:Key="欢迎使用">欢迎使用</sys:String>
     <sys:String x:Key="启动次数">启动次数</sys:String>
@@ -116,10 +116,7 @@
     <sys:String x:Key="列">列</sys:String>
     <sys:String x:Key="字数">字数</sys:String>
     <sys:String x:Key="全书字数">全书字数</sys:String>
-
     <!--提示消息-->
-    <sys:String x:Key="用户协议">用户协议</sys:String>
-    <sys:String x:Key="提示">提示</sys:String>
     <sys:String x:Key="创建或打开以开始">创建或打开一本书籍以开始</sys:String>
     <sys:String x:Key="未打开任何书籍">当前没有打开任何书籍</sys:String>
     <sys:String x:Key="书籍备份中">书籍备份中......</sys:String>
@@ -172,40 +169,20 @@
     <sys:String x:Key="导出成功">导出成功，已打开导出文件所在目录，共计字数</sys:String>
     <sys:String x:Key="已取消导出">已取消导出</sys:String>
 
-    <sys:String x:Key="下一个主题的配置文件不存在">下一个主题的配置文件不存在</sys:String>
-    <sys:String x:Key="偏好主题的不存在">偏好主题的不存在，已载入默认主题</sys:String>
-
-    <sys:String x:Key="已重置">设置已重置</sys:String>
-    <sys:String x:Key="已保存">设置已保存</sys:String>
-    <sys:String x:Key="已载入">设置已载入</sys:String>
 
 
-
-
-
-
-
-
-    <!--菜单 updater-->
-
-    <!--面板-->
-    <sys:String x:Key="最小">最小值</sys:String>
-    <sys:String x:Key="最大">最大值</sys:String>
-
-    <!--内容-->
+    <!--updater-->
     <sys:String x:Key="安装">安装</sys:String>
     <sys:String x:Key="更新">更新</sys:String>
     <sys:String x:Key="卸载">卸载</sys:String>
     <sys:String x:Key="终止">终止</sys:String>
     <sys:String x:Key="目录">安装目录</sys:String>
+    <sys:String x:Key="网络连接成功">网络连接成功</sys:String>
+    <sys:String x:Key="网络连接失败">网络连接失败</sys:String>
 
 
 
-
-    <!--菜单栏role-->
-
-    <!--工具栏-->
-    <!--文件页-->
+    <!--role-->
     <sys:String x:Key="生成">生成</sys:String>
     <sys:String x:Key="生成+">生成人设</sys:String>
     <sys:String x:Key="移除">移除</sys:String>
@@ -214,8 +191,6 @@
     <sys:String x:Key="导出当前+">导出当前选中人设到剪贴板</sys:String>
     <sys:String x:Key="导出全部">导出全部</sys:String>
     <sys:String x:Key="导出全部+">导出全部人设到剪贴板</sys:String>
-    <!--编辑页-->
-    <!--设置页-->
     <sys:String x:Key="姓氏">姓氏</sys:String>
     <sys:String x:Key="名字">名称</sys:String>
     <sys:String x:Key="生日">生日</sys:String>
@@ -227,29 +202,18 @@
     <sys:String x:Key="姓氏2">仅复姓</sys:String>
     <sys:String x:Key="性别0">男性/女性</sys:String>
     <sys:String x:Key="性别1">男性/女性/无性/双性</sys:String>
-
     <sys:String x:Key="类型">类型</sys:String>
     <sys:String x:Key="长度">长度</sys:String>
-
-
-    <!--提示消息-->
     <sys:String x:Key="范围错误">最小值必须小于最大值</sys:String>
     <sys:String x:Key="生日范围错误">生日范围最小值必须小于最大值</sys:String>
     <sys:String x:Key="身高范围错误">身高范围最小值必须小于最大值</sys:String>
     <sys:String x:Key="体重范围错误">体重范围最小值必须小于最大值</sys:String>
 
-    <sys:String x:Key="已复制">已复制到剪贴板</sys:String>
-    <sys:String x:Key="已更改">偏好设置已更改</sys:String>
-
-    <sys:String x:Key="网络连接成功">网络连接成功</sys:String>
-    <sys:String x:Key="网络连接失败">网络连接失败</sys:String>
 
 
-    <!--文件页-->
+    <!--player-->
     <sys:String x:Key="添加">添加</sys:String>
     <sys:String x:Key="添加+">添加 A</sys:String>
-
-    <!--编辑页-->
     <sys:String x:Key="屏幕模式">屏幕模式</sys:String>
     <sys:String x:Key="全屏">全屏模式</sys:String>
     <sys:String x:Key="全屏+">全屏/窗口模式 鼠标中键</sys:String>
@@ -278,8 +242,6 @@
     <sys:String x:Key="循终+">设置循环终点 [</sys:String>
     <sys:String x:Key="清循">清除循环</sys:String>
     <sys:String x:Key="清循+">清除循环 \</sys:String>
-
-    <!--设置页-->
     <sys:String x:Key="记录播放列表">记录播放列表</sys:String>
     <sys:String x:Key="记录播放模式">记录播放模式</sys:String>
     <sys:String x:Key="记录播放音量">记录播放音量</sys:String>
@@ -287,10 +249,6 @@
     <sys:String x:Key="记录视频翻转">记录视频翻转</sys:String>
     <sys:String x:Key="记录视频旋转">记录视频旋转</sys:String>
     <sys:String x:Key="记录跳跃时长">记录跳跃时长</sys:String>
-
-    <!--信息页-->
-
-    <!--控制面板-->
     <sys:String x:Key="上个">上个</sys:String>
     <sys:String x:Key="上个+">播放上个媒体 PageUp</sys:String>
     <sys:String x:Key="快退">快退</sys:String>
@@ -312,15 +270,12 @@
     <sys:String x:Key="速度">速度</sys:String>
     <sys:String x:Key="速度+">播放速度 ,/.</sys:String>
     <sys:String x:Key="跳跃">跳跃时长</sys:String>
-
-    <!--提示-->
     <sys:String x:Key="没有媒体">当前没有媒体</sys:String>
     <sys:String x:Key="媒体总数">媒体总数</sys:String>
     <sys:String x:Key="音量升高">音量升高</sys:String>
     <sys:String x:Key="音量降低">音量降低</sys:String>
     <sys:String x:Key="速度增加">速度增加</sys:String>
     <sys:String x:Key="速度减少">速度减少</sys:String>
-
     <sys:String x:Key="双击左键">双击左键</sys:String>
     <sys:String x:Key="播放选定视频">播放选定媒体</sys:String>
     <sys:String x:Key="删除选定视频">删除选定媒体</sys:String>
@@ -337,7 +292,6 @@
     <sys:String x:Key="已经是第一个媒体">已经是第一个媒体</sys:String>
     <sys:String x:Key="全部播放完毕">所有媒体已播放完毕</sys:String>
     <sys:String x:Key="删除视频">媒体已从播放列表移除</sys:String>
-
     <sys:String x:Key="循环始于">循环段将开始于</sys:String>
     <sys:String x:Key="循环终于">循环段将结束于</sys:String>
     <sys:String x:Key="开始点应靠前">循环开始点应当早于循环结束点</sys:String>

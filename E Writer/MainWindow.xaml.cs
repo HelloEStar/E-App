@@ -89,59 +89,6 @@ namespace E.Writer
 
         //载入
         /// <summary>
-        /// 载入语言选项
-        /// </summary>
-        private void LoadLanguageItems()
-        {
-            List<LanguageItem> LanguageItems = new List<LanguageItem>()
-            {
-                new LanguageItem("中文（默认）", "zh_CN"),
-                new LanguageItem("English", "en_US"),
-            };
-
-            CbbLanguages.Items.Clear();
-            foreach (LanguageItem item in LanguageItems)
-            {
-                ComboBoxItem cbi = new ComboBoxItem
-                {
-                    Content = item.Name,
-                    ToolTip = item.Value,
-                    Tag = item.RD
-                };
-                CbbLanguages.Items.Add(cbi);
-            }
-        }
-        /// <summary>
-        /// 载入所有可用主题
-        /// </summary>
-        private void LoadThemeItems()
-        {
-            //创建皮肤文件夹
-            if (!Directory.Exists(AppInfo.ThemeFolder))
-            { Directory.CreateDirectory(AppInfo.ThemeFolder); }
-
-            CbbThemes.Items.Clear();
-            string[] _mySkins = Directory.GetFiles(AppInfo.ThemeFolder);
-            foreach (string item in _mySkins)
-            {
-                string tmp = Path.GetExtension(item);
-                if (tmp == ".ini" || tmp == ".INI")
-                {
-                    string tmp2 = INIOperator.ReadIniKeys("文件", "类型", item);
-                    //若是主题配置文件
-                    if (tmp2 == "主题")
-                    {
-                        ComboBoxItem cbi = new ComboBoxItem
-                        {
-                            Content = Path.GetFileNameWithoutExtension(item),
-                            ToolTip = item
-                        };
-                        CbbThemes.Items.Add(cbi);
-                    }
-                }
-            }
-        }
-        /// <summary>
         /// 获取字体选项
         /// </summary>
         private void LoadFontItems()
@@ -1431,36 +1378,6 @@ namespace E.Writer
             }
         }
         /// <summary>
-        /// 设置内部展开状态
-        /// </summary>
-        /// <param name="node">节点</param>
-        private void SetExpandedState(TreeViewItemNode node)
-        {
-            if (node.IsFile == false)
-            {
-                //如果记录的展开状态是 展开
-                if (node.IsExpanded)
-                {
-                    //将此节点展开
-                    DependencyObject DPObj = TvwBook.ItemContainerGenerator.ContainerFromItem(node);
-                    if (DPObj != null)
-                    {
-                        ((TreeViewItem)DPObj).IsExpanded = true;
-                    }
-                }
-                //如果记录的展开状态是 收起
-                else
-                {
-                    //将此节点收起
-                    DependencyObject DPObj = TvwBook.ItemContainerGenerator.ContainerFromItem(node);
-                    if (DPObj != null)
-                    {
-                        ((TreeViewItem)DPObj).IsExpanded = false;
-                    }
-                }
-            }
-        }
-        /// <summary>
         /// 编码格式更改为utf-8
         /// </summary>
         /// <param name="path">文件路径</param>
@@ -2208,8 +2125,8 @@ namespace E.Writer
         private void Main_Loaded(object sender, RoutedEventArgs e)
         {
             //载入
-            LoadLanguageItems();
-            LoadThemeItems();
+            LanguageHelper.LoadLanguageItems(CbbLanguages);
+            ThemeHelper.LoadThemeItems(CbbThemes);
             LoadFontItems();
             LoadBookItems();
 
@@ -2766,7 +2683,7 @@ namespace E.Writer
                 string themePath = cbi.ToolTip.ToString();
                 if (File.Exists(themePath))
                 {
-                    ColorHelper.SetTheme(Resources, themePath);
+                    ColorHelper.SetColors(Resources, themePath);
                 }
                 else
                 {

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 
@@ -69,7 +71,7 @@ namespace SharedProject
         /// </summary>
         public string BitCoinAddress { get; }
 
-        public string ThemeFolder { get; } = "Themes";
+        public static string ThemeFolder { get; } = "Themes";
 
         public AppInfo()
         {
@@ -209,6 +211,9 @@ namespace SharedProject
         }
     }
 
+    /// <summary>
+    /// 颜色助手
+    /// </summary>
     public class ColorHelper
     {
         /// <summary>
@@ -250,7 +255,7 @@ namespace SharedProject
         /// 设置主题
         /// </summary>
         /// <param name="themePath">主题文件路径</param>
-        public static void SetTheme(ResourceDictionary resource, string themePath)
+        public static void SetColors(ResourceDictionary resource, string themePath)
         {
             SetColor(resource, "一级字体颜色", Create(INIOperator.ReadIniKeys("字体", "一级字体", themePath)));
             SetColor(resource, "二级字体颜色", Create(INIOperator.ReadIniKeys("字体", "二级字体", themePath)));
@@ -268,7 +273,75 @@ namespace SharedProject
     }
 
     /// <summary>
-    /// 网络帮助器
+    /// 语言助手
+    /// </summary>
+    public class LanguageHelper
+    {
+        /// <summary>
+        /// 载入语言选项
+        /// </summary>
+        public static void LoadLanguageItems(ComboBox cbb)
+        {
+            List<LanguageItem> LanguageItems = new List<LanguageItem>()
+            {
+                new LanguageItem("中文（默认）", "zh_CN"),
+                new LanguageItem("English", "en_US"),
+            };
+
+            cbb.Items.Clear();
+            foreach (LanguageItem item in LanguageItems)
+            {
+                ComboBoxItem cbi = new ComboBoxItem
+                {
+                    Content = item.Name,
+                    ToolTip = item.Value,
+                    Tag = item.RD
+                };
+                cbb.Items.Add(cbi);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 主题助手
+    /// </summary>
+    public class ThemeHelper
+    {
+        /// <summary>
+        /// 载入所有可用主题
+        /// </summary>
+        public static void LoadThemeItems(ComboBox cbb)
+        {
+            //创建皮肤文件夹
+            if (!Directory.Exists(AppInfo.ThemeFolder))
+            { Directory.CreateDirectory(AppInfo.ThemeFolder); }
+
+            cbb.Items.Clear();
+            string[] _mySkins = Directory.GetFiles(AppInfo.ThemeFolder);
+            foreach (string item in _mySkins)
+            {
+                string tmp = Path.GetExtension(item);
+                if (tmp == ".ini" || tmp == ".INI")
+                {
+                    string tmp2 = INIOperator.ReadIniKeys("文件", "类型", item);
+                    //若是主题配置文件
+                    if (tmp2 == "主题")
+                    {
+                        ComboBoxItem cbi = new ComboBoxItem
+                        {
+                            Content = Path.GetFileNameWithoutExtension(item),
+                            ToolTip = item
+                        };
+                        cbb.Items.Add(cbi);
+                    }
+                }
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// 网络助手
     /// </summary>
     public class NetHelper
     {

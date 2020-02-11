@@ -8,20 +8,44 @@
     <sys:String x:Key="编辑">Edit</sys:String>
     <sys:String x:Key="设置">Setting</sys:String>
     <sys:String x:Key="关于">About</sys:String>
-    <sys:String x:Key="文件+">File List F</sys:String>
-    <sys:String x:Key="编辑+">Edit Panel</sys:String>
-    <sys:String x:Key="设置+">Setting Panel</sys:String>
-    <sys:String x:Key="关于+">About Panel</sys:String>
 
-    
-    
-    
-    
-    
-    
-    
+
     <!--工具栏-->
-    <!--书籍页-->
+    <!--工具栏 设置页-->
+    <sys:String x:Key="重置">Reset</sys:String>
+    <sys:String x:Key="清空">Clear</sys:String>
+    <sys:String x:Key="语言">Language</sys:String>
+    <sys:String x:Key="主题">Theme</sys:String>
+    <sys:String x:Key="最小">Min Value</sys:String>
+    <sys:String x:Key="最大">Max Value</sys:String>
+    <!--工具栏 信息页-->
+    <sys:String x:Key="官网">Official Website</sys:String>
+    <sys:String x:Key="开源">Open Source Page</sys:String>
+    <sys:String x:Key="讨论">Discuss Group</sys:String>
+    <sys:String x:Key="名称">App Name</sys:String>
+    <sys:String x:Key="说明">Description</sys:String>
+    <sys:String x:Key="版本">Version</sys:String>
+    <sys:String x:Key="作者">Developer</sys:String>
+    <sys:String x:Key="日志">Update Log</sys:String>
+    <sys:String x:Key="赞助">Sponsor BitCoin</sys:String>
+    <sys:String x:Key="前往">Go to</sys:String>
+    <sys:String x:Key="复制">Copy</sys:String>
+
+    <!--提示消息-->
+    <sys:String x:Key="提示">Help</sys:String>
+    <sys:String x:Key="用户协议">User Agreement</sys:String>
+    <sys:String x:Key="已重置">Settings Reseted</sys:String>
+    <sys:String x:Key="已保存">Settings Saved</sys:String>
+    <sys:String x:Key="已载入">Settings Loaded</sys:String>
+    <sys:String x:Key="已复制">Copy to clipboard</sys:String>
+    <sys:String x:Key="已更改">Settings Changed</sys:String>
+    <sys:String x:Key="下一个主题的配置文件不存在">Next Theme's file isn't exist</sys:String>
+    <sys:String x:Key="偏好主题的不存在">Theme isn't exist, default theme loaded</sys:String>
+
+
+
+    <!--Writer-->
+    <!--工具栏 文件页-->
     <sys:String x:Key="书史+">Books Open History</sys:String>
     <sys:String x:Key="打开">Open</sys:String>
     <sys:String x:Key="打开+">Open Book Ctrl+O</sys:String>
@@ -52,7 +76,6 @@
     <sys:String x:Key="创书">+ Book</sys:String>
     <sys:String x:Key="创卷">+ Chapter</sys:String>
     <sys:String x:Key="创文">+ Essay</sys:String>
-
     <!--编辑页-->
     <sys:String x:Key="撤重">Undo and Redo</sys:String>
     <sys:String x:Key="撤销">Undo</sys:String>
@@ -71,15 +94,7 @@
     <sys:String x:Key="查下">Find Next</sys:String>
     <sys:String x:Key="换下">Replace Next</sys:String>
     <sys:String x:Key="换全">Replace All</sys:String>
-
     <!--设置页-->
-    <sys:String x:Key="重置">Reset</sys:String>
-    <sys:String x:Key="清空">Clear</sys:String>
-    <sys:String x:Key="重置+">Reset Settings</sys:String>
-    <sys:String x:Key="清空+">Clear Running Info</sys:String>
-    
-    <sys:String x:Key="语言">Language</sys:String>
-    <sys:String x:Key="主题">Theme</sys:String>
     <sys:String x:Key="字体">Font Family</sys:String>
     <sys:String x:Key="字号">Font Size</sys:String>
     <sys:String x:Key="界面">UI</sys:String>
@@ -95,31 +110,14 @@
     <sys:String x:Key="间隔时间自动保存">Auto save every timespan</sys:String>
     <sys:String x:Key="文章切换时自动保存">Auto save when swich file</sys:String>
     <sys:String x:Key="间隔时间自动备份">Auto backup every timespan</sys:String>
-
-    <!--信息页-->
-    <sys:String x:Key="官网">Official Website</sys:String>
-    <sys:String x:Key="开源">Open Source Page</sys:String>
-    <sys:String x:Key="讨论">Discuss Group</sys:String>
-    <sys:String x:Key="前往">Go to</sys:String>
-    <sys:String x:Key="名称">App Name</sys:String>
-    <sys:String x:Key="说明">Description</sys:String>
-    <sys:String x:Key="版本">Version</sys:String>
-    <sys:String x:Key="作者">Developer</sys:String>
-    <sys:String x:Key="日志">Update Log</sys:String>
-    <sys:String x:Key="赞助">Sponsor BitCoin</sys:String>
-    <sys:String x:Key="复制">Copy</sys:String>
-    
-    <!--内容-->
+    <!--右侧区域-->
     <sys:String x:Key="欢迎使用">Welcome to</sys:String>
     <sys:String x:Key="启动次数">Start up counts</sys:String>
     <sys:String x:Key="行">Row</sys:String>
     <sys:String x:Key="列">Col</sys:String>
     <sys:String x:Key="字数">Word counts</sys:String>
     <sys:String x:Key="全书字数">Totally Word counts</sys:String>
-
-    <!--提示-->
-    <sys:String x:Key="用户协议">User Agreement</sys:String>
-    <sys:String x:Key="提示">Help</sys:String>
+    <!--提示消息-->
     <sys:String x:Key="创建或打开以开始">Open or create a book to start</sys:String>
     <sys:String x:Key="未打开任何书籍">Didn't open any book</sys:String>
     <sys:String x:Key="书籍备份中">In back up...</sys:String>
@@ -172,35 +170,20 @@
     <sys:String x:Key="导出成功">Exported, the counts of words are</sys:String>
     <sys:String x:Key="已取消导出">Export cancelled</sys:String>
 
-    <sys:String x:Key="下一个主题的配置文件不存在">Next Theme's file isn't exist</sys:String>
-    <sys:String x:Key="偏好主题的不存在">Theme isn't exist, default theme loaded</sys:String>
-
-    <sys:String x:Key="已重置">Settings Reseted</sys:String>
-    <sys:String x:Key="已保存">Settings Saved</sys:String>
-    <sys:String x:Key="已载入">Settings Loaded</sys:String>
 
 
-
-
-    <!--菜单updater-->
-
-    <!--面板-->
-    <sys:String x:Key="最小">Min Value</sys:String>
-    <sys:String x:Key="最大">Max Value</sys:String>
-
-    <!--内容-->
+    <!--updater-->
     <sys:String x:Key="安装">Install</sys:String>
     <sys:String x:Key="更新">Update</sys:String>
     <sys:String x:Key="卸载">Uninstall</sys:String>
     <sys:String x:Key="终止">Stop</sys:String>
     <sys:String x:Key="目录">Install Directory</sys:String>
+    <sys:String x:Key="网络连接成功">Connect to Internet Success</sys:String>
+    <sys:String x:Key="网络连接失败">Connect to Internet Failed</sys:String>
 
 
 
-    <!--菜单栏-->
-
-    <!--工具栏-->
-    <!--文件页-->
+    <!--role-->
     <sys:String x:Key="生成">Create</sys:String>
     <sys:String x:Key="生成+">Create a Role</sys:String>
     <sys:String x:Key="移除">Remove</sys:String>
@@ -209,8 +192,6 @@
     <sys:String x:Key="导出当前+">Export Selected Role</sys:String>
     <sys:String x:Key="导出全部">Export All</sys:String>
     <sys:String x:Key="导出全部+">Export All Roles</sys:String>
-    <!--编辑页-->
-    <!--设置页-->
     <sys:String x:Key="姓氏">Surname</sys:String>
     <sys:String x:Key="名字">Name</sys:String>
     <sys:String x:Key="生日">Birthday</sys:String>
@@ -222,39 +203,19 @@
     <sys:String x:Key="姓氏2">Complex</sys:String>
     <sys:String x:Key="性别0">Male/Female</sys:String>
     <sys:String x:Key="性别1">Male/Female/Asexual/Bisexual</sys:String>
-
     <sys:String x:Key="类型">Type</sys:String>
     <sys:String x:Key="长度">Length</sys:String>
-
-    <!--信息页-->
-
-    <!--提示消息-->
     <sys:String x:Key="范围错误">Min must smaller than Max</sys:String>
     <sys:String x:Key="生日范围错误">Birthday min value must smaller than max value</sys:String>
     <sys:String x:Key="身高范围错误">Height min value must smaller than max value</sys:String>
     <sys:String x:Key="体重范围错误">Weight min value must smaller than max value</sys:String>
 
-    <sys:String x:Key="已复制">Copy to clipboard</sys:String>
-    <sys:String x:Key="已更改">Preferences Changed</sys:String>
-
-    <sys:String x:Key="网络连接成功">Connect to Internet Success</sys:String>
-    <sys:String x:Key="网络连接失败">Connect to Internet Failed</sys:String>
+    
 
 
-
-
-
-
-
-
-    <!--菜单栏player-->
-
-    <!--工具栏-->
-    <!--文件页-->
+    <!--player-->
     <sys:String x:Key="添加">Add</sys:String>
     <sys:String x:Key="添加+">Add A</sys:String>
-
-    <!--编辑页-->
     <sys:String x:Key="屏幕模式">Screeen Mode</sys:String>
     <sys:String x:Key="全屏">FullScreen</sys:String>
     <sys:String x:Key="全屏+">FullScreeen/Window Mode M-Mouse</sys:String>
@@ -283,8 +244,6 @@
     <sys:String x:Key="循终+">Set LoopeEnd [</sys:String>
     <sys:String x:Key="清循">ClearLoop</sys:String>
     <sys:String x:Key="清循+">Clear Loop \</sys:String>
-
-    <!--设置页-->
     <sys:String x:Key="记录播放列表">Record Play List</sys:String>
     <sys:String x:Key="记录播放模式">Record Play Mode</sys:String>
     <sys:String x:Key="记录播放音量">Record Volume</sys:String>
@@ -292,10 +251,6 @@
     <sys:String x:Key="记录视频翻转">Record Flip</sys:String>
     <sys:String x:Key="记录视频旋转">Record Rotation</sys:String>
     <sys:String x:Key="记录跳跃时长">Record Jump Time</sys:String>
-
-    <!--信息页-->
-
-    <!--控制面板-->
     <sys:String x:Key="上个">Last</sys:String>
     <sys:String x:Key="上个+">Play Last Media PageUp</sys:String>
     <sys:String x:Key="快退">Back</sys:String>
@@ -317,15 +272,12 @@
     <sys:String x:Key="速度">Speed</sys:String>
     <sys:String x:Key="速度+">Play Speed ,/.</sys:String>
     <sys:String x:Key="跳跃">Jump Time</sys:String>
-
-    <!--提示-->
     <sys:String x:Key="没有媒体">No Media Now</sys:String>
     <sys:String x:Key="媒体总数">Media Count</sys:String>
     <sys:String x:Key="音量升高">Volume Up</sys:String>
     <sys:String x:Key="音量降低">Volume Down</sys:String>
     <sys:String x:Key="速度增加">Speed Up</sys:String>
     <sys:String x:Key="速度减少">Speed Down</sys:String>
-
     <sys:String x:Key="双击左键">Double Click</sys:String>
     <sys:String x:Key="播放选定视频">Play selected media</sys:String>
     <sys:String x:Key="删除选定视频">Delete selected media</sys:String>
@@ -342,7 +294,6 @@
     <sys:String x:Key="已经是第一个媒体">No more last</sys:String>
     <sys:String x:Key="全部播放完毕">All Finish</sys:String>
     <sys:String x:Key="删除视频">Media has been removed</sys:String>
-
     <sys:String x:Key="循环始于">Loop start at</sys:String>
     <sys:String x:Key="循环终于">Loop stop at</sys:String>
     <sys:String x:Key="开始点应靠前">Loop start point should be earlier than stop point</sys:String>
