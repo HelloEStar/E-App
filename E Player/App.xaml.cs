@@ -30,8 +30,8 @@ namespace E.Player
         private static Assembly OnResolveAssembly(object sender, ResolveEventArgs args)
         {
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
-            var executingAssemblyName = executingAssembly.GetName();
-            var resName = executingAssemblyName.Name + ".resources";
+            AssemblyName executingAssemblyName = executingAssembly.GetName();
+            string resName = executingAssemblyName.Name + ".resources";
 
             AssemblyName assemblyName = new AssemblyName(args.Name);
             string path;
@@ -44,7 +44,7 @@ namespace E.Player
                 path = assemblyName.Name + ".dll";
                 if (assemblyName.CultureInfo.Equals(CultureInfo.InvariantCulture) == false)
                 {
-                    path = String.Format(@"{0}\{1}", assemblyName.CultureInfo, path);
+                    path = string.Format(@"{0}\{1}", assemblyName.CultureInfo, path);
                 }
             }
 

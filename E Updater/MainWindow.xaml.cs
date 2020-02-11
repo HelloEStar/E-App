@@ -16,6 +16,7 @@ using Button = System.Windows.Controls.Button;
 
 using Settings = E.Updater.Properties.Settings;
 using SharedProject;
+using System.Text.RegularExpressions;
 
 namespace E.Updater
 {
@@ -52,6 +53,7 @@ namespace E.Updater
         private InstallState ENState { get; set; }
         #endregion
 
+        #region 方法
         //构造
         /// <summary>
         /// 默认构造器
@@ -224,6 +226,35 @@ namespace E.Updater
             else
             {
                 return null;
+            }
+        }
+
+        private List<string> GetDownloadLinks()
+        {
+            List<string> strs = new List<string>();
+            try
+            {
+                WebClient wc = new WebClient
+                {
+                    //获取或设置用于向Internet资源的请求进行身份验证的网络凭据
+                    Credentials = CredentialCache.DefaultCredentials
+                };
+                byte[] pageData = wc.DownloadData("https://github.com/HelloEStar/E.App/wiki");
+                //如果获取网站页面采用的是GB2312，则使用这句  
+                //string pageHtml = Encoding.Default.GetString(pageData);
+                //如果获取网站页面采用的是UTF-8，则使用这句
+                string pageHtml = Encoding.UTF8.GetString(pageData);
+                string expr = @"(https://github.com/HelloEStar/E.App/files).*(zip)";
+                MatchCollection mc = Regex.Matches(pageHtml, expr);
+                foreach (Match m in mc)
+                {
+                    strs.Add(m.Value);
+                }
+                return strs;
+            }
+            catch (WebException)
+            {
+                return strs;
             }
         }
 
@@ -899,6 +930,7 @@ namespace E.Updater
                     break;
             }
         }
+        #endregion 
 
         #region 事件
         //主窗口
@@ -1011,6 +1043,11 @@ namespace E.Updater
             Process.Start("explorer.exe", AppInfo.QQGroupLink);
         }
 
+
+        private void BtnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            GetDownloadLinks();
+        }
 
 
         //浏览
@@ -1198,11 +1235,5 @@ namespace E.Updater
             已安装旧版本,
             已安装最新版本,
         }
-
-        private void BtnRefresh_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
     }
 }
