@@ -166,24 +166,24 @@
             <Grid x:Name="PanWorkArea" Style="{DynamicResource 工作区样式}" Drop="PanWorkArea_Drop">
                 <MediaElement x:Name="MetMedia" MediaOpened="MetMedia_MediaOpened" MediaEnded="MetMedia_MediaEnded" MouseLeftButtonUp="MetMedia_MouseLeftButtonUp" LoadedBehavior="Manual" MediaFailed="MetMedia_MediaFailed" SourceUpdated="MetMedia_SourceUpdated"/>
                 <Image x:Name="ImgCover" Margin="0" MouseLeftButtonUp="MetMedia_MouseLeftButtonUp"/>
-                <Label x:Name="LblMessage" Style="{DynamicResource 自由标签样式}" Foreground="{DynamicResource 有焦点选中颜色}" Content="消息提示" Margin="10,10,10,0" Height="30" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                <Label x:Name="LblMessage" Style="{DynamicResource 自由标签样式一}" Foreground="{DynamicResource 有焦点选中颜色}" Content="消息提示" Margin="10,10,10,0" Height="30" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 
                 <!--控制工具栏-->
                 <Grid x:Name="PanControl" Height="90" VerticalAlignment="Bottom" MouseLeave="PanControl_MouseLeave" MouseEnter="PanControl_MouseEnter" Background="#00000000">
                     <DockPanel Height="30" VerticalAlignment="Bottom" Background="{DynamicResource 二级背景颜色}" Margin="10,0,10,50">
-                        <Label x:Name="LblCurrentTime" Style="{DynamicResource 自由标签样式}" Width="70" HorizontalContentAlignment="Center"/>
-                        <Label x:Name="LblAllTime" Content="00:00:00" Style="{DynamicResource 自由标签样式}" Width="70" DockPanel.Dock="Right" HorizontalContentAlignment="Center"/>
+                        <Label x:Name="LblCurrentTime" Style="{DynamicResource 自由标签样式一}" Width="70" HorizontalContentAlignment="Center"/>
+                        <Label x:Name="LblAllTime" Content="00:00:00" Style="{DynamicResource 自由标签样式一}" Width="70" DockPanel.Dock="Right" HorizontalContentAlignment="Center"/>
                         <Slider x:Name="SldTime" Style="{DynamicResource 滑块样式}" IsSelectionRangeEnabled="True" MouseLeftButtonUp="SldTime_MouseLeftButtonUp" Ticks=""
                                 Value="{Binding ElementName=MetMedia, Path=Position, Converter={StaticResource 时间间隔转换器},Mode=TwoWay}"/>
                     </DockPanel>
 
                     <DockPanel Background="{DynamicResource 二级背景颜色}" Margin="10,0,0,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="150">
-                        <Label Content="{DynamicResource 音量}" Style="{DynamicResource 自由标签样式}" Margin="5,0"/>
+                        <Label Content="{DynamicResource 音量}" Style="{DynamicResource 自由标签样式一}" Margin="5,0"/>
                         <Slider x:Name="SldVolume" Style="{DynamicResource 滑块样式}" ValueChanged="SldVolume_ValueChanged" Value="{Binding ElementName=MetMedia, Path=Volume, Mode=TwoWay}"/>
                     </DockPanel>
 
                     <DockPanel Background="{DynamicResource 二级背景颜色}" Margin="0,0,10,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150">
-                        <Label Content="{DynamicResource 速度}" Style="{DynamicResource 自由标签样式}" Margin="5,0"/>
+                        <Label Content="{DynamicResource 速度}" Style="{DynamicResource 自由标签样式一}" Margin="5,0"/>
                         <Slider x:Name="SldSpeed" Style="{DynamicResource 滑块样式}" ValueChanged="SldSpeed_ValueChanged" Maximum="2" Minimum="0.1" Ticks="0.1 0.5 1 1.5 2" Value="{Binding ElementName=MetMedia, Path=SpeedRatio, Mode=TwoWay}" />
                     </DockPanel>
 

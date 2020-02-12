@@ -116,7 +116,7 @@
             <Grid x:Name="PanWorkArea" Style="{DynamicResource 工作区样式}">
                 <DockPanel>
                     <Button x:Name="BtnCreate" Content="生成" Style="{DynamicResource 自由按钮样式}" Margin="0" Height="80" Click="BtnCreate_Click" DockPanel.Dock="Bottom" FontSize="40" VerticalAlignment="Bottom"/>
-                    <Label x:Name="LblMessage" Content="帮助消息" Style="{DynamicResource 自由标签样式}" DockPanel.Dock="Top" VerticalAlignment="Top" HorizontalContentAlignment="Center" Margin="10,0"/>
+                    <Label x:Name="LblMessage" Content="帮助消息" Style="{DynamicResource 自由标签样式一}" DockPanel.Dock="Top" VerticalAlignment="Top" HorizontalContentAlignment="Center" Margin="10,0"/>
                     <TextBox x:Name="TxtValue" Style="{DynamicResource 文本输入框样式}" FontSize="200" IsReadOnly="True" SelectionBrush="{DynamicResource 有焦点选中颜色}" Text="0" SizeChanged="TxtValue_SizeChanged" Margin="10" HorizontalScrollBarVisibility="Auto" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="Auto" BorderThickness="0"/>
                 </DockPanel>
             </Grid>

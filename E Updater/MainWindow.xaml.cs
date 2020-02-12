@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Windows.Forms;
 using System.Windows;
 using System.IO;
 using System.Net;
@@ -143,7 +142,7 @@ namespace E.Updater
         /// </summary>
         private string GetFolderPath()
         {
-            FolderBrowserDialog fbd = new FolderBrowserDialog
+            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog
             {
                 ShowNewFolderButton = true,
                 //SelectedPath = FatherPath.Text,
@@ -202,51 +201,51 @@ namespace E.Updater
             switch (menu)
             {
                 case MenuTool.无:
-                    //PanFile.Visibility = Visibility.Collapsed;
+                    PanFile.Visibility = Visibility.Collapsed;
                     //PanEdit.Visibility = Visibility.Collapsed;
                     PanSetting.Visibility = Visibility.Collapsed;
                     PanAbout.Visibility = Visibility.Collapsed;
-                    //BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
                     //BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
                     BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
                     BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
                     break;
                 case MenuTool.文件:
-                    //PanFile.Visibility = Visibility.Visible;
+                    PanFile.Visibility = Visibility.Visible;
                     //PanEdit.Visibility = Visibility.Collapsed;
                     PanSetting.Visibility = Visibility.Collapsed;
                     PanAbout.Visibility = Visibility.Collapsed;
-                    //BtnFile.BorderThickness = new Thickness(4, 0, 0, 0);
+                    BtnFile.BorderThickness = new Thickness(4, 0, 0, 0);
                     //BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
                     BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
                     BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
                     break;
                 case MenuTool.编辑:
-                    //PanFile.Visibility = Visibility.Collapsed;
+                    PanFile.Visibility = Visibility.Collapsed;
                     //PanEdit.Visibility = Visibility.Visible;
                     PanSetting.Visibility = Visibility.Collapsed;
                     PanAbout.Visibility = Visibility.Collapsed;
-                    //BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
                     //BtnEdit.BorderThickness = new Thickness(4, 0, 0, 0);
                     BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
                     BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
                     break;
                 case MenuTool.设置:
-                    //PanFile.Visibility = Visibility.Collapsed;
+                    PanFile.Visibility = Visibility.Collapsed;
                     //PanEdit.Visibility = Visibility.Collapsed;
                     PanSetting.Visibility = Visibility.Visible;
                     PanAbout.Visibility = Visibility.Collapsed;
-                    //BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
                     //BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
                     BtnSetting.BorderThickness = new Thickness(4, 0, 0, 0);
                     BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
                     break;
                 case MenuTool.关于:
-                    //PanFile.Visibility = Visibility.Collapsed;
+                    PanFile.Visibility = Visibility.Collapsed;
                     //PanEdit.Visibility = Visibility.Collapsed;
                     PanSetting.Visibility = Visibility.Collapsed;
                     PanAbout.Visibility = Visibility.Visible;
-                    //BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
                     //BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
                     BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
                     BtnAbout.BorderThickness = new Thickness(4, 0, 0, 0);
@@ -580,7 +579,7 @@ namespace E.Updater
             switch (CurrentMenuTool)
             {
                 case MenuTool.文件:
-                    SetMenuTool(MenuTool.无);
+                    //SetMenuTool(MenuTool.无);
                     break;
                 default:
                     SetMenuTool(MenuTool.文件);
@@ -610,7 +609,7 @@ namespace E.Updater
             switch (CurrentMenuTool)
             {
                 case MenuTool.设置:
-                    SetMenuTool(MenuTool.无);
+                    //SetMenuTool(MenuTool.无);
                     break;
                 default:
                     SetMenuTool(MenuTool.设置);
@@ -625,7 +624,7 @@ namespace E.Updater
             switch (CurrentMenuTool)
             {
                 case MenuTool.关于:
-                    SetMenuTool(MenuTool.无);
+                    //SetMenuTool(MenuTool.无);
                     break;
                 default:
                     SetMenuTool(MenuTool.关于);
@@ -659,8 +658,26 @@ namespace E.Updater
         {
             Refresh();
         }
+        private void Main_KeyUp(object sender, KeyEventArgs e)
+        {
+            //Ctrl+T 切换下个主题
+            if (e.Key == Key.T && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
+            { SetNextTheme(); }
+
+            //关于菜单
+            if (e.Key == Key.F1)
+            { Process.Start("explorer.exe", AppInfo.HomePage); }
+            else if (e.Key == Key.F2)
+            { Process.Start("explorer.exe", AppInfo.GitHubPage); }
+            else if (e.Key == Key.F3)
+            { Process.Start("explorer.exe", AppInfo.QQGroupLink); }
+        }
 
         //菜单栏
+        private void BtnFile_Click(object sender, RoutedEventArgs e)
+        {
+            SwitchMenuToolFile();
+        }
         private void BtnSetting_Click(object sender, RoutedEventArgs e)
         {
             SwitchMenuToolSetting();
@@ -740,7 +757,7 @@ namespace E.Updater
             Process.Start("explorer.exe", AppInfo.QQGroupLink);
         }
 
-
+        //工作区
         private void BtnRefresh_Click(object sender, RoutedEventArgs e)
         {
             GetDownloadLinks();

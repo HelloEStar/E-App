@@ -5,23 +5,25 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:E.Updater"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="200">
+             d:DesignHeight="90" d:DesignWidth="360">
     
-    <DockPanel Background="{DynamicResource 二级背景颜色}" Height="200" Width="200">
+    <DockPanel Background="{DynamicResource 二级背景颜色}" Height="90" Width="360">
         <DockPanel DockPanel.Dock="Top" >
-            <Image x:Name="ImgIcon" Height="100" Width="100" Margin="5" VerticalAlignment="Top" Source="Resources/E Updater.ico"/>
-            <Label x:Name="LblName" Content="E Updater" Style="{DynamicResource 标题标签样式}" DockPanel.Dock="Top"/>
-            <Label x:Name="LblCurrentVersion" Content="0.0.0.0" Style="{DynamicResource  自由标签样式}" DockPanel.Dock="Top"/>
-            <Label x:Name="LblDetail" Content="软件更新器" Style="{DynamicResource 自由标签样式}"/>
+            <Image x:Name="ImgIcon" Height="90" Width="90" VerticalAlignment="Top" Source="Resources/E Updater.ico"/>
+            <WrapPanel Width="120" ItemHeight="30" ItemWidth="60" DockPanel.Dock="Right">
+                <Button x:Name="BtnInstall" Content="{DynamicResource 安装}" Style="{DynamicResource 自由按钮样式}"/>
+                <Button x:Name="BtnUninstall" Content="{DynamicResource 卸载}" Style="{DynamicResource 自由按钮样式}"/>
+                <Button x:Name="BtnUpdate" Content="{DynamicResource 更新}" Style="{DynamicResource 自由按钮样式}"/>
+                <Button x:Name="BtnBrowse" Content="位置" Style="{DynamicResource 自由按钮样式}"/>
+                <Button x:Name="BtnRun" Content="{DynamicResource 启动}" Style="{DynamicResource 自由按钮样式}"/>
+                <Button x:Name="BtnKill" Content="{DynamicResource 停止}" Style="{DynamicResource 自由按钮样式}"/>
+            </WrapPanel>
+            <StackPanel>
+                <Label x:Name="LblName" Content="E Updater" Style="{DynamicResource 标题标签样式}" Margin="0" Padding="5" DockPanel.Dock="Top"/>
+                <Label x:Name="LblVersion" Content="0.0.0.0" Height="15" Padding="5,0" Style="{DynamicResource  自由标签样式二}" DockPanel.Dock="Top"/>
+                <Label x:Name="LblDescription" Content="软件更新器" Height="20" Padding="5,0"  Style="{DynamicResource 自由标签样式三}" DockPanel.Dock="Top"/>
+                <Label x:Name="LblState"  Content="当前状态" Height="25" Padding="5,0" Style="{DynamicResource 自由标签样式二}"/>
+            </StackPanel>
         </DockPanel>
-        <WrapPanel ItemHeight="30" ItemWidth="50" DockPanel.Dock="Bottom">
-            <Button x:Name="BtnInstall" Content="{DynamicResource 安装}" Style="{DynamicResource 自由按钮样式}"/>
-            <Button x:Name="BtnUpdate" Content="{DynamicResource 更新}" Style="{DynamicResource 自由按钮样式}"/>
-            <Button x:Name="BtnUninstall" Content="{DynamicResource 卸载}" Style="{DynamicResource 自由按钮样式}"/>
-            <Button x:Name="BtnBrowse" Content="位置" Style="{DynamicResource 自由按钮样式}"/>
-            <Button x:Name="BtnRun" Content="{DynamicResource 启动}" Style="{DynamicResource 自由按钮样式}"/>
-            <Button x:Name="BtnKill" Content="{DynamicResource 停止}" Style="{DynamicResource 自由按钮样式}"/>
-        </WrapPanel>
-        <Label Content="当前状态" Style="{DynamicResource 自由标签样式}"/>
     </DockPanel>
 </UserControl>

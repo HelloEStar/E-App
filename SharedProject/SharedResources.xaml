@@ -136,10 +136,20 @@
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="FontSize" Value="14"/>
     </Style>
-    <Style x:Key="自由标签样式" TargetType="Label">
+    <Style x:Key="自由标签样式一" TargetType="Label">
         <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="FontSize" Value="14"/>
+    </Style>
+    <Style x:Key="自由标签样式二" TargetType="Label">
+        <Setter Property="Foreground" Value="{DynamicResource 二级字体颜色}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+    <Style x:Key="自由标签样式三" TargetType="Label">
+        <Setter Property="Foreground" Value="{DynamicResource 三级字体颜色}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="10"/>
     </Style>
 
     <!--文本框样式-->

@@ -173,7 +173,7 @@
             </Grid>
             <!--工具栏 关于-->
             <Grid x:Name="PanAbout" Style="{DynamicResource 工具栏样式}" Visibility="Collapsed">
-                <DockPanel>
+                <ScrollViewer>
                     <StackPanel DockPanel.Dock="Top">
                         <DockPanel>
                             <Button x:Name="BtnHomePage" Content="{DynamicResource 前往}" Style="{DynamicResource 自由按钮样式}" Click="BtnHomePage_Click" DockPanel.Dock="Right" Width="80"/>
@@ -211,7 +211,7 @@
 
                         <TextBlock x:Name="TxtUpdateNote" Text="?" Style="{DynamicResource 文本显示框样式}" TextWrapping="Wrap"/>
                     </StackPanel>
-                </DockPanel>
+                </ScrollViewer>
             </Grid>
 
             <!--工作区-->
@@ -221,7 +221,7 @@
                 <DockPanel DockPanel.Dock="Bottom" Height="30" Background="{DynamicResource 二级背景颜色}">
                     <TextBlock x:Name="TxtWordCount" Text="字数：0" Style="{DynamicResource 文本显示框样式}" MaxWidth="100" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
                     <TextBlock x:Name="TxtRowAndColumn" Text="行：0，列：0" Style="{DynamicResource 文本显示框样式}" MaxWidth="150" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
-                    <Label x:Name="LblMessage" Content="帮助消息" Style="{DynamicResource 自由标签样式}"/>
+                    <Label x:Name="LblMessage" Content="帮助消息" Style="{DynamicResource 自由标签样式一}"/>
                 </DockPanel>
                 <TextBox x:Name="TxtFileContent" Style="{DynamicResource 文本输入框样式}"
                          AcceptsReturn="true" TextWrapping="Wrap" Padding="5" BorderThickness="0" Height="Auto" Margin="0"
