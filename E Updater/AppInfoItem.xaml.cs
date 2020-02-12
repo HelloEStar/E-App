@@ -57,7 +57,6 @@ namespace E.Updater
             set { SetValue(AppIconProperty, value); }
         }
 
-
         private static void OnAppNameChanged(object sender, DependencyPropertyChangedEventArgs args)
         {
             AppInfoItem source = (AppInfoItem)sender;
@@ -82,6 +81,49 @@ namespace E.Updater
         {
             AppInfoItem source = (AppInfoItem)sender;
             source.ImgIcon.Source = new BitmapImage(new Uri((string)args.NewValue, UriKind.Relative));
+        }
+
+        private void PanBtns_Loaded(object sender, RoutedEventArgs e)
+        {
+            PanBtns.Visibility = Visibility.Collapsed;
+        }
+        private void PanAppInfo_MouseEnter(object sender, MouseEventArgs e)
+        {
+            PanAppInfo.Background = (Brush)FindResource("三级背景颜色");
+            PanBtns.Visibility = Visibility.Visible;
+        }
+        private void PanAppInfo_MouseLeave(object sender, MouseEventArgs e)
+        {
+            PanAppInfo.Background = (Brush)FindResource("二级背景颜色");
+            PanBtns.Visibility = Visibility.Collapsed;
+        }
+
+        private void BtnInstall_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void BtnUninstall_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void BtnUpdate_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtnBrowse_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtnRun_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void BtnKill_Click(object sender, RoutedEventArgs e)
+        {
+
+
         }
     }
 }
