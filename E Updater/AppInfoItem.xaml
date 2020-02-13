@@ -11,12 +11,12 @@
         <DockPanel DockPanel.Dock="Top" >
             <Image x:Name="ImgIcon" Height="90" Width="90" VerticalAlignment="Top" Source="Resources/E Updater.ico"/>
             <WrapPanel x:Name="PanBtns" Width="120" ItemHeight="30" ItemWidth="60" DockPanel.Dock="Right" Loaded="PanBtns_Loaded">
-                <Button x:Name="BtnInstall" Content="{DynamicResource 安装}" Style="{DynamicResource 自由按钮样式}" Click="BtnInstall_Click"/>
-                <Button x:Name="BtnUninstall" Content="{DynamicResource 卸载}" Style="{DynamicResource 自由按钮样式}" Click="BtnUninstall_Click"/>
-                <Button x:Name="BtnUpdate" Content="{DynamicResource 更新}" Style="{DynamicResource 自由按钮样式}" Click="BtnUpdate_Click"/>
-                <Button x:Name="BtnBrowse" Content="位置" Style="{DynamicResource 自由按钮样式}" Click="BtnBrowse_Click"/>
-                <Button x:Name="BtnRun" Content="{DynamicResource 启动}" Style="{DynamicResource 自由按钮样式}" Click="BtnRun_Click"/>
-                <Button x:Name="BtnKill" Content="{DynamicResource 停止}" Style="{DynamicResource 自由按钮样式}" Click="BtnKill_Click"/>
+                <Button x:Name="BtnInstall" Content="{DynamicResource 安装}" Style="{DynamicResource 自由按钮样式浅色}" Click="BtnInstall_Click"/>
+                <Button x:Name="BtnUnInstall" Content="{DynamicResource 卸载}" Style="{DynamicResource 自由按钮样式浅色}" Click="BtnUnInstall_Click"/>
+                <Button x:Name="BtnUpdate" Content="{DynamicResource 更新}" Style="{DynamicResource 自由按钮样式浅色}" Click="BtnUpdate_Click"/>
+                <Button x:Name="BtnBrowse" Content="位置" Style="{DynamicResource 自由按钮样式浅色}" Click="BtnBrowse_Click"/>
+                <Button x:Name="BtnRun" Content="{DynamicResource 启动}" Style="{DynamicResource 自由按钮样式浅色}" Click="BtnRun_Click"/>
+                <Button x:Name="BtnKill" Content="{DynamicResource 停止}" Style="{DynamicResource 自由按钮样式浅色}" Click="BtnKill_Click"/>
             </WrapPanel>
             <DockPanel>
                 <Label x:Name="LblName" Content="E Updater" Height="36" FontSize="18" Style="{DynamicResource 标题标签样式}" Margin="0" Padding="5" DockPanel.Dock="Top"/>

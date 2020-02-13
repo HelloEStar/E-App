@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -10,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace SharedProject
 {
@@ -58,7 +61,7 @@ namespace SharedProject
         /// <summary>
         /// GitHub链接
         /// </summary>
-        public string GitHubPage { get; } 
+        public string GitHubPage { get; }
         /// <summary>
         /// 官方Q群
         /// </summary>
@@ -115,9 +118,9 @@ namespace SharedProject
     }
 
     /// <summary>
-    /// ini文件操作类
+    /// ini文件助手
     /// </summary>
-    public class INIOperator
+    public class INIHelper
     {
         /// <summary>
         /// 写入或创建ini文件
@@ -261,18 +264,18 @@ namespace SharedProject
         /// <param name="themePath">主题文件路径</param>
         public static void SetColors(ResourceDictionary resource, string themePath)
         {
-            SetColor(resource, "一级字体颜色", Create(INIOperator.ReadIniKeys("Font", "Level_1", themePath)));
-            SetColor(resource, "二级字体颜色", Create(INIOperator.ReadIniKeys("Font", "Level_2", themePath)));
-            SetColor(resource, "三级字体颜色", Create(INIOperator.ReadIniKeys("Font", "Level_3", themePath)));
+            SetColor(resource, "一级字体颜色", Create(INIHelper.ReadIniKeys("Font", "Level_1", themePath)));
+            SetColor(resource, "二级字体颜色", Create(INIHelper.ReadIniKeys("Font", "Level_2", themePath)));
+            SetColor(resource, "三级字体颜色", Create(INIHelper.ReadIniKeys("Font", "Level_3", themePath)));
 
-            SetColor(resource, "一级背景颜色", Create(INIOperator.ReadIniKeys("Background", "Level_1", themePath)));
-            SetColor(resource, "二级背景颜色", Create(INIOperator.ReadIniKeys("Background", "Level_2", themePath)));
-            SetColor(resource, "三级背景颜色", Create(INIOperator.ReadIniKeys("Background", "Level_3", themePath)));
+            SetColor(resource, "一级背景颜色", Create(INIHelper.ReadIniKeys("Background", "Level_1", themePath)));
+            SetColor(resource, "二级背景颜色", Create(INIHelper.ReadIniKeys("Background", "Level_2", themePath)));
+            SetColor(resource, "三级背景颜色", Create(INIHelper.ReadIniKeys("Background", "Level_3", themePath)));
 
-            SetColor(resource, "一级边框颜色", Create(INIOperator.ReadIniKeys("Border", "Level_1", themePath)));
+            SetColor(resource, "一级边框颜色", Create(INIHelper.ReadIniKeys("Border", "Level_1", themePath)));
 
-            SetColor(resource, "有焦点选中颜色", Create(INIOperator.ReadIniKeys("Highlight", "Focused", themePath)));
-            SetColor(resource, "无焦点选中颜色", Create(INIOperator.ReadIniKeys("Highlight", "UnFocused", themePath)));
+            SetColor(resource, "有焦点选中颜色", Create(INIHelper.ReadIniKeys("Highlight", "Focused", themePath)));
+            SetColor(resource, "无焦点选中颜色", Create(INIHelper.ReadIniKeys("Highlight", "UnFocused", themePath)));
         }
     }
 
@@ -327,7 +330,7 @@ namespace SharedProject
                 string tmp = Path.GetExtension(item);
                 if (tmp == ".ini" || tmp == ".INI")
                 {
-                    string tmp2 = INIOperator.ReadIniKeys("File", "Type", item);
+                    string tmp2 = INIHelper.ReadIniKeys("File", "Type", item);
                     //若是主题配置文件
                     if (tmp2 == "Theme")
                     {
@@ -423,6 +426,124 @@ namespace SharedProject
             }
         }
     }
+
+    public class DownloadHelper
+    {
+        /// <summary>
+        /// 下载文件
+        /// </summary>
+        /// <param name="url">下载路径</param>
+        /// <param name="fileName">保存名称</param>
+        private void Download(string url, string fileName)
+        {
+            //尝试下载
+            try
+            {
+                //确保下载文件夹存在
+                if (!Directory.Exists(AppInfo.DownloadFolder))
+                { Directory.CreateDirectory(AppInfo.DownloadFolder); }
+
+                //设置存储路径
+                string address = AppInfo.DownloadFolder + @"\" + fileName;
+                WebClient webClient = new WebClient();
+                if (!File.Exists(address))
+                {
+                    webClient.DownloadFile(new Uri(url), address);
+                    if (MessageBox.Show(fileName + " 已完成下载，是否打开下载文件夹", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        Process.Start("explorer.exe", AppInfo.DownloadFolder);
+                    }
+                }
+                else
+                {
+                    if (MessageBox.Show("下载文件夹内含有同名文件，替换此文件？", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        webClient.DownloadFile(new Uri(url), address);
+                        if (MessageBox.Show(fileName + " 已完成下载，是否打开下载文件夹", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                        {
+                            Process.Start("explorer.exe", AppInfo.DownloadFolder);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+    }
+    public class ZipHelper
+    {
+        /// <summary>  
+        /// 解压zip格式的文件。  
+        /// </summary>  
+        /// <param name="zipFile">压缩文件路径</param>  
+        /// <param name="targetDir">解压文件存放路径,为空时默认与压缩文件同一级目录下，跟压缩文件同名的文件夹</param>  
+        /// <param name="err">出错信息</param>  
+        /// <returns>解压是否成功</returns>  
+        public static bool UnZip(string zipFile, string targetDir)
+        {
+            //检查错误
+            if (zipFile == string.Empty)
+            {
+                return false;
+            }
+            if (!File.Exists(zipFile))
+            {
+                return false;
+            }
+
+            //解压文件夹为空时默认在同级目录创建压缩文件同名文件夹  
+            if (targetDir == string.Empty)
+            { targetDir = zipFile.Replace(Path.GetFileName(zipFile), Path.GetFileNameWithoutExtension(zipFile)); }
+
+            if (!targetDir.EndsWith("\\"))
+            { targetDir += "\\"; }
+
+            if (!Directory.Exists(targetDir))
+            { Directory.CreateDirectory(targetDir); }
+
+            using (ZipInputStream s = new ZipInputStream(File.OpenRead(zipFile)))
+            {
+                ZipEntry theEntry;
+                while ((theEntry = s.GetNextEntry()) != null)
+                {
+                    string directoryName = Path.GetDirectoryName(theEntry.Name);
+                    string fileName = Path.GetFileName(theEntry.Name);
+                    if (directoryName.Length > 0)
+                    {
+                        Directory.CreateDirectory(targetDir + directoryName);
+                        //将解压后的文件放到带时间戳的文件夹里
+                    }
+                    if (!directoryName.EndsWith("\\"))
+                    {
+                    }
+                    if (fileName != string.Empty)
+                    {
+                        using (FileStream streamWriter = File.Create(targetDir + theEntry.Name))
+                        {
+                            int size = 2048;
+                            byte[] data = new byte[2048];
+                            while (true)
+                            {
+                                size = s.Read(data, 0, data.Length);
+                                if (size > 0)
+                                {
+                                    streamWriter.Write(data, 0, size);
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+            return false;
+        }
+    }
+
 
     /// <summary>
     /// 自定义ComboBox选项

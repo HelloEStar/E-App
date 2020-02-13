@@ -100,30 +100,27 @@ namespace E.Updater
 
         private void BtnInstall_Click(object sender, RoutedEventArgs e)
         {
+            ((MainWindow)Application.Current.MainWindow).Install(AppName);
         }
-
-        private void BtnUninstall_Click(object sender, RoutedEventArgs e)
+        private void BtnUnInstall_Click(object sender, RoutedEventArgs e)
         {
+            ((MainWindow)Application.Current.MainWindow).UnInstall(AppName);
         }
-
         private void BtnUpdate_Click(object sender, RoutedEventArgs e)
         {
-
+            ((MainWindow)Application.Current.MainWindow).Update(AppName);
         }
-
         private void BtnBrowse_Click(object sender, RoutedEventArgs e)
         {
-
+            ((MainWindow)Application.Current.MainWindow).Browse(AppName);
         }
-
         private void BtnRun_Click(object sender, RoutedEventArgs e)
         {
+            ((MainWindow)Application.Current.MainWindow).Run(AppName);
         }
-
         private void BtnKill_Click(object sender, RoutedEventArgs e)
         {
-
-
+            ((MainWindow)Application.Current.MainWindow).Kill(AppName);
         }
     }
 }
