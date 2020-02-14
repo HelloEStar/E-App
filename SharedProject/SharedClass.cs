@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -12,7 +13,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using ICSharpCode.SharpZipLib.Zip;
 
 namespace SharedProject
 {
@@ -79,6 +79,7 @@ namespace SharedProject
         public static string BackupFolder { get; } = "Backups";
         public static string DownloadFolder { get; } = "Downloads";
         public static string TempFolder { get; } = "TempFiles";
+        public static string DownloadLink { get; } = "https://github.com/HelloEStar/E.App/wiki";
 
         public AppInfo()
         {
@@ -391,6 +392,7 @@ namespace SharedProject
         private const int INTERNET_CONNECTION_LAN = 2;
         private const int INTERNET_CONNECTION_PROXY = 4;
         private const int INTERNET_CONNECTION_MODEM_BUSY = 8;
+
         /// <summary>
         /// 获取联网状态
         /// </summary>
@@ -399,6 +401,7 @@ namespace SharedProject
         /// <returns></returns>
         [DllImport("wininet.dll")]
         private extern static bool InternetGetConnectedState(out int connectionDescription, int reservedValue);
+
         /// <summary>
         /// 检测用户计算机是否已连接网络
         /// </summary>
@@ -426,124 +429,6 @@ namespace SharedProject
             }
         }
     }
-
-    public class DownloadHelper
-    {
-        /// <summary>
-        /// 下载文件
-        /// </summary>
-        /// <param name="url">下载路径</param>
-        /// <param name="fileName">保存名称</param>
-        private void Download(string url, string fileName)
-        {
-            //尝试下载
-            try
-            {
-                //确保下载文件夹存在
-                if (!Directory.Exists(AppInfo.DownloadFolder))
-                { Directory.CreateDirectory(AppInfo.DownloadFolder); }
-
-                //设置存储路径
-                string address = AppInfo.DownloadFolder + @"\" + fileName;
-                WebClient webClient = new WebClient();
-                if (!File.Exists(address))
-                {
-                    webClient.DownloadFile(new Uri(url), address);
-                    if (MessageBox.Show(fileName + " 已完成下载，是否打开下载文件夹", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    {
-                        Process.Start("explorer.exe", AppInfo.DownloadFolder);
-                    }
-                }
-                else
-                {
-                    if (MessageBox.Show("下载文件夹内含有同名文件，替换此文件？", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    {
-                        webClient.DownloadFile(new Uri(url), address);
-                        if (MessageBox.Show(fileName + " 已完成下载，是否打开下载文件夹", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                        {
-                            Process.Start("explorer.exe", AppInfo.DownloadFolder);
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
-    }
-    public class ZipHelper
-    {
-        /// <summary>  
-        /// 解压zip格式的文件。  
-        /// </summary>  
-        /// <param name="zipFile">压缩文件路径</param>  
-        /// <param name="targetDir">解压文件存放路径,为空时默认与压缩文件同一级目录下，跟压缩文件同名的文件夹</param>  
-        /// <param name="err">出错信息</param>  
-        /// <returns>解压是否成功</returns>  
-        public static bool UnZip(string zipFile, string targetDir)
-        {
-            //检查错误
-            if (zipFile == string.Empty)
-            {
-                return false;
-            }
-            if (!File.Exists(zipFile))
-            {
-                return false;
-            }
-
-            //解压文件夹为空时默认在同级目录创建压缩文件同名文件夹  
-            if (targetDir == string.Empty)
-            { targetDir = zipFile.Replace(Path.GetFileName(zipFile), Path.GetFileNameWithoutExtension(zipFile)); }
-
-            if (!targetDir.EndsWith("\\"))
-            { targetDir += "\\"; }
-
-            if (!Directory.Exists(targetDir))
-            { Directory.CreateDirectory(targetDir); }
-
-            using (ZipInputStream s = new ZipInputStream(File.OpenRead(zipFile)))
-            {
-                ZipEntry theEntry;
-                while ((theEntry = s.GetNextEntry()) != null)
-                {
-                    string directoryName = Path.GetDirectoryName(theEntry.Name);
-                    string fileName = Path.GetFileName(theEntry.Name);
-                    if (directoryName.Length > 0)
-                    {
-                        Directory.CreateDirectory(targetDir + directoryName);
-                        //将解压后的文件放到带时间戳的文件夹里
-                    }
-                    if (!directoryName.EndsWith("\\"))
-                    {
-                    }
-                    if (fileName != string.Empty)
-                    {
-                        using (FileStream streamWriter = File.Create(targetDir + theEntry.Name))
-                        {
-                            int size = 2048;
-                            byte[] data = new byte[2048];
-                            while (true)
-                            {
-                                size = s.Read(data, 0, data.Length);
-                                if (size > 0)
-                                {
-                                    streamWriter.Write(data, 0, size);
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-
-            }
-            return false;
-        }
-    }
-
 
     /// <summary>
     /// 自定义ComboBox选项
@@ -573,6 +458,30 @@ namespace SharedProject
             Path = path;
             Name = System.IO.Path.GetFileName(path);
             //Name = System.IO.Path.GetDirectoryName(path);
+        }
+    }
+
+    public class FolderHelper
+    {
+        /// <summary>
+        /// 选择文件夹
+        /// </summary>
+        public static string ChooseFolder()
+        {
+            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog
+            {
+                ShowNewFolderButton = true,
+                Description = "请选择文件夹"
+            };
+
+            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                return fbd.SelectedPath;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 

@@ -16,6 +16,7 @@ using Label = System.Windows.Controls.Label;
 using Settings = E.Updater.Properties.Settings;
 using SharedProject;
 using System.Text.RegularExpressions;
+using System.ComponentModel;
 
 namespace E.Updater
 {
@@ -37,7 +38,6 @@ namespace E.Updater
 
         private Dictionary<string, string> DownloadLinks = new Dictionary<string, string>();
         private Dictionary<string, string> AppFilePaths = new Dictionary<string, string>();
-        private string DownloadLink = "https://github.com/HelloEStar/E.App/wiki";
         #endregion
 
         #region 方法
@@ -127,28 +127,6 @@ namespace E.Updater
             path = Path.GetDirectoryName(path);
             return path;
         }
-
-        /// <summary>
-        /// 浏览
-        /// </summary>
-        private string CreateFolder()
-        {
-            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog
-            {
-                ShowNewFolderButton = true,
-                //SelectedPath = FatherPath.Text,
-                Description = "请选择软件安装位置："
-            };
-            //按下确定选择的按钮，获取根目录文件夹路径
-            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                return fbd.SelectedPath;
-            }
-            else
-            {
-                return null;
-            }
-        }
         /// <summary>
         /// 
         /// </summary>
@@ -166,51 +144,13 @@ namespace E.Updater
                 return;
             }
 
-            try
+            using (WebClient wc = new WebClient())
             {
-                WebClient wc = new WebClient
-                {
-                    //获取或设置用于向Internet资源的请求进行身份验证的网络凭据
-                    Credentials = CredentialCache.DefaultCredentials
-                };
-                byte[] pageData = wc.DownloadData(DownloadLink);
-                //如果获取网站页面采用的是GB2312，则使用这句  
-                //string pageHtml = Encoding.Default.GetString(pageData);
-                //如果获取网站页面采用的是UTF-8，则使用这句
-                string pageHtml = Encoding.UTF8.GetString(pageData);
-                string expr = @"(https://github.com/HelloEStar/E.App/files).*(zip)";
-                MatchCollection mc = Regex.Matches(pageHtml, expr);
-
-                DownloadLinks.Clear();
-                foreach (Match m in mc)
-                {
-                    string name = "";
-                    if (m.Value.Contains("pdater"))
-                    {
-                        name = "E Updater";
-                    }
-                    else if (m.Value.Contains("riter"))
-                    {
-                        name = "E Writer";
-                    }
-                    else if (m.Value.Contains("layer"))
-                    {
-                        name = "E Player";
-                    }
-                    else if (m.Value.Contains("umber"))
-                    {
-                        name = "E Number";
-                    }
-                    else if (m.Value.Contains("ole"))
-                    {
-                        name = "E Role";
-                    }
-                    DownloadLinks.Add(name, m.Value);
-                }
-            }
-            catch (WebException)
-            {
-                ShowMessage("网络错误，无法访问" + DownloadLink);
+                //获取或设置用于向Internet资源的请求进行身份验证的网络凭据
+                wc.Credentials = CredentialCache.DefaultCredentials;
+                wc.DownloadDataCompleted += new DownloadDataCompletedEventHandler(DownloadDataCompleted);
+                wc.DownloadDataAsync(new Uri(AppInfo.DownloadLink));
+                ShowMessage("正在获取最新版本信息");
             }
         }
 
@@ -409,6 +349,68 @@ namespace E.Updater
             MessageHelper.ShowMessage(LblMessage, message, newBox);
         }
 
+        //切换
+        /// <summary>
+        /// 切换工具面板
+        /// </summary>
+        private void SwitchMenuToolFile()
+        {
+            switch (CurrentMenuTool)
+            {
+                case MenuTool.文件:
+                    //SetMenuTool(MenuTool.无);
+                    break;
+                default:
+                    SetMenuTool(MenuTool.文件);
+                    break;
+            }
+        }
+        /// <summary>
+        /// 切换编辑面板
+        /// </summary>
+        private void SwitchMenuToolEdit()
+        {
+            switch (CurrentMenuTool)
+            {
+                case MenuTool.编辑:
+                    SetMenuTool(MenuTool.无);
+                    break;
+                default:
+                    SetMenuTool(MenuTool.编辑);
+                    break;
+            }
+        }
+        /// <summary>
+        /// 切换设置面板
+        /// </summary>
+        private void SwitchMenuToolSetting()
+        {
+            switch (CurrentMenuTool)
+            {
+                case MenuTool.设置:
+                    //SetMenuTool(MenuTool.无);
+                    break;
+                default:
+                    SetMenuTool(MenuTool.设置);
+                    break;
+            }
+        }
+        /// <summary>
+        /// 切换关于面板
+        /// </summary>
+        private void SwitchMenuToolAbout()
+        {
+            switch (CurrentMenuTool)
+            {
+                case MenuTool.关于:
+                    //SetMenuTool(MenuTool.无);
+                    break;
+                default:
+                    SetMenuTool(MenuTool.关于);
+                    break;
+            }
+        }
+
         //其它
         /// <summary>
         /// 安装
@@ -416,27 +418,29 @@ namespace E.Updater
         /// <param name="appName"></param>
         public void Install(string appName)
         {
-            if (!DownloadLinks.TryGetValue(appName, out string link))
+            if (!DownloadLinks.TryGetValue(appName, out string url))
             {
-                ShowMessage("未找到下载链接");
+                ShowMessage("未找到下载链接，请刷新");
                 return;
             }
 
-            Version version = GetLinkVersion(link);
+            Version version = GetLinkVersion(url);
             if (version == null)
             {
+                ShowMessage("获取版本信息失败");
                 return;
             }
 
+            //下载文件
             string zipFileName = appName + version + ".zip";
+            string targetPath = AppInfo.DownloadFolder + @"\" + zipFileName;
+            Download(url, targetPath);
 
-            Download(link, zipFileName);
-            UnZip(AppInfo.DownloadFolder + "\\" + zipFileName, AppInfo.TempFolder);
-
+            //解压文件
             if (appName == AppInfo.Name)
             {
-                //eu
-                //创建的压缩文件名称
+                UnZip(AppInfo.DownloadFolder + "\\" + zipFileName, AppInfo.TempFolder);
+
                 string _bat = "Update.bat";
                 //获取解压后所有文件的路径
                 string _file1 = AppInfo.TempFolder + "\\E Updater.exe";
@@ -459,9 +463,10 @@ namespace E.Updater
             }
             else
             {
-                string folder = CreateFolder();
+                string folder = FolderHelper.ChooseFolder();
                 if (Directory.Exists(folder))
                 {
+                    UnZip(AppInfo.DownloadFolder + "\\" + zipFileName, folder);
                     ShowMessage(Path.GetFileNameWithoutExtension(appName) + "已安装", false);
                 }
             }
@@ -506,6 +511,7 @@ namespace E.Updater
         /// <param name="appname"></param>
         public void Update(string appName)
         {
+            Install(appName);
             if (appName == AppInfo.Name)
             {
             }
@@ -603,180 +609,102 @@ namespace E.Updater
                 Process.Start("explorer.exe", @" /select, " + path);
             }
         }
-
-        /// <summary>
-        /// 下载文件
-        /// </summary>
-        /// <param name="url">下载路径</param>
-        /// <param name="fileName">保存名称</param>
-        private void Download(string url, string fileName)
-        {
-            //尝试下载
-            try
-            {
-                //确保下载文件夹存在
-                if (!Directory.Exists(AppInfo.DownloadFolder))
-                { Directory.CreateDirectory(AppInfo.DownloadFolder); }
-
-                //设置存储路径
-                string address = AppInfo.DownloadFolder + @"\" + fileName;
-                WebClient webClient = new WebClient();
-                if (!File.Exists(address))
-                {
-                    webClient.DownloadFile(new Uri(url), address);
-                    ShowMessage(fileName + "下载成功");
-                    if (MessageBox.Show(fileName + " 已完成下载，是否打开下载文件夹", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    {
-                        Process.Start("explorer.exe", AppInfo.DownloadFolder);
-                    }
-                }
-                else
-                {
-                    if (MessageBox.Show("下载文件夹内含有同名文件，替换此文件？", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    {
-                        webClient.DownloadFile(new Uri(url), address);
-                        ShowMessage(fileName + "下载成功");
-                        if (MessageBox.Show(fileName + " 已完成下载，是否打开下载文件夹", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                        {
-                            Process.Start("explorer.exe", AppInfo.DownloadFolder);
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                ShowMessage(fileName + "下载失败");
-            }
-        }
         /// <summary>  
         /// 解压zip格式的文件。  
         /// </summary>  
-        /// <param name="zipFilePath">压缩文件路径</param>  
-        /// <param name="unZipDir">解压文件存放路径,为空时默认与压缩文件同一级目录下，跟压缩文件同名的文件夹</param>  
+        /// <param name="zipFile">压缩文件路径</param>  
+        /// <param name="targetDir">解压文件存放路径,为空时默认与压缩文件同一级目录下，跟压缩文件同名的文件夹</param>  
         /// <param name="err">出错信息</param>  
         /// <returns>解压是否成功</returns>  
-        private void UnZip(string zipFilePath, string unZipDir)
+        private void UnZip(string zipFile, string targetDir)
         {
             //检查错误
-            if (zipFilePath == string.Empty)
+            if (zipFile == string.Empty)
             {
-                //throw new Exception("压缩文件不能为空！");
                 return;
             }
-            if (!File.Exists(zipFilePath))
+            if (!File.Exists(zipFile))
             {
-                //throw new System.IO.FileNotFoundException("压缩文件不存在！");
                 return;
             }
-            //文件夹里建一个带有时间戳的文件夹
-            //unZipDir += "weather" + DateTime.Now.ToString("yyyyMMddHHmmsss");
-            //解压文件夹为空时默认与压缩文件同一级目录下，跟压缩文件同名的文件夹  
-            if (unZipDir == string.Empty)
-            { unZipDir = zipFilePath.Replace(Path.GetFileName(zipFilePath), Path.GetFileNameWithoutExtension(zipFilePath)); }
-            if (!unZipDir.EndsWith("\\"))
-            { unZipDir += "\\"; }
-            if (!Directory.Exists(unZipDir))
-            { Directory.CreateDirectory(unZipDir); }
-            using (ZipInputStream s = new ZipInputStream(File.OpenRead(zipFilePath)))
+
+            //解压文件夹为空时默认在同级目录创建压缩文件同名文件夹  
+            if (targetDir == string.Empty)
+            { targetDir = zipFile.Replace(Path.GetFileName(zipFile), Path.GetFileNameWithoutExtension(zipFile)); }
+
+            if (!targetDir.EndsWith("\\"))
+            { targetDir += "\\"; }
+
+            if (!Directory.Exists(targetDir))
+            { Directory.CreateDirectory(targetDir); }
+
+            using (ZipInputStream zis = new ZipInputStream(File.OpenRead(zipFile)))
             {
-                ZipEntry theEntry;
-                while ((theEntry = s.GetNextEntry()) != null)
+                ZipEntry ze;
+                while ((ze = zis.GetNextEntry()) != null)
                 {
-                    string directoryName = Path.GetDirectoryName(theEntry.Name);
-                    string fileName = Path.GetFileName(theEntry.Name);
+                    string directoryName = Path.GetDirectoryName(ze.Name);
+                    string fileName = Path.GetFileName(ze.Name);
                     if (directoryName.Length > 0)
                     {
-                        Directory.CreateDirectory(unZipDir + directoryName);
-                        //将解压后的文件放到带时间戳的文件夹里
+                        Directory.CreateDirectory(targetDir + directoryName);
                     }
                     if (!directoryName.EndsWith("\\"))
                     {
                     }
-                    if (fileName != String.Empty)
+                    if (fileName != string.Empty)
                     {
-                        using (FileStream streamWriter = File.Create(unZipDir + theEntry.Name))
+                        FileStream streamWriter = File.Create(targetDir + ze.Name);
+                        int size = 2048;
+                        byte[] data = new byte[2048];
+                        while (true)
                         {
-                            int size = 2048;
-                            byte[] data = new byte[2048];
-                            while (true)
+                            size = zis.Read(data, 0, data.Length);
+                            if (size > 0)
                             {
-                                size = s.Read(data, 0, data.Length);
-                                if (size > 0)
-                                {
-                                    streamWriter.Write(data, 0, size);
-                                }
-                                else
-                                {
-                                    break;
-                                }
+                                streamWriter.Write(data, 0, size);
+                            }
+                            else
+                            {
+                                break;
                             }
                         }
                     }
                 }
+            }
+        }
+        /// <summary>
+        /// 下载文件
+        /// </summary>
+        /// <param name="url">下载路径</param>
+        /// <param name="targetPath">保存名称</param>
+        private void Download(string url, string targetPath)
+        {
+            //确保下载文件夹存在
+            if (!Directory.Exists(AppInfo.DownloadFolder))
+            { Directory.CreateDirectory(AppInfo.DownloadFolder); }
 
+            if (File.Exists(targetPath))
+            {
+                MessageBoxResult mbr = MessageBox.Show("下载文件夹内含有同名文件，替换此文件？", "", MessageBoxButton.YesNo);
+                switch (mbr)
+                {
+                    case MessageBoxResult.Yes:
+                        break;
+                    case MessageBoxResult.No:
+                        string fileName = Path.GetFileNameWithoutExtension(targetPath);
+                        targetPath = targetPath.Replace(fileName, fileName + " (1)");
+                        break;
+                    default:
+                        break;
+                }
             }
-        }
 
-
-        //切换
-        /// <summary>
-        /// 切换工具面板
-        /// </summary>
-        private void SwitchMenuToolFile()
-        {
-            switch (CurrentMenuTool)
+            using (WebClient wc = new WebClient())
             {
-                case MenuTool.文件:
-                    //SetMenuTool(MenuTool.无);
-                    break;
-                default:
-                    SetMenuTool(MenuTool.文件);
-                    break;
-            }
-        }
-        /// <summary>
-        /// 切换编辑面板
-        /// </summary>
-        private void SwitchMenuToolEdit()
-        {
-            switch (CurrentMenuTool)
-            {
-                case MenuTool.编辑:
-                    SetMenuTool(MenuTool.无);
-                    break;
-                default:
-                    SetMenuTool(MenuTool.编辑);
-                    break;
-            }
-        }
-        /// <summary>
-        /// 切换设置面板
-        /// </summary>
-        private void SwitchMenuToolSetting()
-        {
-            switch (CurrentMenuTool)
-            {
-                case MenuTool.设置:
-                    //SetMenuTool(MenuTool.无);
-                    break;
-                default:
-                    SetMenuTool(MenuTool.设置);
-                    break;
-            }
-        }
-        /// <summary>
-        /// 切换关于面板
-        /// </summary>
-        private void SwitchMenuToolAbout()
-        {
-            switch (CurrentMenuTool)
-            {
-                case MenuTool.关于:
-                    //SetMenuTool(MenuTool.无);
-                    break;
-                default:
-                    SetMenuTool(MenuTool.关于);
-                    break;
+                wc.DownloadFile(new Uri(url), targetPath);
+                wc.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressChanged);
+                wc.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCompleted);
             }
         }
         #endregion 
@@ -798,7 +726,7 @@ namespace E.Updater
 
             GetDownloadLinks();
         }
-        private void Main_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Main_Closing(object sender, CancelEventArgs e)
         {
             SaveSettings();
         }
@@ -819,6 +747,90 @@ namespace E.Updater
             { Process.Start("explorer.exe", AppInfo.GitHubPage); }
             else if (e.Key == Key.F3)
             { Process.Start("explorer.exe", AppInfo.QQGroupLink); }
+        }
+        private void DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e)
+        {
+            try
+            {
+                if (e.Error != null)
+                {
+                    ShowMessage("网络错误，无法获取最新版本信息");
+                    return;
+                }
+                if (e.Cancelled == true)
+                {
+                    ShowMessage("操作已取消");
+                    return;
+                }
+                if (e.Result == null)
+                {
+                    ShowMessage("未获取最新版本信息");
+                    return;
+                }
+
+                byte[] pageData = e.Result;
+                string pageHtml = Encoding.UTF8.GetString(pageData);
+                string expr = @"(https://github.com/HelloEStar/E.App/files).*(zip)";
+                MatchCollection mc = Regex.Matches(pageHtml, expr);
+
+                DownloadLinks.Clear();
+                foreach (Match m in mc)
+                {
+                    string name = "";
+                    if (m.Value.Contains("pdater"))
+                    {
+                        name = "E Updater";
+                    }
+                    else if (m.Value.Contains("riter"))
+                    {
+                        name = "E Writer";
+                    }
+                    else if (m.Value.Contains("layer"))
+                    {
+                        name = "E Player";
+                    }
+                    else if (m.Value.Contains("umber"))
+                    {
+                        name = "E Number";
+                    }
+                    else if (m.Value.Contains("ole"))
+                    {
+                        name = "E Role";
+                    }
+                    DownloadLinks.Add(name, m.Value);
+                }
+                ShowMessage("已获取最新版本信息");
+            }
+            catch
+            {
+                ShowMessage("未知错误，无法获取最新版本信息");
+            }
+        }
+        private void DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            try
+            {
+                if (e.Error != null)
+                {
+                    ShowMessage("网络错误，无法下载文件");
+                    return;
+                }
+                if (e.Cancelled == true)
+                {
+                    ShowMessage("操作已取消");
+                    return;
+                }
+
+                ShowMessage("已下载文件，正在安装");
+            }
+            catch
+            {
+                ShowMessage("未知错误，无法下载文件");
+            }
+        }
+        private void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            ShowMessage("正在下载 " + e.ProgressPercentage.ToString());
         }
 
         //菜单栏
