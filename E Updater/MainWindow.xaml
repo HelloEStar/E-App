@@ -34,14 +34,7 @@
                         <Label x:Name="LblMessage" Content="提示" Style="{DynamicResource 自由标签样式一}"/>
                     </DockPanel>
                     <ScrollViewer>
-                        <StackPanel Name="PanApps">
-                            <local:AppInfoItem x:Name="EU" AppName="E Updater" AppIcon="Resources/E Updater.ico" AppDescription="软件描述" AppVersion="0.0.0.0" AppState="当前状态"/>
-                            <local:AppInfoItem x:Name="EW" AppName="E Writer" AppIcon="Resources/E Writer.ico" AppDescription="软件描述" AppVersion="0.0.0.0" AppState="当前状态"/>
-                            <local:AppInfoItem x:Name="EP" AppName="E Player" AppIcon="Resources/E Player.ico" AppDescription="软件描述" AppVersion="0.0.0.0" AppState="当前状态"/>
-                            <local:AppInfoItem x:Name="EN" AppName="E Number" AppIcon="Resources/E Number.ico" AppDescription="软件描述" AppVersion="0.0.0.0" AppState="当前状态"/>
-                            <local:AppInfoItem x:Name="ER" AppName="E Role" AppIcon="Resources/E Role.ico" AppDescription="软件描述" AppVersion="0.0.0.0" AppState="当前状态"/>
-
-                        </StackPanel>
+                        <StackPanel Name="PanApps"/>
                     </ScrollViewer>
                 </DockPanel>
             </Grid>

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SharedProject;
 
 namespace E.Updater
 {
@@ -31,6 +34,7 @@ namespace E.Updater
         public static readonly DependencyProperty AppStateProperty = DependencyProperty.Register("AppState", typeof(string), typeof(AppInfoItem), new PropertyMetadata("App State", new PropertyChangedCallback(OnAppStateChanged)));
         public static readonly DependencyProperty AppIconProperty = DependencyProperty.Register("AppIcon", typeof(string), typeof(AppInfoItem), new PropertyMetadata("App Icon", new PropertyChangedCallback(OnAppIconChanged)));
        
+        public AppInfo AppInfo { get; set; }
         public string AppName
         {
             get { return (string)GetValue(AppNameProperty); }
@@ -83,6 +87,11 @@ namespace E.Updater
             source.ImgIcon.Source = new BitmapImage(new Uri((string)args.NewValue, UriKind.Relative));
         }
 
+
+        private void PanAppInfo_Loaded(object sender, RoutedEventArgs e)
+        {
+            Refresh();
+        }
         private void PanBtns_Loaded(object sender, RoutedEventArgs e)
         {
             PanBtns.Visibility = Visibility.Collapsed;
@@ -100,27 +109,130 @@ namespace E.Updater
 
         private void BtnInstall_Click(object sender, RoutedEventArgs e)
         {
-            ((MainWindow)Application.Current.MainWindow).Install(AppName);
+            ((MainWindow)Application.Current.MainWindow).Install(AppInfo);
+            Refresh();
         }
         private void BtnUnInstall_Click(object sender, RoutedEventArgs e)
         {
-            ((MainWindow)Application.Current.MainWindow).UnInstall(AppName);
+            ((MainWindow)Application.Current.MainWindow).UnInstall(AppInfo);
+            Refresh();
         }
         private void BtnUpdate_Click(object sender, RoutedEventArgs e)
         {
-            ((MainWindow)Application.Current.MainWindow).Update(AppName);
+            ((MainWindow)Application.Current.MainWindow).Update(AppInfo);
+            Refresh();
         }
         private void BtnBrowse_Click(object sender, RoutedEventArgs e)
         {
-            ((MainWindow)Application.Current.MainWindow).Browse(AppName);
+            AppInfo.Browse();
+            Refresh();
         }
         private void BtnRun_Click(object sender, RoutedEventArgs e)
         {
-            ((MainWindow)Application.Current.MainWindow).Run(AppName);
+            AppInfo.Run();
+            Refresh();
         }
         private void BtnKill_Click(object sender, RoutedEventArgs e)
         {
-            ((MainWindow)Application.Current.MainWindow).Kill(AppName);
+            AppInfo.Kill();
+            Refresh();
+        }
+
+        public void Refresh()
+        {
+            if (AppInfo != null)
+            {
+                //已安装
+                if (AppInfo.IsExists)
+                {
+                    BtnInstall.IsEnabled = false;
+                    BtnBrowse.IsEnabled = true;
+
+                    //运行中
+                    if (AppInfo.IsRunning)
+                    {
+                        BtnUnInstall.IsEnabled = false;
+                        BtnRun.IsEnabled = false;
+                        BtnKill.IsEnabled = true;
+                    }
+                    //未运行
+                    else
+                    {
+                        BtnUnInstall.IsEnabled = true;
+                        BtnRun.IsEnabled = true;
+                        BtnKill.IsEnabled = false;
+                    }
+
+                    //有下载链接
+                    if (AppInfo.DownloadVersion != null)
+                    {
+                        //有新版
+                        if (AppInfo.DownloadVersion > AppInfo.Version)
+                        {
+                            BtnUpdate.IsEnabled = true;
+                            AppState = "有新版本待更新";
+                        }
+                        //无新版
+                        else
+                        {
+                            BtnUpdate.IsEnabled = false;
+                            AppState = "已是最新版本";
+                        }
+                    }
+                    //无下载链接
+                    else
+                    {
+                        BtnUpdate.IsEnabled = false;
+                        AppState = "已安装";
+                    }
+
+                    AppVersion = AppInfo.Version.ToString();
+                }
+                //未安装
+                else
+                {
+                    BtnBrowse.IsEnabled = false;
+                    BtnUpdate.IsEnabled = false;
+
+                    BtnUnInstall.IsEnabled = false;
+                    BtnRun.IsEnabled = false;
+                    BtnKill.IsEnabled = false;
+
+                    //有下载链接
+                    if (AppInfo.DownloadVersion != null)
+                    {
+                        BtnInstall.IsEnabled = true;
+                        AppState = "未安装";
+                    }
+                    //无下载链接
+                    else
+                    {
+                        BtnInstall.IsEnabled = false;
+                        AppState = "未取得下载链接";
+                    }
+
+                    AppVersion = "0.0.0.0";
+                }
+
+                AppName = AppInfo.Name;
+                AppDescription = AppInfo.Description;
+                AppIcon = "Resources/" + AppInfo.Name + ".ico";
+            }
+            else
+            {
+                BtnInstall.IsEnabled = false;
+                BtnUnInstall.IsEnabled = false;
+                BtnBrowse.IsEnabled = false;
+                BtnUpdate.IsEnabled = false;
+                BtnRun.IsEnabled = false;
+                BtnKill.IsEnabled = false;
+
+                AppName = "未知应用";
+                AppDescription = "应用描述";
+                AppVersion = "0.0.0.0";
+                AppState = "应用未配置";
+                AppIcon = "Resources/E Updater.ico";
+            }
         }
     }
 }

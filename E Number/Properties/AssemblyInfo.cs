@@ -7,7 +7,7 @@ using System.Windows;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("E Number")]
+[assembly: AssemblyTitle("这是一个随机数生成器")]
 [assembly: AssemblyDescription("这是一个随机数生成器。")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("益菌@浮泽工作室")]

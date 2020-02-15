@@ -36,8 +36,10 @@ namespace E.Updater
         /// </summary>
         private MenuTool CurrentMenuTool { get; set; } = MenuTool.文件;
 
-        private Dictionary<string, string> DownloadLinks = new Dictionary<string, string>();
-        private Dictionary<string, string> AppFilePaths = new Dictionary<string, string>();
+        private List<AppInfo> appInfos = new List<AppInfo>();
+        private string downloadingFile = "";
+        private string downloadingMessage = "";
+        private string installFolder = "";
         #endregion
 
         #region 方法
@@ -51,6 +53,37 @@ namespace E.Updater
         }
 
         ///载入
+        private void LoadAppsInfo()
+        {
+            appInfos.Clear();
+            appInfos.Add(AppInfo);
+            appInfos.Add(new AppInfo("E Writer"));
+            appInfos.Add(new AppInfo("E Player"));
+            appInfos.Add(new AppInfo("E Number"));
+            appInfos.Add(new AppInfo("E Role"));
+
+            PanApps.Children.Clear();
+            foreach (AppInfo item in appInfos)
+            {
+                AppInfoItem aii = new AppInfoItem();
+                aii.AppInfo = item;
+                PanApps.Children.Add(aii);
+            }
+
+            //读取一个字符串，并加入播放列表
+            if (!string.IsNullOrEmpty(Settings.Default.Paths))
+            {
+                string[] paths = Regex.Split(Settings.Default.Paths, ",");
+                foreach (string item in paths)
+                {
+                    if (!File.Exists(item)) continue;
+
+                    string name = Path.GetFileNameWithoutExtension(item);
+                    AppInfo ai = appInfos.Find(x => x.Name == name);
+                    ai.SetFilePath(item);
+                }
+            }
+        }
 
         //打开
 
@@ -65,7 +98,20 @@ namespace E.Updater
             Settings.Default.Save();
             ShowMessage(FindResource("已保存").ToString());
         }
-
+        /// <summary>
+        /// 保存应用信息
+        /// </summary>
+        private void SaveAppInfos()
+        {
+            Settings.Default.Paths = "";
+            string paths = "";
+            foreach (AppInfo item in appInfos)
+            {
+                paths += item.FilePath + ",";
+            }
+            paths = paths.TrimEnd(',');
+            Settings.Default.Paths = paths;
+        }
 
         ///创建
 
@@ -79,56 +125,7 @@ namespace E.Updater
 
         //获取
         /// <summary>
-        /// 检测指定目录是否有可执行文件，并获取其版本信息
-        /// </summary>
-        /// <param name="dir"></param>
-        /// <param name="name"></param>
-        private Version GetFileVersion(string path)
-        {
-            if (File.Exists(path))
-            {
-                FileVersionInfo file = FileVersionInfo.GetVersionInfo(path);
-                Version ver = new Version(file.FileVersion);
-                return ver;
-            }
-            else
-            {
-                return null;
-            }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        private Version GetLinkVersion(string url)
-        {
-            string expr = @"[0,65536].[0,65536].[0,65536].[0,65536]";
-            MatchCollection mc = Regex.Matches(url, expr);
-            if (mc.Count > 0)
-            {
-                Version ver = new Version(mc[0].Value);
-                return ver;
-            }
-            else return null;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="appName"></param>
-        /// <returns></returns>
-        private string GetAppFoleder(string appName)
-        {
-            if (!AppFilePaths.TryGetValue(appName, out string path))
-            {
-                ShowMessage("未找到软件");
-                return "";
-            }
-            path = Path.GetDirectoryName(path);
-            return path;
-        }
-        /// <summary>
-        /// 
+        /// 获取下载链接
         /// </summary>
         /// <returns></returns>
         private void GetDownloadLinks()
@@ -136,21 +133,21 @@ namespace E.Updater
             if (NetHelper.IsOnLine())
             {
                 ShowMessage(FindResource("网络连接成功").ToString());
+
+                using (WebClient wc = new WebClient())
+                {
+                    //获取或设置用于向Internet资源的请求进行身份验证的网络凭据
+                    wc.Credentials = CredentialCache.DefaultCredentials;
+                    wc.DownloadDataCompleted += new DownloadDataCompletedEventHandler(DownloadDataCompleted);
+                    wc.DownloadDataAsync(new Uri(AppInfo.WikiPage));
+                    ShowMessage("正在获取最新版本信息");
+                }
             }
             else
             {
                 ShowMessage("未连接网络");
                 ShowMessage(FindResource("网络连接失败").ToString());
                 return;
-            }
-
-            using (WebClient wc = new WebClient())
-            {
-                //获取或设置用于向Internet资源的请求进行身份验证的网络凭据
-                wc.Credentials = CredentialCache.DefaultCredentials;
-                wc.DownloadDataCompleted += new DownloadDataCompletedEventHandler(DownloadDataCompleted);
-                wc.DownloadDataAsync(new Uri(AppInfo.DownloadLink));
-                ShowMessage("正在获取最新版本信息");
             }
         }
 
@@ -286,27 +283,6 @@ namespace E.Updater
                 }
             }
         }
-        /// <summary>
-        /// 检测指定软件是否运行
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        private bool IsRunning(string path)
-        {
-            if (File.Exists(path))
-            {
-                string name = Path.GetFileNameWithoutExtension(path);
-                Process[] ps = Process.GetProcesses();
-                foreach (Process p in ps)
-                {
-                    if (p.ProcessName == name && p.MainModule.FileName == path)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
 
         //刷新
         /// <summary>
@@ -334,8 +310,22 @@ namespace E.Updater
         /// </summary>
         public void RefreshTitle()
         {
-            string str = AppInfo.Name + " " + AppInfo.VersionShort;
+            string str = AppInfo.Name + " " + AppInfo.VersionShort + downloadingMessage;
             Main.Title = str;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public void RefreshAppInfoItems()
+        {
+            for (int i = 0; i < PanApps.Children.Count; i++)
+            {
+                AppInfoItem aii = (AppInfoItem)PanApps.Children[i];
+                if (aii != null)
+                {
+                    aii.Refresh();
+                }
+            }
         }
 
         //显示
@@ -413,200 +403,114 @@ namespace E.Updater
 
         //其它
         /// <summary>
-        /// 安装
-        /// </summary>
-        /// <param name="appName"></param>
-        public void Install(string appName)
-        {
-            if (!DownloadLinks.TryGetValue(appName, out string url))
-            {
-                ShowMessage("未找到下载链接，请刷新");
-                return;
-            }
-
-            Version version = GetLinkVersion(url);
-            if (version == null)
-            {
-                ShowMessage("获取版本信息失败");
-                return;
-            }
-
-            //下载文件
-            string zipFileName = appName + version + ".zip";
-            string targetPath = AppInfo.DownloadFolder + @"\" + zipFileName;
-            Download(url, targetPath);
-
-            //解压文件
-            if (appName == AppInfo.Name)
-            {
-                UnZip(AppInfo.DownloadFolder + "\\" + zipFileName, AppInfo.TempFolder);
-
-                string _bat = "Update.bat";
-                //获取解压后所有文件的路径
-                string _file1 = AppInfo.TempFolder + "\\E Updater.exe";
-                string _file2 = AppInfo.TempFolder + "\\ICSharpCode.SharpZipLib.dll";
-                //创建批处理命令
-                FileStream fs = new FileStream(_bat, FileMode.Create, FileAccess.Write);
-                StreamWriter sw = new StreamWriter(fs);
-                sw.WriteLine("@echo off");
-                sw.WriteLine("move \"" + _file1 + "\" \"\"");
-                sw.WriteLine("move \"" + _file2 + "\" \"\"");
-                //sw.WriteLine("echo \"Press any key to run E Updater\"");
-                //sw.WriteLine("pause");
-                sw.WriteLine("start \"\" \"E Updater.exe\"");
-                sw.Flush();
-                sw.Close();
-                //运行批处理命令
-                Process.Start(_bat);
-                //退出EU
-                Close();
-            }
-            else
-            {
-                string folder = FolderHelper.ChooseFolder();
-                if (Directory.Exists(folder))
-                {
-                    UnZip(AppInfo.DownloadFolder + "\\" + zipFileName, folder);
-                    ShowMessage(Path.GetFileNameWithoutExtension(appName) + "已安装", false);
-                }
-            }
-        }
-        /// <summary>
         /// 卸载
         /// </summary>
         /// <param name="name"></param>
         /// <param name="folder"></param>
-        public void UnInstall(string appName)
+        public bool UnInstall(AppInfo appInfo)
         {
-            if (appName == AppInfo.Name)
+            if (File.Exists(appInfo.FilePath))
             {
-
-            }
-            else
-            {
-                if (!AppFilePaths.TryGetValue(appName, out string path))
+                if (!appInfo.IsRunning)
                 {
-                    ShowMessage("未找到软件");
-                    return;
-                }
-
-                string folder = GetAppFoleder(appName);
-                if (Directory.Exists(folder))
-                {
-                    if (IsRunning(path))
+                    string tip = string.Format("确定要卸载{0}吗？\n这将删除整个文件夹{1}，且无法恢复。", appInfo.Name, appInfo.FileFolder);
+                    MessageBoxResult mbr = MessageBox.Show(tip, "", MessageBoxButton.YesNo);
+                    switch (mbr)
                     {
-                        ShowMessage("正在运行，请关闭");
-                    }
-                    else
-                    {
-                        Directory.Delete(folder, true);
-                        ShowMessage(appName + "已卸载");
+                        case MessageBoxResult.Yes:
+                            Directory.Delete(appInfo.FileFolder, true);
+                            ShowMessage("已卸载 " + appInfo.Name);
+                            return true;
+                        default:
+                            break;
                     }
                 }
             }
+            return false;
+        }
+        /// <summary>
+        /// 安装
+        /// </summary>
+        /// <param name="appName"></param>
+        public bool Install(AppInfo appInfo)
+        {
+            if (string.IsNullOrEmpty(appInfo.DownloadLink))
+            {
+                return false;
+            }
+
+            if (appInfo.DownloadVersion == null)
+            {
+                return false;
+            }
+
+            //指定安装文件夹
+            string folder = FolderHelper.ChooseFolder();
+            if (!Directory.Exists(folder))
+            {
+                return false;
+            }
+            installFolder = folder + "\\" + appInfo.Name;
+            foreach (AppInfo item in appInfos)
+            {
+                if (item == appInfo)
+                {
+                    item.SetFilePath(installFolder + "\\" + appInfo.Name + ".exe");
+                }
+            }
+
+            //下载文件
+            string fileName = appInfo.Name + " " + appInfo.DownloadVersion + ".zip";
+            string filePath = AppInfo.DownloadFolder + "\\" + fileName;
+            Download(appInfo.DownloadLink, filePath);
+            return true;
         }
         /// <summary>
         /// 更新
         /// </summary>
         /// <param name="appname"></param>
-        public void Update(string appName)
+        public void Update(AppInfo appInfo)
         {
-            Install(appName);
-            if (appName == AppInfo.Name)
-            {
-            }
-            else
-            {
-
-            }
+            Install(appInfo);
         }
-        /// <summary>
-        /// 运行
-        /// </summary>
-        /// <param name="btn"></param>
-        /// <param name="path"></param>
-        public void Run(string appName)
-        {
-            if (appName == AppInfo.Name)
-            {
-            }
-            else
-            {
-                if (!AppFilePaths.TryGetValue(appName, out string path))
-                {
-                    ShowMessage("未找到软件");
-                    return;
-                }
 
-                if (IsRunning(path))
-                {
-                }
-                else
-                {
-                    if (File.Exists(path))
-                    {
-                        Process.Start(path);
-                    }
-                    else
-                    {
-                        ShowMessage("可执行文件不存在");
-                    }
-                }
-            }
-        }
         /// <summary>
-        /// 关闭
+        /// 下载文件
         /// </summary>
-        /// <param name="btn"></param>
-        /// <param name="path"></param>
-        public void Kill(string appName)
+        /// <param name="downloadLink">下载路径</param>
+        /// <param name="filePath">保存名称</param>
+        public void Download(string downloadLink, string filePath)
         {
-            if (appName == AppInfo.Name)
-            {
-                Close();
-            }
-            else
-            {
-                if (!AppFilePaths.TryGetValue(appName, out string path))
-                {
-                    ShowMessage("未找到软件");
-                    return;
-                }
+            //确保下载文件夹存在
+            if (!Directory.Exists(AppInfo.DownloadFolder))
+            { Directory.CreateDirectory(AppInfo.DownloadFolder); }
 
-                if (IsRunning(path))
-                {
-                    Process[] ps = Process.GetProcesses();
-                    foreach (Process p in ps)
-                    {
-                        if (p.ProcessName == appName && p.MainModule.FileName == path)
-                        {
-                            p.CloseMainWindow();
-                            ShowMessage("已关闭" + appName);
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    ShowMessage("未运行" + appName);
-                }
-            }
-        }
-        /// <summary>
-        /// 浏览
-        /// </summary>
-        /// <param name="appName"></param>
-        public void Browse(string appName)
-        {
-            if (!AppFilePaths.TryGetValue(appName, out string path))
+            if (File.Exists(filePath))
             {
-                ShowMessage("未找到软件");
-                return;
+                MessageBoxResult mbr = MessageBox.Show("下载文件夹内含有同名文件，替换此文件？", "", MessageBoxButton.YesNo);
+                switch (mbr)
+                {
+                    case MessageBoxResult.Yes:
+                        break;
+                    case MessageBoxResult.No:
+                        string fileName = Path.GetFileNameWithoutExtension(filePath);
+                        filePath = filePath.Replace(fileName, fileName + " (1)");
+                        break;
+                    default:
+                        break;
+                }
             }
 
-            if (File.Exists(path))
+            using (WebClient wc = new WebClient())
             {
-                Process.Start("explorer.exe", @" /select, " + path);
+                downloadingFile = filePath;
+                wc.DownloadFileAsync(new Uri(downloadLink), filePath);
+                wc.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressChanged);
+                wc.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCompleted);
+
+                downloadingMessage = " 正在下载安装包 0%";
+                ShowMessage(downloadingMessage);
+                RefreshTitle();
             }
         }
         /// <summary>  
@@ -673,80 +577,86 @@ namespace E.Updater
                 }
             }
         }
-        /// <summary>
-        /// 下载文件
-        /// </summary>
-        /// <param name="url">下载路径</param>
-        /// <param name="targetPath">保存名称</param>
-        private void Download(string url, string targetPath)
+        private void DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            //确保下载文件夹存在
-            if (!Directory.Exists(AppInfo.DownloadFolder))
-            { Directory.CreateDirectory(AppInfo.DownloadFolder); }
-
-            if (File.Exists(targetPath))
+            try
             {
-                MessageBoxResult mbr = MessageBox.Show("下载文件夹内含有同名文件，替换此文件？", "", MessageBoxButton.YesNo);
-                switch (mbr)
+                if (e.Error != null)
                 {
-                    case MessageBoxResult.Yes:
-                        break;
-                    case MessageBoxResult.No:
-                        string fileName = Path.GetFileNameWithoutExtension(targetPath);
-                        targetPath = targetPath.Replace(fileName, fileName + " (1)");
-                        break;
-                    default:
-                        break;
+                    ShowMessage("网络错误，无法下载文件");
+                    return;
                 }
-            }
+                if (e.Cancelled == true)
+                {
+                    ShowMessage("操作已取消");
+                    return;
+                }
+                if (!File.Exists(downloadingFile))
+                {
+                    ShowMessage("下载文件不存在");
+                    return;
+                }
 
-            using (WebClient wc = new WebClient())
+                string name = Path.GetFileNameWithoutExtension(downloadingFile);
+                ShowMessage("已下载文件，正在安装 " + name);
+                //解压文件
+                if (name == "E Updater")
+                {
+                    UnZip(downloadingFile, AppInfo.TempFolder);
+
+                    string _bat = "Update.bat";
+                    //获取解压后所有文件的路径
+                    string _file1 = AppInfo.TempFolder + "\\E Updater.exe";
+                    //string _file2 = AppInfo.TempFolder + "\\ICSharpCode.SharpZipLib.dll";
+                    //创建批处理命令
+                    FileStream fs = new FileStream(_bat, FileMode.Create, FileAccess.Write);
+                    StreamWriter sw = new StreamWriter(fs);
+                    sw.WriteLine("@echo off");
+                    sw.WriteLine("move \"" + _file1 + "\" \"\"");
+                    //sw.WriteLine("move \"" + _file2 + "\" \"\"");
+                    //sw.WriteLine("echo \"Press any key to run E Updater\"");
+                    //sw.WriteLine("pause");
+                    sw.WriteLine("start \"\" \"E Updater.exe\"");
+                    sw.Flush();
+                    sw.Close();
+                    //运行批处理命令
+                    Process.Start(_bat);
+                    //退出EU
+                    Close();
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(installFolder))
+                    {
+                        ShowMessage("未指定安装文件夹");
+                    }
+                    else
+                    {
+                        if (!Directory.Exists(installFolder))
+                        {
+                            Directory.CreateDirectory(installFolder);
+                        }
+                        UnZip(downloadingFile, installFolder);
+                        ShowMessage("已安装 " + name);
+                    }
+                }
+                RefreshAppInfoItems();
+
+                downloadingFile = "";
+                installFolder = "";
+                downloadingMessage = "";
+                RefreshTitle();
+            }
+            catch
             {
-                wc.DownloadFile(new Uri(url), targetPath);
-                wc.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressChanged);
-                wc.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCompleted);
+                ShowMessage("未知错误，无法下载文件");
             }
         }
-        #endregion 
-
-        #region 事件
-        //主窗口
-        private void Main_Loaded(object sender, RoutedEventArgs e)
+        private void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            //载入
-            LanguageHelper.LoadLanguageItems(CbbLanguages);
-            ThemeHelper.LoadThemeItems(CbbThemes);
-
-            //刷新
-            RefreshAppInfo();
+            downloadingMessage = " 正在下载安装包 " + e.ProgressPercentage.ToString() + "%";
+            ShowMessage(downloadingMessage);
             RefreshTitle();
-
-            //检查用户协议
-            CheckUserAgreement();
-
-            GetDownloadLinks();
-        }
-        private void Main_Closing(object sender, CancelEventArgs e)
-        {
-            SaveSettings();
-        }
-        private void Main_GotFocus(object sender, RoutedEventArgs e)
-        {
-            GetDownloadLinks();
-        }
-        private void Main_KeyUp(object sender, KeyEventArgs e)
-        {
-            //Ctrl+T 切换下个主题
-            if (e.Key == Key.T && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
-            { SetNextTheme(); }
-
-            //关于菜单
-            if (e.Key == Key.F1)
-            { Process.Start("explorer.exe", AppInfo.HomePage); }
-            else if (e.Key == Key.F2)
-            { Process.Start("explorer.exe", AppInfo.GitHubPage); }
-            else if (e.Key == Key.F3)
-            { Process.Start("explorer.exe", AppInfo.QQGroupLink); }
         }
         private void DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e)
         {
@@ -773,7 +683,6 @@ namespace E.Updater
                 string expr = @"(https://github.com/HelloEStar/E.App/files).*(zip)";
                 MatchCollection mc = Regex.Matches(pageHtml, expr);
 
-                DownloadLinks.Clear();
                 foreach (Match m in mc)
                 {
                     string name = "";
@@ -797,40 +706,61 @@ namespace E.Updater
                     {
                         name = "E Role";
                     }
-                    DownloadLinks.Add(name, m.Value);
+                    AppInfo ai = appInfos.Find(x => x.Name == name);
+                    ai.DownloadLink = m.Value;
                 }
                 ShowMessage("已获取最新版本信息");
+                RefreshAppInfoItems();
             }
             catch
             {
                 ShowMessage("未知错误，无法获取最新版本信息");
             }
         }
-        private void DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
-        {
-            try
-            {
-                if (e.Error != null)
-                {
-                    ShowMessage("网络错误，无法下载文件");
-                    return;
-                }
-                if (e.Cancelled == true)
-                {
-                    ShowMessage("操作已取消");
-                    return;
-                }
+        #endregion 
 
-                ShowMessage("已下载文件，正在安装");
-            }
-            catch
-            {
-                ShowMessage("未知错误，无法下载文件");
-            }
-        }
-        private void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        #region 事件
+        //主窗口
+        private void Main_Loaded(object sender, RoutedEventArgs e)
         {
-            ShowMessage("正在下载 " + e.ProgressPercentage.ToString());
+            //载入
+            LanguageHelper.LoadLanguageItems(CbbLanguages);
+            ThemeHelper.LoadThemeItems(CbbThemes);
+            LoadAppsInfo();
+
+            //刷新
+            RefreshAppInfo();
+            RefreshTitle();
+            RefreshAppInfoItems();
+
+            //检查用户协议
+            CheckUserAgreement();
+
+            GetDownloadLinks();
+        }
+        private void Main_Closing(object sender, CancelEventArgs e)
+        {
+            SaveAppInfos();
+            SaveSettings();
+        }
+        private void Main_GotFocus(object sender, RoutedEventArgs e)
+        {
+            GetDownloadLinks();
+            RefreshAppInfoItems();
+        }
+        private void Main_KeyUp(object sender, KeyEventArgs e)
+        {
+            //Ctrl+T 切换下个主题
+            if (e.Key == Key.T && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
+            { SetNextTheme(); }
+
+            //关于菜单
+            if (e.Key == Key.F1)
+            { Process.Start("explorer.exe", AppInfo.HomePage); }
+            else if (e.Key == Key.F2)
+            { Process.Start("explorer.exe", AppInfo.GitHubPage); }
+            else if (e.Key == Key.F3)
+            { Process.Start("explorer.exe", AppInfo.QQGroupLink); }
         }
 
         //菜单栏

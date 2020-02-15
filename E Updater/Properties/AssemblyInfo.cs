@@ -7,8 +7,8 @@ using System.Windows;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("E Updater")]
-[assembly: AssemblyDescription("E系列软件更新程序")]
+[assembly: AssemblyTitle("软件更新器")]
+[assembly: AssemblyDescription("E系列软件更新器")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("菌临天下工作室")]
 [assembly: AssemblyProduct("E Updater")]
@@ -51,5 +51,5 @@ using System.Windows;
 // 可以指定所有值，也可以使用以下所示的 "*" 预置版本号和修订号
 // 方法是按如下所示使用“*”: :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.1930")]
-[assembly: AssemblyFileVersion("1.0.0.1930")]
+[assembly: AssemblyVersion("1.1.0.20047")]
+[assembly: AssemblyFileVersion("1.1.0.20047")]

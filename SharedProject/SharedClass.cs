@@ -8,6 +8,7 @@ using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -22,29 +23,48 @@ namespace SharedProject
     public class AppInfo
     {
         /// <summary>
+        /// 全路径
+        /// </summary>
+        public string FilePath { get; private set; }
+        /// <summary>
+        /// 获取文件目录
+        /// </summary>
+        /// <returns></returns>
+        public string FileFolder
+        {
+            get
+            {
+                if (IsExists)
+                {
+                    return Path.GetDirectoryName(FilePath);
+                }
+                return "";
+            }
+        }
+        /// <summary>
         /// 名称
         /// </summary>
-        public string Name { get; }
+        public string Name { get; private set; }
         /// <summary>
         /// 描述
         /// </summary>
-        public string Description { get; }
+        public string Description { get; private set; }
         /// <summary>
         /// 组织
         /// </summary>
-        public string Company { get; }
+        public string Company { get; private set; }
         /// <summary>
         /// 版权信息
         /// </summary>
-        public string Copyright { get; }
+        public string Copyright { get; private set; }
         /// <summary>
         /// 用户协议
         /// </summary>
-        public string UserAgreement { get; }
+        public string UserAgreement { get; private set; }
         /// <summary>
         /// 当前版本
         /// </summary>
-        public Version Version { get; }
+        public Version Version { get; private set; }
         /// <summary>
         /// 当前版本短写
         /// </summary>
@@ -52,42 +72,103 @@ namespace SharedProject
         /// <summary>
         /// 更新日志
         /// </summary>
-        public string UpdateNote { get; }
+        public string UpdateNote { get; private set; }
 
         /// <summary>
         /// 主页链接
         /// </summary>
-        public string HomePage { get; }
+        public string HomePage { get; private set; }
+        /// <summary>
+        /// 下载链接
+        /// </summary>
+        public string DownloadLink { get; set; }
+        /// <summary>
+        /// 下载文件版本
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public Version DownloadVersion
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(DownloadLink))
+                {
+                    string expr = @"\d+\.\d+\.\d+\.\d+";
+                    MatchCollection mc = Regex.Matches(DownloadLink, expr);
+                    if (mc.Count > 0)
+                    {
+                        Version ver = new Version(mc[0].Value);
+                        return ver;
+                    }
+                }
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 维基链接
+        /// </summary>
+        public static string WikiPage { get; } = "https://github.com/HelloEStar/E.App/wiki";
         /// <summary>
         /// GitHub链接
         /// </summary>
-        public string GitHubPage { get; }
+        public static string GitHubPage { get; } = "https://github.com/HelloEStar/E.App";
         /// <summary>
         /// 官方Q群
         /// </summary>
-        public string QQGroupLink { get; }
+        public static string QQGroupLink { get; } = "http://jq.qq.com/?_wv=1027&k=5TQxcvR";
         /// <summary>
         /// 官方Q群
         /// </summary>
-        public string QQGroupNumber { get; }
+        public static string QQGroupNumber { get; } = "279807070";
         /// <summary>
         /// 比特币地址
         /// </summary>
-        public string BitCoinAddress { get; }
+        public static string BitCoinAddress { get; } = "19LHHVQzWJo8DemsanJhSZ4VNRtknyzR1q";
 
         public static string ThemeFolder { get; } = "Themes";
         public static string BackupFolder { get; } = "Backups";
         public static string DownloadFolder { get; } = "Downloads";
         public static string TempFolder { get; } = "TempFiles";
-        public static string DownloadLink { get; } = "https://github.com/HelloEStar/E.App/wiki";
+
+
+        /// <summary>
+        /// 应用文件是否存在
+        /// </summary>
+        /// <returns></returns>
+        public bool IsExists
+        {
+            get
+            {
+                return File.Exists(FilePath);
+            }
+        }
+        /// <summary>
+        /// 检测指定软件是否运行
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public bool IsRunning
+        {
+            get
+            {
+                if (IsExists)
+                {
+                    Process[] ps = Process.GetProcesses();
+                    foreach (Process p in ps)
+                    {
+                        if (p.ProcessName == Name && p.MainModule.FileName == FilePath)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+        }
 
         public AppInfo()
         {
-            AssemblyProductAttribute product = (AssemblyProductAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyProductAttribute));
-            AssemblyDescriptionAttribute description = (AssemblyDescriptionAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyDescriptionAttribute));
-            AssemblyCompanyAttribute company = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyCompanyAttribute));
-            AssemblyCopyrightAttribute copyright = (AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyCopyrightAttribute));
-
             Uri uri0 = new Uri("UserAgreement.md", UriKind.Relative);
             Stream src0 = Application.GetResourceStream(uri0).Stream;
             string userAgreement = new StreamReader(src0, Encoding.UTF8).ReadToEnd();
@@ -96,25 +177,98 @@ namespace SharedProject
             Stream src = Application.GetResourceStream(uri).Stream;
             string updateNote = new StreamReader(src, Encoding.UTF8).ReadToEnd().Replace("### ", "");
 
-            string homePage = "https://github.com/HelloEStar/E.App/wiki/" + product.Product.Replace(" ", "-");
-            string gitHubPage = "https://github.com/HelloEStar/E.App";
-            string qqGroupLink = "http://jq.qq.com/?_wv=1027&k=5TQxcvR";
-            string qqGroupNumber = "279807070";
-            string bitCoinAddress = "19LHHVQzWJo8DemsanJhSZ4VNRtknyzR1q";
+            FilePath = Process.GetCurrentProcess().MainModule.FileName;
+            FileVersionInfo info = FileVersionInfo.GetVersionInfo(FilePath); 
 
-            Name = product.Product;
-            Description = description.Description;
-            Company = company.Company;
-            Copyright = copyright.Copyright;
+            Name = info.ProductName;
+            Description = info.FileDescription;
+            Company = info.CompanyName;
+            Copyright = info.LegalCopyright;
             UserAgreement = userAgreement;
-            Version = new Version(System.Windows.Forms.Application.ProductVersion);
+            Version = new Version(info.ProductVersion);
             UpdateNote = updateNote;
+            HomePage = "https://github.com/HelloEStar/E.App/wiki/" + Name.Replace(" ", "-");
+            DownloadLink = "";
+        }
+        public AppInfo(string name)
+        {
+            FilePath = "";
+            Name = name;
+            Description = "";
+            //Company = fvi.CompanyName;
+            //Copyright = fvi.LegalCopyright;
+            //UserAgreement = "";
+            //Version = new Version();
+            //UpdateNote = "";
+            HomePage = "https://github.com/HelloEStar/E.App/wiki/" + Name.Replace(" ", "-");
+            //DownloadLink = download;
+        }
+        public void SetFilePath(string path)
+        {
+            if (File.Exists(path))
+            {
+                FilePath = path;
+                FileVersionInfo info = FileVersionInfo.GetVersionInfo(FilePath);
 
-            HomePage = homePage;
-            GitHubPage = gitHubPage;
-            QQGroupLink = qqGroupLink;
-            QQGroupNumber = qqGroupNumber;
-            BitCoinAddress = bitCoinAddress;
+                Name = info.ProductName;
+                Description = info.FileDescription;
+                Company = info.CompanyName;
+                Copyright = info.LegalCopyright;
+                //UserAgreement = "";
+                Version = new Version(info.ProductVersion);
+                //UpdateNote = "";
+                HomePage = "https://github.com/HelloEStar/E.App/wiki/" + Name.Replace(" ", "-");
+                //DownloadLink = download;
+            }
+        }
+
+        /// <summary>
+        /// 运行
+        /// </summary>
+        /// <param name="btn"></param>
+        /// <param name="path"></param>
+        public void Run()
+        {
+            if (IsRunning)
+            {
+            }
+            else
+            {
+                Process.Start(FilePath);
+            }
+        }
+        /// <summary>
+        /// 关闭
+        /// </summary>
+        /// <param name="btn"></param>
+        /// <param name="path"></param>
+        public void Kill()
+        {
+            if (IsRunning)
+            {
+                Process[] ps = Process.GetProcesses();
+                foreach (Process p in ps)
+                {
+                    if (p.ProcessName == Name && p.MainModule.FileName == FilePath)
+                    {
+                        p.CloseMainWindow();
+                        return;
+                    }
+                }
+            }
+            else
+            {
+            }
+        }
+        /// <summary>
+        /// 浏览
+        /// </summary>
+        public void Browse()
+        {
+            if (IsExists)
+            {
+                Process.Start("explorer.exe", @" /select, " + FilePath);
+            }
         }
     }
 

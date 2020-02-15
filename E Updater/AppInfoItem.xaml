@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="90" d:DesignWidth="360">
     
-    <DockPanel x:Name="PanAppInfo" Background="{DynamicResource 二级背景颜色}" Height="90" Width="360" MouseEnter="PanAppInfo_MouseEnter" MouseLeave="PanAppInfo_MouseLeave">
+    <DockPanel x:Name="PanAppInfo" Background="{DynamicResource 二级背景颜色}" Height="90" Width="360" MouseEnter="PanAppInfo_MouseEnter" MouseLeave="PanAppInfo_MouseLeave" Loaded="PanAppInfo_Loaded">
         <DockPanel DockPanel.Dock="Top" >
             <Image x:Name="ImgIcon" Height="90" Width="90" VerticalAlignment="Top" Source="Resources/E Updater.ico"/>
             <WrapPanel x:Name="PanBtns" Width="120" ItemHeight="30" ItemWidth="60" DockPanel.Dock="Right" Loaded="PanBtns_Loaded">
