@@ -85,7 +85,7 @@ namespace E.Writer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("书籍")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Books")]
         public string BooksDir {
             get {
                 return ((string)(this["BooksDir"]));
@@ -97,7 +97,7 @@ namespace E.Writer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("备份")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Backup")]
         public string BackupDir {
             get {
                 return ((string)(this["BackupDir"]));

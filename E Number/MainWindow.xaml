@@ -103,7 +103,7 @@
                             <TextBlock x:Name="TxtDeveloper" Text="?" Style="{DynamicResource 文本显示框样式}"/>
                             <Label Content="{DynamicResource 版本}"  Style="{DynamicResource 标题标签样式}"/>
                             <TextBlock x:Name="TxtVersion" Text="?" Style="{DynamicResource 文本显示框样式}"/>
-                            <Label Content="{DynamicResource 日志}" Style="{DynamicResource 标题标签样式}"/>
+                            <Label Content="{DynamicResource 发行}" Style="{DynamicResource 标题标签样式}"/>
 
                             <TextBlock x:Name="TxtUpdateNote" Text="?" Style="{DynamicResource 文本显示框样式}" TextWrapping="Wrap"/>
                         </StackPanel>

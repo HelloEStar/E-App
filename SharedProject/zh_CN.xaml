@@ -45,7 +45,7 @@
     <sys:String x:Key="说明">应用说明</sys:String>
     <sys:String x:Key="作者">应用作者</sys:String>
     <sys:String x:Key="版本">当前版本</sys:String>
-    <sys:String x:Key="日志">更新日志</sys:String>
+    <sys:String x:Key="发行">发行说明</sys:String>
     <sys:String x:Key="赞助">赞助比特币</sys:String>
     <sys:String x:Key="前往">前往</sys:String>
     <sys:String x:Key="复制">复制</sys:String>

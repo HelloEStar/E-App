@@ -18,10 +18,10 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="BooksDir" Type="System.String" Scope="User">
-      <Value Profile="(Default)">书籍</Value>
+      <Value Profile="(Default)">Books</Value>
     </Setting>
     <Setting Name="BackupDir" Type="System.String" Scope="User">
-      <Value Profile="(Default)">备份</Value>
+      <Value Profile="(Default)">Backup</Value>
     </Setting>
     <Setting Name="Theme" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>

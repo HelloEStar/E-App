@@ -208,7 +208,10 @@ namespace E.Number
         /// </summary>
         private void ResetSettings()
         {
+            int rc = Settings.Default.RunCount;
             Settings.Default.Reset();
+            Settings.Default.RunCount = rc;
+            Settings.Default.Save();
             ShowMessage(FindResource("已重置").ToString());
         }
 
@@ -362,6 +365,7 @@ namespace E.Number
             //刷新
             RefreshAppInfo(); 
             RefreshTitle();
+            LblMessage.Opacity = 0;
 
             //检查用户协议
             CheckUserAgreement();

@@ -279,7 +279,7 @@ namespace E.Player
                     Tag = uri.LocalPath,
                     ToolTip = uri.LocalPath,
                     Content = GetMediaName(uri.LocalPath),
-                    Style = (Style)FindResource("列表子项样式")
+                    Style = (Style)FindResource("列表子项样式"),
                 };
                 //添加鼠标事件
                 PlayListBoxItem.AddHandler(MouseDownEvent, new MouseButtonEventHandler(LtbFileItem_MouseDown), true);
@@ -1202,10 +1202,14 @@ namespace E.Player
         /// </summary>
         private void VolumeUp()
         {
-            MetMedia.Volume += 0.1;
-            double temp = Math.Round(MetMedia.Volume, 2);
+            double temp = MetMedia.Volume + 0.1;
+            if (temp > 1)
+            {
+                temp = 1;
+            }
+            temp = Math.Round(temp, 1);
+            MetMedia.Volume = temp;
             SldVolume.Value = temp;
-            SldVolume.ToolTip = temp;
             ShowMessage(FindResource("当前音量").ToString() + "：" + temp);
         }
         /// <summary>
@@ -1213,10 +1217,14 @@ namespace E.Player
         /// </summary>
         private void VolumeDown()
         {
-            MetMedia.Volume -= 0.1;
-            double temp = Math.Round(MetMedia.Volume, 2);
+            double temp = MetMedia.Volume - 0.1;
+            if (temp < 0)
+            {
+                temp = 0;
+            }
+            temp = Math.Round(temp, 1);
+            MetMedia.Volume = temp;
             SldVolume.Value = temp;
-            SldVolume.ToolTip = temp;
             ShowMessage(FindResource("当前音量").ToString() + "：" + temp);
         }
         /// <summary>
@@ -1224,10 +1232,14 @@ namespace E.Player
         /// </summary>
         private void SpeedUp()
         {
-            MetMedia.SpeedRatio += 0.1;
-            double temp = Math.Round(MetMedia.SpeedRatio, 2);
+            double temp = MetMedia.SpeedRatio + 0.1;
+            if (temp > 2)
+            {
+                temp = 2;
+            }
+            temp = Math.Round(temp, 1);
+            MetMedia.SpeedRatio = temp;
             SldSpeed.Value = temp;
-            SldSpeed.ToolTip = temp;
             ShowMessage(FindResource("播放速度").ToString() + "：" + temp);
         }
         /// <summary>
@@ -1235,10 +1247,14 @@ namespace E.Player
         /// </summary>
         private void SpeedDown()
         {
-            MetMedia.SpeedRatio -= 0.1;
-            double temp = Math.Round(MetMedia.SpeedRatio, 2);
+            double temp = MetMedia.SpeedRatio - 0.1;
+            if (temp < 0.1)
+            {
+                temp = 0.1;
+            }
+            temp = Math.Round(temp, 1);
+            MetMedia.SpeedRatio = temp;
             SldSpeed.Value = temp;
-            SldSpeed.ToolTip = temp;
             ShowMessage(FindResource("播放速度").ToString() + "：" + temp);
         }
         /// <summary>
@@ -1397,21 +1413,21 @@ namespace E.Player
             {
                 SetRotationCW();
             }
-            //按+-键改变音量
-            else if (e.Key == Key.OemPlus || e.Key == Key.Add && MetMedia.Volume < 0.9)
+            //按上下键改变音量
+            else if (!e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) && !e.KeyboardDevice.IsKeyDown(Key.RightCtrl) && e.Key == Key.Up)
             {
                 VolumeUp();
             }
-            else if (e.Key == Key.OemMinus || e.Key == Key.Subtract && MetMedia.Volume > 0.1)
+            else if (!e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) && !e.KeyboardDevice.IsKeyDown(Key.RightCtrl) && e.Key == Key.Down)
             {
                 VolumeDown();
             }
-            //按，。键改变播放速度
-            else if (e.Key == Key.OemPeriod && MetMedia.SpeedRatio < 2)
+            //按Ctrl+上下键改变播放速度
+            else if ((e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)) && e.Key == Key.Up)
             {
                 SpeedUp();
             }
-            else if (e.Key == Key.OemComma && MetMedia.SpeedRatio > 0.15)
+            else if ((e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)) && e.Key == Key.Down)
             {
                 SpeedDown();
             }
@@ -1633,22 +1649,6 @@ namespace E.Player
         {
             Back();
         }
-        private void BtnVolumeUp_Click(object sender, RoutedEventArgs e)
-        {
-            VolumeUp();
-        }
-        private void BtnVolumeDown_Click(object sender, RoutedEventArgs e)
-        {
-            VolumeDown();
-        }
-        private void BtnSpeedUp_Click(object sender, RoutedEventArgs e)
-        {
-            SpeedUp();
-        }
-        private void BtnSpeedDown_Click(object sender, RoutedEventArgs e)
-        {
-            SpeedDown();
-        }
         private void BtnLoopStart_Click(object sender, RoutedEventArgs e)
         {
             SetLoopStart();
@@ -1793,13 +1793,13 @@ namespace E.Player
         private void SldVolume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             double temp = Math.Round(SldVolume.Value, 2);
-            SldVolume.ToolTip = temp;
+            SldVolume.ToolTip = temp + " ↑/↓";
             ShowMessage(FindResource("当前音量").ToString() + "：" + temp);
         }
         private void SldSpeed_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             double temp = Math.Round(SldSpeed.Value, 2);
-            SldSpeed.ToolTip = temp;
+            SldSpeed.ToolTip = temp + " Ctrl + ↑/Ctrl + ↓";
             ShowMessage(FindResource("播放速度").ToString() + "：" + temp);
         }
 

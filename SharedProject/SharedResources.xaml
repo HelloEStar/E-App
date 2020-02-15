@@ -47,6 +47,8 @@
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Height" Value="40"/>
         <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="IsTabStop" Value="False"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -353,6 +355,7 @@
         <Setter Property="Width" Value="238"/>
         <Setter Property="Margin" Value="0"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="IsTabStop" Value="False"/>
     </Style>
 
     <!--滚动视图样式-->
@@ -566,6 +569,7 @@
         <Setter Property="Minimum" Value="0"/>
         <Setter Property="Maximum" Value="1"/>
         <Setter Property="SmallChange" Value="0.1"/>
+        <Setter Property="IsTabStop" Value="False"/>
         <!--SmallChange用来当Slider有焦点时，使用键盘的左右箭头来改变值的大小-->
         <Setter Property="LargeChange" Value="1"/>
         <!--LargeChange是点击Slider条的空白部分造成值的改变大小（和滚动条类似）-->

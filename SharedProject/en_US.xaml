@@ -45,7 +45,7 @@
     <sys:String x:Key="说明">Description</sys:String>
     <sys:String x:Key="版本">Version</sys:String>
     <sys:String x:Key="作者">Developer</sys:String>
-    <sys:String x:Key="日志">Update Log</sys:String>
+    <sys:String x:Key="发行">Release Notes</sys:String>
     <sys:String x:Key="赞助">Sponsor BitCoin</sys:String>
     <sys:String x:Key="前往">Go to</sys:String>
     <sys:String x:Key="复制">Copy</sys:String>

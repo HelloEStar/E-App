@@ -7,12 +7,12 @@ using System.Windows;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("E Player")]
-[assembly: AssemblyDescription("这是一个小巧又强大的播放器。")]
+[assembly: AssemblyTitle("媒体播放器")]
+[assembly: AssemblyDescription("这是一个媒体播放器")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("益菌@浮泽工作室")]
 [assembly: AssemblyProduct("E Player")]
-[assembly: AssemblyCopyright("Copyright ©  2018 浮泽工作室")]
+[assembly: AssemblyCopyright("Copyright ©  2020 浮泽工作室")]
 [assembly: AssemblyTrademark("E Player")]
 [assembly: AssemblyCulture("")]
 
@@ -51,5 +51,5 @@ using System.Windows;
 // 可以指定所有值，也可以使用以下所示的 "*" 预置版本号和修订号
 // 方法是按如下所示使用“*”: :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.0.20032")]
-[assembly: AssemblyFileVersion("1.1.0.20032")]
+[assembly: AssemblyVersion("1.1.1.20047")]
+[assembly: AssemblyFileVersion("1.1.1.20047")]

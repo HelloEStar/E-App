@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("菌临天下工作室")]
 [assembly: AssemblyProduct("E Updater")]
-[assembly: AssemblyCopyright("Copyright ©  2018 菌临天下工作室")]
+[assembly: AssemblyCopyright("Copyright ©  2020 菌临天下工作室")]
 [assembly: AssemblyTrademark("E Updater")]
 [assembly: AssemblyCulture("")]
 
