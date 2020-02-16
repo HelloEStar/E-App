@@ -22,10 +22,12 @@ namespace SharedProject
     /// </summary>
     public class AppInfo
     {
+        private string name;
+
         /// <summary>
         /// 全路径
         /// </summary>
-        public string FilePath { get; private set; }
+        public string FilePath { get; set; }
         /// <summary>
         /// 获取文件目录
         /// </summary>
@@ -44,40 +46,137 @@ namespace SharedProject
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name { get; private set; }
+        public string Name
+        {
+            get
+            {
+                if (IsExists)
+                {
+                    FileVersionInfo info = FileVersionInfo.GetVersionInfo(FilePath);
+                    return info.ProductName;
+                }
+                return name;
+            }
+            set 
+            {
+                FilePath = "";
+                name = value;
+            }
+        }
         /// <summary>
         /// 描述
         /// </summary>
-        public string Description { get; private set; }
+        public string Description 
+        { 
+            get
+            {
+                if (IsExists)
+                {
+                    FileVersionInfo info = FileVersionInfo.GetVersionInfo(FilePath);
+                    return info.FileDescription;
+                }
+                return "";
+            }
+        }
         /// <summary>
         /// 组织
         /// </summary>
-        public string Company { get; private set; }
+        public string Company
+        {
+            get
+            {
+                if (IsExists)
+                {
+                    FileVersionInfo info = FileVersionInfo.GetVersionInfo(FilePath);
+                    return info.CompanyName;
+                }
+                return "";
+            }
+        }
         /// <summary>
         /// 版权信息
         /// </summary>
-        public string Copyright { get; private set; }
+        public string Copyright
+        {
+            get
+            {
+                if (IsExists)
+                {
+                    FileVersionInfo info = FileVersionInfo.GetVersionInfo(FilePath);
+                    return info.LegalCopyright;
+                }
+                return "";
+            }
+        }
         /// <summary>
         /// 用户协议
         /// </summary>
-        public string UserAgreement { get; private set; }
+        public string UserAgreement
+        {
+            get
+            {
+                if (IsExists)
+                {
+                    Uri uri0 = new Uri("UserAgreement.md", UriKind.Relative);
+                    Stream src0 = Application.GetResourceStream(uri0).Stream;
+                    string userAgreement = new StreamReader(src0, Encoding.UTF8).ReadToEnd();
+                    return userAgreement;
+                }
+                return "";
+            }
+        }
         /// <summary>
         /// 当前版本
         /// </summary>
-        public Version Version { get; private set; }
+        public Version Version
+        {
+            get
+            {
+                if (IsExists)
+                {
+                    FileVersionInfo info = FileVersionInfo.GetVersionInfo(FilePath);
+                    return new Version(info.ProductVersion);
+                }
+                return new Version();
+            }
+        }
         /// <summary>
         /// 当前版本短写
         /// </summary>
-        public string VersionShort { get { return Version.Major + "." + Version.Minor + "." + Version.Build; } }
+        public string VersionShort 
+        { 
+            get 
+            {
+                return Version.Major + "." + Version.Minor + "." + Version.Build; 
+            }
+        }
         /// <summary>
         /// 更新日志
         /// </summary>
-        public string UpdateNote { get; private set; }
-
+        public string UpdateNote
+        {
+            get
+            {
+                if (IsExists)
+                {
+                    Uri uri = new Uri("Resources/ReleaseNotes.md", UriKind.Relative);
+                    Stream src = Application.GetResourceStream(uri).Stream;
+                    string updateNote = new StreamReader(src, Encoding.UTF8).ReadToEnd().Replace("### ", "");
+                    return updateNote;
+                }
+                return "";
+            }
+        }
         /// <summary>
         /// 主页链接
         /// </summary>
-        public string HomePage { get; private set; }
+        public string HomePage 
+        {
+            get
+            {
+                return "https://github.com/HelloEStar/E.App/wiki/" + Name.Replace(" ", "-");
+            }
+        }
         /// <summary>
         /// 下载链接
         /// </summary>
@@ -154,13 +253,19 @@ namespace SharedProject
             {
                 if (IsExists)
                 {
-                    Process[] ps = Process.GetProcesses();
-                    foreach (Process p in ps)
+                    try
                     {
-                        if (p.ProcessName == Name && p.MainModule.FileName == FilePath)
+                        Process[] ps = Process.GetProcesses();
+                        foreach (Process p in ps)
                         {
-                            return true;
+                            if (p.ProcessName == Name && p.MainModule.FileName == FilePath)
+                            {
+                                return true;
+                            }
                         }
+                    }
+                    catch (Exception)
+                    {
                     }
                 }
                 return false;
@@ -169,57 +274,11 @@ namespace SharedProject
 
         public AppInfo()
         {
-            Uri uri0 = new Uri("UserAgreement.md", UriKind.Relative);
-            Stream src0 = Application.GetResourceStream(uri0).Stream;
-            string userAgreement = new StreamReader(src0, Encoding.UTF8).ReadToEnd();
-
-            Uri uri = new Uri("Resources/ReleaseNotes.md", UriKind.Relative);
-            Stream src = Application.GetResourceStream(uri).Stream;
-            string updateNote = new StreamReader(src, Encoding.UTF8).ReadToEnd().Replace("### ", "");
-
             FilePath = Process.GetCurrentProcess().MainModule.FileName;
-            FileVersionInfo info = FileVersionInfo.GetVersionInfo(FilePath); 
-
-            Name = info.ProductName;
-            Description = info.FileDescription;
-            Company = info.CompanyName;
-            Copyright = info.LegalCopyright;
-            UserAgreement = userAgreement;
-            Version = new Version(info.ProductVersion);
-            UpdateNote = updateNote;
-            HomePage = "https://github.com/HelloEStar/E.App/wiki/" + Name.Replace(" ", "-");
-            DownloadLink = "";
         }
         public AppInfo(string name)
         {
-            FilePath = "";
             Name = name;
-            Description = "";
-            //Company = fvi.CompanyName;
-            //Copyright = fvi.LegalCopyright;
-            //UserAgreement = "";
-            //Version = new Version();
-            //UpdateNote = "";
-            HomePage = "https://github.com/HelloEStar/E.App/wiki/" + Name.Replace(" ", "-");
-            //DownloadLink = download;
-        }
-        public void SetFilePath(string path)
-        {
-            if (File.Exists(path))
-            {
-                FilePath = path;
-                FileVersionInfo info = FileVersionInfo.GetVersionInfo(FilePath);
-
-                Name = info.ProductName;
-                Description = info.FileDescription;
-                Company = info.CompanyName;
-                Copyright = info.LegalCopyright;
-                //UserAgreement = "";
-                Version = new Version(info.ProductVersion);
-                //UpdateNote = "";
-                HomePage = "https://github.com/HelloEStar/E.App/wiki/" + Name.Replace(" ", "-");
-                //DownloadLink = download;
-            }
         }
 
         /// <summary>
@@ -229,13 +288,7 @@ namespace SharedProject
         /// <param name="path"></param>
         public void Run()
         {
-            if (IsRunning)
-            {
-            }
-            else
-            {
-                Process.Start(FilePath);
-            }
+            Process.Start(FilePath);
         }
         /// <summary>
         /// 关闭
@@ -244,20 +297,14 @@ namespace SharedProject
         /// <param name="path"></param>
         public void Kill()
         {
-            if (IsRunning)
+            Process[] ps = Process.GetProcesses();
+            foreach (Process p in ps)
             {
-                Process[] ps = Process.GetProcesses();
-                foreach (Process p in ps)
+                if (p.ProcessName == Name && p.MainModule.FileName == FilePath)
                 {
-                    if (p.ProcessName == Name && p.MainModule.FileName == FilePath)
-                    {
-                        p.CloseMainWindow();
-                        return;
-                    }
+                    p.CloseMainWindow();
+                    return;
                 }
-            }
-            else
-            {
             }
         }
         /// <summary>
@@ -265,9 +312,35 @@ namespace SharedProject
         /// </summary>
         public void Browse()
         {
-            if (IsExists)
+            if (Name == "E Updater")
             {
                 Process.Start("explorer.exe", @" /select, " + FilePath);
+                return;
+            }
+            
+            if (IsExists)
+            {
+                string tip = "是否手动指定软件位置？\n是：手动指定软件位置\n否：打开软件所在位置";
+                MessageBoxResult mbr = MessageBox.Show(tip, "提示", MessageBoxButton.YesNoCancel);
+                switch (mbr)
+                {
+                    case MessageBoxResult.Yes:
+                        break;
+                    case MessageBoxResult.No:
+                        Process.Start("explorer.exe", @" /select, " + FilePath);
+                        return;
+                    default:
+                        return;
+                }
+            }
+            System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog
+            {
+                Filter = Name + "可执行文件(" + Name + ".exe)|" + Name + ".exe"
+            };
+            dialog.ShowDialog();
+            if (File.Exists(dialog.FileName))
+            {
+                FilePath = dialog.FileName;
             }
         }
     }

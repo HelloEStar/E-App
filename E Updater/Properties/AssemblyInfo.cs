@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("软件更新器")]
 [assembly: AssemblyDescription("E系列软件更新器")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("菌临天下工作室")]
+[assembly: AssemblyCompany("浮泽工作室")]
 [assembly: AssemblyProduct("E Updater")]
-[assembly: AssemblyCopyright("Copyright ©  2020 菌临天下工作室")]
+[assembly: AssemblyCopyright("Copyright ©  2020 浮泽工作室")]
 [assembly: AssemblyTrademark("E Updater")]
 [assembly: AssemblyCulture("")]
 

@@ -9,7 +9,7 @@
     
     <DockPanel x:Name="PanAppInfo" Background="{DynamicResource 二级背景颜色}" Height="90" Width="360" MouseEnter="PanAppInfo_MouseEnter" MouseLeave="PanAppInfo_MouseLeave" Loaded="PanAppInfo_Loaded">
         <DockPanel DockPanel.Dock="Top" >
-            <Image x:Name="ImgIcon" Height="90" Width="90" VerticalAlignment="Top" Source="Resources/E Updater.ico"/>
+            <Image x:Name="ImgIcon" Height="90" Width="90" VerticalAlignment="Top" Source="Resources/E Updater.ico" MouseUp="ImgIcon_MouseUp" Cursor="Hand"/>
             <WrapPanel x:Name="PanBtns" Width="120" ItemHeight="30" ItemWidth="60" DockPanel.Dock="Right" Loaded="PanBtns_Loaded">
                 <Button x:Name="BtnInstall" Content="{DynamicResource 安装}" Style="{DynamicResource 自由按钮样式浅色}" Click="BtnInstall_Click"/>
                 <Button x:Name="BtnUnInstall" Content="{DynamicResource 卸载}" Style="{DynamicResource 自由按钮样式浅色}" Click="BtnUnInstall_Click"/>

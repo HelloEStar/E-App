@@ -8,15 +8,16 @@ using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Input;
+using System.Text.RegularExpressions;
+using System.ComponentModel;
 using ICSharpCode.SharpZipLib.Zip;
+using SharedProject;
+
 using MessageBox = System.Windows.MessageBox;
 using Application = System.Windows.Forms.Application;
 using Button = System.Windows.Controls.Button;
 using Label = System.Windows.Controls.Label;
 using Settings = E.Updater.Properties.Settings;
-using SharedProject;
-using System.Text.RegularExpressions;
-using System.ComponentModel;
 
 namespace E.Updater
 {
@@ -35,8 +36,12 @@ namespace E.Updater
         /// 当前菜单
         /// </summary>
         private MenuTool CurrentMenuTool { get; set; } = MenuTool.文件;
+        /// <summary>
+        /// 应用列表
+        /// </summary>
+        private List<AppInfo> AppInfos { get; set; } = new List<AppInfo>();
 
-        private List<AppInfo> appInfos = new List<AppInfo>();
+        private string currentApp = "";
         private string downloadingFile = "";
         private string downloadingMessage = "";
         private string installFolder = "";
@@ -55,18 +60,20 @@ namespace E.Updater
         ///载入
         private void LoadAppsInfo()
         {
-            appInfos.Clear();
-            appInfos.Add(AppInfo);
-            appInfos.Add(new AppInfo("E Writer"));
-            appInfos.Add(new AppInfo("E Player"));
-            appInfos.Add(new AppInfo("E Number"));
-            appInfos.Add(new AppInfo("E Role"));
+            AppInfos.Clear();
+            AppInfos.Add(AppInfo);
+            AppInfos.Add(new AppInfo("E Writer"));
+            AppInfos.Add(new AppInfo("E Player"));
+            AppInfos.Add(new AppInfo("E Number"));
+            AppInfos.Add(new AppInfo("E Role"));
 
             PanApps.Children.Clear();
-            foreach (AppInfo item in appInfos)
+            foreach (AppInfo item in AppInfos)
             {
-                AppInfoItem aii = new AppInfoItem();
-                aii.AppInfo = item;
+                AppInfoItem aii = new AppInfoItem
+                {
+                    AppInfo = item
+                };
                 PanApps.Children.Add(aii);
             }
 
@@ -79,8 +86,8 @@ namespace E.Updater
                     if (!File.Exists(item)) continue;
 
                     string name = Path.GetFileNameWithoutExtension(item);
-                    AppInfo ai = appInfos.Find(x => x.Name == name);
-                    ai.SetFilePath(item);
+                    AppInfo ai = AppInfos.Find(x => x.Name == name);
+                    ai.FilePath = item;
                 }
             }
         }
@@ -105,7 +112,7 @@ namespace E.Updater
         {
             Settings.Default.Paths = "";
             string paths = "";
-            foreach (AppInfo item in appInfos)
+            foreach (AppInfo item in AppInfos)
             {
                 paths += item.FilePath + ",";
             }
@@ -409,7 +416,7 @@ namespace E.Updater
         /// <param name="folder"></param>
         public bool UnInstall(AppInfo appInfo)
         {
-            if (File.Exists(appInfo.FilePath))
+            if (appInfo.IsExists)
             {
                 if (!appInfo.IsRunning)
                 {
@@ -450,17 +457,11 @@ namespace E.Updater
             {
                 return false;
             }
-            installFolder = folder + "\\" + appInfo.Name;
-            foreach (AppInfo item in appInfos)
-            {
-                if (item == appInfo)
-                {
-                    item.SetFilePath(installFolder + "\\" + appInfo.Name + ".exe");
-                }
-            }
+            currentApp = appInfo.Name;
+            installFolder = folder + "\\" + currentApp;
 
             //下载文件
-            string fileName = appInfo.Name + " " + appInfo.DownloadVersion + ".zip";
+            string fileName = currentApp + " " + appInfo.DownloadVersion + ".zip";
             string filePath = AppInfo.DownloadFolder + "\\" + fileName;
             Download(appInfo.DownloadLink, filePath);
             return true;
@@ -469,9 +470,26 @@ namespace E.Updater
         /// 更新
         /// </summary>
         /// <param name="appname"></param>
-        public void Update(AppInfo appInfo)
+        public bool Update(AppInfo appInfo)
         {
-            Install(appInfo);
+            if (string.IsNullOrEmpty(appInfo.DownloadLink))
+            {
+                return false;
+            }
+
+            if (appInfo.DownloadVersion == null)
+            {
+                return false;
+            }
+
+            //指定安装文件夹
+            installFolder = appInfo.FileFolder;
+
+            //下载文件
+            string fileName = appInfo.Name + " " + appInfo.DownloadVersion + ".zip";
+            string filePath = AppInfo.DownloadFolder + "\\" + fileName;
+            Download(appInfo.DownloadLink, filePath);
+            return true;
         }
 
         /// <summary>
@@ -577,22 +595,87 @@ namespace E.Updater
                 }
             }
         }
+        #endregion 
+
+        #region 事件
+        //主窗口
+        private void Main_Loaded(object sender, RoutedEventArgs e)
+        {
+            //载入
+            LanguageHelper.LoadLanguageItems(CbbLanguages);
+            ThemeHelper.LoadThemeItems(CbbThemes);
+            LoadAppsInfo();
+
+            //刷新
+            RefreshAppInfo();
+            RefreshTitle();
+            RefreshAppInfoItems();
+
+            //检查用户协议
+            CheckUserAgreement();
+
+            GetDownloadLinks();
+        }
+        private void Main_Closing(object sender, CancelEventArgs e)
+        {
+            SaveAppInfos();
+            SaveSettings();
+        }
+        private void Main_GotFocus(object sender, RoutedEventArgs e)
+        {
+            RefreshAppInfoItems();
+        }
+        private void Main_KeyUp(object sender, KeyEventArgs e)
+        {
+            //Ctrl+T 切换下个主题
+            if (e.Key == Key.T && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
+            { SetNextTheme(); }
+
+            //关于菜单
+            if (e.Key == Key.F1)
+            { Process.Start("explorer.exe", AppInfo.HomePage); }
+            else if (e.Key == Key.F2)
+            { Process.Start("explorer.exe", AppInfo.GitHubPage); }
+            else if (e.Key == Key.F3)
+            { Process.Start("explorer.exe", AppInfo.QQGroupLink); }
+        }
+        private void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            downloadingMessage = " 正在下载安装包 " + e.ProgressPercentage.ToString() + "%";
+            ShowMessage(downloadingMessage);
+            RefreshTitle();
+        }
         private void DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
             try
             {
                 if (e.Error != null)
                 {
+                    currentApp = "";
+                    downloadingFile = "";
+                    installFolder = "";
+                    downloadingMessage = "";
+                    RefreshTitle();
                     ShowMessage("网络错误，无法下载文件");
                     return;
                 }
                 if (e.Cancelled == true)
                 {
+                    currentApp = "";
+                    downloadingFile = "";
+                    installFolder = "";
+                    downloadingMessage = "";
+                    RefreshTitle();
                     ShowMessage("操作已取消");
                     return;
                 }
                 if (!File.Exists(downloadingFile))
                 {
+                    currentApp = "";
+                    downloadingFile = "";
+                    installFolder = "";
+                    downloadingMessage = "";
+                    RefreshTitle();
                     ShowMessage("下载文件不存在");
                     return;
                 }
@@ -637,26 +720,26 @@ namespace E.Updater
                             Directory.CreateDirectory(installFolder);
                         }
                         UnZip(downloadingFile, installFolder);
+                        AppInfo ai = AppInfos.Find(x => x.Name == currentApp);
+                        if (ai != null)
+                        {
+                            ai.FilePath = installFolder + "\\" + ai.Name + ".exe";
+                        }
                         ShowMessage("已安装 " + name);
                     }
                 }
-                RefreshAppInfoItems();
-
-                downloadingFile = "";
-                installFolder = "";
-                downloadingMessage = "";
-                RefreshTitle();
             }
             catch
             {
                 ShowMessage("未知错误，无法下载文件");
             }
-        }
-        private void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
-            downloadingMessage = " 正在下载安装包 " + e.ProgressPercentage.ToString() + "%";
-            ShowMessage(downloadingMessage);
+
+            currentApp = "";
+            downloadingFile = "";
+            installFolder = "";
+            downloadingMessage = "";
             RefreshTitle();
+            RefreshAppInfoItems();
         }
         private void DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e)
         {
@@ -706,7 +789,7 @@ namespace E.Updater
                     {
                         name = "E Role";
                     }
-                    AppInfo ai = appInfos.Find(x => x.Name == name);
+                    AppInfo ai = AppInfos.Find(x => x.Name == name);
                     ai.DownloadLink = m.Value;
                 }
                 ShowMessage("已获取最新版本信息");
@@ -716,51 +799,6 @@ namespace E.Updater
             {
                 ShowMessage("未知错误，无法获取最新版本信息");
             }
-        }
-        #endregion 
-
-        #region 事件
-        //主窗口
-        private void Main_Loaded(object sender, RoutedEventArgs e)
-        {
-            //载入
-            LanguageHelper.LoadLanguageItems(CbbLanguages);
-            ThemeHelper.LoadThemeItems(CbbThemes);
-            LoadAppsInfo();
-
-            //刷新
-            RefreshAppInfo();
-            RefreshTitle();
-            RefreshAppInfoItems();
-
-            //检查用户协议
-            CheckUserAgreement();
-
-            GetDownloadLinks();
-        }
-        private void Main_Closing(object sender, CancelEventArgs e)
-        {
-            SaveAppInfos();
-            SaveSettings();
-        }
-        private void Main_GotFocus(object sender, RoutedEventArgs e)
-        {
-            GetDownloadLinks();
-            RefreshAppInfoItems();
-        }
-        private void Main_KeyUp(object sender, KeyEventArgs e)
-        {
-            //Ctrl+T 切换下个主题
-            if (e.Key == Key.T && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
-            { SetNextTheme(); }
-
-            //关于菜单
-            if (e.Key == Key.F1)
-            { Process.Start("explorer.exe", AppInfo.HomePage); }
-            else if (e.Key == Key.F2)
-            { Process.Start("explorer.exe", AppInfo.GitHubPage); }
-            else if (e.Key == Key.F3)
-            { Process.Start("explorer.exe", AppInfo.QQGroupLink); }
         }
 
         //菜单栏

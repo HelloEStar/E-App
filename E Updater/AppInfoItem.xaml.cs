@@ -106,6 +106,13 @@ namespace E.Updater
             PanAppInfo.Background = (Brush)FindResource("二级背景颜色");
             PanBtns.Visibility = Visibility.Collapsed;
         }
+        private void ImgIcon_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                Process.Start("explorer.exe", AppInfo.HomePage);
+            }
+        }
 
         private void BtnInstall_Click(object sender, RoutedEventArgs e)
         {
@@ -142,11 +149,12 @@ namespace E.Updater
         {
             if (AppInfo != null)
             {
+                BtnBrowse.IsEnabled = true;
+
                 //已安装
                 if (AppInfo.IsExists)
                 {
                     BtnInstall.IsEnabled = false;
-                    BtnBrowse.IsEnabled = true;
 
                     //运行中
                     if (AppInfo.IsRunning)
@@ -191,7 +199,6 @@ namespace E.Updater
                 //未安装
                 else
                 {
-                    BtnBrowse.IsEnabled = false;
                     BtnUpdate.IsEnabled = false;
 
                     BtnUnInstall.IsEnabled = false;
@@ -217,6 +224,7 @@ namespace E.Updater
                 AppName = AppInfo.Name;
                 AppDescription = AppInfo.Description;
                 AppIcon = "Resources/" + AppInfo.Name + ".ico";
+                ImgIcon.ToolTip = AppInfo.HomePage;
             }
             else
             {
@@ -232,6 +240,7 @@ namespace E.Updater
                 AppVersion = "0.0.0.0";
                 AppState = "应用未配置";
                 AppIcon = "Resources/E Updater.ico";
+                ImgIcon.ToolTip = AppInfo.HomePage;
             }
         }
     }
