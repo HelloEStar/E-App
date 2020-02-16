@@ -155,18 +155,17 @@ namespace E.Updater
                 if (AppInfo.IsExists)
                 {
                     BtnInstall.IsEnabled = false;
+                    BtnUnInstall.IsEnabled = true;
 
                     //运行中
                     if (AppInfo.IsRunning)
                     {
-                        BtnUnInstall.IsEnabled = false;
                         BtnRun.IsEnabled = false;
                         BtnKill.IsEnabled = true;
                     }
                     //未运行
                     else
                     {
-                        BtnUnInstall.IsEnabled = true;
                         BtnRun.IsEnabled = true;
                         BtnKill.IsEnabled = false;
                     }

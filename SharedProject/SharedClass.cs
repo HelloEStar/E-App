@@ -335,7 +335,7 @@ namespace SharedProject
             }
             System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog
             {
-                Filter = Name + "可执行文件(" + Name + ".exe)|" + Name + ".exe"
+                Filter = Name + "可执2行文件(" + Name + ".exe)|" + Name + ".exe"
             };
             dialog.ShowDialog();
             if (File.Exists(dialog.FileName))
@@ -693,12 +693,12 @@ namespace SharedProject
         /// <summary>
         /// 选择文件夹
         /// </summary>
-        public static string ChooseFolder()
+        public static string ChooseFolder(string description)
         {
             System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog
             {
                 ShowNewFolderButton = true,
-                Description = "请选择文件夹"
+                Description = description
             };
 
             if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)

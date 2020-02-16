@@ -418,18 +418,57 @@ namespace E.Updater
         {
             if (appInfo.IsExists)
             {
-                if (!appInfo.IsRunning)
+                if (appInfo.Name == "E Updater")
                 {
-                    string tip = string.Format("确定要卸载{0}吗？\n这将删除整个文件夹{1}，且无法恢复。", appInfo.Name, appInfo.FileFolder);
+                    string tip = string.Format("确定要卸载{0}吗？", appInfo.Name, appInfo.FileFolder);
                     MessageBoxResult mbr = MessageBox.Show(tip, "", MessageBoxButton.YesNo);
                     switch (mbr)
                     {
                         case MessageBoxResult.Yes:
-                            Directory.Delete(appInfo.FileFolder, true);
-                            ShowMessage("已卸载 " + appInfo.Name);
+                            string _bat = "UnInstall.bat";
+                            //获取解压后所有文件的路径
+                            string _file1 = "E Updater.exe";
+                            string _file2 = AppInfo.DownloadFolder;
+                            string _file3 = AppInfo.ThemeFolder;
+                            string _file4 = AppInfo.TempFolder;
+                            //创建批处理命令
+                            FileStream fs = new FileStream(_bat, FileMode.Create, FileAccess.Write);
+                            StreamWriter sw = new StreamWriter(fs);
+                            sw.WriteLine("@echo off");
+                            sw.WriteLine("del /f /s /q " + "\""+ _file1 + "\"");
+                            sw.WriteLine("rd /s /q " + _file2);
+                            sw.WriteLine("rd /s /q " + _file3);
+                            sw.WriteLine("rd /s /q " + _file4);
+                            sw.Flush();
+                            sw.Close();
+                            //退出EU
+                            Close();
+                            //运行批处理命令
+                            Process.Start(_bat);
                             return true;
                         default:
                             break;
+                    }
+                }
+                else
+                {
+                    if (!appInfo.IsRunning)
+                    {
+                        string tip = string.Format("确定要卸载{0}吗？\n这将删除整个文件夹{1}，且无法恢复。", appInfo.Name, appInfo.FileFolder);
+                        MessageBoxResult mbr = MessageBox.Show(tip, "", MessageBoxButton.YesNo);
+                        switch (mbr)
+                        {
+                            case MessageBoxResult.Yes:
+                                Directory.Delete(appInfo.FileFolder, true);
+                                ShowMessage("已卸载 " + appInfo.Name);
+                                return true;
+                            default:
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        ShowMessage("请先关闭" + appInfo.Name + "再卸载");
                     }
                 }
             }
@@ -452,7 +491,7 @@ namespace E.Updater
             }
 
             //指定安装文件夹
-            string folder = FolderHelper.ChooseFolder();
+            string folder = FolderHelper.ChooseFolder("请选择安装目录");
             if (!Directory.Exists(folder))
             {
                 return false;
@@ -683,20 +722,21 @@ namespace E.Updater
                 string name = Path.GetFileNameWithoutExtension(downloadingFile);
                 ShowMessage("已下载文件，正在安装 " + name);
                 //解压文件
-                if (name == "E Updater")
+                if (name.Contains("E Updater"))
                 {
                     UnZip(downloadingFile, AppInfo.TempFolder);
 
                     string _bat = "Update.bat";
                     //获取解压后所有文件的路径
                     string _file1 = AppInfo.TempFolder + "\\E Updater.exe";
-                    //string _file2 = AppInfo.TempFolder + "\\ICSharpCode.SharpZipLib.dll";
+                    string _file2 = AppInfo.TempFolder + "\\" + AppInfo.ThemeFolder;
                     //创建批处理命令
                     FileStream fs = new FileStream(_bat, FileMode.Create, FileAccess.Write);
                     StreamWriter sw = new StreamWriter(fs);
                     sw.WriteLine("@echo off");
+                    sw.WriteLine("rd /s /q "+ AppInfo.ThemeFolder);
                     sw.WriteLine("move \"" + _file1 + "\" \"\"");
-                    //sw.WriteLine("move \"" + _file2 + "\" \"\"");
+                    sw.WriteLine("move \"" + _file2 + "\" \"\"");
                     //sw.WriteLine("echo \"Press any key to run E Updater\"");
                     //sw.WriteLine("pause");
                     sw.WriteLine("start \"\" \"E Updater.exe\"");
