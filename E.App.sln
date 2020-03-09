@@ -17,9 +17,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E Role", "E Role\E Role.csp
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedProject", "SharedProject\SharedProject.shproj", "{FD904394-84BE-4E96-AAE0-27D882BCA533}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E Coder", "E Coder\E Coder.csproj", "{1AE5AC2A-A7A3-405C-9662-2D3FEC3A8E99}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		SharedProject\SharedProject.projitems*{16c7420b-b47a-4ba8-865e-cb8cd91e065e}*SharedItemsImports = 4
+		SharedProject\SharedProject.projitems*{1ae5ac2a-a7a3-405c-9662-2d3fec3a8e99}*SharedItemsImports = 4
 		SharedProject\SharedProject.projitems*{3abae54a-6bec-48df-8661-eff05ae1b347}*SharedItemsImports = 4
 		SharedProject\SharedProject.projitems*{5c87b096-9dcd-46b1-b683-a0fb47dbe2e8}*SharedItemsImports = 4
 		SharedProject\SharedProject.projitems*{79907fed-116d-42d5-9b9d-f9c9aaa4d497}*SharedItemsImports = 4
@@ -134,6 +137,22 @@ Global
 		{79907FED-116D-42D5-9B9D-F9C9AAA4D497}.Release|x64.Build.0 = Release|Any CPU
 		{79907FED-116D-42D5-9B9D-F9C9AAA4D497}.Release|x86.ActiveCfg = Release|Any CPU
 		{79907FED-116D-42D5-9B9D-F9C9AAA4D497}.Release|x86.Build.0 = Release|Any CPU
+		{1AE5AC2A-A7A3-405C-9662-2D3FEC3A8E99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AE5AC2A-A7A3-405C-9662-2D3FEC3A8E99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AE5AC2A-A7A3-405C-9662-2D3FEC3A8E99}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{1AE5AC2A-A7A3-405C-9662-2D3FEC3A8E99}.Debug|ARM.Build.0 = Debug|Any CPU
+		{1AE5AC2A-A7A3-405C-9662-2D3FEC3A8E99}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1AE5AC2A-A7A3-405C-9662-2D3FEC3A8E99}.Debug|x64.Build.0 = Debug|Any CPU
+		{1AE5AC2A-A7A3-405C-9662-2D3FEC3A8E99}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1AE5AC2A-A7A3-405C-9662-2D3FEC3A8E99}.Debug|x86.Build.0 = Debug|Any CPU
+		{1AE5AC2A-A7A3-405C-9662-2D3FEC3A8E99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AE5AC2A-A7A3-405C-9662-2D3FEC3A8E99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AE5AC2A-A7A3-405C-9662-2D3FEC3A8E99}.Release|ARM.ActiveCfg = Release|Any CPU
+		{1AE5AC2A-A7A3-405C-9662-2D3FEC3A8E99}.Release|ARM.Build.0 = Release|Any CPU
+		{1AE5AC2A-A7A3-405C-9662-2D3FEC3A8E99}.Release|x64.ActiveCfg = Release|Any CPU
+		{1AE5AC2A-A7A3-405C-9662-2D3FEC3A8E99}.Release|x64.Build.0 = Release|Any CPU
+		{1AE5AC2A-A7A3-405C-9662-2D3FEC3A8E99}.Release|x86.ActiveCfg = Release|Any CPU
+		{1AE5AC2A-A7A3-405C-9662-2D3FEC3A8E99}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
