@@ -14,6 +14,17 @@
     <Resource Include="$(MSBuildThisFileDirectory)UserAgreement.md" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\EWindow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\BoolToVisibility.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\CornerRadiusToDouble.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\DoubleFactor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\DoubleToCornerRadius.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\DoubleToThickness.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\StringToVisibility.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\TimeSpanToDouble.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\ColorHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\INIHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\NetHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SharedClass.cs" />
   </ItemGroup>
   <ItemGroup>

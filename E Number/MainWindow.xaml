@@ -1,4 +1,4 @@
-﻿<Window x:Name="Main" x:Class="E.Number.MainWindow"
+﻿<share:EWindow x:Name="Main" x:Class="E.Number.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -122,4 +122,4 @@
             </Grid>
         </DockPanel>
     </Grid>
-</Window>
+</share:EWindow>

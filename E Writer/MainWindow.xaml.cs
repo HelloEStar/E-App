@@ -16,6 +16,7 @@ using MessageBox = System.Windows.MessageBox;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using Settings = E.Writer.Properties.Settings;
 using SharedProject;
+using SharedProject.Controls;
 
 namespace E.Writer
 {

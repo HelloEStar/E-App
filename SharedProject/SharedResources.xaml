@@ -750,6 +750,6 @@
 
 
     <!--时间间隔转换器-->
-    <share:TimeSpanDoubleConverter x:Key="时间间隔转换器"/>
-    <share:VisibilityBoolConverter x:Key="可见性布尔转换器"/>
+    <share:TimeSpanToDouble x:Key="时间间隔转换器"/>
+    <share:BoolToVisibility x:Key="可见性布尔转换器"/>
 </ResourceDictionary>

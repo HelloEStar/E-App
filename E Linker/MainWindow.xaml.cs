@@ -17,30 +17,9 @@ using Settings = E.Linker.Properties.Settings;
 
 namespace E.Linker
 {
-    /// <summary>
-    /// MainWindow.xaml 的交互逻辑
-    /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : EWindow
     {
-        #region 属性
-        /// <summary>
-        /// 应用信息
-        /// </summary>
-        private AppInfo AppInfo { get; } = new AppInfo();
-
-        /// <summary>
-        /// 当前菜单
-        /// </summary>
-        private MenuTool CurrentMenuTool { get; set; } = MenuTool.文件;
-
-        #endregion 
-
-
-        #region 方法
         //构造
-        /// <summary>
-        /// 构造器
-        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -51,9 +30,6 @@ namespace E.Linker
         }
 
         //载入
-        /// <summary>
-        /// 读取记录
-        /// </summary>
         private void LoadRecordItems()
         {
             if (!string.IsNullOrEmpty(Settings.Default.Record))
@@ -66,23 +42,8 @@ namespace E.Linker
             }
         }
 
-        ///打开
-
-        ///关闭
-
         //保存
-        /// <summary>
-        /// 保存应用设置
-        /// </summary>
-        private void SaveSettings()
-        {
-            Settings.Default.Save();
-            ShowMessage(FindResource("已保存").ToString());
-        }
-        /// <summary>
-        /// 保存记录
-        /// </summary>
-        private void SaveRecords()
+        protected override void SaveSettings()
         {
             Settings.Default.Record = "";
             List<string> strs = new List<string>();
@@ -91,9 +52,10 @@ namespace E.Linker
                 strs.Add(item.Content.ToString());
             }
             Settings.Default.Record = string.Join("///", strs);
-        }
 
-        //创建
+            Settings.Default.Save();
+            ShowMessage(FindResource("已保存").ToString());
+        }
 
         //添加
         private void AddRecordItem(string content)
@@ -107,158 +69,15 @@ namespace E.Linker
             LtbRecord.Items.Add(item);
         }
 
-        ///移除
-
-        ///清空
-
-        ///删除
-
-        ///获取
-
-
-        //设置
-        /// <summary>
-        /// 设置菜单
-        /// </summary>
-        /// <param name="menu"></param>
-        private void SetMenuTool(MenuTool menu)
-        {
-            switch (menu)
-            {
-                case MenuTool.无:
-                    PanFile.Visibility = Visibility.Collapsed;
-                    //PanEdit.Visibility = Visibility.Collapsed;
-                    PanSetting.Visibility = Visibility.Collapsed;
-                    PanAbout.Visibility = Visibility.Collapsed;
-                    BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
-                    //BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
-                    break;
-                case MenuTool.文件:
-                    PanFile.Visibility = Visibility.Visible;
-                    //PanEdit.Visibility = Visibility.Collapsed;
-                    PanSetting.Visibility = Visibility.Collapsed;
-                    PanAbout.Visibility = Visibility.Collapsed;
-                    BtnFile.BorderThickness = new Thickness(4, 0, 0, 0);
-                    //BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
-                    break;
-                case MenuTool.编辑:
-                    PanFile.Visibility = Visibility.Collapsed;
-                    //PanEdit.Visibility = Visibility.Visible;
-                    PanSetting.Visibility = Visibility.Collapsed;
-                    PanAbout.Visibility = Visibility.Collapsed;
-                    BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
-                    //BtnEdit.BorderThickness = new Thickness(4, 0, 0, 0);
-                    BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
-                    break;
-                case MenuTool.设置:
-                    PanFile.Visibility = Visibility.Collapsed;
-                    //PanEdit.Visibility = Visibility.Collapsed;
-                    PanSetting.Visibility = Visibility.Visible;
-                    PanAbout.Visibility = Visibility.Collapsed;
-                    BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
-                    //BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnSetting.BorderThickness = new Thickness(4, 0, 0, 0);
-                    BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
-                    break;
-                case MenuTool.关于:
-                    PanFile.Visibility = Visibility.Collapsed;
-                    //PanEdit.Visibility = Visibility.Collapsed;
-                    PanSetting.Visibility = Visibility.Collapsed;
-                    PanAbout.Visibility = Visibility.Visible;
-                    BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
-                    //BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnAbout.BorderThickness = new Thickness(4, 0, 0, 0);
-                    break;
-                default:
-                    break;
-            }
-            CurrentMenuTool = menu;
-        }
-        /// <summary>
-        /// 设置语言选项
-        /// </summary>
-        /// <param name="language">语言简拼</param>
-        private void SetLanguage(int index)
-        {
-            Settings.Default.Language = index;
-        }
-        /// <summary>
-        /// 设置主题选项
-        /// </summary>
-        /// <param name="themePath">主题路径</param>
-        private void SetTheme(int index)
-        {
-            Settings.Default.Theme = index;
-        }
-        /// <summary>
-        /// 切换下个主题显示
-        /// </summary>
-        private void SetNextTheme()
-        {
-            int index = Settings.Default.Theme;
-            index++;
-            if (index > CbbThemes.Items.Count - 1)
-            {
-                index = 0;
-            }
-            SetTheme(index);
-        }
-
         //重置
-        /// <summary>
-        /// 重置应用设置
-        /// </summary>
-        private void ResetSettings()
+        protected override void ResetSettings()
         {
             Settings.Default.Reset();
             ShowMessage(FindResource("已重置").ToString());
         }
 
-        ///选择
-
-        //检查
-        /// <summary>
-        /// 用户是否同意
-        /// </summary>
-        /// <returns></returns>
-        private bool IsUserAgree()
-        {
-            string str = AppInfo.UserAgreement + "\n\n你需要同意此协议才能使用本软件，是否同意？";
-            MessageBoxResult result = MessageBox.Show(str, FindResource("用户协议").ToString(), MessageBoxButton.YesNo);
-            return (result == MessageBoxResult.Yes);
-        }
-        /// <summary>
-        /// 检查用户协议
-        /// </summary>
-        private void CheckUserAgreement()
-        {
-            Settings.Default.RunCount += 1;
-            if (Settings.Default.RunCount == 1)
-            {
-                if (!IsUserAgree())
-                {
-                    Settings.Default.RunCount = 0;
-                    Close();
-                }
-            }
-        }
-        /// <summary>
-        /// 检测名字是否合法字符
-        /// </summary>
-        /// <param name="name">名字</param>
-        /// <returns>是否合法字符</returns>
-
         //刷新
-        /// <summary>
-        /// 刷新软件信息
-        /// </summary>
-        private void RefreshAppInfo()
+        protected override void RefreshAppInfo()
         {
             TxtHomePage.Text = AppInfo.HomePage;
             TxtHomePage.ToolTip = AppInfo.HomePage;
@@ -275,142 +94,40 @@ namespace E.Linker
             TxtVersion.Text = AppInfo.Version.ToString();
             TxtUpdateNote.Text = AppInfo.UpdateNote;
         }
-        /// <summary>
-        /// 刷新主窗口标题
-        /// </summary>
-        public void RefreshTitle()
+        protected override void RefreshTitle()
         {
             string str = AppInfo.Name + " " + AppInfo.VersionShort;
             Main.Title = str;
         }
 
         //显示
-        /// <summary>
-        /// 显示消息
-        /// </summary>
-        /// <param name="resourceName">资源名</param>
-        /// <param name="newBox">是否弹出对话框</param>
-        private void ShowMessage(string message, bool newBox = false)
+        protected override void ShowMessage(string message, bool newBox = false)
         {
-            MessageHelper.ShowMessage(LblMessage, message, newBox);
+            ShowMessage(LblMessage, message, newBox);
         }
 
-        //切换
-        /// <summary>
-        /// 切换工具面板
-        /// </summary>
-        private void SwitchMenuToolFile()
-        {
-            switch (CurrentMenuTool)
-            {
-                case MenuTool.文件:
-                    SetMenuTool(MenuTool.无);
-                    break;
-                default:
-                    SetMenuTool(MenuTool.文件);
-                    break;
-            }
-        }
-        /// <summary>
-        /// 切换编辑面板
-        /// </summary>
-        private void SwitchMenuToolEdit()
-        {
-            switch (CurrentMenuTool)
-            {
-                case MenuTool.编辑:
-                    SetMenuTool(MenuTool.无);
-                    break;
-                default:
-                    SetMenuTool(MenuTool.编辑);
-                    break;
-            }
-        }
-        /// <summary>
-        /// 切换设置面板
-        /// </summary>
-        private void SwitchMenuToolSetting()
-        {
-            switch (CurrentMenuTool)
-            {
-                case MenuTool.设置:
-                    SetMenuTool(MenuTool.无);
-                    break;
-                default:
-                    SetMenuTool(MenuTool.设置);
-                    break;
-            }
-        }
-        /// <summary>
-        /// 切换关于面板
-        /// </summary>
-        private void SwitchMenuToolAbout()
-        {
-            switch (CurrentMenuTool)
-            {
-                case MenuTool.关于:
-                    SetMenuTool(MenuTool.无);
-                    break;
-                default:
-                    SetMenuTool(MenuTool.关于);
-                    break;
-            }
-        }
-        #endregion
 
-
-        #region 事件
         //主窗口
         private void Main_Loaded(object sender, RoutedEventArgs e)
         {
             //载入
-            LanguageHelper.LoadLanguageItems(CbbLanguages);
-            ThemeHelper.LoadThemeItems(CbbThemes);
+            LoadLanguageItems(CbbLanguages);
+            LoadThemeItems(CbbThemes);
             LoadRecordItems();
 
             //刷新
             RefreshAppInfo();
             RefreshTitle();
-
-            //检查用户协议
-            CheckUserAgreement();
         }
         private void Main_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            SaveRecords();
             SaveSettings();
         }
-        private void Main_KeyUp(object sender, KeyEventArgs e)
+        protected override void Main_KeyUp(object sender, KeyEventArgs e)
         {
             //Ctrl+T 切换下个主题
             if (e.Key == Key.T && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
-            { SetNextTheme(); }
-
-            //关于菜单
-            if (e.Key == Key.F1)
-            { Process.Start("explorer.exe", AppInfo.HomePage); }
-            else if (e.Key == Key.F2)
-            { Process.Start("explorer.exe", AppInfo.GitHubPage); }
-            else if (e.Key == Key.F3)
-            { Process.Start("explorer.exe", AppInfo.QQGroupLink); }
-        }
-
-        //菜单栏
-        private void BtnFile_Click(object sender, RoutedEventArgs e)
-        {
-            SwitchMenuToolFile();
-        }
-        private void BtnEdit_Click(object sender, RoutedEventArgs e)
-        {
-            SwitchMenuToolEdit();
-        }
-        private void BtnSetting_Click(object sender, RoutedEventArgs e)
-        {
-            SwitchMenuToolSetting();
-        }
-        private void BtnAbout_Click(object sender, RoutedEventArgs e)
-        {
-            SwitchMenuToolAbout();
+            { SetNextTheme(CbbThemes, Settings.Default.Theme); }
         }
 
         //工具栏
@@ -418,16 +135,6 @@ namespace E.Linker
         private void BtnClear_Click(object sender, RoutedEventArgs e)
         {
             LtbRecord.Items.Clear();
-        }
-        ///编辑
-        ///设置
-        private void BtnSaveSettings_Click(object sender, RoutedEventArgs e)
-        {
-            SaveSettings();
-        }
-        private void BtnResetSettings_Click(object sender, RoutedEventArgs e)
-        {
-            ResetSettings();
         }
         private void CbbLanguages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -447,7 +154,7 @@ namespace E.Linker
                 {
                     CbbLanguages.Items.Remove(cbi);
                     //设为默认主题
-                    SetLanguage(0);
+                    Settings.Default.Language = 0;
                 }
             }
         }
@@ -465,32 +172,10 @@ namespace E.Linker
                 {
                     CbbThemes.Items.Remove(cbi);
                     //设为默认主题
-                    SetTheme(0);
+                    Settings.Default.Theme = 0;
                 }
             }
         }
-        ///关于
-        private void BtnBitCoinAddress_Click(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Clipboard.SetDataObject(TxtBitCoinAddress.Text, true);
-            ShowMessage(FindResource("已复制").ToString());
-        }
-        private void BtnHomePage_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("explorer.exe", AppInfo.HomePage);
-        }
-        private void BtnGitHubPage_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("explorer.exe", AppInfo.GitHubPage);
-        }
-        private void BtnQQGroup_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("explorer.exe", AppInfo.QQGroupLink);
-        }
-
-        #endregion
-
-
 
 
         Point point = new Point();
@@ -498,14 +183,12 @@ namespace E.Linker
         {
             Move.ReleaseMouseCapture();
         }
-
         private void Node_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             point = e.GetPosition(null);
             Move.CaptureMouse();
             Move.Cursor = Cursors.Hand;
         }
-
         private void Node_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
