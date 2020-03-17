@@ -16,24 +16,8 @@ using Path = System.IO.Path;
 
 namespace E.Role
 {
-    /// <summary>
-    /// MainWindow.xaml 的交互逻辑
-    /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : EWindow
     {
-        #region 属性
-        /// <summary>
-        /// 应用信息
-        /// </summary>
-        private AppInfo AppInfo { get; } = new AppInfo();
-
-        /// <summary>
-        /// 当前菜单
-        /// </summary>
-        private MenuTool CurrentMenuTool { get; set; } = MenuTool.文件;
-        /// <summary>
-        /// 姓氏列表
-        /// </summary>
         public List<string> Surnames { get; } = new List<string>()
         {"赵", "钱", "孙", "李", "周", "吴", "郑", "王", "冯", "陈", "楮", "卫", "蒋", "沈", "韩", "杨",
   "朱", "秦", "尤", "许", "何", "吕", "施", "张", "孔", "曹", "严", "华", "金", "魏", "陶", "姜",
@@ -68,30 +52,18 @@ namespace E.Role
   "锺离", "宇文", "长孙", "慕容", "鲜于", "闾丘", "司徒", "司空", "丌官", "司寇", "子车", "微生",
   "颛孙", "端木", "巫马", "公西", "漆雕", "乐正", "壤驷", "公良", "拓拔", "夹谷", "宰父", "谷梁",
   "段干", "百里", "东郭", "南门", "呼延", "羊舌", "梁丘", "左丘", "东门", "西门", "南宫"};
-        /// <summary>
-        /// 性别列表
-        /// </summary>
         public List<string> Genders { get; } = new List<string>()
         {
             "男","女", "无", "双"
         };
-        #endregion
 
-
-        #region 方法
         //构造
-        /// <summary>
-        /// 构造器
-        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
         }
 
         //载入
-        /// <summary>
-        /// 载入角色生成记录
-        /// </summary>
         private void LoadRoleItems()
         {
             string str = Settings.Default.Record.Replace("}", "");
@@ -122,29 +94,13 @@ namespace E.Role
             }
         }
 
-        ///打开
-
-        ///关闭
-
         //保存
-        /// <summary>
-        /// 保存应用设置
-        /// </summary>
-        private void SaveSettings()
+        protected override void SaveSettings()
         {
             if (!CheckIsCorrectRange())
             {
                 return;
             }
-
-            Settings.Default.Save();
-            ShowMessage(FindResource("已保存").ToString());
-        }
-        /// <summary>
-        /// 保存角色
-        /// </summary>
-        private void SaveRoles()
-        {
             if (LtbRecord.Items != null)
             {
                 List<Role> items = new List<Role>();
@@ -165,13 +121,12 @@ namespace E.Role
                 }
                 Settings.Default.Record = str;
             }
+
+            Settings.Default.Save();
+            ShowMessage(FindResource("已保存").ToString());
         }
 
         //创建
-        /// <summary>
-        /// 创建角色
-        /// </summary>
-        /// <returns></returns>
         private void CreateRole()
         {
             if (!CheckIsCorrectRange())
@@ -215,9 +170,6 @@ namespace E.Role
         }
 
         //添加
-        /// <summary>
-        /// 创建列表元素
-        /// </summary>
         private void AddRoleItem(Role role, bool isShow)
         {
             if (role != null)
@@ -243,9 +195,6 @@ namespace E.Role
 
 
         //移除
-        /// <summary>
-        /// 移除当前选中
-        /// </summary>
         private void RemoveCurrentRoleItem()
         {
             if (LtbRecord.SelectedItem != null)
@@ -253,10 +202,6 @@ namespace E.Role
                 LtbRecord.Items.Remove(LtbRecord.SelectedItem);
             }
         }
-
-        ///清空
-
-        ///删除
 
         //获取
         /// <summary>
@@ -420,11 +365,7 @@ namespace E.Role
         }
 
         //设置
-        /// <summary>
-        /// 设置菜单
-        /// </summary>
-        /// <param name="menu"></param>
-        private void SetMenuTool(MenuTool menu)
+        protected override void SetMenuTool(MenuTool menu)
         {
             switch (menu)
             {
@@ -483,41 +424,9 @@ namespace E.Role
             }
             CurrentMenuTool = menu;
         }
-        /// <summary>
-        /// 设置语言选项
-        /// </summary>
-        /// <param name="language">语言简拼</param>
-        private void SetLanguage(int index)
-        {
-            Settings.Default.Language = index;
-        }
-        /// <summary>
-        /// 设置主题选项
-        /// </summary>
-        /// <param name="themePath">主题路径</param>
-        private void SetTheme(int index)
-        {
-            Settings.Default.Theme = index;
-        }
-        /// <summary>
-        /// 切换下个主题显示
-        /// </summary>
-        private void SetNextTheme()
-        {
-            int index = Settings.Default.Theme;
-            index++;
-            if (index > CbbThemes.Items.Count - 1)
-            {
-                index = 0;
-            }
-            SetTheme(index);
-        }
 
         //重置
-        /// <summary>
-        /// 重置应用设置
-        /// </summary>
-        private void ResetSettings()
+        protected override void ResetSettings()
         {
             int rc = Settings.Default.RunCount;
             Settings.Default.Reset();
@@ -526,37 +435,7 @@ namespace E.Role
             ShowMessage(FindResource("已重置").ToString());
         }
 
-        ///选择
-
         //检查
-        /// <summary>
-        /// 用户是否同意
-        /// </summary>
-        /// <returns></returns>
-        private bool IsUserAgree()
-        {
-            string str = AppInfo.UserAgreement + "\n\n你需要同意此协议才能使用本软件，是否同意？";
-            MessageBoxResult result = MessageBox.Show(str, FindResource("用户协议").ToString(), MessageBoxButton.YesNo);
-            return (result == MessageBoxResult.Yes);
-        }
-        /// <summary>
-        /// 检查用户协议
-        /// </summary>
-        private void CheckUserAgreement()
-        {
-            Settings.Default.RunCount += 1;
-            if (Settings.Default.RunCount == 1)
-            {
-                if (!IsUserAgree())
-                {
-                    Settings.Default.RunCount = 0;
-                    Close();
-                }
-            }
-        }
-        /// <summary>
-        /// 检查范围是否正确
-        /// </summary>
         private bool CheckIsCorrectRange()
         {
             bool isRight = true;
@@ -579,10 +458,7 @@ namespace E.Role
         }
 
         //刷新
-        /// <summary>
-        /// 刷新软件信息
-        /// </summary>
-        private void RefreshAppInfo()
+        protected override void RefreshAppInfo()
         {
             TxtHomePage.Text = AppInfo.HomePage;
             TxtHomePage.ToolTip = AppInfo.HomePage;
@@ -599,28 +475,12 @@ namespace E.Role
             TxtVersion.Text = AppInfo.Version.ToString();
             TxtUpdateNote.Text = AppInfo.UpdateNote;
         }
-        /// <summary>
-        /// 刷新主窗口标题
-        /// </summary>
-        public void RefreshTitle()
-        {
-            string str = AppInfo.Name + " " + AppInfo.VersionShort;
-            Main.Title = str;
-        }
 
         //显示
-        /// <summary>
-        /// 显示消息
-        /// </summary>
-        /// <param name="resourceName">资源名</param>
-        /// <param name="newBox">是否弹出对话框</param>
-        private void ShowMessage(string message, bool newBox = false)
+        protected override void ShowMessage(string message, bool newBox = false)
         {
-            MessageHelper.ShowMessage(LblMessage, message, newBox);
+            ShowMessage(LblMessage, message, newBox);
         }
-        /// <summary>
-        /// 显示角色
-        /// </summary>
         private void ShowRole(Role role)
         {
             TxtSurname.Text = role.Surname;
@@ -630,10 +490,6 @@ namespace E.Role
             TxtHeight.Text = role.Height;
             TxtWeight.Text = role.Weight;
         }
-        /// <summary>
-        /// 显示角色
-        /// </summary>
-        /// <param name="item"></param>
         private void ShowRole(ListBoxItem item)
         {
             if (item != null)
@@ -643,9 +499,6 @@ namespace E.Role
                 ShowRole(role);
             }
         }
-        /// <summary>
-        /// 显示当前选择角色
-        /// </summary>
         private void ShowCurrentRoleItem()
         {
             if (LtbRecord.SelectedItem != null)
@@ -655,78 +508,12 @@ namespace E.Role
             }
         }
 
-        //切换
-        /// <summary>
-        /// 切换工具面板
-        /// </summary>
-        private void SwitchMenuToolFile()
-        {
-            switch (CurrentMenuTool)
-            {
-                case MenuTool.文件:
-                    SetMenuTool(MenuTool.无);
-                    break;
-                default:
-                    SetMenuTool(MenuTool.文件);
-                    break;
-            }
-        }
-        /// <summary>
-        /// 切换编辑面板
-        /// </summary>
-        private void SwitchMenuToolEdit()
-        {
-            switch (CurrentMenuTool)
-            {
-                case MenuTool.编辑:
-                    SetMenuTool(MenuTool.无);
-                    break;
-                default:
-                    SetMenuTool(MenuTool.编辑);
-                    break;
-            }
-        }
-        /// <summary>
-        /// 切换设置面板
-        /// </summary>
-        private void SwitchMenuToolSetting()
-        {
-            switch (CurrentMenuTool)
-            {
-                case MenuTool.设置:
-                    SetMenuTool(MenuTool.无);
-                    break;
-                default:
-                    SetMenuTool(MenuTool.设置);
-                    break;
-            }
-        }
-        /// <summary>
-        /// 切换关于面板
-        /// </summary>
-        private void SwitchMenuToolAbout()
-        {
-            switch (CurrentMenuTool)
-            {
-                case MenuTool.关于:
-                    SetMenuTool(MenuTool.无);
-                    break;
-                default:
-                    SetMenuTool(MenuTool.关于);
-                    break;
-            }
-        }
-
-        #endregion
-
-
-        #region 事件
         //主窗口
         private void Main_Loaded(object sender, RoutedEventArgs e)
         {
             //载入
-            LanguageHelper.LoadLanguageItems(CbbLanguages);
-            ThemeHelper.LoadThemeItems(CbbThemes);
+            LoadLanguageItems(CbbLanguages);
+            LoadThemeItems(CbbThemes);
             LoadRoleItems();
 
             //刷新
@@ -734,45 +521,23 @@ namespace E.Role
             RefreshTitle();
             LblMessage.Opacity = 0;
 
-            //检查用户协议
-            CheckUserAgreement();
+            //检查用户是否同意用户协议
+            if (CheckUserAgreement(Settings.Default.RunCount))
+            {
+                Settings.Default.RunCount += 1;
+            }
         }
         private void Main_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            SaveRoles();
             SaveSettings();
         }
-        private void Main_KeyUp(object sender, KeyEventArgs e)
+        protected override void Main_KeyUp(object sender, KeyEventArgs e)
         {
+            base.Main_KeyUp(sender, e);
+
             //Ctrl+T 切换下个主题
             if (e.Key == Key.T && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
-            { SetNextTheme(); }
-
-            //关于菜单
-            if (e.Key == Key.F1)
-            { Process.Start("explorer.exe", AppInfo.HomePage); }
-            else if (e.Key == Key.F2)
-            { Process.Start("explorer.exe", AppInfo.GitHubPage); }
-            else if (e.Key == Key.F3)
-            { Process.Start("explorer.exe", AppInfo.QQGroupLink); }
-        }
-
-        //菜单栏
-        private void BtnFile_Click(object sender, RoutedEventArgs e)
-        {
-            SwitchMenuToolFile();
-        }
-        private void BtnEdit_Click(object sender, RoutedEventArgs e)
-        {
-            SwitchMenuToolEdit();
-        }
-        private void BtnSetting_Click(object sender, RoutedEventArgs e)
-        {
-            SwitchMenuToolSetting();
-        }
-        private void BtnAbout_Click(object sender, RoutedEventArgs e)
-        {
-            SwitchMenuToolAbout();
+            { SetNextTheme(CbbThemes, Settings.Default.Theme); }
         }
 
         //工具栏
@@ -833,16 +598,6 @@ namespace E.Role
                 ShowRole((ListBoxItem)sender);
             }
         }
-        ///编辑
-        ///设置
-        private void BtnSaveSettings_Click(object sender, RoutedEventArgs e)
-        {
-            SaveSettings();
-        }
-        private void BtnResetSettings_Click(object sender, RoutedEventArgs e)
-        {
-            ResetSettings();
-        }
         private void CbbLanguages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CbbLanguages.SelectedItem != null)
@@ -861,7 +616,7 @@ namespace E.Role
                 {
                     CbbLanguages.Items.Remove(cbi);
                     //设为默认主题
-                    SetLanguage(0);
+                    Settings.Default.Language = 0;
                 }
             }
         }
@@ -879,33 +634,10 @@ namespace E.Role
                 {
                     CbbThemes.Items.Remove(cbi);
                     //设为默认主题
-                    SetTheme(0);
+                    Settings.Default.Theme = 0;
                 }
             }
         }
-
-
-        ///关于
-        private void BtnBitCoinAddress_Click(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Clipboard.SetDataObject(TxtBitCoinAddress.Text, true);
-            ShowMessage(FindResource("已复制").ToString());
-        }
-        private void BtnHomePage_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("explorer.exe", AppInfo.HomePage);
-        }
-        private void BtnGitHubPage_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("explorer.exe", AppInfo.GitHubPage);
-        }
-        private void BtnQQGroup_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("explorer.exe", AppInfo.QQGroupLink);
-        }
-
-        //工作区
-        #endregion
     }
 
     public class Role

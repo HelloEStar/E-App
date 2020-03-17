@@ -132,11 +132,6 @@ namespace E.Number
         }
 
         //刷新
-        protected override void RefreshTitle()
-        {
-            string str = AppInfo.Name + " " + AppInfo.VersionShort;
-            Main.Title = str;
-        }
         protected override void RefreshAppInfo()
         {
             TxtHomePage.Text = AppInfo.HomePage;

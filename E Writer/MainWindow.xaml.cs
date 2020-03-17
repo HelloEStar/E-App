@@ -16,73 +16,25 @@ using MessageBox = System.Windows.MessageBox;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using Settings = E.Writer.Properties.Settings;
 using SharedProject;
-using SharedProject.Controls;
 
 namespace E.Writer
 {
-    /// <summary>
-    /// MainWindow.xaml 的交互逻辑
-    /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : EWindow
     {
-        #region 属性
-        /// <summary>
-        /// 应用信息
-        /// </summary>
-        private AppInfo AppInfo { get; } = new AppInfo();
-
-        /// <summary>
-        /// 当前菜单
-        /// </summary>
-        private MenuTool CurrentMenuTool { get; set; } = MenuTool.文件;
-        /// <summary>
-        /// 
-        /// </summary>
         private FileOrFolderInfo CurrentBook { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
         private FileOrFolderInfo CurrentChapter { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
         private FileOrFolderInfo CurrentEssay { get; set; }
-        /// <summary>
-        /// 打开的文件是否已保存
-        /// </summary>
         private bool IsSaved { get; set; } = true;
-        /// <summary>
-        /// 当前匹配文字
-        /// </summary>
         private string CurrentFindText { get; set; }
-        /// <summary>
-        /// 替换文字
-        /// </summary>
         private string ReplaceText { get; set; }
-        /// <summary>
-        /// 下个匹配文字的索引
-        /// </summary>
         private int NextStartIndex { get; set; }
-        /// <summary>
-        /// 选中的节点
-        /// </summary>
         private TreeViewItemNode SelectedNode { get; set; }
 
-        /// <summary>
-        /// 自动保存计时器
-        /// </summary>
         private DispatcherTimer AutoSaveTimer { get; set; }
-        /// <summary>
-        /// 自动备份计时器
-        /// </summary>
         private DispatcherTimer AutoBackupTimer { get; set; }
-        #endregion 
 
         #region 方法
         //构造
-        /// <summary>
-        /// 默认构造器
-        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -415,8 +367,19 @@ namespace E.Writer
         /// <summary>
         /// 保存应用设置
         /// </summary>
-        private void SaveSettings()
+        protected override void SaveSettings()
         {
+            if (Settings.Default.RunCount > 0)
+            {
+                Settings.Default._books = "";
+                List<string> strs = new List<string>();
+                foreach (ComboBoxItem item in CbbBooks.Items)
+                {
+                    strs.Add(item.Tag.ToString());
+                }
+                Settings.Default._books = string.Join("///", strs);
+            }
+
             Settings.Default.Save();
             ShowMessage(FindResource("已保存").ToString());
         }
@@ -477,19 +440,6 @@ namespace E.Writer
                 }
                 RefreshTitle();
             }
-        }
-        /// <summary>
-        /// 保存书籍历史
-        /// </summary>
-        private void SaveBookHistory()
-        {
-            Settings.Default._books = "";
-            List<string> strs = new List<string>();
-            foreach (ComboBoxItem item in CbbBooks.Items)
-            {
-                strs.Add(item.Tag.ToString());
-            }
-            Settings.Default._books = string.Join("///", strs);
         }
 
         //创建
@@ -1270,11 +1220,7 @@ namespace E.Writer
         }
 
         //设置
-        /// <summary>
-        /// 设置菜单
-        /// </summary>
-        /// <param name="menu"></param>
-        private void SetMenuTool(MenuTool menu)
+        protected override void SetMenuTool(MenuTool menu)
         {
             switch (menu)
             {
@@ -1333,39 +1279,7 @@ namespace E.Writer
             }
             CurrentMenuTool = menu;
         }
-        /// <summary>
-        /// 设置语言选项
-        /// </summary>
-        /// <param name="language">语言简拼</param>
-        private void SetLanguage(int index)
-        {
-            Settings.Default.Language = index;
-        }
-        /// <summary>
-        /// 设置主题选项
-        /// </summary>
-        /// <param name="themePath">主题路径</param>
-        private void SetTheme(int index)
-        {
-            Settings.Default.Theme = index;
-        }
-        /// <summary>
-        /// 切换下个主题显示
-        /// </summary>
-        private void SetNextTheme()
-        {
-            int index = Settings.Default.Theme;
-            index++;
-            if (index > CbbThemes.Items.Count - 1)
-            {
-                index = 0;
-            }
-            SetTheme(index);
-        }
 
-        /// <summary>
-        /// 设置书籍选项
-        /// </summary>
         private void SetBookItem(string path)
         {
             foreach (ComboBoxItem item in CbbBooks.Items)
@@ -1378,11 +1292,6 @@ namespace E.Writer
                 }
             }
         }
-        /// <summary>
-        /// 编码格式更改为utf-8
-        /// </summary>
-        /// <param name="path">文件路径</param>
-        /// <param name="encoding">编码格式</param>
         private static void SetEncodeType(string path, Encoding encoding)
         {
             FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
@@ -1397,10 +1306,7 @@ namespace E.Writer
         }
 
         //重置
-        /// <summary>
-        /// 重置应用设置
-        /// </summary>
-        private void ResetSettings()
+        protected override void ResetSettings()
         {
             int rc = Settings.Default.RunCount;
             Settings.Default.Reset();
@@ -1835,18 +1741,10 @@ namespace E.Writer
         }
 
         //显示
-        /// <summary>
-        /// 显示消息
-        /// </summary>
-        /// <param name="resourceName">资源名</param>
-        /// <param name="newBox">是否弹出对话框</param>
-        private void ShowMessage(string message, bool newBox = false)
+        protected override void ShowMessage(string message, bool newBox = false)
         {
-            MessageHelper.ShowMessage(LblMessage, message, newBox);
+            ShowMessage(LblMessage, message, newBox);
         }
-        /// <summary>
-        /// 展开目录
-        /// </summary>
         private void ExpandTree()
         {
             foreach (TreeViewItemNode item in TvwBook.Items)
@@ -1869,68 +1767,6 @@ namespace E.Writer
                 //FileNode tvi = (FileNode)dObject;
                 //tvi.IsExpanded = false;
                 item.IsExpanded = false;
-            }
-        }
-
-        //切换
-        /// <summary>
-        /// 切换工具面板
-        /// </summary>
-        private void SwitchMenuToolFile()
-        {
-            switch (CurrentMenuTool)
-            {
-                case MenuTool.文件:
-                    SetMenuTool(MenuTool.无);
-                    break;
-                default:
-                    SetMenuTool(MenuTool.文件);
-                    break;
-            }
-        }
-        /// <summary>
-        /// 切换编辑面板
-        /// </summary>
-        private void SwitchMenuToolEdit()
-        {
-            switch (CurrentMenuTool)
-            {
-                case MenuTool.编辑:
-                    SetMenuTool(MenuTool.无);
-                    break;
-                default:
-                    SetMenuTool(MenuTool.编辑);
-                    break;
-            }
-        }
-        /// <summary>
-        /// 切换设置面板
-        /// </summary>
-        private void SwitchMenuToolSetting()
-        {
-            switch (CurrentMenuTool)
-            {
-                case MenuTool.设置:
-                    SetMenuTool(MenuTool.无);
-                    break;
-                default:
-                    SetMenuTool(MenuTool.设置);
-                    break;
-            }
-        }
-        /// <summary>
-        /// 切换关于面板
-        /// </summary>
-        private void SwitchMenuToolAbout()
-        {
-            switch (CurrentMenuTool)
-            {
-                case MenuTool.关于:
-                    SetMenuTool(MenuTool.无);
-                    break;
-                default:
-                    SetMenuTool(MenuTool.关于);
-                    break;
             }
         }
 
@@ -2093,8 +1929,8 @@ namespace E.Writer
         private void Main_Loaded(object sender, RoutedEventArgs e)
         {
             //载入
-            LanguageHelper.LoadLanguageItems(CbbLanguages);
-            ThemeHelper.LoadThemeItems(CbbThemes);
+            LoadLanguageItems(CbbLanguages);
+            LoadThemeItems(CbbThemes);
             LoadFontItems();
             LoadBookItems();
 
@@ -2118,13 +1954,9 @@ namespace E.Writer
         private void Main_Closing(object sender, CancelEventArgs e)
         {
             e.Cancel = CheckEssayWasSavedAndDoClose();
-            if (Settings.Default.RunCount > 0)
-            {
-                SaveBookHistory();
-            }
             SaveSettings();
         }
-        private void Main_KeyUp(object sender, KeyEventArgs e)
+        protected override void Main_KeyUp(object sender, KeyEventArgs e)
         {
             //若打开了书
             if (CurrentBook != null)
@@ -2233,17 +2065,12 @@ namespace E.Writer
             //Ctrl+B 创建
             if (e.Key == Key.B && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
             { Create(); }
+
             //Ctrl+T 切换下个主题
             if (e.Key == Key.T && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
-            { SetNextTheme(); }
+            { SetNextTheme(CbbThemes, Settings.Default.Theme); }
 
-            //关于菜单
-            if (e.Key == Key.F1)
-            { Process.Start("explorer.exe", AppInfo.HomePage); }
-            else if (e.Key == Key.F2)
-            { Process.Start("explorer.exe", AppInfo.GitHubPage); }
-            else if (e.Key == Key.F3)
-            { Process.Start("explorer.exe", AppInfo.QQGroupLink); }
+            base.Main_KeyUp(sender, e);
         }
         private void TimerAutoSave_Tick(object sender, EventArgs e)
         {
@@ -2258,24 +2085,6 @@ namespace E.Writer
         {
             //timer2.Stop();
             Backup();
-        }
-
-        //菜单栏
-        private void BtnFile_Click(object sender, RoutedEventArgs e)
-        {
-            SwitchMenuToolFile();
-        }
-        private void BtnEdit_Click(object sender, RoutedEventArgs e)
-        {
-            SwitchMenuToolEdit();
-        }
-        private void BtnSetting_Click(object sender, RoutedEventArgs e)
-        {
-            SwitchMenuToolSetting();
-        }
-        private void BtnAbout_Click(object sender, RoutedEventArgs e)
-        {
-            SwitchMenuToolAbout();
         }
 
         //工具栏
@@ -2613,21 +2422,12 @@ namespace E.Writer
             }
         }
         ///设置
-        private void BtnSaveSettings_Click(object sender, RoutedEventArgs e)
-        {
-            SaveSettings();
-        }
-        private void BtnResetSettings_Click(object sender, RoutedEventArgs e)
-        {
-            ResetSettings();
-        }
         private void CbbLanguages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CbbLanguages.SelectedItem != null)
             {
                 ComboBoxItem cbi = CbbLanguages.SelectedItem as ComboBoxItem;
-                ResourceDictionary rd = cbi.Tag as ResourceDictionary;
-                if (rd != null)
+                if (cbi.Tag is ResourceDictionary rd)
                 {
                     //主窗口更改语言
                     if (Resources.MergedDictionaries.Count > 0)
@@ -2640,7 +2440,7 @@ namespace E.Writer
                 {
                     CbbLanguages.Items.Remove(cbi);
                     //设为默认主题
-                    SetLanguage(0);
+                    Settings.Default.Language = 0;
                 }
             }
         }
@@ -2658,7 +2458,7 @@ namespace E.Writer
                 {
                     CbbThemes.Items.Remove(cbi);
                     //设为默认主题
-                    SetTheme(0);
+                    Settings.Default.Theme = 0;
                 }
             }
         }
@@ -2711,24 +2511,6 @@ namespace E.Writer
         private void SldAutoBackupMinute_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             TxtAutoBackupTime.Text = Settings.Default.AutoBackupMinute.ToString();
-        }
-        ///关于
-        private void BtnBitCoinAddress_Click(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Clipboard.SetDataObject(TxtBitCoinAddress.Text, true);
-            ShowMessage(FindResource("已复制").ToString());
-        }
-        private void BtnHomePage_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("explorer.exe", AppInfo.HomePage);
-        }
-        private void BtnGitHubPage_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("explorer.exe", AppInfo.GitHubPage);
-        }
-        private void BtnQQGroup_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("explorer.exe", AppInfo.QQGroupLink);
         }
 
         //工作区

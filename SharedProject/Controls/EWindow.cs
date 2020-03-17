@@ -130,7 +130,11 @@ namespace SharedProject
         /// <summary>
         /// 刷新窗口标题
         /// </summary>
-        protected virtual void RefreshTitle() { }
+        protected virtual void RefreshTitle()
+        { 
+            string str = AppInfo.Name + " " + AppInfo.VersionShort;
+            Title = str;
+        }
         /// <summary>
         /// 刷新应用信息
         /// </summary>

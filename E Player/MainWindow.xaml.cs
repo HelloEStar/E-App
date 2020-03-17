@@ -12,14 +12,12 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Drawing.Imaging;
-using System.Windows.Media.Animation;
 using Tags.ID3;
 using MessageBox = System.Windows.MessageBox;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using DragEventArgs = System.Windows.DragEventArgs;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using Path = System.IO.Path;
-
 using Settings = E.Player.Properties.Settings;
 using SharedProject;
 
@@ -64,9 +62,6 @@ namespace E.Player
         }
 
         //载入
-        /// <summary>
-        /// 载入媒体记录
-        /// </summary>
         private void LoadVideoItems()
         {
             //读取一个字符串，并加入播放列表
@@ -88,9 +83,6 @@ namespace E.Player
         }
 
         //打开
-        /// <summary>
-        /// 打开媒体
-        /// </summary>
         private void OpenMedia()
         {
             string path = GetFilePath();
@@ -100,9 +92,6 @@ namespace E.Player
                 AddPlayListItem(uir, true);
             }
         }
-        /// <summary>
-        /// 打开媒体
-        /// </summary>
         public void OpenMedia(string path)
         {
             if (File.Exists(path))
@@ -113,9 +102,6 @@ namespace E.Player
         }
 
         //关闭
-        /// <summary>
-        /// 关闭媒体
-        /// </summary>
         private void CloseMedia()
         {
             MetMedia.Close();
@@ -180,9 +166,6 @@ namespace E.Player
         }
 
         //创建
-        /// <summary>
-        /// 创建计时器
-        /// </summary>
         private void CreateTimer()
         {
             Loaded += new RoutedEventHandler(TimertimerSldLoop_Tick);
@@ -199,9 +182,6 @@ namespace E.Player
         }
 
         //添加
-        /// <summary>
-        /// 添加媒体
-        /// </summary>
         private void AddMedia()
         {
             string path = GetFilePath();
@@ -211,11 +191,6 @@ namespace E.Player
                 AddPlayListItem(uir, false);
             }
         }
-        /// <summary>
-        /// 创建播放列表媒体元素
-        /// </summary>
-        /// <param name="uri">媒体路径</param>
-        /// <param name="isPlay">是否直接播放</param>
         private void AddPlayListItem(Uri uri, bool isPlay)
         {
             if (uri != null)
@@ -281,9 +256,6 @@ namespace E.Player
         }
 
         //移除
-        /// <summary>
-        /// 删除媒体
-        /// </summary>
         private void RemoveMedia()
         {
             //获取当前选择的Item在PlayListBox的索引
@@ -314,9 +286,6 @@ namespace E.Player
                 ShowMessage(FindResource("没有媒体").ToString());
             }
         }
-        /// <summary>
-        /// 清除循环段
-        /// </summary>
         private void RemoveLoop()
         {
             if (HasEndPosition == true || HasStartPosition == true)
@@ -334,12 +303,7 @@ namespace E.Player
             }
         }
 
-        ///删除
-        
         //清空
-        /// <summary>
-        /// 清空媒体
-        /// </summary>
         private void ClearMediaList()
         {
             CloseMedia();
@@ -349,20 +313,11 @@ namespace E.Player
         }
 
         //获取
-        /// <summary>
-        /// 获取媒体名字
-        /// </summary>
-        /// <param name="path">媒体路径</param>
-        /// <returns>媒体名称</returns>
         private string GetMediaName(string path)
         {
             string name = Path.GetFileName(path);
             return name;
         }
-        /// <summary>
-        /// 浏览文件获取路径
-        /// </summary>
-        /// <returns>媒体路径</returns>
         private string GetFilePath()
         {
             OpenFileDialog dialog = new OpenFileDialog
@@ -375,11 +330,6 @@ namespace E.Player
             dialog.ShowDialog();
             return dialog.FileName;
         }
-        /// <summary>
-        /// 由地址返回图片，返回类型为System.Drawing.Image
-        /// </summary>
-        /// <param name="MP3path">MP3全地址</param>
-        /// <returns></returns>
         private List<BitmapImage> GetMP3Cover(string MP3path)
         {
             try
@@ -469,17 +419,10 @@ namespace E.Player
             }
             CurrentMenuTool = menu;
         }
-        /// <summary>
-        /// 设置控制面板
-        /// </summary>
-        /// <param name="isShow"></param>
         private void SetMenuToolControl(bool isShow)
         {
             PanControl.Opacity = isShow ? 1 : 0;
         }
-        /// <summary>
-        /// 设置播放模式
-        /// </summary>
         private void SetPlayMode(int index)
         {
             Settings.Default.PlayMode = index;
@@ -624,18 +567,13 @@ namespace E.Player
         }
 
         //检查
-        /// <summary>
-        /// 检测路径是否正确
-        /// </summary>
-        /// <param name="path">路径</param>
-        /// <returns>路径是否正确</returns>
         private bool IsPathRight(string path)
         {
             //检测路径是否存在
             if (File.Exists(path))
             {
                 //获取文件扩展名
-                string _videoExtension = System.IO.Path.GetExtension(path);
+                string _videoExtension = Path.GetExtension(path);
                 //检测文件扩展名是否正确
                 if (_videoExtension == ".avi" || _videoExtension == ".mp4" || _videoExtension == ".rmvb" || _videoExtension == ".mkv" || _videoExtension == ".wmv" || _videoExtension == ".wma" ||
                     _videoExtension == ".AVI" || _videoExtension == ".MP4" || _videoExtension == ".RMVB" || _videoExtension == ".MKV" || _videoExtension == ".WMV" || _videoExtension == ".WMA" ||
@@ -657,21 +595,15 @@ namespace E.Player
         }
 
         //刷新
-        /// <summary>
-        /// 刷新主窗口标题
-        /// </summary>
         protected override void RefreshTitle()
         {
-            string str = AppInfo.Name + " " + AppInfo.VersionShort;
-            Main.Title = str;
+            base.RefreshTitle();
+
             if (CurrentMedia != null)
             {
                 Main.Title += " - " + GetMediaName(CurrentMedia.LocalPath);
             }
         }
-        /// <summary>
-        /// 刷新软件信息
-        /// </summary>
         protected override void RefreshAppInfo()
         {
             TxtHomePage.Text = AppInfo.HomePage;
@@ -689,10 +621,6 @@ namespace E.Player
             TxtVersion.Text = AppInfo.Version.ToString();
             TxtUpdateNote.Text = AppInfo.UpdateNote;
         }
-        /// <summary>
-        /// 更改主窗口右键菜单和窗口控件状态
-        /// </summary>
-        /// <param name="state"></param>
         private void RefreshBtnsState()
         {
             if (CurrentMedia == null)
@@ -804,9 +732,6 @@ namespace E.Player
         {
             ShowMessage(LblMessage, message, newBox);
         }
-        /// <summary>
-        /// 创建mp3封面
-        /// </summary>
         private void ShowMP3Cover(string path)
         {
             if (Path.GetExtension(path) == ".mp3")
@@ -830,9 +755,6 @@ namespace E.Player
         }
 
         //切换
-        /// <summary>
-        /// 切换播放与暂停操作
-        /// </summary>
         private void SwichPlayAndPauseMedia()
         {
             if (!IsPlaying)

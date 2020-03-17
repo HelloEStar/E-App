@@ -23,9 +23,6 @@ namespace E.Updater
 {
     public partial class MainWindow : EWindow
     {
-        /// <summary>
-        /// 应用列表
-        /// </summary>
         private List<AppInfo> AppInfos { get; set; } = new List<AppInfo>();
 
         private string currentApp = "";
@@ -33,17 +30,13 @@ namespace E.Updater
         private string downloadingMessage = "";
         private string installFolder = "";
 
-        #region 方法
         //构造
-        /// <summary>
-        /// 默认构造器
-        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        ///载入
+        //载入
         private void LoadAppsInfo()
         {
             AppInfos.Clear();
@@ -78,23 +71,8 @@ namespace E.Updater
             }
         }
 
-        //打开
-
-        ///关闭
-
         //保存
-        /// <summary>
-        /// 保存应用设置
-        /// </summary>
-        private void SaveSettings()
-        {
-            Settings.Default.Save();
-            ShowMessage(FindResource("已保存").ToString());
-        }
-        /// <summary>
-        /// 保存应用信息
-        /// </summary>
-        private void SaveAppInfos()
+        protected override void SaveSettings()
         {
             Settings.Default.Paths = "";
             string paths = "";
@@ -104,23 +82,12 @@ namespace E.Updater
             }
             paths = paths.TrimEnd(',');
             Settings.Default.Paths = paths;
+
+            Settings.Default.Save();
+            ShowMessage(FindResource("已保存").ToString());
         }
 
-        ///创建
-
-        ///添加
-
-        ///移除
-
-        ///清空
-
-        ///删除
-
         //获取
-        /// <summary>
-        /// 获取下载链接
-        /// </summary>
-        /// <returns></returns>
         private void GetDownloadLinks()
         {
             if (NetHelper.IsOnLine())
@@ -145,11 +112,7 @@ namespace E.Updater
         }
 
         //设置
-        /// <summary>
-        /// 设置菜单
-        /// </summary>
-        /// <param name="menu"></param>
-        private void SetMenuTool(MenuTool menu)
+        protected override void SetMenuTool(MenuTool menu)
         {
             switch (menu)
             {
@@ -208,80 +171,16 @@ namespace E.Updater
             }
             CurrentMenuTool = menu;
         }
-        /// <summary>
-        /// 设置语言选项
-        /// </summary>
-        /// <param name="language">语言简拼</param>
-        private void SetLanguage(int index)
-        {
-            Settings.Default.Language = index;
-        }
-        /// <summary>
-        /// 设置主题选项
-        /// </summary>
-        /// <param name="themePath">主题路径</param>
-        private void SetTheme(int index)
-        {
-            Settings.Default.Theme = index;
-        }
-        /// <summary>
-        /// 切换下个主题显示
-        /// </summary>
-        private void SetNextTheme()
-        {
-            int index = Settings.Default.Theme;
-            index++;
-            if (index > CbbThemes.Items.Count - 1)
-            {
-                index = 0;
-            }
-            SetTheme(index);
-        }
 
         //重置
-        /// <summary>
-        /// 重置应用设置
-        /// </summary>
-        private void ResetSettings()
+        protected override void ResetSettings()
         {
             Settings.Default.Reset();
             ShowMessage(FindResource("已重置").ToString());
         }
 
-        ///选择
-
-        //检查
-        /// <summary>
-        /// 用户是否同意
-        /// </summary>
-        /// <returns></returns>
-        private bool IsUserAgree()
-        {
-            string str = AppInfo.UserAgreement + "\n\n你需要同意此协议才能使用本软件，是否同意？";
-            MessageBoxResult result = MessageBox.Show(str, FindResource("用户协议").ToString(), MessageBoxButton.YesNo);
-            return (result == MessageBoxResult.Yes);
-        }
-        /// <summary>
-        /// 检查用户协议
-        /// </summary>
-        private void CheckUserAgreement()
-        {
-            Settings.Default.RunCount += 1;
-            if (Settings.Default.RunCount == 1)
-            {
-                if (!IsUserAgree())
-                {
-                    Settings.Default.RunCount = 0;
-                    Close();
-                }
-            }
-        }
-
         //刷新
-        /// <summary>
-        /// 刷新软件信息
-        /// </summary>
-        private void RefreshAppInfo()
+        protected override void RefreshAppInfo()
         {
             TxtHomePage.Text = AppInfo.HomePage;
             TxtHomePage.ToolTip = AppInfo.HomePage;
@@ -298,17 +197,12 @@ namespace E.Updater
             TxtVersion.Text = AppInfo.Version.ToString();
             TxtUpdateNote.Text = AppInfo.UpdateNote;
         }
-        /// <summary>
-        /// 刷新主窗口标题
-        /// </summary>
-        public void RefreshTitle()
+        protected override void RefreshTitle()
         {
-            string str = AppInfo.Name + " " + AppInfo.VersionShort + downloadingMessage;
-            Main.Title = str;
+            base.RefreshTitle();
+
+            Title += downloadingMessage;
         }
-        /// <summary>
-        /// 
-        /// </summary>
         public void RefreshAppInfoItems()
         {
             for (int i = 0; i < PanApps.Children.Count; i++)
@@ -322,84 +216,12 @@ namespace E.Updater
         }
 
         //显示
-        /// <summary>
-        /// 显示消息
-        /// </summary>
-        /// <param name="resourceName">资源名</param>
-        /// <param name="newBox">是否弹出对话框</param>
-        private void ShowMessage(string message, bool newBox = false)
+        protected override void ShowMessage(string message, bool newBox = false)
         {
-            MessageHelper.ShowMessage(LblMessage, message, newBox);
-        }
-
-        //切换
-        /// <summary>
-        /// 切换工具面板
-        /// </summary>
-        private void SwitchMenuToolFile()
-        {
-            switch (CurrentMenuTool)
-            {
-                case MenuTool.文件:
-                    //SetMenuTool(MenuTool.无);
-                    break;
-                default:
-                    SetMenuTool(MenuTool.文件);
-                    break;
-            }
-        }
-        /// <summary>
-        /// 切换编辑面板
-        /// </summary>
-        private void SwitchMenuToolEdit()
-        {
-            switch (CurrentMenuTool)
-            {
-                case MenuTool.编辑:
-                    SetMenuTool(MenuTool.无);
-                    break;
-                default:
-                    SetMenuTool(MenuTool.编辑);
-                    break;
-            }
-        }
-        /// <summary>
-        /// 切换设置面板
-        /// </summary>
-        private void SwitchMenuToolSetting()
-        {
-            switch (CurrentMenuTool)
-            {
-                case MenuTool.设置:
-                    //SetMenuTool(MenuTool.无);
-                    break;
-                default:
-                    SetMenuTool(MenuTool.设置);
-                    break;
-            }
-        }
-        /// <summary>
-        /// 切换关于面板
-        /// </summary>
-        private void SwitchMenuToolAbout()
-        {
-            switch (CurrentMenuTool)
-            {
-                case MenuTool.关于:
-                    //SetMenuTool(MenuTool.无);
-                    break;
-                default:
-                    SetMenuTool(MenuTool.关于);
-                    break;
-            }
+            ShowMessage(LblMessage, message, newBox);
         }
 
         //其它
-        /// <summary>
-        /// 卸载
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="folder"></param>
         public bool UnInstall(AppInfo appInfo)
         {
             if (appInfo.IsExists)
@@ -460,10 +282,6 @@ namespace E.Updater
             }
             return false;
         }
-        /// <summary>
-        /// 安装
-        /// </summary>
-        /// <param name="appName"></param>
         public bool Install(AppInfo appInfo)
         {
             if (string.IsNullOrEmpty(appInfo.DownloadLink))
@@ -477,7 +295,7 @@ namespace E.Updater
             }
 
             //指定安装文件夹
-            string folder = FolderHelper.ChooseFolder("请选择安装目录");
+            string folder = ChooseFolder("请选择安装目录");
             if (!Directory.Exists(folder))
             {
                 return false;
@@ -491,10 +309,6 @@ namespace E.Updater
             Download(appInfo.DownloadLink, filePath);
             return true;
         }
-        /// <summary>
-        /// 更新
-        /// </summary>
-        /// <param name="appname"></param>
         public bool Update(AppInfo appInfo)
         {
             if (string.IsNullOrEmpty(appInfo.DownloadLink))
@@ -516,12 +330,6 @@ namespace E.Updater
             Download(appInfo.DownloadLink, filePath);
             return true;
         }
-
-        /// <summary>
-        /// 下载文件
-        /// </summary>
-        /// <param name="downloadLink">下载路径</param>
-        /// <param name="filePath">保存名称</param>
         public void Download(string downloadLink, string filePath)
         {
             //确保下载文件夹存在
@@ -556,13 +364,6 @@ namespace E.Updater
                 RefreshTitle();
             }
         }
-        /// <summary>  
-        /// 解压zip格式的文件。  
-        /// </summary>  
-        /// <param name="zipFile">压缩文件路径</param>  
-        /// <param name="targetDir">解压文件存放路径,为空时默认与压缩文件同一级目录下，跟压缩文件同名的文件夹</param>  
-        /// <param name="err">出错信息</param>  
-        /// <returns>解压是否成功</returns>  
         private void UnZip(string zipFile, string targetDir)
         {
             //检查错误
@@ -602,11 +403,10 @@ namespace E.Updater
                     if (fileName != string.Empty)
                     {
                         FileStream streamWriter = File.Create(targetDir + ze.Name);
-                        int size = 2048;
                         byte[] data = new byte[2048];
                         while (true)
                         {
-                            size = zis.Read(data, 0, data.Length);
+                            int size = zis.Read(data, 0, data.Length);
                             if (size > 0)
                             {
                                 streamWriter.Write(data, 0, size);
@@ -620,9 +420,7 @@ namespace E.Updater
                 }
             }
         }
-        #endregion 
 
-        #region 事件
         //主窗口
         private void Main_Loaded(object sender, RoutedEventArgs e)
         {
@@ -636,33 +434,29 @@ namespace E.Updater
             RefreshTitle();
             RefreshAppInfoItems();
 
-            //检查用户协议
-            CheckUserAgreement();
+            //检查用户是否同意用户协议
+            if (CheckUserAgreement(Settings.Default.RunCount))
+            {
+                Settings.Default.RunCount += 1;
+            }
 
             GetDownloadLinks();
         }
         private void Main_Closing(object sender, CancelEventArgs e)
         {
-            SaveAppInfos();
             SaveSettings();
         }
         private void Main_GotFocus(object sender, RoutedEventArgs e)
         {
             RefreshAppInfoItems();
         }
-        private void Main_KeyUp(object sender, KeyEventArgs e)
+        protected override void Main_KeyUp(object sender, KeyEventArgs e)
         {
             //Ctrl+T 切换下个主题
             if (e.Key == Key.T && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
-            { SetNextTheme(); }
+            { SetNextTheme(CbbThemes, Settings.Default.Theme); }
 
-            //关于菜单
-            if (e.Key == Key.F1)
-            { Process.Start("explorer.exe", AppInfo.HomePage); }
-            else if (e.Key == Key.F2)
-            { Process.Start("explorer.exe", AppInfo.GitHubPage); }
-            else if (e.Key == Key.F3)
-            { Process.Start("explorer.exe", AppInfo.QQGroupLink); }
+            base.Main_KeyUp(sender, e);
         }
         private void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
@@ -827,30 +621,7 @@ namespace E.Updater
             }
         }
 
-        //菜单栏
-        private void BtnFile_Click(object sender, RoutedEventArgs e)
-        {
-            SwitchMenuToolFile();
-        }
-        private void BtnSetting_Click(object sender, RoutedEventArgs e)
-        {
-            SwitchMenuToolSetting();
-        }
-        private void BtnAbout_Click(object sender, RoutedEventArgs e)
-        {
-            SwitchMenuToolAbout();
-        }
-
         //工具栏
-        ///设置
-        private void BtnSaveSettings_Click(object sender, RoutedEventArgs e)
-        {
-            SaveSettings();
-        }
-        private void BtnResetSettings_Click(object sender, RoutedEventArgs e)
-        {
-            ResetSettings();
-        }
         private void CbbLanguages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CbbLanguages.SelectedItem != null)
@@ -869,7 +640,7 @@ namespace E.Updater
                 {
                     CbbLanguages.Items.Remove(cbi);
                     //设为默认主题
-                    SetLanguage(0);
+                    Settings.Default.Language = 0;
                 }
             }
         }
@@ -887,28 +658,9 @@ namespace E.Updater
                 {
                     CbbThemes.Items.Remove(cbi);
                     //设为默认主题
-                    SetTheme(0);
+                    Settings.Default.Theme = 0;
                 }
             }
-        }
-
-        ///关于
-        private void BtnBitCoinAddress_Click(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Clipboard.SetDataObject(TxtBitCoinAddress.Text, true);
-            ShowMessage(FindResource("已复制").ToString());
-        }
-        private void BtnHomePage_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("explorer.exe", AppInfo.HomePage);
-        }
-        private void BtnGitHubPage_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("explorer.exe", AppInfo.GitHubPage);
-        }
-        private void BtnQQGroup_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("explorer.exe", AppInfo.QQGroupLink);
         }
 
         //工作区
@@ -916,6 +668,5 @@ namespace E.Updater
         {
             GetDownloadLinks();
         }
-        #endregion
     }
 }

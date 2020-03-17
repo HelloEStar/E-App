@@ -143,11 +143,6 @@ namespace E.Coder
             TxtVersion.Text = AppInfo.Version.ToString();
             TxtUpdateNote.Text = AppInfo.UpdateNote;
         }
-        protected override void RefreshTitle()
-        {
-            string str = AppInfo.Name + " " + AppInfo.VersionShort;
-            Main.Title = str;
-        }
 
         //显示
         protected override void ShowMessage(string message, bool newBox = false)
