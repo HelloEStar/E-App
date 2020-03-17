@@ -21,21 +21,8 @@ using Settings = E.Updater.Properties.Settings;
 
 namespace E.Updater
 {
-    /// <summary>
-    /// MainWindow.xaml 的交互逻辑
-    /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : EWindow
     {
-        #region 属性
-        /// <summary>
-        /// 应用信息
-        /// </summary>
-        private AppInfo AppInfo { get; } = new AppInfo();
-
-        /// <summary>
-        /// 当前菜单
-        /// </summary>
-        private MenuTool CurrentMenuTool { get; set; } = MenuTool.文件;
         /// <summary>
         /// 应用列表
         /// </summary>
@@ -45,7 +32,6 @@ namespace E.Updater
         private string downloadingFile = "";
         private string downloadingMessage = "";
         private string installFolder = "";
-        #endregion
 
         #region 方法
         //构造
@@ -641,8 +627,8 @@ namespace E.Updater
         private void Main_Loaded(object sender, RoutedEventArgs e)
         {
             //载入
-            LanguageHelper.LoadLanguageItems(CbbLanguages);
-            ThemeHelper.LoadThemeItems(CbbThemes);
+            LoadLanguageItems(CbbLanguages);
+            LoadThemeItems(CbbThemes);
             LoadAppsInfo();
 
             //刷新
