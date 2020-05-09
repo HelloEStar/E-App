@@ -9,12 +9,10 @@
     <Import_RootNamespace>SharedProject</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Resource Include="$(MSBuildThisFileDirectory)Dlls\ICSharpCode.SharpZipLib.dll" />
-    <Resource Include="$(MSBuildThisFileDirectory)Dlls\Tags.dll" />
-    <Resource Include="$(MSBuildThisFileDirectory)UserAgreement.md" />
+    <Resource Include="$(MSBuildThisFileDirectory)Resources\UserAgreement.md" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\EWindow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EWindow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BoolToVisibility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\CornerRadiusToDouble.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\DoubleFactor.cs" />
@@ -28,15 +26,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)SharedClass.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="$(MSBuildThisFileDirectory)en_US.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Styles\en_US.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)SharedResources.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Styles\Style.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)zh_CN.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Styles\zh_CN.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -48,8 +46,5 @@
     <Content Include="$(MSBuildThisFileDirectory)Themes\深色.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Dlls\" />
   </ItemGroup>
 </Project>

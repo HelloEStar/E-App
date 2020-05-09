@@ -153,13 +153,14 @@ namespace SharedProject
         /// <summary>
         /// 更新日志
         /// </summary>
-        public string UpdateNote
+        public string ReleaseNote
         {
             get
             {
                 if (IsExists)
                 {
                     Uri uri = new Uri("Resources/ReleaseNotes.md", UriKind.Relative);
+                    //Uri uri = new Uri("pack://application:,,,/Resources/ReleaseNotes.md", UriKind.RelativeOrAbsolute);
                     Stream src = Application.GetResourceStream(uri).Stream;
                     string updateNote = new StreamReader(src, Encoding.UTF8).ReadToEnd().Replace("### ", "");
                     return updateNote;
@@ -333,15 +334,15 @@ namespace SharedProject
                         return;
                 }
             }
-            System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog
-            {
-                Filter = Name + "可执2行文件(" + Name + ".exe)|" + Name + ".exe"
-            };
-            dialog.ShowDialog();
-            if (File.Exists(dialog.FileName))
-            {
-                FilePath = dialog.FileName;
-            }
+            //System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog
+            //{
+            //    Filter = Name + "可执2行文件(" + Name + ".exe)|" + Name + ".exe"
+            //};
+            //dialog.ShowDialog();
+            //if (File.Exists(dialog.FileName))
+            //{
+            //    FilePath = dialog.FileName;
+            //}
         }
     }
 
@@ -379,17 +380,17 @@ namespace SharedProject
     /// <summary>
     /// 语言项
     /// </summary>
-    public class LanguageItem : ResourceDictionary
+    public class RDItem : ResourceDictionary
     {
         public string Name { get; set; }
         public string Value { get; set; }
         public ResourceDictionary RD { get; set; }
 
-        public LanguageItem(string name, string value)
+        public RDItem(string name, string value)
         {
             Name = name;
             Value = value;
-            Uri uri = new Uri( value + ".xaml", UriKind.Relative);
+            Uri uri = new Uri("Styles/" + value + ".xaml", UriKind.Relative);
             ResourceDictionary rd = Application.LoadComponent(uri) as ResourceDictionary;
             RD = rd;
         }

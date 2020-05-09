@@ -12,9 +12,9 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using System.ComponentModel;
 using System.Diagnostics;
+using Microsoft.International.Converters.TraditionalChineseToSimplifiedConverter;
 using MessageBox = System.Windows.MessageBox;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-using Settings = E.Writer.Properties.Settings;
 using SharedProject;
 
 namespace E.Writer
@@ -303,7 +303,7 @@ namespace E.Writer
                 TxtWordCount.Text = FindResource("字数") + "：0";
                 TvwBook.ToolTip = FindResource("创建或打开以开始");
 
-                ShowMessage(FindResource("已关闭书籍").ToString() +"：" + CurrentBook.Name);
+                ShowMessage(FindResource("已关闭书籍").ToString() + "：" + CurrentBook.Name);
                 CurrentBook = null;
                 RefreshBtnsState();
                 RefreshTitle();
@@ -512,7 +512,7 @@ namespace E.Writer
         {
             if (TxtCreatePath.Text == null || TxtCreatePath.Text == "")
             {
-                ShowMessage(FindResource("请设置存放位置").ToString(),true);
+                ShowMessage(FindResource("请设置存放位置").ToString(), true);
                 return;
             }
             if (TxtCreateName.Text == null || TxtCreateName.Text == "")
@@ -882,7 +882,7 @@ namespace E.Writer
             //获取对应文件路径
             string _path = SelectedNode.ToolTip.ToString();
             string name = SelectedNode.Header.ToString();
-            MessageBoxResult result = MessageBox.Show("是否删除文章：" + name +" ？", "删除项目", MessageBoxButton.YesNo);
+            MessageBoxResult result = MessageBox.Show("是否删除文章：" + name + " ？", "删除项目", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
                 RemoveFolderNode(SelectedNode);
@@ -1090,9 +1090,8 @@ namespace E.Writer
         /// <returns>繁体文字内容</returns>
         private static string GetTraditional(string simplifiedChinese)
         {
-            System.Globalization.CultureInfo vCultureInfo = new System.Globalization.CultureInfo("zh-CN", false);
-            string traditionalChinese = Microsoft.VisualBasic.Strings.StrConv(simplifiedChinese, Microsoft.VisualBasic.VbStrConv.TraditionalChinese, vCultureInfo.LCID);
-            return traditionalChinese;
+            return ChineseConverter.Convert(simplifiedChinese, ChineseConversionDirection.SimplifiedToTraditional);
+
         }
         /// <summary>
         /// 繁转简
@@ -1101,9 +1100,7 @@ namespace E.Writer
         /// <returns>简体文字内容</returns>
         private static string GetSimplified(string traditionalChinese)
         {
-            System.Globalization.CultureInfo vCultureInfo = new System.Globalization.CultureInfo("zh-CN", false);
-            string simplifiedChinese = Microsoft.VisualBasic.Strings.StrConv(traditionalChinese, Microsoft.VisualBasic.VbStrConv.SimplifiedChinese, vCultureInfo.LCID);
-            return simplifiedChinese;
+            return ChineseConverter.Convert(traditionalChinese, ChineseConversionDirection.TraditionalToSimplified);
         }
         /// <summary>
         /// 遍历书籍目录下的子文件夹，创建节点
@@ -1557,7 +1554,7 @@ namespace E.Writer
             TxtDescription.Text = AppInfo.Description;
             TxtDeveloper.Text = AppInfo.Company;
             TxtVersion.Text = AppInfo.Version.ToString();
-            TxtUpdateNote.Text = AppInfo.UpdateNote;
+            TxtUpdateNote.Text = AppInfo.ReleaseNote;
         }
         /// <summary>
         /// 刷新按钮状态
@@ -1956,7 +1953,7 @@ namespace E.Writer
             e.Cancel = CheckEssayWasSavedAndDoClose();
             SaveSettings();
         }
-        protected override void Main_KeyUp(object sender, KeyEventArgs e)
+        protected override void EWindow_KeyUp(object sender, KeyEventArgs e)
         {
             //若打开了书
             if (CurrentBook != null)
@@ -2017,7 +2014,7 @@ namespace E.Writer
                     //Ctrl+F 查找替换
                     if (e.Key == Key.F && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
                     {
-                        BtnEdit_Click(null,null);
+                        BtnEdit_Click(null, null);
                     }
                     //Ctrl+Shift+Q 关闭文章
                     if (e.Key == Key.Q && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
@@ -2070,7 +2067,7 @@ namespace E.Writer
             if (e.Key == Key.T && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
             { SetNextTheme(CbbThemes, Settings.Default.Theme); }
 
-            base.Main_KeyUp(sender, e);
+            base.EWindow_KeyUp(sender, e);
         }
         private void TimerAutoSave_Tick(object sender, EventArgs e)
         {
@@ -2187,7 +2184,7 @@ namespace E.Writer
             if (TxtCreateName.Text == null || TxtCreateName.Text == "")
             {
                 BtnCreateBook.ToolTip = FindResource("请输入书籍名称").ToString();
-                BtnCreateChapter.ToolTip = FindResource("请输入卷册名称").ToString() ;
+                BtnCreateChapter.ToolTip = FindResource("请输入卷册名称").ToString();
                 BtnCreateEssay.ToolTip = FindResource("请输入文章名称").ToString();
             }
             else
@@ -2199,8 +2196,7 @@ namespace E.Writer
         }
         private void CbbBooks_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ComboBoxItem cbi = CbbBooks.SelectedItem as ComboBoxItem;
-            if (cbi != null)
+            if (CbbBooks.SelectedItem is ComboBoxItem cbi)
             {
                 if (CurrentBook != null)
                 { CloseBook(); }
@@ -2465,8 +2461,7 @@ namespace E.Writer
 
         private void CbbFonts_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ComboBoxItem cbi = CbbFonts.SelectedItem as ComboBoxItem;
-            if (cbi != null)
+            if (CbbFonts.SelectedItem is ComboBoxItem cbi)
             {
                 TxtFileContent.FontFamily = cbi.FontFamily;
                 Settings.Default.FontFamily = cbi.FontFamily.Source;

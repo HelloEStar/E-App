@@ -1,16 +1,16 @@
-﻿<Application x:Class="E.Writer.App"
+﻿<Application x:Class="E_Writer.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:E_Writer"
              StartupUri="MainWindow.xaml">
-
     <Application.Resources>
         <ResourceDictionary>
-            <!--这个节点是配置默认语言的-->
+            <!--这个节点是配置默认样式的-->
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="zh_CN.xaml"/>
-                <ResourceDictionary Source="SharedResources.xaml"/>
+                <ResourceDictionary Source="Styles/zh_CN.xaml"/>
+                <ResourceDictionary Source="Styles/Style.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
         </ResourceDictionary>
+         
     </Application.Resources>
 </Application>

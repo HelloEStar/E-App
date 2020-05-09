@@ -5,15 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:E.Updater"
         xmlns:share="clr-namespace:SharedProject"
-        xmlns:Properties="clr-namespace:E.Updater.Properties"
         mc:Ignorable="d"
         Title="E Updater" Height="600" Width="416" MinWidth="416" MinHeight="400" MaxWidth="416" Icon="Resources/E Updater.ico"
-        WindowStartupLocation="CenterScreen" Closing="Main_Closing" Loaded="Main_Loaded" GotFocus="Main_GotFocus" KeyUp="Main_KeyUp">
+        WindowStartupLocation="CenterScreen" Closing="Main_Closing" Loaded="Main_Loaded" GotFocus="Main_GotFocus" KeyUp="EWindow_KeyUp">
 
     <Window.Resources>
-        <Properties:Settings x:Key="Settings" />
+        <local:Settings x:Key="Settings" />
     </Window.Resources>
-    
+
     <Grid x:Name="GrdMain">
         <DockPanel>
             <!--菜单栏-->

@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
 using SharedProject;
-using MessageBox = System.Windows.MessageBox;
-using Settings = E.Role.Properties.Settings;
-using Path = System.IO.Path;
 
 namespace E.Role
 {
@@ -132,7 +126,7 @@ namespace E.Role
             if (!CheckIsCorrectRange())
             {
                 return;
-            } 
+            }
 
             string surname = "";
             if (Settings.Default.IsCreateSurame)
@@ -261,6 +255,7 @@ namespace E.Role
         {
             List<string> chineseWords = new List<string>();
             Random rm = new Random();
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             Encoding gb = Encoding.GetEncoding("gb2312");
 
             for (int i = 0; i < count; i++)
@@ -440,17 +435,17 @@ namespace E.Role
         {
             bool isRight = true;
             if (Settings.Default.BirthdayMin >= Settings.Default.BirthdayMax)
-            { 
+            {
                 ShowMessage(FindResource("生日范围错误").ToString());
                 isRight = false;
             }
             if (Settings.Default.HeightMin >= Settings.Default.HeightMax)
-            { 
+            {
                 ShowMessage(FindResource("身高范围错误").ToString());
                 isRight = false;
             }
             if (Settings.Default.WeightMin >= Settings.Default.WeightMax)
-            { 
+            {
                 ShowMessage(FindResource("体重范围错误").ToString());
                 isRight = false;
             }
@@ -473,7 +468,7 @@ namespace E.Role
             TxtDescription.Text = AppInfo.Description;
             TxtDeveloper.Text = AppInfo.Company;
             TxtVersion.Text = AppInfo.Version.ToString();
-            TxtUpdateNote.Text = AppInfo.UpdateNote;
+            TxtUpdateNote.Text = AppInfo.ReleaseNote;
         }
 
         //显示
@@ -531,9 +526,9 @@ namespace E.Role
         {
             SaveSettings();
         }
-        protected override void Main_KeyUp(object sender, KeyEventArgs e)
+        protected override void EWindow_KeyUp(object sender, KeyEventArgs e)
         {
-            base.Main_KeyUp(sender, e);
+            base.EWindow_KeyUp(sender, e);
 
             //Ctrl+T 切换下个主题
             if (e.Key == Key.T && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
@@ -638,6 +633,7 @@ namespace E.Role
                 }
             }
         }
+
     }
 
     public class Role
@@ -648,8 +644,8 @@ namespace E.Role
         public string Gender { get; set; }
         public string Height { get; set; }
         public string Weight { get; set; }
-        public string LongInfo 
-        { 
+        public string LongInfo
+        {
             get
             {
                 string info = "";
@@ -677,7 +673,7 @@ namespace E.Role
 
                 info = info.TrimEnd('\n');
                 return info;
-            } 
+            }
         }
         public string ShortInfo
         {
@@ -726,7 +722,7 @@ namespace E.Role
         }
     }
 
-    public enum SurnameType 
+    public enum SurnameType
     {
         Both,
         Single,

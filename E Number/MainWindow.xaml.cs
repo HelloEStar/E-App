@@ -1,24 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows.Media;
-using System.Text.RegularExpressions;
-using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 using SharedProject;
-using Settings = E.Number.Properties.Settings;
 
 namespace E.Number
 {
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
     public partial class MainWindow : EWindow
     {
         public MainWindow()
         {
             InitializeComponent();
         }
+
 
         //载入
         private void LoadRecordItems()
@@ -147,7 +156,7 @@ namespace E.Number
             TxtDescription.Text = AppInfo.Description;
             TxtDeveloper.Text = AppInfo.Company;
             TxtVersion.Text = AppInfo.Version.ToString();
-            TxtUpdateNote.Text = AppInfo.UpdateNote;
+            TxtUpdateNote.Text = AppInfo.ReleaseNote;
         }
 
         //显示
@@ -156,16 +165,19 @@ namespace E.Number
             ShowMessage(LblMessage, message, newBox);
         }
 
+
+
         //主窗口
-        private void Main_Loaded(object sender, RoutedEventArgs e)
+        protected override void EWindow_Loaded(object sender, RoutedEventArgs e)
         {
             //载入
             LoadLanguageItems(CbbLanguages);
             LoadThemeItems(CbbThemes);
             LoadRecordItems();
-
+            //Uri iconUri = new Uri("pack://application:,,,/Resources/E Number.ico", UriKind.RelativeOrAbsolute);
+            //Icon = BitmapFrame.Create(iconUri);
             //刷新
-            RefreshAppInfo(); 
+            RefreshAppInfo();
             RefreshTitle();
             LblMessage.Opacity = 0;
 
@@ -175,13 +187,13 @@ namespace E.Number
                 Settings.Default.RunCount += 1;
             }
         }
-        private void Main_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        protected override void EWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             SaveSettings();
         }
-        protected override void Main_KeyUp(object sender, KeyEventArgs e)
+        protected override void EWindow_KeyUp(object sender, KeyEventArgs e)
         {
-            base.Main_KeyUp(sender, e);
+            base.EWindow_KeyUp(sender, e);
 
             //Ctrl+T 切换下个主题
             if (e.Key == Key.T && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
@@ -195,7 +207,7 @@ namespace E.Number
         }
         private void TxtValue_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            TxtValue.FontSize = TxtValue.ActualHeight/1.25f;
+            TxtValue.FontSize = TxtValue.ActualHeight / 1.25f;
         }
         private void CbbLanguages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -283,5 +295,6 @@ namespace E.Number
                 ShowMessage(FindResource("范围错误").ToString());
             }
         }
+
     }
 }

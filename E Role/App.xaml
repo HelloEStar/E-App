@@ -5,13 +5,12 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
-            <!--这个节点是配置默认语言的-->
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="zh_CN.xaml"/>
-                <ResourceDictionary Source="SharedResources.xaml"/>
+                <ResourceDictionary Source="Styles/zh_CN.xaml"/>
+                <ResourceDictionary Source="Styles/Style.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
         </ResourceDictionary>
-
+         
     </Application.Resources>
 </Application>

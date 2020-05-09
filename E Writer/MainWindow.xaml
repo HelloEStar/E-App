@@ -5,15 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:E.Writer"
         xmlns:share="clr-namespace:SharedProject"
-        xmlns:Properties="clr-namespace:E.Writer.Properties"
         mc:Ignorable="d"
         Title="E Writer" Height="800" Width="1000" MinWidth="600" MinHeight="580" AllowDrop="True" WindowStartupLocation="CenterScreen" Foreground="Black" Background="Black" 
-        KeyUp="Main_KeyUp" Loaded="Main_Loaded" Closing="Main_Closing" Icon="Resources/E Writer.ico" >
+        KeyUp="EWindow_KeyUp" Loaded="Main_Loaded" Closing="Main_Closing" Icon="Resources/E Writer.ico" >
 
     <!--自定义控件模板-->
     <Window.Resources>
-        <!--设置-->
-        <Properties:Settings x:Key="Settings" />
+        <local:Settings x:Key="Settings" />
     </Window.Resources>
 
     <Grid x:Name="GrdMain">
@@ -27,34 +25,34 @@
                     <Button x:Name="BtnAbout" Content="{DynamicResource 关于}" ToolTip="{DynamicResource 关于}" Style="{DynamicResource 菜单按钮样式}" Click="BtnAbout_Click"/>
                 </StackPanel>
             </DockPanel>
-            
+
             <!--工具栏-->
             <!--工具栏 文件-->
             <Grid x:Name="PanFile" Style="{DynamicResource 工具栏样式}" >
                 <DockPanel>
                     <ComboBox x:Name="CbbBooks" Style="{DynamicResource 下拉框样式}"  ToolTip="{DynamicResource 书籍历史}" DockPanel.Dock="Top"
                               SelectionChanged="CbbBooks_SelectionChanged" FontSize="18" FontWeight="Bold" Height="40" BorderThickness="0" Margin="0"/>
-                    
+
                     <WrapPanel Style="{DynamicResource 水平流式面板样式}" DockPanel.Dock="Top" Margin="0">
                         <Button x:Name="BtnOpenBook" Content="{DynamicResource 打开}" ToolTip="{DynamicResource 打开书籍+}" Style="{DynamicResource 自由按钮样式}" Click="BtnOpenBook_Click"/>
                         <Button x:Name="BtnCreate" Content="{DynamicResource 创建}" ToolTip="{DynamicResource 创建对象+}" Style="{DynamicResource 自由按钮样式}" Click="BtnCreate_Click"/>
                         <Button x:Name="BtnCloseBook" Content="{DynamicResource 关闭}" ToolTip="{DynamicResource 关闭书籍+}" Style="{DynamicResource 自由按钮样式}" Click="BtnCloseBook_Click" />
                         <Button x:Name="BtnDelete" Content="{DynamicResource 删除}" ToolTip="{DynamicResource 删除对象+}" Style="{DynamicResource 自由按钮样式}" Click="BtnDelete_Click" />
                     </WrapPanel>
-                    
+
                     <WrapPanel Style="{DynamicResource 水平流式面板样式}" DockPanel.Dock="Top" Margin="0">
                         <Button x:Name="BtnSave" Content="{DynamicResource 保存}" ToolTip="{DynamicResource 保存文章+}" Style="{DynamicResource 自由按钮样式}" Click="BtnSave_Click" />
                         <Button x:Name="BtnSaveAs" Content="{DynamicResource 另存}" ToolTip="{DynamicResource 另存文章+}" Style="{DynamicResource 自由按钮样式}" Click="BtnSaveAs_Click" />
                         <Button x:Name="BtnExport" Content="{DynamicResource 导出}" ToolTip="{DynamicResource 导出全文+}" Style="{DynamicResource 自由按钮样式}" Click="BtnExport_Click" />
                         <Button x:Name="BtnBookInfo" Content="{DynamicResource 信息}" ToolTip="{DynamicResource 书籍信息+}" Style="{DynamicResource 自由按钮样式}" Click="BtnBookInfo_Click" />
                     </WrapPanel>
-                    
+
                     <WrapPanel Style="{DynamicResource 水平流式面板样式}" DockPanel.Dock="Top" Margin="0" >
                         <Button x:Name="BtnExpand" Content="{DynamicResource 展开}" ToolTip="{DynamicResource 展开目录+}" Style="{DynamicResource 自由按钮样式}" Click="BtnExpand_Click" />
                         <Button x:Name="BtnCollapse" Content="{DynamicResource 收起}" ToolTip="{DynamicResource 收起目录+}" Style="{DynamicResource 自由按钮样式}" Click="BtnCollapse_Click" />
                         <Button x:Name="BtnRefresh" Content="{DynamicResource 刷新}" ToolTip="{DynamicResource 刷新目录+}" Style="{DynamicResource 自由按钮样式}" Click="BtnRefresh_Click" />
                     </WrapPanel>
-                    
+
                     <StackPanel x:Name="PanCreate" DockPanel.Dock="Top" Visibility="Collapsed" Background="{DynamicResource 一级背景颜色}">
                         <DockPanel>
                             <Button x:Name="BtnBrowse" Content="{DynamicResource 浏览}" Style="{DynamicResource 自由按钮样式反色}" Click="BtnBrowse_Click" DockPanel.Dock="Right" Width="80"/>
@@ -122,7 +120,7 @@
                             <Label Content="{DynamicResource 主题}" Style="{DynamicResource 标题标签样式}"/>
                             <ComboBox x:Name="CbbThemes" Style="{DynamicResource 下拉框样式}" SelectionChanged="CbbThemes_SelectionChanged"
                                       SelectedIndex="{Binding Source={StaticResource Settings}, Path=Default.Theme,Mode=TwoWay}"/>
-                            
+
                             <Label Content="{DynamicResource 字体}" Style="{DynamicResource 标题标签样式}"/>
                             <ComboBox x:Name="CbbFonts" Style="{DynamicResource 下拉框样式}" SelectionChanged="CbbFonts_SelectionChanged"/>
 

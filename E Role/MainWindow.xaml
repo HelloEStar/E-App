@@ -5,14 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:E.Role"
         xmlns:share="clr-namespace:SharedProject"
-        xmlns:Properties="clr-namespace:E.Role.Properties"
         mc:Ignorable="d"
-        Title="E Role" Height="400" Width="600" MinWidth="600" MinHeight="350" Icon="Resources/E Role.ico" BorderThickness="0" WindowStartupLocation="CenterScreen" Loaded="Main_Loaded" Closing="Main_Closing" KeyUp="Main_KeyUp">
+        Title="E Role" Height="400" Width="600" MinWidth="600" MinHeight="350" Icon="Resources/E Role.ico" BorderThickness="0" WindowStartupLocation="CenterScreen" 
+               Loaded="Main_Loaded" Closing="Main_Closing" KeyUp="EWindow_KeyUp">
 
-    <!--自定义控件模板-->
     <Window.Resources>
-        <!--设置-->
-        <Properties:Settings x:Key="Settings" />
+        <local:Settings x:Key="Settings" />
     </Window.Resources>
 
     <Grid x:Name="GrdMain">
@@ -62,7 +60,7 @@
                             <Label Content="{DynamicResource 主题}" Style="{DynamicResource 标题标签样式}"/>
                             <ComboBox x:Name="CbbThemes" Style="{DynamicResource 下拉框样式}" SelectionChanged="CbbThemes_SelectionChanged"
                                       SelectedIndex="{Binding Source={StaticResource Settings}, Path=Default.Theme,Mode=TwoWay}"/>
-                            
+
                             <DockPanel>
                                 <CheckBox x:Name="CcbIsCreateSurame" Style="{DynamicResource 检查框样式}" DockPanel.Dock="Right" IsChecked="{Binding Source={StaticResource Settings}, Path=Default.IsCreateSurame,Mode=TwoWay}"/>
                                 <Label Content="{DynamicResource 姓氏}" Style="{DynamicResource 标题标签样式}" Margin="5,0"/>
@@ -107,7 +105,7 @@
                                             Text="{Binding Source={StaticResource Settings}, Path=Default.BirthdayMax,Mode=TwoWay}"
                                             IsEnabled="{Binding Source={StaticResource Settings}, Path=Default.IsCreateBirthday,Mode=OneWay}" Margin="0,0,5,0"/>
                             </DockPanel>
-                            
+
                             <DockPanel>
                                 <CheckBox x:Name="CcbIsCreateGender" Style="{DynamicResource 检查框样式}" DockPanel.Dock="Right" IsChecked="{Binding Source={StaticResource Settings}, Path=Default.IsCreateGender,Mode=TwoWay}"/>
                                 <Label Content="{DynamicResource 性别}" Style="{DynamicResource 标题标签样式}" Margin="5,0"/>

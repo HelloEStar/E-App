@@ -17,7 +17,6 @@ using MessageBox = System.Windows.MessageBox;
 using Application = System.Windows.Forms.Application;
 using Button = System.Windows.Controls.Button;
 using Label = System.Windows.Controls.Label;
-using Settings = E.Updater.Properties.Settings;
 
 namespace E.Updater
 {
@@ -94,14 +93,14 @@ namespace E.Updater
             {
                 ShowMessage(FindResource("网络连接成功").ToString());
 
-                using (WebClient wc = new WebClient())
+                using WebClient wc = new WebClient
                 {
                     //获取或设置用于向Internet资源的请求进行身份验证的网络凭据
-                    wc.Credentials = CredentialCache.DefaultCredentials;
-                    wc.DownloadDataCompleted += new DownloadDataCompletedEventHandler(DownloadDataCompleted);
-                    wc.DownloadDataAsync(new Uri(AppInfo.WikiPage));
-                    ShowMessage("正在获取最新版本信息");
-                }
+                    Credentials = CredentialCache.DefaultCredentials
+                };
+                wc.DownloadDataCompleted += new DownloadDataCompletedEventHandler(DownloadDataCompleted);
+                wc.DownloadDataAsync(new Uri(AppInfo.WikiPage));
+                ShowMessage("正在获取最新版本信息");
             }
             else
             {
@@ -195,7 +194,7 @@ namespace E.Updater
             TxtDescription.Text = AppInfo.Description;
             TxtDeveloper.Text = AppInfo.Company;
             TxtVersion.Text = AppInfo.Version.ToString();
-            TxtUpdateNote.Text = AppInfo.UpdateNote;
+            TxtUpdateNote.Text = AppInfo.ReleaseNote;
         }
         protected override void RefreshTitle()
         {
@@ -243,7 +242,7 @@ namespace E.Updater
                             FileStream fs = new FileStream(_bat, FileMode.Create, FileAccess.Write);
                             StreamWriter sw = new StreamWriter(fs);
                             sw.WriteLine("@echo off");
-                            sw.WriteLine("del /f /s /q " + "\""+ _file1 + "\"");
+                            sw.WriteLine("del /f /s /q " + "\"" + _file1 + "\"");
                             sw.WriteLine("rd /s /q " + _file2);
                             sw.WriteLine("rd /s /q " + _file3);
                             sw.WriteLine("rd /s /q " + _file4);
@@ -352,19 +351,17 @@ namespace E.Updater
                 }
             }
 
-            using (WebClient wc = new WebClient())
-            {
-                downloadingFile = filePath;
-                wc.DownloadFileAsync(new Uri(downloadLink), filePath);
-                wc.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressChanged);
-                wc.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCompleted);
+            using WebClient wc = new WebClient();
+            downloadingFile = filePath;
+            wc.DownloadFileAsync(new Uri(downloadLink), filePath);
+            wc.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressChanged);
+            wc.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCompleted);
 
-                downloadingMessage = " 正在下载安装包 0%";
-                ShowMessage(downloadingMessage);
-                RefreshTitle();
-            }
+            downloadingMessage = " 正在下载安装包 0%";
+            ShowMessage(downloadingMessage);
+            RefreshTitle();
         }
-        private void UnZip(string zipFile, string targetDir)
+        private void UnZip(string zipFile, string targetDir)
         {
             //检查错误
             if (zipFile == string.Empty)
@@ -450,13 +447,13 @@ namespace E.Updater
         {
             RefreshAppInfoItems();
         }
-        protected override void Main_KeyUp(object sender, KeyEventArgs e)
+        protected override void EWindow_KeyUp(object sender, KeyEventArgs e)
         {
             //Ctrl+T 切换下个主题
             if (e.Key == Key.T && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
             { SetNextTheme(CbbThemes, Settings.Default.Theme); }
 
-            base.Main_KeyUp(sender, e);
+            base.EWindow_KeyUp(sender, e);
         }
         private void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
@@ -514,7 +511,7 @@ namespace E.Updater
                     FileStream fs = new FileStream(_bat, FileMode.Create, FileAccess.Write);
                     StreamWriter sw = new StreamWriter(fs);
                     sw.WriteLine("@echo off");
-                    sw.WriteLine("rd /s /q "+ AppInfo.ThemeFolder);
+                    sw.WriteLine("rd /s /q " + AppInfo.ThemeFolder);
                     sw.WriteLine("move \"" + _file1 + "\" \"\"");
                     sw.WriteLine("move \"" + _file2 + "\" \"\"");
                     //sw.WriteLine("echo \"Press any key to run E Updater\"");

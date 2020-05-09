@@ -18,7 +18,6 @@ using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using DragEventArgs = System.Windows.DragEventArgs;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using Path = System.IO.Path;
-using Settings = E.Player.Properties.Settings;
 using SharedProject;
 
 namespace E.Player
@@ -44,7 +43,7 @@ namespace E.Player
         }
         public MainWindow(string[] args) : this()
         {
-            if (args.Length >0)
+            if (args.Length > 0)
             {
                 for (int i = 0; i < args.Length; i++)
                 {
@@ -619,7 +618,7 @@ namespace E.Player
             TxtDescription.Text = AppInfo.Description;
             TxtDeveloper.Text = AppInfo.Company;
             TxtVersion.Text = AppInfo.Version.ToString();
-            TxtUpdateNote.Text = AppInfo.UpdateNote;
+            TxtUpdateNote.Text = AppInfo.ReleaseNote;
         }
         private void RefreshBtnsState()
         {
@@ -1043,7 +1042,7 @@ namespace E.Player
             Settings.Default.FileList = "";
             SaveSettings();
         }
-        protected override void Main_KeyUp(object sender, KeyEventArgs e)
+        protected override void EWindow_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
             {
@@ -1211,7 +1210,7 @@ namespace E.Player
             if (e.Key == Key.T && (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)))
             { SetNextTheme(CbbThemes, Settings.Default.Theme); }
 
-            base.Main_KeyUp(sender, e);
+            base.EWindow_KeyUp(sender, e);
         }
         private void Main_MouseUp(object sender, MouseButtonEventArgs e)
         {
@@ -1231,7 +1230,7 @@ namespace E.Player
         private void TimerSldTime_Tick(object sender, EventArgs e)
         {
             SldTime.Value = MetMedia.Position.TotalSeconds;
-            LblCurrentTime.Content = MetMedia.Position.ToString().Substring(0,8);
+            LblCurrentTime.Content = MetMedia.Position.ToString().Substring(0, 8);
         }
 
         //工具栏
@@ -1516,7 +1515,7 @@ namespace E.Player
             double d0 = SldTime.Maximum / 4;
             double d1 = SldTime.Maximum / 4 * 2;
             double d2 = SldTime.Maximum / 4 * 3;
-            SldTime.Ticks = new DoubleCollection(new double[] { d0, d1, d2});
+            SldTime.Ticks = new DoubleCollection(new double[] { d0, d1, d2 });
             LblAllTime.Content = MetMedia.NaturalDuration;
             RefreshTitle();
         }
