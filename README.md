@@ -1,7 +1,7 @@
 # E App
 
 ## 简介
-E App 是基于 .net.framework 4.7.2 开发的 Windows 10 WPF 解决方案，集合了多个日常使用的应用项目。  
+E App 目前是基于 .net.core 开发的 Windows 10 WPF 解决方案，集合了多个日常使用的应用项目。  
 你可以前往维基页面了解更多详细信息：[Github Wiki](https://github.com/HelloEStar/E.App/wiki)  
 * [E Updater 软件更新器](https://github.com/HelloEStar/E.App/wiki/E-Updater)
 * [E Writer 小说编辑器](https://github.com/HelloEStar/E.App/wiki/E-Writer)
