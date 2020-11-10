@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.29001.49
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedProject", "SharedProject\SharedProject.shproj", "{FD904394-84BE-4E96-AAE0-27D882BCA533}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "E Case", "E Case\E Case.csproj", "{AEE027C9-475D-4B73-9638-E2AC2285F485}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "E Number", "E Number\E Number.csproj", "{86375084-CF96-4F34-AB29-697E20657979}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "E Role", "E Role\E Role.csproj", "{7CEC3EB3-AD6D-4DC6-800F-30A0DD5D87CA}"
@@ -15,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "E Player", "E Player\E Play
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "E Writer", "E Writer\E Writer.csproj", "{D7E920B6-0D5A-4748-8D54-B62FBEC6E860}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E Updater", "E Updater\E Updater.csproj", "{3AB5EDC7-AC8F-46C7-9A1D-D55F21FFF094}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "E Updater", "E Updater\E Updater.csproj", "{3AB5EDC7-AC8F-46C7-9A1D-D55F21FFF094}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -23,7 +21,6 @@ Global
 		SharedProject\SharedProject.projitems*{3ab5edc7-ac8f-46c7-9a1d-d55f21fff094}*SharedItemsImports = 5
 		SharedProject\SharedProject.projitems*{7cec3eb3-ad6d-4dc6-800f-30a0dd5d87ca}*SharedItemsImports = 5
 		SharedProject\SharedProject.projitems*{86375084-cf96-4f34-ab29-697e20657979}*SharedItemsImports = 5
-		SharedProject\SharedProject.projitems*{aee027c9-475d-4b73-9638-e2ac2285f485}*SharedItemsImports = 5
 		SharedProject\SharedProject.projitems*{d7e920b6-0d5a-4748-8d54-b62fbec6e860}*SharedItemsImports = 5
 		SharedProject\SharedProject.projitems*{fd904394-84be-4e96-aae0-27d882bca533}*SharedItemsImports = 13
 	EndGlobalSection
@@ -38,22 +35,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AEE027C9-475D-4B73-9638-E2AC2285F485}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AEE027C9-475D-4B73-9638-E2AC2285F485}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AEE027C9-475D-4B73-9638-E2AC2285F485}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{AEE027C9-475D-4B73-9638-E2AC2285F485}.Debug|ARM.Build.0 = Debug|Any CPU
-		{AEE027C9-475D-4B73-9638-E2AC2285F485}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{AEE027C9-475D-4B73-9638-E2AC2285F485}.Debug|x64.Build.0 = Debug|Any CPU
-		{AEE027C9-475D-4B73-9638-E2AC2285F485}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{AEE027C9-475D-4B73-9638-E2AC2285F485}.Debug|x86.Build.0 = Debug|Any CPU
-		{AEE027C9-475D-4B73-9638-E2AC2285F485}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AEE027C9-475D-4B73-9638-E2AC2285F485}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AEE027C9-475D-4B73-9638-E2AC2285F485}.Release|ARM.ActiveCfg = Release|Any CPU
-		{AEE027C9-475D-4B73-9638-E2AC2285F485}.Release|ARM.Build.0 = Release|Any CPU
-		{AEE027C9-475D-4B73-9638-E2AC2285F485}.Release|x64.ActiveCfg = Release|Any CPU
-		{AEE027C9-475D-4B73-9638-E2AC2285F485}.Release|x64.Build.0 = Release|Any CPU
-		{AEE027C9-475D-4B73-9638-E2AC2285F485}.Release|x86.ActiveCfg = Release|Any CPU
-		{AEE027C9-475D-4B73-9638-E2AC2285F485}.Release|x86.Build.0 = Release|Any CPU
 		{86375084-CF96-4F34-AB29-697E20657979}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{86375084-CF96-4F34-AB29-697E20657979}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86375084-CF96-4F34-AB29-697E20657979}.Debug|ARM.ActiveCfg = Debug|Any CPU
