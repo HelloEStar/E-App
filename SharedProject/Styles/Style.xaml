@@ -4,18 +4,18 @@
     xmlns:share="clr-namespace:SharedProject">
 
     <!--颜色-->
-    <SolidColorBrush x:Key="一级字体颜色" Color="#000000FF"/>
-    <SolidColorBrush x:Key="二级字体颜色" Color="#3C3C3CFF"/>
-    <SolidColorBrush x:Key="三级字体颜色" Color="#787878FF"/>
+    <SolidColorBrush x:Key="一级字体颜色" Color="#FF000000"/>
+    <SolidColorBrush x:Key="二级字体颜色" Color="#FF3C3C3C"/>
+    <SolidColorBrush x:Key="三级字体颜色" Color="#FF787878"/>
 
-    <SolidColorBrush x:Key="一级背景颜色" Color="#DCDCDCFF"/>
-    <SolidColorBrush x:Key="二级背景颜色" Color="#F0F0F0FF"/>
+    <SolidColorBrush x:Key="一级背景颜色" Color="#FFDCDCDC"/>
+    <SolidColorBrush x:Key="二级背景颜色" Color="#FFF0F0F0"/>
     <SolidColorBrush x:Key="三级背景颜色" Color="#FFFFFFFF"/>
 
-    <SolidColorBrush x:Key="一级边框颜色" Color="#A0A0A0FF"/>
+    <SolidColorBrush x:Key="一级边框颜色" Color="#FFA0A0A0"/>
 
-    <SolidColorBrush x:Key="有焦点选中颜色" Color="#007FFF7F"/>
-    <SolidColorBrush x:Key="无焦点选中颜色" Color="#7FC8C87F"/>
+    <SolidColorBrush x:Key="有焦点选中颜色" Color="#7F007FFF"/>
+    <SolidColorBrush x:Key="无焦点选中颜色" Color="#7F7FC8FF"/>
 
     <Color x:Key="树状图子项有焦点选中颜色">#7F007FFF</Color>
     <Color x:Key="树状图子项无焦点选中颜色">#7F7FC8FF</Color>
