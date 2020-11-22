@@ -75,18 +75,18 @@ namespace E.Number
                     //PanEdit.Visibility = Visibility.Collapsed;
                     PanSetting.Visibility = Visibility.Collapsed;
                     PanAbout.Visibility = Visibility.Collapsed;
-                    BtnFile.Background = (Brush)FindResource("一级背景颜色");
-                    BtnSetting.Background = (Brush)FindResource("一级背景颜色");
-                    BtnAbout.Background = (Brush)FindResource("一级背景颜色");
+                    BtnFile.Background = BrushBG01;
+                    BtnSetting.Background = BrushBG01;
+                    BtnAbout.Background = BrushBG01;
                     break;
                 case MenuTool.文件:
                     PanFile.Visibility = Visibility.Visible;
                     //PanEdit.Visibility = Visibility.Collapsed;
                     PanSetting.Visibility = Visibility.Collapsed;
                     PanAbout.Visibility = Visibility.Collapsed;
-                    BtnFile.Background = (Brush)FindResource("二级背景颜色");
-                    BtnSetting.Background = (Brush)FindResource("一级背景颜色");
-                    BtnAbout.Background = (Brush)FindResource("一级背景颜色");
+                    BtnFile.Background = BrushBG02;
+                    BtnSetting.Background = BrushBG01;
+                    BtnAbout.Background = BrushBG01;
                     break;
                 case MenuTool.编辑:
                     PanFile.Visibility = Visibility.Collapsed;
@@ -99,18 +99,18 @@ namespace E.Number
                     //PanEdit.Visibility = Visibility.Collapsed;
                     PanSetting.Visibility = Visibility.Visible;
                     PanAbout.Visibility = Visibility.Collapsed;
-                    BtnFile.Background = (Brush)FindResource("一级背景颜色");
-                    BtnSetting.Background = (Brush)FindResource("二级背景颜色");
-                    BtnAbout.Background = (Brush)FindResource("一级背景颜色");
+                    BtnFile.Background = BrushBG01;
+                    BtnSetting.Background = BrushBG02;
+                    BtnAbout.Background = BrushBG01;
                     break;
                 case MenuTool.关于:
                     PanFile.Visibility = Visibility.Collapsed;
                     //PanEdit.Visibility = Visibility.Collapsed;
                     PanSetting.Visibility = Visibility.Collapsed;
                     PanAbout.Visibility = Visibility.Visible;
-                    BtnFile.Background = (Brush)FindResource("一级背景颜色");
-                    BtnSetting.Background = (Brush)FindResource("一级背景颜色");
-                    BtnAbout.Background = (Brush)FindResource("二级背景颜色");
+                    BtnFile.Background = BrushBG01;
+                    BtnSetting.Background = BrushBG01;
+                    BtnAbout.Background = BrushBG02;
 
                     break;
                 default:

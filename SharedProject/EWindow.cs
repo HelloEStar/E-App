@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 
 namespace SharedProject
@@ -21,6 +22,18 @@ namespace SharedProject
         /// 当前菜单
         /// </summary>
         protected MenuTool CurrentMenuTool { get; set; } = MenuTool.文件;
+
+        protected Brush BrushBG01 => (Brush)FindResource("一级背景颜色");
+        protected Brush BrushBG02 => (Brush)FindResource("二级背景颜色");
+        protected Brush BrushBG03 => (Brush)FindResource("三级背景颜色");
+        protected Brush BrushFG01 => (Brush)FindResource("一级前景颜色");
+        protected Brush BrushFG02 => (Brush)FindResource("二级前景颜色");
+        protected Brush BrushFG03 => (Brush)FindResource("三级前景颜色");
+        protected Brush BrushHighlight01 => (Brush)FindResource("一级高亮颜色");
+        protected Brush BrushHighlight02 => (Brush)FindResource("二级高亮颜色");
+        protected Brush BrushHighlight03 => (Brush)FindResource("三级高亮颜色");
+
+
 
         /// <summary>
         /// 检查用户是否同意用户协议

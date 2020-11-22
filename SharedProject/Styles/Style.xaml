@@ -14,11 +14,11 @@
 
     <SolidColorBrush x:Key="一级边框颜色" Color="#FFA0A0A0"/>
 
-    <SolidColorBrush x:Key="有焦点选中颜色" Color="#7F007FFF"/>
-    <SolidColorBrush x:Key="无焦点选中颜色" Color="#7F7FC8FF"/>
+    <SolidColorBrush x:Key="有焦点选中颜色" Color="#FF007FFF"/>
+    <SolidColorBrush x:Key="无焦点选中颜色" Color="#FF7FC8FF"/>
 
-    <Color x:Key="树状图子项有焦点选中颜色">#7F007FFF</Color>
-    <Color x:Key="树状图子项无焦点选中颜色">#7F7FC8FF</Color>
+    <Color x:Key="树状图子项有焦点选中颜色">#FF007FFF</Color>
+    <Color x:Key="树状图子项无焦点选中颜色">#FF7FC8FF</Color>
 
     <!--菜单栏样式-->
     <Style x:Key="菜单栏样式" TargetType="Grid">
@@ -370,15 +370,32 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
-                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="True">
                         <Grid Background="{TemplateBinding Background}">
-                            <ScrollContentPresenter  Cursor="{TemplateBinding Cursor}" Margin="{TemplateBinding Padding}" ContentTemplate="{TemplateBinding ContentTemplate}"/>
-                            <ScrollBar x:Name="PART_VerticalScrollBar" HorizontalAlignment="Right" Maximum="{TemplateBinding ScrollableHeight}" Orientation="Vertical"
-                                       Style="{DynamicResource 滚动条样式}" ViewportSize="{TemplateBinding ViewportHeight}" Value="{TemplateBinding VerticalOffset}"
-                                       Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
-                            <ScrollBar x:Name="PART_HorizontalScrollBar" Maximum="{TemplateBinding ScrollableWidth}" Orientation="Horizontal"
-                                       Style="{DynamicResource 滚动条样式}" VerticalAlignment="Bottom" Value="{TemplateBinding HorizontalOffset}"
-                                       ViewportSize="{TemplateBinding ViewportWidth}" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
+                            <ScrollContentPresenter 
+                                Cursor="{TemplateBinding Cursor}"
+                                Margin="{TemplateBinding Padding}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                            <ScrollBar
+                                x:Name="PART_VerticalScrollBar"
+                                HorizontalAlignment="Right"
+                                Maximum="{TemplateBinding ScrollableHeight}"
+                                Orientation="Vertical"
+                                Style="{DynamicResource 滚动条样式}"
+                                ViewportSize="{TemplateBinding ViewportHeight}"
+                                Value="{TemplateBinding VerticalOffset}"
+                                Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+                            <ScrollBar
+                                x:Name="PART_HorizontalScrollBar"
+                                Maximum="{TemplateBinding ScrollableWidth}"
+                                Orientation="Horizontal"
+                                Style="{DynamicResource 滚动条样式}"
+                                VerticalAlignment="Bottom"
+                                Value="{TemplateBinding HorizontalOffset}"
+                                ViewportSize="{TemplateBinding ViewportWidth}"
+                                Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -386,11 +403,11 @@
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimation Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0.25"/>
-                                    <DoubleAnimation Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Opacity" To="0.2" Duration="0:0:0.25" BeginTime="0:0:1"/>
+                                    <DoubleAnimation Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Opacity" To="0.4" Duration="0:0:0.25" BeginTime="0:0:1"/>
                                     <DoubleAnimation Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Width" To="16" Duration="0:0:0.25"/>
                                     <DoubleAnimation Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Width" To="8" Duration="0:0:0.25" BeginTime="0:0:1"/>
                                     <DoubleAnimation Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0.25"/>
-                                    <DoubleAnimation Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Opacity"  To="0.2" Duration="0:0:0.25" BeginTime="0:0:1"/>
+                                    <DoubleAnimation Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Opacity"  To="0.4" Duration="0:0:0.25" BeginTime="0:0:1"/>
                                     <DoubleAnimation Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Height" To="16" Duration="0:0:0.25"/>
                                     <DoubleAnimation Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Height" To="8" Duration="0:0:0.25" BeginTime="0:0:1"/>
                                 </Storyboard>
@@ -399,7 +416,7 @@
                         <EventTrigger RoutedEvent="MouseEnter" SourceName="PART_VerticalScrollBar">
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <DoubleAnimation  Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0.25"/>
+                                    <DoubleAnimation Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0.25"/>
                                     <DoubleAnimation Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Width" To="16" Duration="0:0:0.25"/>
                                 </Storyboard>
                             </BeginStoryboard>
@@ -407,7 +424,7 @@
                         <EventTrigger RoutedEvent="MouseLeave" SourceName="PART_VerticalScrollBar">
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Opacity" To="0.2" Duration="0:0:0.25"/>
+                                    <DoubleAnimation Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Opacity" To="0.4" Duration="0:0:0.25"/>
                                     <DoubleAnimation Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Width" To="8" Duration="0:0:0.25"/>
                                 </Storyboard>
                             </BeginStoryboard>
@@ -423,7 +440,7 @@
                         <EventTrigger RoutedEvent="MouseLeave" SourceName="PART_HorizontalScrollBar">
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Opacity" To="0.2" Duration="0:0:0.25"/>
+                                    <DoubleAnimation Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Opacity" To="0.4" Duration="0:0:0.25"/>
                                     <DoubleAnimation Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Height" To="8" Duration="0:0:0.25"/>
                                 </Storyboard>
                             </BeginStoryboard>
@@ -440,11 +457,11 @@
     <Style x:Key="滚动条样式" TargetType="{x:Type ScrollBar}">
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
         <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
-        <Setter Property="Background" Value="Transparent"/>
+        <!--<Setter Property="Background" Value="Transparent"/>-->
         <Setter Property="Margin" Value="0"/>
         <Setter Property="Width" Value="16"/>
         <Setter Property="MinWidth" Value="8"/>
-        <Setter Property="Opacity" Value="0.2"/>
+        <!--<Setter Property="Opacity" Value="1"/>-->
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -455,41 +472,58 @@
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="auto"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <RepeatButton  Grid.Row="0" Style="{DynamicResource 垂直滚动条上下按钮2}" Command="{x:Static ScrollBar.PageUpCommand}"/>
-                        <Track x:Name="PART_Track"   Grid.Row="1" IsEnabled="{TemplateBinding IsMouseOver}" IsDirectionReversed="true">
+                        <RepeatButton 
+                            Grid.Row="0"
+                            Style="{DynamicResource 垂直滚动条上下按钮2}"
+                            Command="{x:Static ScrollBar.PageUpCommand}"/>
+                        <Track 
+                            x:Name="PART_Track"
+                            Grid.Row="1"
+                            IsEnabled="{TemplateBinding IsMouseOver}"
+                            IsDirectionReversed="true">
                             <Track.DecreaseRepeatButton>
-                                <RepeatButton Style="{DynamicResource 垂直滚动条按钮样式}" Command="{x:Static ScrollBar.PageUpCommand}"/>
+                                <RepeatButton
+                                    Style="{DynamicResource 垂直滚动条按钮样式}"
+                                    Command="{x:Static ScrollBar.PageUpCommand}"/>
                             </Track.DecreaseRepeatButton>
                             <Track.IncreaseRepeatButton>
-                                <RepeatButton Style="{DynamicResource 垂直滚动条按钮样式}" Command="{x:Static ScrollBar.PageDownCommand}"/>
+                                <RepeatButton
+                                    Style="{DynamicResource 垂直滚动条按钮样式}"
+                                    Command="{x:Static ScrollBar.PageDownCommand}"/>
                             </Track.IncreaseRepeatButton>
                             <Track.Thumb>
                                 <Thumb Style="{DynamicResource 滚动条把手样式}"/>
                             </Track.Thumb>
                         </Track>
-                        <RepeatButton Grid.Row="2" Style="{DynamicResource 垂直滚动条上下按钮2}" Command="{x:Static ScrollBar.PageDownCommand}"/>
+                        <RepeatButton Grid.Row="2"
+                                      Style="{DynamicResource 垂直滚动条上下按钮2}"
+                                      Command="{x:Static ScrollBar.PageDownCommand}"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Style.Triggers>
             <Trigger Property="Orientation" Value="Horizontal">
-                <Setter Property="Background"  Value="Transparent"/>
+                <!--<Setter Property="Background"  Value="Transparent"/>-->
                 <Setter Property="Margin" Value="0"/>
                 <Setter Property="Height" Value="5"/>
                 <Setter Property="MinHeight" Value="5"/>
                 <Setter Property="Width" Value="Auto"/>
-                <Setter Property="Opacity" Value="0.2"/>
+                <!--<Setter Property="Opacity" Value="0.4"/>-->
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ScrollBar}">
                             <Grid x:Name="Bg" SnapsToDevicePixels="true">
                                 <Track x:Name="PART_Track" IsEnabled="{TemplateBinding IsMouseOver}">
                                     <Track.DecreaseRepeatButton>
-                                        <RepeatButton Style="{DynamicResource 水平滚动条按钮样式}"  Command="{x:Static ScrollBar.PageLeftCommand}"/>
+                                        <RepeatButton 
+                                            Style="{DynamicResource 水平滚动条按钮样式}"
+                                            Command="{x:Static ScrollBar.PageLeftCommand}"/>
                                     </Track.DecreaseRepeatButton>
                                     <Track.IncreaseRepeatButton>
-                                        <RepeatButton Style="{DynamicResource 水平滚动条按钮样式}"  Command="{x:Static ScrollBar.PageRightCommand}"/>
+                                        <RepeatButton
+                                            Style="{DynamicResource 水平滚动条按钮样式}"
+                                            Command="{x:Static ScrollBar.PageRightCommand}"/>
                                     </Track.IncreaseRepeatButton>
                                     <Track.Thumb>
                                         <Thumb Style="{DynamicResource 滚动条把手样式}"/>
@@ -514,7 +548,7 @@
                 <ControlTemplate TargetType="{x:Type Thumb}">
                     <Grid>
                         <!--滚动条颜色-->
-                        <Border Background="{DynamicResource 一级边框颜色}"/>
+                        <Border Background="{DynamicResource 一级背景颜色}"/>
                         <!--CornerRadius="3"-->
                     </Grid>
                 </ControlTemplate>
@@ -526,11 +560,13 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Focusable" Value="false"/>
         <Setter Property="IsTabStop" Value="false"/>
-        <Setter Property="Opacity" Value="0.2"/>
+        <Setter Property="Opacity" Value="0.4"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
-                    <Rectangle Fill="{TemplateBinding Background}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}"/>
+                    <Rectangle Fill="{TemplateBinding Background}"
+                               Width="{TemplateBinding Width}"
+                               Height="{TemplateBinding Height}"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -540,11 +576,13 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Focusable" Value="false"/>
         <Setter Property="IsTabStop" Value="false"/>
-        <Setter Property="Opacity" Value="0.2"/>
+        <Setter Property="Opacity" Value="0.4"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
-                    <Rectangle Fill="{TemplateBinding Background}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}"/>
+                    <Rectangle Fill="{TemplateBinding Background}"
+                               Width="{TemplateBinding Width}"
+                               Height="{TemplateBinding Height}"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
