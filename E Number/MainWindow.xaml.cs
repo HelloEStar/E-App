@@ -18,16 +18,12 @@ using SharedProject;
 
 namespace E.Number
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : EWindow
     {
         public MainWindow()
         {
             InitializeComponent();
         }
-
 
         //载入
         private void LoadRecordItems()
@@ -79,50 +75,43 @@ namespace E.Number
                     //PanEdit.Visibility = Visibility.Collapsed;
                     PanSetting.Visibility = Visibility.Collapsed;
                     PanAbout.Visibility = Visibility.Collapsed;
-                    BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
-                    //BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnFile.Background = (Brush)FindResource("一级背景颜色");
+                    BtnSetting.Background = (Brush)FindResource("一级背景颜色");
+                    BtnAbout.Background = (Brush)FindResource("一级背景颜色");
                     break;
                 case MenuTool.文件:
                     PanFile.Visibility = Visibility.Visible;
                     //PanEdit.Visibility = Visibility.Collapsed;
                     PanSetting.Visibility = Visibility.Collapsed;
                     PanAbout.Visibility = Visibility.Collapsed;
-                    BtnFile.BorderThickness = new Thickness(4, 0, 0, 0);
-                    //BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnFile.Background = (Brush)FindResource("二级背景颜色");
+                    BtnSetting.Background = (Brush)FindResource("一级背景颜色");
+                    BtnAbout.Background = (Brush)FindResource("一级背景颜色");
                     break;
                 case MenuTool.编辑:
                     PanFile.Visibility = Visibility.Collapsed;
                     //PanEdit.Visibility = Visibility.Visible;
                     PanSetting.Visibility = Visibility.Collapsed;
                     PanAbout.Visibility = Visibility.Collapsed;
-                    BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
-                    //BtnEdit.BorderThickness = new Thickness(4, 0, 0, 0);
-                    BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
                     break;
                 case MenuTool.设置:
                     PanFile.Visibility = Visibility.Collapsed;
                     //PanEdit.Visibility = Visibility.Collapsed;
                     PanSetting.Visibility = Visibility.Visible;
                     PanAbout.Visibility = Visibility.Collapsed;
-                    BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
-                    //BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnSetting.BorderThickness = new Thickness(4, 0, 0, 0);
-                    BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnFile.Background = (Brush)FindResource("一级背景颜色");
+                    BtnSetting.Background = (Brush)FindResource("二级背景颜色");
+                    BtnAbout.Background = (Brush)FindResource("一级背景颜色");
                     break;
                 case MenuTool.关于:
                     PanFile.Visibility = Visibility.Collapsed;
                     //PanEdit.Visibility = Visibility.Collapsed;
                     PanSetting.Visibility = Visibility.Collapsed;
                     PanAbout.Visibility = Visibility.Visible;
-                    BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
-                    //BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnAbout.BorderThickness = new Thickness(4, 0, 0, 0);
+                    BtnFile.Background = (Brush)FindResource("一级背景颜色");
+                    BtnSetting.Background = (Brush)FindResource("一级背景颜色");
+                    BtnAbout.Background = (Brush)FindResource("二级背景颜色");
+
                     break;
                 default:
                     break;
@@ -165,8 +154,6 @@ namespace E.Number
             ShowMessage(LblMessage, message, newBox);
         }
 
-
-
         //主窗口
         protected override void EWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -204,6 +191,21 @@ namespace E.Number
         private void BtnClear_Click(object sender, RoutedEventArgs e)
         {
             LtbRecord.Items.Clear();
+        }
+        private void BtnExport_Click(object sender, RoutedEventArgs e)
+        {
+            if (LtbRecord.Items != null && LtbRecord.Items.Count > 0)
+            {
+                string str = "";
+                foreach (var item in LtbRecord.Items)
+                {
+                    ListBoxItem lb = (ListBoxItem)item;
+                    str += lb.Content + "\n";
+                }
+                str = str.TrimEnd('\n').TrimEnd('\n');
+                Clipboard.SetDataObject(str, true);
+                ShowMessage(FindResource("已复制").ToString());
+            }
         }
         private void TxtValue_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -247,6 +249,8 @@ namespace E.Number
                     //设为默认主题
                     Settings.Default.Theme = 0;
                 }
+                //立即刷新按钮样式
+                SetMenuTool(CurrentMenuTool);
             }
         }
         private void TxtMinValue_Loaded(object sender, RoutedEventArgs e)
@@ -295,6 +299,5 @@ namespace E.Number
                 ShowMessage(FindResource("范围错误").ToString());
             }
         }
-
     }
 }

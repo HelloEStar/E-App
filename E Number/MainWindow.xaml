@@ -29,7 +29,7 @@
                                 Content="{DynamicResource 记录}"
                                 Style="{DynamicResource 菜单按钮样式}" 
                                 Click="BtnFile_Click" 
-                                BorderThickness="4,0,0,0"/>
+                                Background="{DynamicResource 二级背景颜色}"/>
                         <Button x:Name="BtnSetting" 
                                 Content="{DynamicResource 设置}" 
                                 Style="{DynamicResource 菜单按钮样式}" 
@@ -50,11 +50,15 @@
                     <WrapPanel 
                         Style="{DynamicResource 水平流式面板样式}"
                         DockPanel.Dock="Bottom" 
-                        ItemWidth="240">
+                        ItemWidth="120">
                         <Button x:Name="BtnClear" 
                                 Style="{DynamicResource 自由按钮样式}" 
                                 Content="{DynamicResource 清空}"
                                 Click="BtnClear_Click"/>
+                        <Button x:Name="BtnExport" 
+                                Style="{DynamicResource 自由按钮样式}" 
+                                Content="{DynamicResource 导出}"
+                                Click="BtnExport_Click" Cursor="Hand"/>
                     </WrapPanel>
                     <ListBox x:Name="LtbRecord" 
                              Background="{x:Null}" 

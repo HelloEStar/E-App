@@ -6,9 +6,12 @@
     <RootNamespace>E.Number</RootNamespace>
     <UseWPF>true</UseWPF>
     <AssemblyName>E Number</AssemblyName>
-    <PackageId>E Number</PackageId>
     <Company>浮泽工作室</Company>
     <Authors>E Star</Authors>
+    <ApplicationIcon>Resources\E Number.ico</ApplicationIcon>
+    <FileVersion>1.1.2.1122</FileVersion>
+    <Description>随机数生成器</Description>
+    <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
 
   <Import Project="..\SharedProject\SharedProject.projitems" Label="Shared" />
@@ -20,6 +23,9 @@
 
   <ItemGroup>
     <Resource Include="Resources\E Number.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Resources\ReleaseNotes.md" />
   </ItemGroup>
 

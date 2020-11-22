@@ -53,7 +53,7 @@ namespace SharedProject
                 if (IsExists)
                 {
                     FileVersionInfo info = FileVersionInfo.GetVersionInfo(FilePath);
-                    return info.ProductName;
+                    return info.FileDescription;
                 }
                 return name;
             }
@@ -73,7 +73,7 @@ namespace SharedProject
                 if (IsExists)
                 {
                     FileVersionInfo info = FileVersionInfo.GetVersionInfo(FilePath);
-                    return info.FileDescription;
+                    return info.Comments;
                 }
                 return "";
             }
@@ -135,7 +135,7 @@ namespace SharedProject
                 if (IsExists)
                 {
                     FileVersionInfo info = FileVersionInfo.GetVersionInfo(FilePath);
-                    return new Version(info.ProductVersion);
+                    return new Version(info.FileVersion);
                 }
                 return new Version();
             }
@@ -175,7 +175,7 @@ namespace SharedProject
         {
             get
             {
-                return "https://github.com/HelloEStar/E.App/wiki/" + Name.Replace(" ", "-");
+                return "https://github.com/HelloEStar/E-App/wiki/" + Name.Replace(" ", "-");
             }
         }
         /// <summary>
@@ -208,11 +208,11 @@ namespace SharedProject
         /// <summary>
         /// 维基链接
         /// </summary>
-        public static string WikiPage { get; } = "https://github.com/HelloEStar/E.App/wiki";
+        public static string WikiPage { get; } = "https://github.com/HelloEStar/E-App/wiki";
         /// <summary>
         /// GitHub链接
         /// </summary>
-        public static string GitHubPage { get; } = "https://github.com/HelloEStar/E.App";
+        public static string GitHubPage { get; } = "https://github.com/HelloEStar/E-App";
         /// <summary>
         /// 官方Q群
         /// </summary>
