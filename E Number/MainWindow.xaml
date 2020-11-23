@@ -273,10 +273,10 @@
                         Content="生成" 
                         Style="{DynamicResource 自由按钮样式}"
                         Margin="0" 
-                        Height="80" 
+                        Height="60" 
                         Click="BtnCreate_Click" 
                         DockPanel.Dock="Bottom"
-                        FontSize="40" 
+                        FontSize="30" 
                         VerticalAlignment="Bottom"/>
                     <Label 
                         x:Name="LblMessage" 

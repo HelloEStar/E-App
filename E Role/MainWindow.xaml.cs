@@ -369,50 +369,42 @@ namespace E.Role
                     //PanEdit.Visibility = Visibility.Collapsed;
                     PanSetting.Visibility = Visibility.Collapsed;
                     PanAbout.Visibility = Visibility.Collapsed;
-                    BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
-                    //BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnFile.Background = BrushBG01;
+                    BtnSetting.Background = BrushBG01;
+                    BtnAbout.Background = BrushBG01;
                     break;
                 case MenuTool.文件:
                     PanFile.Visibility = Visibility.Visible;
                     //PanEdit.Visibility = Visibility.Collapsed;
                     PanSetting.Visibility = Visibility.Collapsed;
                     PanAbout.Visibility = Visibility.Collapsed;
-                    BtnFile.BorderThickness = new Thickness(4, 0, 0, 0);
-                    //BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnFile.Background = BrushBG02;
+                    BtnSetting.Background = BrushBG01;
+                    BtnAbout.Background = BrushBG01;
                     break;
                 case MenuTool.编辑:
                     PanFile.Visibility = Visibility.Collapsed;
                     //PanEdit.Visibility = Visibility.Visible;
                     PanSetting.Visibility = Visibility.Collapsed;
                     PanAbout.Visibility = Visibility.Collapsed;
-                    BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
-                    //BtnEdit.BorderThickness = new Thickness(4, 0, 0, 0);
-                    BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
                     break;
                 case MenuTool.设置:
                     PanFile.Visibility = Visibility.Collapsed;
                     //PanEdit.Visibility = Visibility.Collapsed;
                     PanSetting.Visibility = Visibility.Visible;
                     PanAbout.Visibility = Visibility.Collapsed;
-                    BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
-                    //BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnSetting.BorderThickness = new Thickness(4, 0, 0, 0);
-                    BtnAbout.BorderThickness = new Thickness(0, 0, 0, 0);
+                    BtnFile.Background = BrushBG01;
+                    BtnSetting.Background = BrushBG02;
+                    BtnAbout.Background = BrushBG01;
                     break;
                 case MenuTool.关于:
                     PanFile.Visibility = Visibility.Collapsed;
                     //PanEdit.Visibility = Visibility.Collapsed;
                     PanSetting.Visibility = Visibility.Collapsed;
                     PanAbout.Visibility = Visibility.Visible;
-                    BtnFile.BorderThickness = new Thickness(0, 0, 0, 0);
-                    //BtnEdit.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnSetting.BorderThickness = new Thickness(0, 0, 0, 0);
-                    BtnAbout.BorderThickness = new Thickness(4, 0, 0, 0);
+                    BtnFile.Background = BrushBG01;
+                    BtnSetting.Background = BrushBG01;
+                    BtnAbout.Background = BrushBG02;
                     break;
                 default:
                     break;
@@ -631,6 +623,8 @@ namespace E.Role
                     //设为默认主题
                     Settings.Default.Theme = 0;
                 }
+                //立即刷新按钮样式
+                SetMenuTool(CurrentMenuTool);
             }
         }
 
