@@ -9,7 +9,7 @@
     <Authors>E Star</Authors>
     <Company>浮泽工作室</Company>
     <Description>人设生成器</Description>
-    <FileVersion>1.1.2.1123</FileVersion>
+    <FileVersion>0.2.0.1123</FileVersion>
   </PropertyGroup>
 
   <Import Project="..\SharedProject\SharedProject.projitems" Label="Shared" />
