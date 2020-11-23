@@ -8,6 +8,11 @@
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation />
+    <ApplicationIcon>Resources\E Writer.ico</ApplicationIcon>
+    <Company>浮泽工作室</Company>
+    <Authors>E Star</Authors>
+    <Description>小说编辑器</Description>
+    <FileVersion>1.1.3.1123</FileVersion>
   </PropertyGroup>
   <Import Project="..\SharedProject\SharedProject.projitems" Label="Shared" />
   <ItemGroup>
