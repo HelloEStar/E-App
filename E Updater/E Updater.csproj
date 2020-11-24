@@ -8,7 +8,7 @@
     <Company>浮泽工作室</Company>
     <Authors>E Star</Authors>
     <Description>软件更新器</Description>
-    <FileVersion>1.1.2.1124</FileVersion>
+    <FileVersion>1.2.0.1124</FileVersion>
     <ApplicationIcon>Resources\E Updater.ico</ApplicationIcon>
   </PropertyGroup>
 

@@ -119,8 +119,8 @@ namespace SharedProject
                 {
                     Uri uri0 = new Uri("UserAgreement.md", UriKind.Relative);
                     Stream src0 = Application.GetResourceStream(uri0).Stream;
-                    string userAgreement = new StreamReader(src0, Encoding.UTF8).ReadToEnd();
-                    return userAgreement;
+                    string str = new StreamReader(src0, Encoding.UTF8).ReadToEnd();
+                    return str;
                 }
                 return "";
             }
@@ -162,8 +162,8 @@ namespace SharedProject
                     Uri uri = new Uri("Resources/ReleaseNotes.md", UriKind.Relative);
                     //Uri uri = new Uri("pack://application:,,,/Resources/ReleaseNotes.md", UriKind.RelativeOrAbsolute);
                     Stream src = Application.GetResourceStream(uri).Stream;
-                    string updateNote = new StreamReader(src, Encoding.UTF8).ReadToEnd().Replace("### ", "");
-                    return updateNote;
+                    string str = new StreamReader(src, Encoding.UTF8).ReadToEnd().Replace("### ", "");
+                    return str;
                 }
                 return "";
             }

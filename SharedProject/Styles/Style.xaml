@@ -4,21 +4,20 @@
     xmlns:share="clr-namespace:SharedProject">
 
     <!--颜色-->
-    <SolidColorBrush x:Key="一级字体颜色" Color="#FF000000"/>
-    <SolidColorBrush x:Key="二级字体颜色" Color="#FF3C3C3C"/>
-    <SolidColorBrush x:Key="三级字体颜色" Color="#FF787878"/>
+    <SolidColorBrush x:Key="一级前景颜色" Color="#FF000000"/>
+    <SolidColorBrush x:Key="二级前景颜色" Color="#FF3C3C3C"/>
+    <SolidColorBrush x:Key="三级前景颜色" Color="#FF787878"/>
 
     <SolidColorBrush x:Key="一级背景颜色" Color="#FFDCDCDC"/>
     <SolidColorBrush x:Key="二级背景颜色" Color="#FFF0F0F0"/>
     <SolidColorBrush x:Key="三级背景颜色" Color="#FFFFFFFF"/>
 
-    <SolidColorBrush x:Key="一级边框颜色" Color="#FFA0A0A0"/>
+    <SolidColorBrush x:Key="一级高亮颜色" Color="#FF007FFF"/>
+    <SolidColorBrush x:Key="二级高亮颜色" Color="#FF7FC8FF"/>
+    <SolidColorBrush x:Key="三级高亮颜色" Color="#FFA0A0A0"/>
 
-    <SolidColorBrush x:Key="有焦点选中颜色" Color="#FF007FFF"/>
-    <SolidColorBrush x:Key="无焦点选中颜色" Color="#FF7FC8FF"/>
-
-    <Color x:Key="树状图子项有焦点选中颜色">#FF007FFF</Color>
-    <Color x:Key="树状图子项无焦点选中颜色">#FF7FC8FF</Color>
+    <Color x:Key="树状图子项一级高亮颜色">#FF007FFF</Color>
+    <Color x:Key="树状图子项二级高亮颜色">#FF7FC8FF</Color>
 
     <!--菜单栏样式-->
     <Style x:Key="菜单栏样式" TargetType="Grid">
@@ -45,9 +44,9 @@
 
     <!--按钮样式-->
     <Style x:Key="菜单按钮样式" TargetType="Button">
-        <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
+        <Setter Property="Foreground" Value="{DynamicResource 一级前景颜色}"/>
         <Setter Property="Background" Value="{DynamicResource 一级背景颜色}"/>
-        <!--<Setter Property="BorderBrush" Value="{DynamicResource 一级边框颜色}"/>-->
+        <!--<Setter Property="BorderBrush" Value="{DynamicResource 三级高亮颜色}"/>-->
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Height" Value="40"/>
         <Setter Property="Cursor" Value="Hand"/>
@@ -69,7 +68,7 @@
                             <!--<Setter TargetName="border" Property="BorderThickness" Value="0,0,0,0"/>-->
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource 三级字体颜色}"/>
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource 三级前景颜色}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -77,7 +76,7 @@
         </Setter>
     </Style>
     <Style x:Key="自由按钮样式" TargetType="Button">
-        <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
+        <Setter Property="Foreground" Value="{DynamicResource 一级前景颜色}"/>
         <Setter Property="Background" Value="{DynamicResource 二级背景颜色}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Cursor" Value="Hand"/>
@@ -97,7 +96,7 @@
                             <Setter TargetName="border" Property="Background" Value="{DynamicResource 三级背景颜色}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource 三级字体颜色}"/>
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource 三级前景颜色}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -105,7 +104,7 @@
         </Setter>
     </Style>
     <Style x:Key="自由按钮样式反色" TargetType="Button">
-        <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
+        <Setter Property="Foreground" Value="{DynamicResource 一级前景颜色}"/>
         <Setter Property="Background" Value="{DynamicResource 一级背景颜色}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Cursor" Value="Hand"/>
@@ -125,7 +124,7 @@
                             <Setter TargetName="border" Property="Background" Value="{DynamicResource 三级背景颜色}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource 三级字体颜色}"/>
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource 三级前景颜色}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -133,7 +132,7 @@
         </Setter>
     </Style>
     <Style x:Key="自由按钮样式浅色" TargetType="Button">
-        <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
+        <Setter Property="Foreground" Value="{DynamicResource 一级前景颜色}"/>
         <Setter Property="Background" Value="{DynamicResource 三级背景颜色}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Cursor" Value="Hand"/>
@@ -153,7 +152,7 @@
                             <Setter TargetName="border" Property="Background" Value="{DynamicResource 一级背景颜色}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource 三级字体颜色}"/>
+                            <Setter TargetName="text" Property="Foreground" Value="{DynamicResource 三级前景颜色}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -163,7 +162,7 @@
 
     <!--标签样式-->
     <Style x:Key="标题标签样式" TargetType="Label">
-        <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
+        <Setter Property="Foreground" Value="{DynamicResource 一级前景颜色}"/>
         <Setter Property="Height" Value="30"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="Padding" Value="0"/>
@@ -172,25 +171,25 @@
         <Setter Property="FontSize" Value="14"/>
     </Style>
     <Style x:Key="自由标签样式一" TargetType="Label">
-        <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
+        <Setter Property="Foreground" Value="{DynamicResource 一级前景颜色}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="FontSize" Value="14"/>
     </Style>
     <Style x:Key="自由标签样式二" TargetType="Label">
-        <Setter Property="Foreground" Value="{DynamicResource 二级字体颜色}"/>
+        <Setter Property="Foreground" Value="{DynamicResource 二级前景颜色}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="FontSize" Value="12"/>
     </Style>
     <Style x:Key="自由标签样式三" TargetType="Label">
-        <Setter Property="Foreground" Value="{DynamicResource 三级字体颜色}"/>
+        <Setter Property="Foreground" Value="{DynamicResource 三级前景颜色}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="FontSize" Value="10"/>
     </Style>
 
     <!--文本框样式-->
     <Style x:Key="文本输入框样式" TargetType="TextBox">
-        <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
-        <Setter Property="CaretBrush" Value="{DynamicResource 一级字体颜色}"/>
+        <Setter Property="Foreground" Value="{DynamicResource 一级前景颜色}"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource 一级前景颜色}"/>
         <Setter Property="Background" Value="{DynamicResource 三级背景颜色}"/>
         <Setter Property="Height" Value="30"/>
         <Setter Property="Margin" Value="5"/>
@@ -199,7 +198,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
     <Style x:Key="文本显示框样式" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource 二级字体颜色}"/>
+        <Setter Property="Foreground" Value="{DynamicResource 二级前景颜色}"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="5"/>
@@ -207,7 +206,7 @@
 
     <!--检查框样式-->
     <Style x:Key="检查框样式" TargetType="CheckBox">
-        <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
+        <Setter Property="Foreground" Value="{DynamicResource 一级前景颜色}"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="Padding" Value="5"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -220,7 +219,7 @@
     <!--下拉框样式-->
     <Style x:Key="下拉框样式" TargetType="{x:Type ComboBox}">
         <Setter Property="Background" Value="{DynamicResource 一级背景颜色}"/>
-        <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
+        <Setter Property="Foreground" Value="{DynamicResource 一级前景颜色}"/>
         <Setter Property="Height" Value="30"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="Padding" Value="5"/>
@@ -246,7 +245,7 @@
                         </Grid.ColumnDefinitions>
                         <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="0"
                        PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" Placement="Bottom">
-                            <Border x:Name="dropDownBorder" BorderBrush="{DynamicResource 一级边框颜色}" BorderThickness="1" Background="{DynamicResource 三级背景颜色}"
+                            <Border x:Name="dropDownBorder" BorderBrush="{DynamicResource 三级高亮颜色}" BorderThickness="1" Background="{DynamicResource 三级背景颜色}"
                             MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{Binding ActualWidth, ElementName=templateRoot}">
                                 <ScrollViewer x:Name="DropDownScrollViewer">
                                     <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
@@ -305,7 +304,7 @@
                     <Border x:Name="templateRoot" SnapsToDevicePixels="true" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}">
                         <Border x:Name="splitBorder" Width="30" SnapsToDevicePixels="true" Margin="0" HorizontalAlignment="Right" 
                                         BorderThickness="{TemplateBinding BorderThickness}" Background="{x:Null}">
-                            <Path x:Name="arrow" VerticalAlignment="Center" Margin="0" Stretch="Fill" Height="10" Width="12" HorizontalAlignment="Center" Fill="{DynamicResource 三级字体颜色}" Data="M 50,50 L 0,0 100,0 z"/>
+                            <Path x:Name="arrow" VerticalAlignment="Center" Margin="0" Stretch="Fill" Height="10" Width="12" HorizontalAlignment="Center" Fill="{DynamicResource 三级前景颜色}" Data="M 50,50 L 0,0 100,0 z"/>
                         </Border>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -319,7 +318,7 @@
                             <Setter Property="BorderBrush" TargetName="templateRoot" Value="#FF565656"/>
                         </MultiDataTrigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Fill" TargetName="arrow" Value="{StaticResource 三级字体颜色}"/>
+                            <Setter Property="Fill" TargetName="arrow" Value="{StaticResource 三级前景颜色}"/>
                             <Setter Property="BorderBrush" TargetName="templateRoot" Value="#FFADADAD"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -328,7 +327,7 @@
         </Setter>
     </Style>
     <Style x:Key="下拉框子项样式" TargetType="ComboBoxItem">
-        <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
+        <Setter Property="Foreground" Value="{DynamicResource 一级前景颜色}"/>
         <Setter Property="Background" Value="{DynamicResource 三级背景颜色}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Height" Value="25"/>
@@ -342,10 +341,10 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsHighlighted" Value="True">
-                            <Setter TargetName="Back" Property="Background" Value="{DynamicResource 无焦点选中颜色}"></Setter>
+                            <Setter TargetName="Back" Property="Background" Value="{DynamicResource 二级高亮颜色}"></Setter>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Back" Property="Background" Value="{DynamicResource 有焦点选中颜色}"></Setter>
+                            <Setter TargetName="Back" Property="Background" Value="{DynamicResource 一级高亮颜色}"></Setter>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -355,7 +354,7 @@
 
     <!--列表子项样式-->
     <Style x:Key="列表子项样式" TargetType="ListBoxItem">
-        <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
+        <Setter Property="Foreground" Value="{DynamicResource 一级前景颜色}"/>
         <Setter Property="Height" Value="30"/>
         <Setter Property="Width" Value="238"/>
         <Setter Property="Margin" Value="0"/>
@@ -623,7 +622,7 @@
     <!--树状图样式-->
     <Style x:Key="树状图样式" TargetType="TreeView">
         <Setter Property="Background" Value="{DynamicResource 二级背景颜色}"/>
-        <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}"/>
+        <Setter Property="Foreground" Value="{DynamicResource 一级前景颜色}"/>
         <Setter Property="Margin" Value="0"/>
         <Setter Property="Focusable" Value="False"/>
         <Setter Property="IsTabStop" Value="False"/>
@@ -682,8 +681,8 @@
                                 <VisualState x:Name="Indeterminate" />
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                        <Path x:Name="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" Data="M 0 0 L 8 5 L 0 10 Z" Fill="{DynamicResource 三级字体颜色}"></Path>
-                        <Path x:Name="Expanded" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="0" Data="M 0 0 L 10 0 L 5 8 Z" Fill="{DynamicResource 三级字体颜色}" Visibility="Hidden"></Path>
+                        <Path x:Name="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" Data="M 0 0 L 8 5 L 0 10 Z" Fill="{DynamicResource 三级前景颜色}"></Path>
+                        <Path x:Name="Expanded" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="0" Data="M 0 0 L 10 0 L 5 8 Z" Fill="{DynamicResource 三级前景颜色}" Visibility="Hidden"></Path>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -704,7 +703,7 @@
     <!--树状图子项样式-->
     <Style x:Key="树状图子项样式" TargetType="{x:Type TreeViewItem}">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{DynamicResource 一级字体颜色}" />
+        <Setter Property="Foreground" Value="{DynamicResource 一级前景颜色}" />
         <Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
         <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
         <Setter Property="Padding" Value="5" />
@@ -737,7 +736,7 @@
                                 <VisualState x:Name="Selected">
                                     <Storyboard>
                                         <ColorAnimationUsingKeyFrames Storyboard.TargetName="Bd" Storyboard.TargetProperty="(Panel.Background). (SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0"  Value="{StaticResource 树状图子项有焦点选中颜色}" />
+                                            <EasingColorKeyFrame KeyTime="0"  Value="{StaticResource 树状图子项一级高亮颜色}" />
                                         </ColorAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
@@ -745,7 +744,7 @@
                                 <VisualState x:Name="SelectedInactive">
                                     <Storyboard>
                                         <ColorAnimationUsingKeyFrames Storyboard.TargetName="Bd"  Storyboard.TargetProperty="(Panel.Background). (SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0" Value="{StaticResource 树状图子项无焦点选中颜色}" />
+                                            <EasingColorKeyFrame KeyTime="0" Value="{StaticResource 树状图子项二级高亮颜色}" />
                                         </ColorAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>

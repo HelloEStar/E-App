@@ -21,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\StringToVisibility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\TimeSpanToDouble.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ColorHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\FileHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\INIHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\NetHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SharedClass.cs" />
@@ -40,11 +41,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)Themes\亮色.ini">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="$(MSBuildThisFileDirectory)Themes\深色.ini">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Resource Include="$(MSBuildThisFileDirectory)Resources\00 Light.ini" />
+    <Resource Include="$(MSBuildThisFileDirectory)Resources\01 Dark.ini" />
   </ItemGroup>
 </Project>

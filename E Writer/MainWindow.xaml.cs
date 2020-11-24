@@ -2445,16 +2445,16 @@ namespace E.Writer
             if (CbbThemes.SelectedItem != null)
             {
                 ComboBoxItem cbi = CbbThemes.SelectedItem as ComboBoxItem;
-                string themePath = cbi.ToolTip.ToString();
-                if (File.Exists(themePath))
-                {
-                    ColorHelper.SetColors(Resources, themePath);
-                }
-                else
+                string content = FileHelper.GetContent(cbi.Tag.ToString());
+                if (string.IsNullOrEmpty(content))
                 {
                     CbbThemes.Items.Remove(cbi);
                     //设为默认主题
                     Settings.Default.Theme = 0;
+                }
+                else
+                {
+                    ColorHelper.SetColors(Resources, content);
                 }
                 //立即刷新按钮样式
                 SetMenuTool(CurrentMenuTool);

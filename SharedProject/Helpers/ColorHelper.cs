@@ -49,21 +49,18 @@ namespace SharedProject
         /// <summary>
         /// 设置主题
         /// </summary>
-        /// <param name="themePath">主题文件路径</param>
-        public static void SetColors(ResourceDictionary resource, string themePath)
+        public static void SetColors(ResourceDictionary resource, string content)
         {
-            SetColor(resource, "一级字体颜色", Create(INIHelper.ReadIniKeys("Font", "Level_1", themePath)));
-            SetColor(resource, "二级字体颜色", Create(INIHelper.ReadIniKeys("Font", "Level_2", themePath)));
-            SetColor(resource, "三级字体颜色", Create(INIHelper.ReadIniKeys("Font", "Level_3", themePath)));
+            string[] strs = content.Replace("\r\n", "\n").Replace("\r", "\n").Split('\n');
+            foreach (string item in strs)
+            {
+                if (string.IsNullOrEmpty(item)) continue;
 
-            SetColor(resource, "一级背景颜色", Create(INIHelper.ReadIniKeys("Background", "Level_1", themePath)));
-            SetColor(resource, "二级背景颜色", Create(INIHelper.ReadIniKeys("Background", "Level_2", themePath)));
-            SetColor(resource, "三级背景颜色", Create(INIHelper.ReadIniKeys("Background", "Level_3", themePath)));
+                string[] pair = item.Split('=');
+                if (pair.Length != 2) continue;
 
-            SetColor(resource, "一级边框颜色", Create(INIHelper.ReadIniKeys("Border", "Level_1", themePath)));
-
-            SetColor(resource, "有焦点选中颜色", Create(INIHelper.ReadIniKeys("Highlight", "Focused", themePath)));
-            SetColor(resource, "无焦点选中颜色", Create(INIHelper.ReadIniKeys("Highlight", "UnFocused", themePath)));
+                SetColor(resource, pair[0], Create(pair[1]));
+            }
         }
     }
 }

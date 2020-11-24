@@ -459,7 +459,7 @@
                 <Label
                     x:Name="LblMessage"
                     Style="{DynamicResource 自由标签样式一}"
-                    Foreground="{DynamicResource 有焦点选中颜色}"
+                    Foreground="{DynamicResource 一级高亮颜色}"
                     Content="消息提示"
                     Margin="10,10,10,0"
                     Height="30"

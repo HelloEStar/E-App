@@ -116,13 +116,9 @@ namespace E.Updater
             switch (menu)
             {
                 case MenuTool.无:
-                    //PanFile.Visibility = Visibility.Collapsed;
-                    ////PanEdit.Visibility = Visibility.Collapsed;
-                    //PanSetting.Visibility = Visibility.Collapsed;
-                    //PanAbout.Visibility = Visibility.Collapsed;
-                    //BtnFile.Background = BrushBG01;
-                    //BtnSetting.Background = BrushBG01;
-                    //BtnAbout.Background = BrushBG01;
+                    BtnFile.Background = PanFile.Visibility == Visibility.Collapsed ? BrushBG01 : BrushBG02;
+                    BtnSetting.Background = PanSetting.Visibility == Visibility.Collapsed ? BrushBG01 : BrushBG02;
+                    BtnAbout.Background = PanAbout.Visibility == Visibility.Collapsed ? BrushBG01 : BrushBG02;
                     break;
                 case MenuTool.文件:
                     PanFile.Visibility = Visibility.Visible;
@@ -638,16 +634,16 @@ namespace E.Updater
             if (CbbThemes.SelectedItem != null)
             {
                 ComboBoxItem cbi = CbbThemes.SelectedItem as ComboBoxItem;
-                string themePath = cbi.ToolTip.ToString();
-                if (File.Exists(themePath))
-                {
-                    ColorHelper.SetColors(Resources, themePath);
-                }
-                else
+                string content = FileHelper.GetContent(cbi.Tag.ToString());
+                if (string.IsNullOrEmpty(content))
                 {
                     CbbThemes.Items.Remove(cbi);
                     //设为默认主题
                     Settings.Default.Theme = 0;
+                }
+                else
+                {
+                    ColorHelper.SetColors(Resources, content);
                 }
                 //立即刷新按钮样式
                 SetMenuTool(CurrentMenuTool);

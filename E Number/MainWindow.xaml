@@ -291,7 +291,7 @@
                         Style="{DynamicResource 文本输入框样式}" 
                         FontSize="200" 
                         IsReadOnly="True" 
-                        SelectionBrush="{DynamicResource 有焦点选中颜色}" 
+                        SelectionBrush="{DynamicResource 一级高亮颜色}" 
                         Text="0"
                         SizeChanged="TxtValue_SizeChanged" 
                         Margin="10" 

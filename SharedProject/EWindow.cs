@@ -23,15 +23,15 @@ namespace SharedProject
         /// </summary>
         protected MenuTool CurrentMenuTool { get; set; } = MenuTool.文件;
 
-        protected Brush BrushBG01 => (Brush)FindResource("一级背景颜色");
-        protected Brush BrushBG02 => (Brush)FindResource("二级背景颜色");
-        protected Brush BrushBG03 => (Brush)FindResource("三级背景颜色");
         protected Brush BrushFG01 => (Brush)FindResource("一级前景颜色");
         protected Brush BrushFG02 => (Brush)FindResource("二级前景颜色");
         protected Brush BrushFG03 => (Brush)FindResource("三级前景颜色");
-        protected Brush BrushHighlight01 => (Brush)FindResource("一级高亮颜色");
-        protected Brush BrushHighlight02 => (Brush)FindResource("二级高亮颜色");
-        protected Brush BrushHighlight03 => (Brush)FindResource("三级高亮颜色");
+        protected Brush BrushBG01 => (Brush)FindResource("一级背景颜色");
+        protected Brush BrushBG02 => (Brush)FindResource("二级背景颜色");
+        protected Brush BrushBG03 => (Brush)FindResource("三级背景颜色");
+        protected Brush BrushHL01 => (Brush)FindResource("一级高亮颜色");
+        protected Brush BrushHL02 => (Brush)FindResource("二级高亮颜色");
+        protected Brush BrushHL03 => (Brush)FindResource("三级高亮颜色");
 
 
 
@@ -189,29 +189,29 @@ namespace SharedProject
         /// </summary>
         protected static void LoadThemeItems(ComboBox cbb)
         {
-            //创建皮肤文件夹
-            if (!Directory.Exists(AppInfo.ThemeFolder))
-            { return; }
+            List<string> names = new List<string>
+            {
+                "亮色",
+                "暗色",
+                //"自定义"
+            };
+            List<string> values = new List<string>
+            {
+                "00 Light.ini",
+                "01 Dark.ini",
+                //"自定义"
+            };
 
             cbb.Items.Clear();
-            string[] themes = Directory.GetFiles(AppInfo.ThemeFolder);
-            foreach (string item in themes)
+            for (int i = 0; i < names.Count; i++)
             {
-                string tmp = Path.GetExtension(item);
-                if (tmp == ".ini" || tmp == ".INI")
+                ComboBoxItem cbi = new ComboBoxItem
                 {
-                    string tmp2 = INIHelper.ReadIniKeys("File", "Type", item);
-                    //若是主题配置文件
-                    if (tmp2 == "Theme")
-                    {
-                        ComboBoxItem cbi = new ComboBoxItem
-                        {
-                            Content = Path.GetFileNameWithoutExtension(item),
-                            ToolTip = item
-                        };
-                        cbb.Items.Add(cbi);
-                    }
-                }
+                    Content = names[i],
+                    //ToolTip = values[i],
+                    Tag = values[i]
+                };
+                cbb.Items.Add(cbi);
             }
         }
         /// <summary>
