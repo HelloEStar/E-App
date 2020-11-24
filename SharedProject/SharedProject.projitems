@@ -9,10 +9,8 @@
     <Import_RootNamespace>SharedProject</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Resource Include="$(MSBuildThisFileDirectory)Resources\UserAgreement.md" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)EWindow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SharedClass.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BoolToVisibility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\CornerRadiusToDouble.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\DoubleFactor.cs" />
@@ -24,7 +22,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\FileHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\INIHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\NetHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SharedClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)Languages\en_US.xaml">
@@ -41,10 +38,12 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="$(MSBuildThisFileDirectory)Resources\00 Light.ini" />
-    <Resource Include="$(MSBuildThisFileDirectory)Resources\01 Dark.ini" />
+    <Folder Include="$(MSBuildThisFileDirectory)Languages\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Resources\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Languages\" />
+    <Resource Include="$(MSBuildThisFileDirectory)Resources\00 Light.ini" />
+    <Resource Include="$(MSBuildThisFileDirectory)Resources\01 Dark.ini" />
+    <Resource Include="$(MSBuildThisFileDirectory)Resources\UserAgreement.md" />
   </ItemGroup>
 </Project>
