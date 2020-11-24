@@ -44,7 +44,7 @@
     <Resource Include="Resources\E Role.ico" />
     <Resource Include="Resources\E Updater.ico" />
     <Resource Include="Resources\E Writer.ico" />
-    <Resource Include="Resources\ReleaseNotes.md" />
+    <Resource Include="ReleaseNotes.md" />
   </ItemGroup>
 
   <ItemGroup>

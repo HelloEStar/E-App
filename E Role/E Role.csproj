@@ -25,7 +25,7 @@
 
   <ItemGroup>
     <Resource Include="Resources\E Role.ico" />
-    <Resource Include="Resources\ReleaseNotes.md" />
+    <Resource Include="ReleaseNotes.md" />
   </ItemGroup>
 
   <ItemGroup>

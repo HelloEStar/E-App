@@ -33,7 +33,7 @@
 
   <ItemGroup>
     <Resource Include="Resources\E Player.ico" />
-    <Resource Include="Resources\ReleaseNotes.md" />
+    <Resource Include="ReleaseNotes.md" />
     <Resource Include="Tags.dll" />
   </ItemGroup>
 

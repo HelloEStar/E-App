@@ -117,9 +117,7 @@ namespace SharedProject
             {
                 if (IsExists)
                 {
-                    Uri uri0 = new Uri("UserAgreement.md", UriKind.Relative);
-                    Stream src0 = Application.GetResourceStream(uri0).Stream;
-                    string str = new StreamReader(src0, Encoding.UTF8).ReadToEnd();
+                    string str = FileHelper.GetContent("UserAgreement.md");
                     return str;
                 }
                 return "";
@@ -159,10 +157,7 @@ namespace SharedProject
             {
                 if (IsExists)
                 {
-                    Uri uri = new Uri("Resources/ReleaseNotes.md", UriKind.Relative);
-                    //Uri uri = new Uri("pack://application:,,,/Resources/ReleaseNotes.md", UriKind.RelativeOrAbsolute);
-                    Stream src = Application.GetResourceStream(uri).Stream;
-                    string str = new StreamReader(src, Encoding.UTF8).ReadToEnd().Replace("### ", "");
+                    string str = FileHelper.GetContent("ReleaseNotes.md").Replace("### ", "");
                     return str;
                 }
                 return "";

@@ -30,7 +30,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\E Writer.ico" />
-    <Resource Include="Resources\ReleaseNotes.md" />
+    <Resource Include="ReleaseNotes.md" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Settings.Designer.cs">
