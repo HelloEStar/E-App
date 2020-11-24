@@ -390,7 +390,7 @@ namespace SharedProject
         {
             Name = name;
             Value = value;
-            Uri uri = new Uri("Styles/" + value + ".xaml", UriKind.Relative);
+            Uri uri = new Uri("Languages/" + value + ".xaml", UriKind.Relative);
             ResourceDictionary rd = Application.LoadComponent(uri) as ResourceDictionary;
             RD = rd;
         }

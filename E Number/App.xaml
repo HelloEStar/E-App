@@ -8,7 +8,7 @@
         <ResourceDictionary>
             <!--这个节点是配置默认样式的-->
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Styles/zh_CN.xaml"/>
+                <ResourceDictionary Source="Languages/zh_CN.xaml"/>
                 <ResourceDictionary Source="Styles/Style.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

@@ -27,7 +27,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)SharedClass.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="$(MSBuildThisFileDirectory)Styles\en_US.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Languages\en_US.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -35,7 +35,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Styles\zh_CN.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Languages\zh_CN.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -43,5 +43,8 @@
   <ItemGroup>
     <Resource Include="$(MSBuildThisFileDirectory)Resources\00 Light.ini" />
     <Resource Include="$(MSBuildThisFileDirectory)Resources\01 Dark.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Languages\" />
   </ItemGroup>
 </Project>
