@@ -634,7 +634,17 @@ namespace E.Updater
             if (CbbThemes.SelectedItem != null)
             {
                 ComboBoxItem cbi = CbbThemes.SelectedItem as ComboBoxItem;
-                string content = FileHelper.GetContent(cbi.Tag.ToString());
+                string content = cbi.Tag.ToString();
+                if (content == "自定义")
+                {
+                    if (string.IsNullOrEmpty(Settings.Default.ThemeCustomize))
+                    {
+                        Settings.Default.ThemeCustomize = ThemeItems[0].Value;
+                        Settings.Default.Save();
+                    }
+                    content = Settings.Default.ThemeCustomize;
+                }
+
                 if (string.IsNullOrEmpty(content))
                 {
                     CbbThemes.Items.Remove(cbi);

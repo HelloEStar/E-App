@@ -98,12 +98,12 @@ namespace E.Updater
         }
         private void PanAppInfo_MouseEnter(object sender, MouseEventArgs e)
         {
-            PanAppInfo.Background = (Brush)FindResource("三级背景颜色");
+            PanAppInfo.Background = (Brush)FindResource("三级背景色");
             PanBtns.Visibility = Visibility.Visible;
         }
         private void PanAppInfo_MouseLeave(object sender, MouseEventArgs e)
         {
-            PanAppInfo.Background = (Brush)FindResource("二级背景颜色");
+            PanAppInfo.Background = (Brush)FindResource("二级背景色");
             PanBtns.Visibility = Visibility.Collapsed;
         }
         private void ImgIcon_MouseUp(object sender, MouseButtonEventArgs e)

@@ -23,17 +23,27 @@ namespace SharedProject
         /// </summary>
         protected MenuTool CurrentMenuTool { get; set; } = MenuTool.文件;
 
-        protected Brush BrushFG01 => (Brush)FindResource("一级前景颜色");
-        protected Brush BrushFG02 => (Brush)FindResource("二级前景颜色");
-        protected Brush BrushFG03 => (Brush)FindResource("三级前景颜色");
-        protected Brush BrushBG01 => (Brush)FindResource("一级背景颜色");
-        protected Brush BrushBG02 => (Brush)FindResource("二级背景颜色");
-        protected Brush BrushBG03 => (Brush)FindResource("三级背景颜色");
-        protected Brush BrushHL01 => (Brush)FindResource("一级高亮颜色");
-        protected Brush BrushHL02 => (Brush)FindResource("二级高亮颜色");
-        protected Brush BrushHL03 => (Brush)FindResource("三级高亮颜色");
+        protected Brush BrushFG01 => (Brush)FindResource("一级前景色");
+        protected Brush BrushFG02 => (Brush)FindResource("二级前景色");
+        protected Brush BrushFG03 => (Brush)FindResource("三级前景色");
+        protected Brush BrushBG01 => (Brush)FindResource("一级背景色");
+        protected Brush BrushBG02 => (Brush)FindResource("二级背景色");
+        protected Brush BrushBG03 => (Brush)FindResource("三级背景色");
+        protected Brush BrushHL01 => (Brush)FindResource("一级高亮色");
+        protected Brush BrushHL02 => (Brush)FindResource("二级高亮色");
+        protected Brush BrushHL03 => (Brush)FindResource("三级高亮色");
 
-
+        protected List<RDItem> LanguageItems = new List<RDItem>()
+        {
+            new RDItem("中文（默认）", "zh_CN"),
+            new RDItem("English", "en_US"),
+        };
+        protected List<ThemeItem> ThemeItems = new List<ThemeItem>()
+        {
+            new ThemeItem("亮色（默认）", "00 Light.ini"),
+            new ThemeItem("暗色", "01 Dark.ini"),
+            new ThemeItem("自定义", "自定义"),
+        };
 
         /// <summary>
         /// 检查用户是否同意用户协议
@@ -164,14 +174,8 @@ namespace SharedProject
         /// <summary>
         /// 载入语言选项
         /// </summary>
-        protected static void LoadLanguageItems(ComboBox cbb)
+        protected void LoadLanguageItems(ComboBox cbb)
         {
-            List<RDItem> LanguageItems = new List<RDItem>()
-            {
-                new RDItem("中文（默认）", "zh_CN"),
-                new RDItem("English", "en_US"),
-            };
-
             cbb.Items.Clear();
             foreach (RDItem item in LanguageItems)
             {
@@ -187,29 +191,16 @@ namespace SharedProject
         /// <summary>
         /// 载入所有可用主题
         /// </summary>
-        protected static void LoadThemeItems(ComboBox cbb)
+        protected void LoadThemeItems(ComboBox cbb)
         {
-            List<string> names = new List<string>
-            {
-                "亮色",
-                "暗色",
-                //"自定义"
-            };
-            List<string> values = new List<string>
-            {
-                "00 Light.ini",
-                "01 Dark.ini",
-                //"自定义"
-            };
-
             cbb.Items.Clear();
-            for (int i = 0; i < names.Count; i++)
+            for (int i = 0; i < ThemeItems.Count; i++)
             {
                 ComboBoxItem cbi = new ComboBoxItem
                 {
-                    Content = names[i],
+                    Content = ThemeItems[i].Name,
                     //ToolTip = values[i],
-                    Tag = values[i]
+                    Tag = ThemeItems[i].Value
                 };
                 cbb.Items.Add(cbi);
             }

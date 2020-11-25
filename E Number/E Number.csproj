@@ -12,6 +12,7 @@
     <FileVersion>1.2.0.1124</FileVersion>
     <Description>随机数生成器</Description>
     <NoWin32Manifest>true</NoWin32Manifest>
+    <PackageId>ENumber</PackageId>
   </PropertyGroup>
 
   <Import Project="..\SharedProject\SharedProject.projitems" Label="Shared" />

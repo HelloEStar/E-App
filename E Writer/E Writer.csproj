@@ -13,6 +13,7 @@
     <Authors>E Star</Authors>
     <Description>小说编辑器</Description>
     <FileVersion>1.2.0.1124</FileVersion>
+    <PackageId>EWriter</PackageId>
   </PropertyGroup>
   <Import Project="..\SharedProject\SharedProject.projitems" Label="Shared" />
   <ItemGroup>

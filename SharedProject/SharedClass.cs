@@ -390,4 +390,26 @@ namespace SharedProject
             RD = rd;
         }
     }
+
+    public class ThemeItem
+    {
+        public string Name { get; set; }
+        public string Path { get; set; }
+        public string Value { get; set; }
+
+        public ThemeItem(string name, string path)
+        {
+            Name = name;
+            Path = path;
+
+            if (path == "自定义")
+            {
+                Value = "自定义";
+            }
+            else
+            {
+                Value = FileHelper.GetContent(path);
+            }
+        }
+    }
 }
