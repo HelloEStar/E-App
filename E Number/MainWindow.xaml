@@ -124,16 +124,16 @@
                                     SelectionChanged="CbbThemes_SelectionChanged"
                                     SelectedIndex="{Binding Source={StaticResource Settings}, Path=Default.Theme,Mode=TwoWay}"/>
 
-                                <StackPanel>
-                                    <share:ColorPicker></share:ColorPicker>
-                                    <share:ColorPicker></share:ColorPicker>
-                                    <share:ColorPicker></share:ColorPicker>
-                                    <share:ColorPicker></share:ColorPicker>
-                                    <share:ColorPicker></share:ColorPicker>
-                                    <share:ColorPicker></share:ColorPicker>
-                                    <share:ColorPicker></share:ColorPicker>
-                                    <share:ColorPicker></share:ColorPicker>
-                                    <share:ColorPicker></share:ColorPicker>
+                                <StackPanel x:Name="PanColors">
+                                    <share:ColorPicker x:Name="ClrFG01" ColorTarget="一级前景色" Color="#FFCF2727" />
+                                    <share:ColorPicker x:Name="ClrFG02" ColorTarget="二级前景色" Color="#FFCF2727" />
+                                    <share:ColorPicker x:Name="ClrFG03" ColorTarget="三级前景色" Color="#FFCF2727" />
+                                    <share:ColorPicker x:Name="ClrBG01" ColorTarget="一级背景色" Color="#FFCF2727" />
+                                    <share:ColorPicker x:Name="ClrBG02" ColorTarget="二级背景色" Color="#FFCF2727" />
+                                    <share:ColorPicker x:Name="ClrBG03" ColorTarget="三级背景色" Color="#FFCF2727" />
+                                    <share:ColorPicker x:Name="ClrHL01" ColorTarget="一级高亮色" Color="#FFCF2727" />
+                                    <share:ColorPicker x:Name="ClrHL02" ColorTarget="二级高亮色" Color="#FFCF2727" />
+                                    <share:ColorPicker x:Name="ClrHL03" ColorTarget="三级高亮色" Color="#FFCF2727" />
                                 </StackPanel>
 
                             </StackPanel>

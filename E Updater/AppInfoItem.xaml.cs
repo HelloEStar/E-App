@@ -28,11 +28,31 @@ namespace E.Updater
             InitializeComponent();
         }
 
-        public static readonly DependencyProperty AppNameProperty = DependencyProperty.Register("AppName", typeof(string), typeof(AppInfoItem), new PropertyMetadata("App Name", new PropertyChangedCallback(OnAppNameChanged)));
-        public static readonly DependencyProperty AppDescriptionProperty = DependencyProperty.Register("AppDescription", typeof(string), typeof(AppInfoItem), new PropertyMetadata("App Description", new PropertyChangedCallback(OnAppDescriptionChanged)));
-        public static readonly DependencyProperty AppVersionProperty = DependencyProperty.Register("AppVersion", typeof(string), typeof(AppInfoItem), new PropertyMetadata("App Version", new PropertyChangedCallback(OnAppVersionChanged)));
-        public static readonly DependencyProperty AppStateProperty = DependencyProperty.Register("AppState", typeof(string), typeof(AppInfoItem), new PropertyMetadata("App State", new PropertyChangedCallback(OnAppStateChanged)));
-        public static readonly DependencyProperty AppIconProperty = DependencyProperty.Register("AppIcon", typeof(string), typeof(AppInfoItem), new PropertyMetadata("App Icon", new PropertyChangedCallback(OnAppIconChanged)));
+        public static readonly DependencyProperty AppNameProperty = DependencyProperty.Register(
+            "AppName",
+            typeof(string), 
+            typeof(AppInfoItem),
+            new PropertyMetadata("App Name", new PropertyChangedCallback(OnAppNameChanged)));
+        public static readonly DependencyProperty AppDescriptionProperty = DependencyProperty.Register(
+            "AppDescription", 
+            typeof(string), 
+            typeof(AppInfoItem), 
+            new PropertyMetadata("App Description", new PropertyChangedCallback(OnAppDescriptionChanged)));
+        public static readonly DependencyProperty AppVersionProperty = DependencyProperty.Register(
+            "AppVersion",
+            typeof(string),
+            typeof(AppInfoItem), 
+            new PropertyMetadata("App Version", new PropertyChangedCallback(OnAppVersionChanged)));
+        public static readonly DependencyProperty AppStateProperty = DependencyProperty.Register(
+            "AppState", 
+            typeof(string), 
+            typeof(AppInfoItem),
+            new PropertyMetadata("App State", new PropertyChangedCallback(OnAppStateChanged)));
+        public static readonly DependencyProperty AppIconProperty = DependencyProperty.Register(
+            "AppIcon",
+            typeof(string),
+            typeof(AppInfoItem),
+            new PropertyMetadata("App Icon", new PropertyChangedCallback(OnAppIconChanged)));
        
         public AppInfo AppInfo { get; set; }
         public string AppName

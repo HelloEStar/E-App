@@ -247,6 +247,11 @@ namespace E.Number
                         Settings.Default.Save();
                     }
                     content = Settings.Default.ThemeCustomize;
+                    PanColors.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    PanColors.Visibility = Visibility.Collapsed;
                 }
 
                 if (string.IsNullOrEmpty(content))
@@ -258,6 +263,7 @@ namespace E.Number
                 else
                 {
                     ColorHelper.SetColors(Resources, content);
+                    SetPanColors(PanColors, content);
                 }
                 //立即刷新按钮样式
                 SetMenuTool(CurrentMenuTool);

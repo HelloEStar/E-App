@@ -7,7 +7,12 @@
              d:DesignHeight="30"
              d:DesignWidth="240">
 
-    <StackPanel Orientation="Horizontal" Margin="5" Height="20">
+    <StackPanel
+        x:Name="PanColorPicker" 
+        Orientation="Horizontal"
+        Margin="5" 
+        Height="20" 
+        Loaded="PanColorPicker_Loaded">
         <Label
             x:Name="TxtName" 
             Style="{DynamicResource 二级自由标签}"
@@ -15,12 +20,10 @@
             Width="60"
             Content="一级前景色" />
         <Button
-            x:Name="RctColor" 
-            Margin="5,0"
-            Width="20"
+            x:Name="BtnColor" 
+            Style="{DynamicResource 颜色按钮}"
             Background="Red" 
-            BorderBrush="{DynamicResource 一级背景色}"
-            BorderThickness="2"/>
+            Click="BtnColor_Click"/>
         <Label 
             x:Name="TxtColor" 
             Style="{DynamicResource 二级自由标签}"

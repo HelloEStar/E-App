@@ -132,6 +132,28 @@ namespace SharedProject
         /// <param name="menu"></param>
         protected virtual void SetMenuTool(MenuTool menu) { }
 
+        protected void SetPanColors(StackPanel sp, string content)
+        {
+            string[] strs = content.Replace("\r\n", "\n").Replace("\r", "\n").Split('\n');
+            Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+            foreach (string item in strs)
+            {
+                if (string.IsNullOrEmpty(item)) continue;
+
+                string[] pair = item.Split('=');
+                if (pair.Length != 2) continue;
+
+                keyValuePairs.Add(pair[0], pair[1]);
+            }
+
+            for (int i = 0; i < sp.Children.Count; i++)
+            {
+                ColorPicker cp = (ColorPicker)sp.Children[i];
+                Color cl = ColorHelper.Create(keyValuePairs[cp.ColorTarget]);
+                cp.Color = cl.ToString();
+            }
+        }
+
         /// <summary>
         /// 重置设置
         /// </summary>

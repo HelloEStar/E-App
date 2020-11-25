@@ -25,34 +25,50 @@ namespace SharedProject
             InitializeComponent();
         }
 
-        public static readonly DependencyProperty NameProperty = DependencyProperty.Register(
-            "Name", 
+        public static readonly DependencyProperty ColorTargetProperty = DependencyProperty.Register(
+            "ColorTarget", 
             typeof(string), 
-            typeof(string), 
-            new PropertyMetadata("Name", new PropertyChangedCallback(OnNameChanged)));
+            typeof(ColorPicker), 
+            new PropertyMetadata("Color Target", new PropertyChangedCallback(OnColorTargetChanged)));
         public static readonly DependencyProperty ColorProperty = DependencyProperty.Register(
             "Color",
             typeof(string),
-            typeof(Color), 
+            typeof(ColorPicker), 
             new PropertyMetadata("Color", new PropertyChangedCallback(OnColorChanged)));
 
 
-        public Color Color { get; set; }
-        public string Name
+        public string Color
         {
-            get { return (string)GetValue(string); }
-            set { SetValue(string, value); }
+            get { return (string)GetValue(ColorProperty);  }
+            set { SetValue(ColorProperty, value); }
         }
 
-        private static void OnNameChanged(object sender, DependencyPropertyChangedEventArgs args)
+        public string ColorTarget
         {
-            string source = (string)sender;
-            source.LblName.Content = (string)args.NewValue;
+            get { return (string)GetValue(ColorTargetProperty); }
+            set { SetValue(ColorTargetProperty, value); }
+        }
+
+        private static void OnColorTargetChanged(object sender, DependencyPropertyChangedEventArgs args)
+        {
+            ColorPicker source = (ColorPicker)sender;
+            source.TxtName.Content = (string)args.NewValue;
         }
         private static void OnColorChanged(object sender, DependencyPropertyChangedEventArgs args)
         {
-            string source = (string)sender;
-            source.LblName.Content = (string)args.NewValue;
+            ColorPicker source = (ColorPicker)sender;
+            string str = (string)args.NewValue;
+            source.TxtColor.Content = str;
+            Brush brush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(str));
+            source.BtnColor.Background = brush;
+        }
+
+        private void PanColorPicker_Loaded(object sender, RoutedEventArgs e)
+        {
+        }
+        private void BtnColor_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
