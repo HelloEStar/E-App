@@ -68,7 +68,8 @@ namespace SharedProject
         }
         private void BtnColor_Click(object sender, RoutedEventArgs e)
         {
-
+            GetColor getColor = new GetColor();
+            getColor.Show();
         }
     }
 }

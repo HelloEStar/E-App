@@ -26,6 +26,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\FileHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\INIHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\NetHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\GetColor.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>GetColor.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)Controls\ColorPicker.xaml">
@@ -42,6 +46,11 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="$(MSBuildThisFileDirectory)Languages\zh_CN.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Windows\GetColor.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
