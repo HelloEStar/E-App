@@ -380,6 +380,12 @@ namespace E.Writer
                 Settings.Default._books = string.Join("///", strs);
             }
 
+            if (Settings.Default.Theme == 2)
+            {
+                string content = GetPanColors(PanColors);
+                Settings.Default.ThemeCustomize = content;
+            }
+
             Settings.Default.Save();
             ShowMessage(FindResource("已保存").ToString());
         }
@@ -2451,9 +2457,13 @@ namespace E.Writer
                     if (string.IsNullOrEmpty(Settings.Default.ThemeCustomize))
                     {
                         Settings.Default.ThemeCustomize = ThemeItems[0].Value;
-                        Settings.Default.Save();
                     }
                     content = Settings.Default.ThemeCustomize;
+                    PanColors.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    PanColors.Visibility = Visibility.Collapsed;
                 }
 
                 if (string.IsNullOrEmpty(content))
@@ -2464,6 +2474,7 @@ namespace E.Writer
                 }
                 else
                 {
+                    SetPanColors(PanColors, content);
                     ColorHelper.SetColors(Resources, content);
                 }
                 //立即刷新按钮样式

@@ -10,7 +10,7 @@
     mc:Ignorable="d"
     
     Title="E Writer"
-    Height="800" 
+    Height="800"
     Width="1000"
     MinWidth="600" 
     MinHeight="580"
@@ -30,42 +30,41 @@
 
     <Grid x:Name="GrdMain">
         <DockPanel>
-            <!--菜单栏-->
+            <!--#region 菜单栏-->
             <DockPanel
                 x:Name="PanMenu"
-                Background="{DynamicResource 一级背景色}"
-                Width="40" >
+                Background="{DynamicResource 一级背景色}">
                 <StackPanel DockPanel.Dock="Top">
                     <Button 
                         x:Name="BtnFile"
-                        Content="{DynamicResource 文件}" 
-                        ToolTip="{DynamicResource 文件}"
                         Style="{DynamicResource 一级按钮}"
                         Background="{DynamicResource 二级背景色}"
+                        Content="{DynamicResource 文件}" 
+                        ToolTip="{DynamicResource 文件}"
                         Click="BtnFile_Click"/>
                     <Button 
                         x:Name="BtnEdit"
+                        Style="{DynamicResource 一级按钮}"
                         Content="{DynamicResource 编辑}"
                         ToolTip="{DynamicResource 编辑}"
-                        Style="{DynamicResource 一级按钮}"
                         Click="BtnEdit_Click"/>
                     <Button
                         x:Name="BtnSetting"
+                        Style="{DynamicResource 一级按钮}"
                         Content="{DynamicResource 设置}" 
                         ToolTip="{DynamicResource 设置}" 
-                        Style="{DynamicResource 一级按钮}"
                         Click="BtnSetting_Click"/>
                     <Button 
                         x:Name="BtnAbout"
+                        Style="{DynamicResource 一级按钮}"
                         Content="{DynamicResource 关于}" 
                         ToolTip="{DynamicResource 关于}" 
-                        Style="{DynamicResource 一级按钮}"
                         Click="BtnAbout_Click"/>
                 </StackPanel>
             </DockPanel>
+            <!--#endregion-->
 
-            <!--工具栏-->
-            <!--工具栏 文件-->
+            <!--#region 工具栏-->
             <Grid
                 x:Name="PanFile" 
                 Style="{DynamicResource 工具栏}" >
@@ -75,17 +74,17 @@
                         Style="{DynamicResource 下拉框样式}" 
                         ToolTip="{DynamicResource 书籍历史}"
                         DockPanel.Dock="Top"
-                        SelectionChanged="CbbBooks_SelectionChanged"
+                        BorderThickness="0"
+                        Height="40"
+                        Margin="0"
                         FontSize="18"
                         FontWeight="Bold"
-                        Height="40"
-                        BorderThickness="0"
-                        Margin="0"/>
+                        SelectionChanged="CbbBooks_SelectionChanged"/>
 
                     <WrapPanel 
                         Style="{DynamicResource 单行水平流式面板}"
                         DockPanel.Dock="Bottom" 
-                        Margin="0" >
+                        ItemWidth="60" >
                         <Button 
                             x:Name="BtnExpand" 
                             Style="{DynamicResource 二级按钮}"
@@ -108,8 +107,8 @@
 
                     <WrapPanel 
                         Style="{DynamicResource 单行水平流式面板}"
-                        DockPanel.Dock="Bottom"
-                        Margin="0">
+                        DockPanel.Dock="Bottom" 
+                        ItemWidth="60">
                         <Button 
                             x:Name="BtnSave" 
                             Style="{DynamicResource 二级按钮}"
@@ -138,8 +137,8 @@
 
                     <WrapPanel 
                         Style="{DynamicResource 单行水平流式面板}"
-                        DockPanel.Dock="Bottom"
-                        Margin="0">
+                        DockPanel.Dock="Bottom" 
+                        ItemWidth="60">
                         <Button 
                             x:Name="BtnOpenBook"
                             Style="{DynamicResource 二级按钮}"
@@ -168,35 +167,36 @@
 
                     <StackPanel 
                         x:Name="PanCreate" 
-                        DockPanel.Dock="Top"
-                        Visibility="Collapsed" 
-                        Background="{DynamicResource 一级背景色}">
+                        Background="{DynamicResource 一级背景色}"
+                        DockPanel.Dock="Bottom"
+                        Visibility="Collapsed" >
                         <DockPanel>
                             <Button
                                 x:Name="BtnBrowse"
-                                Content="{DynamicResource 浏览}"
                                 Style="{DynamicResource 二级按钮反色}"
-                                Click="BtnBrowse_Click"
+                                Content="{DynamicResource 浏览}"
                                 DockPanel.Dock="Right"
-                                Width="80"/>
+                                Width="80"
+                                Click="BtnBrowse_Click"/>
                             <Label 
-                                Content="{DynamicResource 对象位置}"
-                                Style="{DynamicResource 一级标签}"/>
+                                Style="{DynamicResource 一级标签}"
+                                Content="{DynamicResource 对象位置}"/>
                         </DockPanel>
                         <TextBox 
                             x:Name="TxtCreatePath"
                             Style="{DynamicResource 一级文本输入框}"
-                            TextChanged="TxtCreatePath_TextChanged" 
                             TextWrapping="Wrap"
                             Height="60"
-                            MinHeight="30"/>
+                            MinHeight="30"
+                            TextChanged="TxtCreatePath_TextChanged" />
 
                         <Label 
-                            Content="{DynamicResource 对象名称}"
-                            Style="{DynamicResource 一级标签}"/>
+                            Style="{DynamicResource 一级标签}"
+                            Content="{DynamicResource 对象名称}"/>
                         <TextBox 
                             x:Name="TxtCreateName" 
                             Style="{DynamicResource 一级文本输入框}"
+                            TextWrapping="Wrap"
                             TextChanged="TxtCreateName_TextChanged"/>
 
                         <WrapPanel 
@@ -204,18 +204,18 @@
                             ItemWidth="80">
                             <Button 
                                 x:Name="BtnCreateBook"
-                                Content="{DynamicResource 创书}" 
                                 Style="{DynamicResource 二级按钮反色}"
+                                Content="{DynamicResource 创书}" 
                                 Click="BtnCreateBook_Click"/>
                             <Button 
                                 x:Name="BtnCreateChapter"
-                                Content="{DynamicResource 创卷}"
                                 Style="{DynamicResource 二级按钮反色}" 
+                                Content="{DynamicResource 创卷}"
                                 Click="BtnCreateChapter_Click"/>
                             <Button 
                                 x:Name="BtnCreateEssay"
-                                Content="{DynamicResource 创文}"
                                 Style="{DynamicResource 二级按钮反色}"
+                                Content="{DynamicResource 创文}"
                                 Click="BtnCreateEssay_Click"/>
                         </WrapPanel>
                     </StackPanel>
@@ -228,100 +228,104 @@
                         KeyUp="TvwBook_KeyUp"/>
                 </DockPanel>
             </Grid>
-            <!--工具栏 编辑-->
             <Grid 
                 x:Name="PanEdit" 
                 Style="{DynamicResource 工具栏}" 
                 Visibility="Collapsed">
                 <DockPanel>
                     <StackPanel>
-                        <Label
-                            Content="{DynamicResource 撤重}"
-                            Style="{DynamicResource 一级标签}"/>
-                        <WrapPanel 
-                            Style="{DynamicResource 单行水平流式面板}"
-                            DockPanel.Dock="Top"
-                            ItemWidth="120">
-                            <Button 
-                                x:Name="BtnUndo"
-                                Content="{DynamicResource 撤销}"
-                                ToolTip="{DynamicResource 撤销+}" 
-                                Style="{DynamicResource 二级按钮}"
-                                Click="BtnUndo_Click" />
-                            <Button 
-                                x:Name="BtnRedo"
-                                Content="{DynamicResource 重做}"
-                                ToolTip="{DynamicResource 重做+}"
-                                Style="{DynamicResource 二级按钮}"
-                                Click="BtnRedo_Click" />
-                        </WrapPanel>
-
-                        <Label
-                            Content="{DynamicResource 转换}"
-                            Style="{DynamicResource 一级标签}"/>
-                        <WrapPanel 
-                            Style="{DynamicResource 单行水平流式面板}"
-                            DockPanel.Dock="Top"
-                            ItemWidth="120">
-                            <Button 
-                                x:Name="BtnToTraditional"
-                                Content="{DynamicResource 转繁}"
-                                ToolTip="{DynamicResource 转繁+}"
-                                Style="{DynamicResource 二级按钮}"
-                                Click="BtnToTraditional_Click"/>
-                            <Button
-                                x:Name="BtnToSimplified"
-                                Content="{DynamicResource 转简}"
-                                ToolTip="{DynamicResource 转简+}"
-                                Style="{DynamicResource 二级按钮}"
-                                Click="BtnToSimplified_Click" />
-                        </WrapPanel>
-
-                        <DockPanel>
-                            <TextBlock 
-                                x:Name="TxtFindAmount"
-                                Text="共计 0 处"
-                                Style="{DynamicResource 文本显示框样式}" 
-                                Margin="10,0,5,0"
-                                DockPanel.Dock="Right"
-                                Width="60"/>
-                            <Label 
-                                Content="{DynamicResource 查换}"
-                                ToolTip="{DynamicResource 查换+}"
+                        <StackPanel>
+                            <Label
                                 Style="{DynamicResource 一级标签}"
-                                Margin="5,0"/>
-                        </DockPanel>
-                        <TextBox 
-                            x:Name="TxtFind"
-                            ToolTip="{DynamicResource 查内}"
-                            Style="{DynamicResource 一级文本输入框}"/>
-                        <TextBox 
-                            x:Name="TxtReplace" 
-                            ToolTip="{DynamicResource 换内}" 
-                            Style="{DynamicResource 一级文本输入框}"/>
-                        <WrapPanel 
-                            Style="{DynamicResource 单行水平流式面板}"
-                            ItemWidth="80">
-                            <Button 
-                                x:Name="BtnFindNext" 
-                                Content="{DynamicResource 查下}"
-                                Style="{DynamicResource 二级按钮}"
-                                Click="BtnFindNext_Click"/>
-                            <Button 
-                                x:Name="BtnReplaceNext" 
-                                Content="{DynamicResource 换下}" 
-                                Style="{DynamicResource 二级按钮}"
-                                Click="BtnReplaceNext_Click"/>
-                            <Button 
-                                x:Name="BtnReplaceAll"
-                                Content="{DynamicResource 换全}" 
-                                Style="{DynamicResource 二级按钮}"
-                                Click="BtnReplaceAll_Click"/>
-                        </WrapPanel>
+                                Content="{DynamicResource 撤重}"/>
+                            <WrapPanel 
+                                Style="{DynamicResource 单行水平流式面板}"
+                                DockPanel.Dock="Top"
+                                ItemWidth="120">
+                                <Button 
+                                    x:Name="BtnUndo"
+                                    Style="{DynamicResource 二级按钮}"
+                                    Content="{DynamicResource 撤销}"
+                                    ToolTip="{DynamicResource 撤销+}" 
+                                    Click="BtnUndo_Click" />
+                                <Button 
+                                    x:Name="BtnRedo"
+                                    Style="{DynamicResource 二级按钮}"
+                                    Content="{DynamicResource 重做}"
+                                    ToolTip="{DynamicResource 重做+}"
+                                    Click="BtnRedo_Click" />
+                            </WrapPanel>
+                        </StackPanel>
+
+                        <StackPanel>
+                            <Label
+                                Content="{DynamicResource 转换}"
+                                Style="{DynamicResource 一级标签}"/>
+                            <WrapPanel 
+                                Style="{DynamicResource 单行水平流式面板}"
+                                DockPanel.Dock="Top"
+                                ItemWidth="120">
+                                <Button 
+                                    x:Name="BtnToTraditional"
+                                    Style="{DynamicResource 二级按钮}"
+                                    Content="{DynamicResource 转繁}"
+                                    ToolTip="{DynamicResource 转繁+}"
+                                    Click="BtnToTraditional_Click"/>
+                                <Button
+                                    x:Name="BtnToSimplified"
+                                    Style="{DynamicResource 二级按钮}"
+                                    Content="{DynamicResource 转简}"
+                                    ToolTip="{DynamicResource 转简+}"
+                                    Click="BtnToSimplified_Click" />
+                            </WrapPanel>
+                        </StackPanel>
+
+                        <StackPanel>
+                            <DockPanel>
+                                <TextBlock 
+                                    x:Name="TxtFindAmount"
+                                    Style="{DynamicResource 一级文本显示框}" 
+                                    DockPanel.Dock="Right"
+                                    Text="共计 0 处"
+                                    Margin="10,0,5,0"
+                                    Width="60"/>
+                                <Label 
+                                    Style="{DynamicResource 一级标签}"
+                                    Content="{DynamicResource 查换}"
+                                    ToolTip="{DynamicResource 查换+}"
+                                    Margin="5,0"/>
+                            </DockPanel>
+                            <TextBox 
+                                x:Name="TxtFind"
+                                Style="{DynamicResource 一级文本输入框}"
+                                ToolTip="{DynamicResource 查内}"/>
+                            <TextBox 
+                                x:Name="TxtReplace" 
+                                Style="{DynamicResource 一级文本输入框}"
+                                ToolTip="{DynamicResource 换内}" />
+                            <WrapPanel 
+                                Style="{DynamicResource 单行水平流式面板}"
+                                ItemWidth="80">
+                                <Button 
+                                    x:Name="BtnFindNext" 
+                                    Style="{DynamicResource 二级按钮}"
+                                    Content="{DynamicResource 查下}"
+                                    Click="BtnFindNext_Click"/>
+                                <Button 
+                                    x:Name="BtnReplaceNext" 
+                                    Style="{DynamicResource 二级按钮}"
+                                    Content="{DynamicResource 换下}" 
+                                    Click="BtnReplaceNext_Click"/>
+                                <Button 
+                                    x:Name="BtnReplaceAll"
+                                    Style="{DynamicResource 二级按钮}"
+                                    Content="{DynamicResource 换全}" 
+                                    Click="BtnReplaceAll_Click"/>
+                            </WrapPanel>
+                        </StackPanel>
                     </StackPanel>
                 </DockPanel>
             </Grid>
-            <!--工具栏 设置-->
             <Grid 
                 x:Name="PanSetting"
                 Style="{DynamicResource 工具栏}" 
@@ -333,268 +337,340 @@
                         ItemWidth="120">
                         <Button 
                             x:Name="BtnSaveSettings"
-                            Content="{DynamicResource 保存}"
                             Style="{DynamicResource 二级按钮}" 
+                            Content="{DynamicResource 保存}"
                             Click="BtnSaveSettings_Click"/>
                         <Button 
                             x:Name="BtnResetSettings"
-                            Content="{DynamicResource 重置}"
                             Style="{DynamicResource 二级按钮}"
+                            Content="{DynamicResource 重置}"
                             Click="BtnResetSettings_Click"/>
                     </WrapPanel>
 
                     <ScrollViewer>
                         <StackPanel DockPanel.Dock="Top">
-                            <Label 
-                                Content="{DynamicResource 语言}"
-                                Style="{DynamicResource 一级标签}"/>
-                            <ComboBox
-                                x:Name="CbbLanguages" 
-                                Style="{DynamicResource 下拉框样式}"
-                                SelectionChanged="CbbLanguages_SelectionChanged"
-                                SelectedIndex="{Binding Source={StaticResource Settings}, Path=Default.Language,Mode=TwoWay}"/>
-
-                            <Label
-                                Content="{DynamicResource 主题}"
-                                Style="{DynamicResource 一级标签}"/>
-                            <ComboBox 
-                                x:Name="CbbThemes"
-                                Style="{DynamicResource 下拉框样式}"
-                                SelectionChanged="CbbThemes_SelectionChanged"
-                                SelectedIndex="{Binding Source={StaticResource Settings}, Path=Default.Theme,Mode=TwoWay}"/>
-
-                            <Label 
-                                Content="{DynamicResource 字体}"
-                                Style="{DynamicResource 一级标签}"/>
-                            <ComboBox
-                                x:Name="CbbFonts" 
-                                Style="{DynamicResource 下拉框样式}" 
-                                SelectionChanged="CbbFonts_SelectionChanged"/>
-
-                            <DockPanel>
-                                <TextBlock
-                                    x:Name="TxtFontSize"
-                                    Style="{DynamicResource 文本显示框样式}"
-                                    DockPanel.Dock="Right"
-                                    Width="40"/>
-                                <Label
-                                    Content="{DynamicResource 字号}" 
+                            <StackPanel>
+                                <Label 
                                     Style="{DynamicResource 一级标签}"
-                                    Margin="5,0" />
-                            </DockPanel>
-                            <Slider 
-                                x:Name="SldFontSize"
-                                Style="{DynamicResource 滑块样式}" 
-                                Value="{Binding Source={StaticResource Settings}, Path=Default.FontSize,Mode=TwoWay}" Minimum="1" Maximum="100" SmallChange="1" LargeChange="10" Ticks="" TickFrequency="10" ValueChanged="SldFontSize_ValueChanged"/>
+                                    Content="{DynamicResource 语言}"/>
+                                <ComboBox
+                                    x:Name="CbbLanguages" 
+                                    Style="{DynamicResource 下拉框样式}"
+                                    SelectedIndex="{Binding Source={StaticResource Settings}, Path=Default.Language,Mode=TwoWay}"
+                                    SelectionChanged="CbbLanguages_SelectionChanged"/>
+                            </StackPanel>
 
-                            <Label
-                                Content="{DynamicResource 启动}"
-                                Style="{DynamicResource 一级标签}"/>
-                            <CheckBox
-                                x:Name="CcbShowRunInfo"
-                                Content="{DynamicResource 显示运行信息}"
-                                Style="{DynamicResource 检查框样式}"
-                                IsChecked="{Binding Source={StaticResource Settings}, Path=Default.IsShowRunInfo,Mode=TwoWay}" />
-                            <CheckBox
-                                x:Name="CcbAutoOpenBook"
-                                Content="{DynamicResource 自动打开书籍}"
-                                Style="{DynamicResource 检查框样式}"
-                                IsChecked="{Binding Source={StaticResource Settings}, Path=Default.IsAutoOpenBook,Mode=TwoWay}" />
+                            <StackPanel>
+                                <Label
+                                    Style="{DynamicResource 一级标签}"
+                                    Content="{DynamicResource 主题}"/>
+                                <ComboBox 
+                                    x:Name="CbbThemes"
+                                    Style="{DynamicResource 下拉框样式}"
+                                    SelectedIndex="{Binding Source={StaticResource Settings}, Path=Default.Theme,Mode=TwoWay}"
+                                    SelectionChanged="CbbThemes_SelectionChanged"/>
 
-                            <Label 
-                                Content="{DynamicResource 补全}" 
-                                Style="{DynamicResource 一级标签}"/>
-                            <CheckBox 
-                                x:Name="CcbAutoCompletion" 
-                                Content="{DynamicResource 自动补全}"
-                                Style="{DynamicResource 检查框样式}"
-                                IsChecked="{Binding Source={StaticResource Settings}, Path=Default.IsAutoCompletion,Mode=TwoWay}" />
+                                <StackPanel x:Name="PanColors">
+                                    <share:ColorPicker x:Name="ClrFG01" ColorTarget="一级前景色" Color="#FFCF2727" />
+                                    <share:ColorPicker x:Name="ClrFG02" ColorTarget="二级前景色" Color="#FFCF2727" />
+                                    <share:ColorPicker x:Name="ClrFG03" ColorTarget="三级前景色" Color="#FFCF2727" />
+                                    <share:ColorPicker x:Name="ClrBG01" ColorTarget="一级背景色" Color="#FFCF2727" />
+                                    <share:ColorPicker x:Name="ClrBG02" ColorTarget="二级背景色" Color="#FFCF2727" />
+                                    <share:ColorPicker x:Name="ClrBG03" ColorTarget="三级背景色" Color="#FFCF2727" />
+                                    <share:ColorPicker x:Name="ClrHL01" ColorTarget="一级高亮色" Color="#FFCF2727" />
+                                    <share:ColorPicker x:Name="ClrHL02" ColorTarget="二级高亮色" Color="#FFCF2727" />
+                                    <share:ColorPicker x:Name="ClrHL03" ColorTarget="三级高亮色" Color="#FFCF2727" />
+                                </StackPanel>
+                            </StackPanel>
 
-                            <Label 
-                                Content="{DynamicResource 缩进}" 
-                                Style="{DynamicResource 一级标签}"/>
-                            <DockPanel>
-                                <TextBlock 
-                                    x:Name="TxtAutoIndentations"
-                                    Style="{DynamicResource 文本显示框样式}"
-                                    DockPanel.Dock="Right" 
-                                    Width="40"/>
+                            <StackPanel>
+                                <Label 
+                                    Style="{DynamicResource 一级标签}"
+                                    Content="{DynamicResource 字体}"/>
+                                <ComboBox
+                                    x:Name="CbbFonts" 
+                                    Style="{DynamicResource 下拉框样式}" 
+                                    SelectionChanged="CbbFonts_SelectionChanged"/>
+                            </StackPanel>
+
+                            <StackPanel>
+                                <Label
+                                    Style="{DynamicResource 一级标签}"
+                                    Content="{DynamicResource 字号}" />
+                                <DockPanel>
+                                    <TextBlock
+                                        x:Name="TxtFontSize"
+                                        Style="{DynamicResource 二级文本显示框}"
+                                        DockPanel.Dock="Right"/>
+                                    <Slider 
+                                        x:Name="SldFontSize"
+                                        Style="{DynamicResource 滑块样式}" 
+                                        Value="{Binding Source={StaticResource Settings}, Path=Default.FontSize,Mode=TwoWay}" 
+                                        Minimum="1"
+                                        Maximum="100" 
+                                        SmallChange="1" 
+                                        LargeChange="10" 
+                                        Ticks=""
+                                        TickFrequency="10"
+                                        ValueChanged="SldFontSize_ValueChanged"/>
+                                </DockPanel>
+                            </StackPanel>
+
+                            <StackPanel>
+                                <Label
+                                    Style="{DynamicResource 一级标签}"
+                                    Content="{DynamicResource 启动}"/>
+                                <CheckBox
+                                    x:Name="CcbShowRunInfo"
+                                    Style="{DynamicResource 检查框样式}"
+                                    Content="{DynamicResource 显示运行信息}"
+                                    IsChecked="{Binding Source={StaticResource Settings}, Path=Default.IsShowRunInfo,Mode=TwoWay}" />
+                                <CheckBox
+                                    x:Name="CcbAutoOpenBook"
+                                    Style="{DynamicResource 检查框样式}"
+                                    Content="{DynamicResource 自动打开书籍}"
+                                    IsChecked="{Binding Source={StaticResource Settings}, Path=Default.IsAutoOpenBook,Mode=TwoWay}" />
+                            </StackPanel>
+
+                            <StackPanel>
+                                <Label 
+                                    Style="{DynamicResource 一级标签}"
+                                    Content="{DynamicResource 补全}" />
+                                <CheckBox 
+                                    x:Name="CcbAutoCompletion" 
+                                    Style="{DynamicResource 检查框样式}"
+                                    Content="{DynamicResource 自动补全}"
+                                    IsChecked="{Binding Source={StaticResource Settings}, Path=Default.IsAutoCompletion,Mode=TwoWay}" />
+                            </StackPanel>
+
+                            <StackPanel>
+                                <Label 
+                                    Style="{DynamicResource 一级标签}"
+                                    Content="{DynamicResource 缩进}" />
                                 <CheckBox 
                                     x:Name="CcbAutoIndentation"
+                                    Style="{DynamicResource 检查框样式}"
                                     Content="{DynamicResource 自动缩进}"
-                                    Style="{DynamicResource 检查框样式}"
-                                    IsChecked="{Binding Source={StaticResource Settings}, Path=Default.IsAutoIndentation,Mode=TwoWay}" Checked="CcbAutoIndentation_Checked" Unchecked="CcbAutoIndentation_Unchecked" />
-                            </DockPanel>
-                            <Slider 
-                                x:Name="SldAutoIndentations" 
-                                Style="{DynamicResource 滑块样式}" 
-                                Value="{Binding Source={StaticResource Settings}, Path=Default.AutoIndentations,Mode=TwoWay}" Minimum="1" Maximum="10" SmallChange="1" LargeChange="10" Ticks="" TickFrequency="1" ValueChanged="SldAutoIndentations_ValueChanged" IsSnapToTickEnabled="True"/>
+                                    IsChecked="{Binding Source={StaticResource Settings}, Path=Default.IsAutoIndentation,Mode=TwoWay}"
+                                    Checked="CcbAutoIndentation_Checked"
+                                    Unchecked="CcbAutoIndentation_Unchecked" />
+                                <DockPanel>
+                                    <TextBlock 
+                                        x:Name="TxtAutoIndentations"
+                                        Style="{DynamicResource 二级文本显示框}"
+                                        DockPanel.Dock="Right"/>
+                                    <Slider 
+                                        x:Name="SldAutoIndentations" 
+                                        Style="{DynamicResource 滑块样式}" 
+                                        Value="{Binding Source={StaticResource Settings}, Path=Default.AutoIndentations,Mode=TwoWay}" 
+                                        Minimum="1" 
+                                        Maximum="10" 
+                                        SmallChange="1" 
+                                        LargeChange="10" 
+                                        Ticks=""
+                                        TickFrequency="1"
+                                        IsSnapToTickEnabled="True"
+                                        ValueChanged="SldAutoIndentations_ValueChanged" />
+                                </DockPanel>
+                            </StackPanel>
 
-                            <Label
-                                Content="{DynamicResource 保存}"
-                                Style="{DynamicResource 一级标签}"/>
-                            <CheckBox 
-                                x:Name="CcbAutoSaveWhenSwitch"
-                                Content="{DynamicResource 文章切换时自动保存}"
-                                Style="{DynamicResource 检查框样式}"
-                                IsChecked="{Binding Source={StaticResource Settings}, Path=Default.IsAutoSaveWhenSwitch,Mode=TwoWay}" />
-                            <DockPanel>
-                                <TextBlock 
-                                    x:Name="TxtAutoSaveMinute"
-                                    Style="{DynamicResource 文本显示框样式}" 
-                                    DockPanel.Dock="Right" 
-                                    Width="40"/>
+                            <StackPanel>
+                                <Label
+                                    Style="{DynamicResource 一级标签}"
+                                    Content="{DynamicResource 保存}"/>
+                                <CheckBox 
+                                    x:Name="CcbAutoSaveWhenSwitch"
+                                    Style="{DynamicResource 检查框样式}"
+                                    Content="{DynamicResource 文章切换时自动保存}"
+                                    IsChecked="{Binding Source={StaticResource Settings}, Path=Default.IsAutoSaveWhenSwitch,Mode=TwoWay}" />
                                 <CheckBox
-                                    x:Name="CcbAutoSaveEveryMinutes" 
-                                    Content="{DynamicResource 间隔时间自动保存}" 
-                                    Style="{DynamicResource 检查框样式}"
-                                    IsChecked="{Binding Source={StaticResource Settings}, Path=Default.IsAutoSaveEveryMinutes,Mode=TwoWay}" Checked="CcbAutoSaveEveryMinutes_Checked" Unchecked="CcbAutoSaveEveryMinutes_Unchecked"/>
-                            </DockPanel>
-                            <Slider
-                                x:Name="SldAutoSaveMinute"
-                                Style="{DynamicResource 滑块样式}"
-                                Value="{Binding Source={StaticResource Settings}, Path=Default.AutoSaveMinute,Mode=TwoWay}" Minimum="1" Maximum="60" SmallChange="1" LargeChange="10" Ticks="" TickFrequency="6" ValueChanged="SldAutoSaveMinute_ValueChanged" />
+                                        x:Name="CcbAutoSaveEveryMinutes" 
+                                        Style="{DynamicResource 检查框样式}"
+                                        Content="{DynamicResource 间隔时间自动保存}" 
+                                        IsChecked="{Binding Source={StaticResource Settings}, Path=Default.IsAutoSaveEveryMinutes,Mode=TwoWay}"
+                                        Checked="CcbAutoSaveEveryMinutes_Checked" 
+                                        Unchecked="CcbAutoSaveEveryMinutes_Unchecked"/>
+                                <DockPanel>
+                                    <TextBlock 
+                                        x:Name="TxtAutoSaveMinute"
+                                        Style="{DynamicResource 二级文本显示框}" 
+                                        DockPanel.Dock="Right"/>
+                                    <Slider
+                                        x:Name="SldAutoSaveMinute"
+                                        Style="{DynamicResource 滑块样式}"
+                                        Value="{Binding Source={StaticResource Settings}, Path=Default.AutoSaveMinute,Mode=TwoWay}" 
+                                        Minimum="1"
+                                        Maximum="60" 
+                                        SmallChange="1"
+                                        LargeChange="10" 
+                                        Ticks=""
+                                        TickFrequency="6" 
+                                        ValueChanged="SldAutoSaveMinute_ValueChanged" />
+                                </DockPanel>
+                            </StackPanel>
 
-
-                            <Label 
-                                Content="{DynamicResource 备份}"
-                                Style="{DynamicResource 一级标签}"/>
-                            <DockPanel>
-                                <TextBlock
-                                    x:Name="TxtAutoBackupTime"
-                                    Style="{DynamicResource 文本显示框样式}"
-                                    DockPanel.Dock="Right"
-                                    Width="40"/>
+                            <StackPanel>
+                                <Label 
+                                    Style="{DynamicResource 一级标签}"
+                                    Content="{DynamicResource 备份}"/>
                                 <CheckBox
-                                    x:Name="CcbAutoBackup"
-                                    Content="{DynamicResource 间隔时间自动备份}"
-                                    Style="{DynamicResource 检查框样式}"
-                                    IsChecked="{Binding Source={StaticResource Settings}, Path=Default.IsAutoBackup,Mode=TwoWay}"  Checked="CcbAutoBackup_Checked" Unchecked="CcbAutoBackup_Unchecked"/>
-                            </DockPanel>
-                            <Slider 
-                                x:Name="SldAutoBackupMinute"
-                                Style="{DynamicResource 滑块样式}"
-                                Value="{Binding Source={StaticResource Settings}, Path=Default.AutoBackupMinute,Mode=TwoWay}" Minimum="1" Maximum="60" SmallChange="1" LargeChange="10" Ticks="" TickFrequency="6" ValueChanged="SldAutoBackupMinute_ValueChanged"/>
-
+                                        x:Name="CcbAutoBackup"
+                                        Style="{DynamicResource 检查框样式}"
+                                        Content="{DynamicResource 间隔时间自动备份}"
+                                        IsChecked="{Binding Source={StaticResource Settings}, Path=Default.IsAutoBackup,Mode=TwoWay}"
+                                        Checked="CcbAutoBackup_Checked"
+                                        Unchecked="CcbAutoBackup_Unchecked"/>
+                                <DockPanel>
+                                    <TextBlock
+                                        x:Name="TxtAutoBackupTime"
+                                        Style="{DynamicResource 二级文本显示框}"
+                                        DockPanel.Dock="Right"/>
+                                    <Slider 
+                                        x:Name="SldAutoBackupMinute"
+                                        Style="{DynamicResource 滑块样式}"
+                                        Value="{Binding Source={StaticResource Settings}, Path=Default.AutoBackupMinute,Mode=TwoWay}"
+                                        Minimum="1"
+                                        Maximum="60"
+                                        SmallChange="1"
+                                        LargeChange="10"
+                                        Ticks=""
+                                        TickFrequency="6"
+                                        ValueChanged="SldAutoBackupMinute_ValueChanged"/>
+                                </DockPanel>
+                            </StackPanel>
                         </StackPanel>
                     </ScrollViewer>
                 </DockPanel>
             </Grid>
-            <!--工具栏 关于-->
             <Grid 
                 x:Name="PanAbout" 
                 Style="{DynamicResource 工具栏}" 
                 Visibility="Collapsed">
                 <ScrollViewer>
                     <StackPanel DockPanel.Dock="Top">
-                        <DockPanel>
-                            <Button 
-                                x:Name="BtnHomePage"
-                                Content="{DynamicResource 前往}"
-                                Style="{DynamicResource 二级按钮}"
-                                Click="BtnHomePage_Click"
-                                DockPanel.Dock="Right" 
-                                Width="80"/>
+                        <StackPanel>
+                            <DockPanel>
+                                <Button 
+                                    x:Name="BtnHomePage"
+                                    Style="{DynamicResource 二级按钮}"
+                                    Content="{DynamicResource 前往}"
+                                    ToolTip="F1"
+                                    Click="BtnHomePage_Click"
+                                    DockPanel.Dock="Right"
+                                    Width="80"/>
+                                <Label
+                                    Style="{DynamicResource 一级标签}"
+                                    Content="{DynamicResource 官网}"/>
+                            </DockPanel>
+                            <TextBlock 
+                                x:Name="TxtHomePage"
+                                Style="{DynamicResource 一级文本显示框}"/>
+                        </StackPanel>
+
+                        <StackPanel>
+                            <DockPanel>
+                                <Button 
+                                    x:Name="BtnGitHubPage"
+                                    Style="{DynamicResource 二级按钮}"
+                                    Content="{DynamicResource 前往}"
+                                    ToolTip="F2"
+                                    Click="BtnGitHubPage_Click"
+                                    DockPanel.Dock="Right"
+                                    Width="80"/>
+                                <Label 
+                                    Style="{DynamicResource 一级标签}"
+                                    Content="{DynamicResource 开源}" />
+                            </DockPanel>
+                            <TextBlock 
+                                x:Name="TxtGitHubPage"
+                                Style="{DynamicResource 一级文本显示框}"/>
+                        </StackPanel>
+
+                        <StackPanel>
+                            <DockPanel>
+                                <Button
+                                    x:Name="BtnQQGroup"
+                                    Style="{DynamicResource 二级按钮}"
+                                    Content="{DynamicResource 前往}"
+                                    ToolTip="F3"
+                                    Click="BtnQQGroup_Click"
+                                    DockPanel.Dock="Right"
+                                    Width="80"/>
+                                <Label 
+                                    Style="{DynamicResource 一级标签}"
+                                    Content="{DynamicResource 讨论}"/>
+                            </DockPanel>
+                            <TextBlock 
+                                x:Name="TxtQQGroup"
+                                Style="{DynamicResource 一级文本显示框}"/>
+                        </StackPanel>
+
+                        <StackPanel>
+                            <DockPanel>
+                                <Button 
+                                    x:Name="BtnBitCoinAddress"
+                                    Style="{DynamicResource 二级按钮}"
+                                    Content="{DynamicResource 复制}"
+                                    Click="BtnBitCoinAddress_Click"
+                                    DockPanel.Dock="Right"
+                                    Width="80"/>
+                                <Label
+                                    Style="{DynamicResource 一级标签}"
+                                    Content="{DynamicResource 赞助}"/>
+                            </DockPanel>
+                            <TextBlock 
+                                x:Name="TxtBitCoinAddress"
+                                Style="{DynamicResource 一级文本显示框}"/>
+                        </StackPanel>
+
+                        <StackPanel>
+                            <Label
+                                Style="{DynamicResource 一级标签}"
+                                Content="{DynamicResource 名称}"/>
+                            <TextBlock
+                                x:Name="TxtThisName"
+                                Style="{DynamicResource 一级文本显示框}"/>
+                        </StackPanel>
+
+                        <StackPanel>
                             <Label 
-                                Content="{DynamicResource 官网}" 
-                                Style="{DynamicResource 一级标签}"/>
-                        </DockPanel>
-                        <TextBlock 
-                            x:Name="TxtHomePage" 
-                            Text="?" 
-                            Style="{DynamicResource 文本显示框样式}"/>
+                                Style="{DynamicResource 一级标签}"
+                                Content="{DynamicResource 说明}"/>
+                            <TextBlock 
+                                x:Name="TxtDescription"
+                                Style="{DynamicResource 一级文本显示框}"/>
+                        </StackPanel>
 
-                        <DockPanel>
-                            <Button 
-                                x:Name="BtnGitHubPage"
-                                Content="{DynamicResource 前往}" 
-                                Style="{DynamicResource 二级按钮}" 
-                                Click="BtnGitHubPage_Click"
-                                DockPanel.Dock="Right"
-                                Width="80"/>
+                        <StackPanel>
+                            <Label
+                                Style="{DynamicResource 一级标签}"
+                                Content="{DynamicResource 作者}"/>
+                            <TextBlock 
+                                x:Name="TxtDeveloper"
+                                Style="{DynamicResource 一级文本显示框}"/>
+                        </StackPanel>
+
+                        <StackPanel>
                             <Label 
-                                Content="{DynamicResource 开源}"
-                                Style="{DynamicResource 一级标签}"/>
-                        </DockPanel>
-                        <TextBlock
-                            x:Name="TxtGitHubPage"
-                            Text="?" 
-                            Style="{DynamicResource 文本显示框样式}"/>
+                                Style="{DynamicResource 一级标签}"
+                                Content="{DynamicResource 版本}"/>
+                            <TextBlock 
+                                x:Name="TxtVersion"
+                                Style="{DynamicResource 一级文本显示框}"/>
+                        </StackPanel>
 
-                        <DockPanel>
-                            <Button 
-                                x:Name="BtnQQGroup"
-                                Content="{DynamicResource 前往}"
-                                Style="{DynamicResource 二级按钮}"
-                                Click="BtnQQGroup_Click"
-                                DockPanel.Dock="Right" 
-                                Width="80"/>
+                        <StackPanel>
                             <Label 
-                                Content="{DynamicResource 讨论}"
-                                Style="{DynamicResource 一级标签}"/>
-                        </DockPanel>
-                        <TextBlock 
-                            x:Name="TxtQQGroup" 
-                            Text="?"
-                            Style="{DynamicResource 文本显示框样式}"/>
-
-                        <DockPanel>
-                            <Button 
-                                x:Name="BtnBitCoinAddress"
-                                Content="{DynamicResource 复制}" 
-                                Style="{DynamicResource 二级按钮}"
-                                Click="BtnBitCoinAddress_Click"
-                                DockPanel.Dock="Right"
-                                Width="80"/>
-                            <Label 
-                                Content="{DynamicResource 赞助}"
-                                Style="{DynamicResource 一级标签}"/>
-                        </DockPanel>
-                        <TextBlock
-                            x:Name="TxtBitCoinAddress" 
-                            Text="?" 
-                            Style="{DynamicResource 文本显示框样式}"/>
-
-                        <Label
-                            Content="{DynamicResource 名称}"
-                            Style="{DynamicResource 一级标签}"/>
-                        <TextBlock
-                            x:Name="TxtThisName" 
-                            Text="?"
-                            Style="{DynamicResource 文本显示框样式}"/>
-                        <Label
-                            Content="{DynamicResource 说明}"
-                            Style="{DynamicResource 一级标签}"/>
-                        <TextBlock 
-                            x:Name="TxtDescription" 
-                            Text="?" 
-                            Style="{DynamicResource 文本显示框样式}"/>
-                        <Label
-                            Content="{DynamicResource 作者}" 
-                            Style="{DynamicResource 一级标签}"/>
-                        <TextBlock 
-                            x:Name="TxtDeveloper" 
-                            Text="?" 
-                            Style="{DynamicResource 文本显示框样式}"/>
-                        <Label 
-                            Content="{DynamicResource 版本}" 
-                            Style="{DynamicResource 一级标签}"/>
-                        <TextBlock 
-                            x:Name="TxtVersion" 
-                            Text="?" 
-                            Style="{DynamicResource 文本显示框样式}"/>
-                        <Label 
-                            Content="{DynamicResource 发行}" 
-                            Style="{DynamicResource 一级标签}"/>
-
-                        <TextBlock 
-                            x:Name="TxtUpdateNote"
-                            Text="?" 
-                            Style="{DynamicResource 文本显示框样式}" 
-                            TextWrapping="Wrap"/>
+                                Style="{DynamicResource 一级标签}"
+                                Content="{DynamicResource 发行}"/>
+                            <TextBlock
+                                x:Name="TxtUpdateNote"
+                                Style="{DynamicResource 一级文本显示框}"/>
+                        </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>
+            <!--#endregion-->
 
             <!--工作区-->
             <DockPanel
@@ -620,14 +696,14 @@
                     <TextBlock 
                         x:Name="TxtWordCount"
                         Text="字数：0"
-                        Style="{DynamicResource 文本显示框样式}" 
+                        Style="{DynamicResource 一级文本显示框}" 
                         MaxWidth="100" 
                         DockPanel.Dock="Right"
                         HorizontalAlignment="Right"/>
                     <TextBlock 
                         x:Name="TxtRowAndColumn" 
                         Text="行：0，列：0"
-                        Style="{DynamicResource 文本显示框样式}"
+                        Style="{DynamicResource 一级文本显示框}"
                         MaxWidth="150" 
                         DockPanel.Dock="Right"
                         HorizontalAlignment="Right"/>

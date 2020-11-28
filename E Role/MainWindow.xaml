@@ -13,7 +13,7 @@
     Icon="Resources/E Role.ico"
     WindowStartupLocation="CenterScreen" 
     BorderThickness="0"
-    Height="800"
+    Height="600"
     Width="600" 
     MinWidth="600"
     MinHeight="350"
@@ -96,7 +96,7 @@
             <Grid
                 x:Name="PanSetting"
                 Style="{DynamicResource 工具栏}"
-                Visibility="Visible">
+                Visibility="Collapsed" >
                 <DockPanel>
                     <WrapPanel
                         Style="{DynamicResource 单行水平流式面板}"
@@ -151,7 +151,7 @@
                             </StackPanel>
 
                             <StackPanel>
-                                <DockPanel>
+                                <DockPanel Margin="5">
                                     <CheckBox 
                                         x:Name="CcbIsCreateSurame"
                                         Style="{DynamicResource 检查框样式}"
@@ -160,13 +160,13 @@
                                     <Label
                                         Style="{DynamicResource 一级标签}"
                                         Content="{DynamicResource 姓氏}"
-                                        Margin="5,0"/>
+                                        Margin="0"/>
                                 </DockPanel>
                                 <ComboBox
                                     x:Name="CbbSurameType"
                                     Style="{DynamicResource 下拉框样式}"
                                     SelectedIndex="{Binding Source={StaticResource Settings}, Path=Default.SurameType,Mode=TwoWay}"
-                                    Margin="5,0">
+                                    Margin="5">
                                     <ComboBoxItem Content="{DynamicResource 姓氏0}"/>
                                     <ComboBoxItem Content="{DynamicResource 姓氏1}"/>
                                     <ComboBoxItem Content="{DynamicResource 姓氏2}"/>
@@ -174,7 +174,7 @@
                             </StackPanel>
 
                             <StackPanel>
-                                <DockPanel>
+                                <DockPanel Margin="5">
                                     <CheckBox 
                                         x:Name="CcbIsCreateName"
                                         Style="{DynamicResource 检查框样式}"
@@ -183,17 +183,15 @@
                                     <Label
                                         Content="{DynamicResource 名字}"
                                         Style="{DynamicResource 一级标签}"
-                                        Margin="5,0"/>
+                                        Margin="0"/>
                                 </DockPanel>
                                 <DockPanel>
                                     <Label
                                         Style="{DynamicResource 二级标签}"
-                                        Content="{DynamicResource 长度}"
-                                        Width="60"/>
+                                        Content="{DynamicResource 长度}"/>
                                     <TextBlock
-                                        Style="{DynamicResource 文本显示框样式}"
+                                        Style="{DynamicResource 二级文本显示框}"
                                         DockPanel.Dock="Right"
-                                        Width="30"
                                         Text="{Binding Source={StaticResource Settings}, Path=Default.NameLength,Mode=OneWay}" />
                                     <Slider
                                         x:Name="TxtNameLength"
@@ -209,7 +207,7 @@
                             </StackPanel>
 
                             <StackPanel>
-                                <DockPanel>
+                                <DockPanel Margin="5">
                                     <CheckBox
                                         x:Name="CcbIsCreateBirthday"
                                         Style="{DynamicResource 检查框样式}"
@@ -218,26 +216,24 @@
                                     <Label
                                         Style="{DynamicResource 一级标签}"
                                         Content="{DynamicResource 生日}"
-                                        Margin="5,0"/>
+                                        Margin="0"/>
                                     </DockPanel>
                                 <DockPanel>
                                     <Label
-                                        Style="{DynamicResource 一级自由标签}"
-                                        Content="{DynamicResource 最小}"
-                                        Width="60"/>
+                                        Style="{DynamicResource 二级标签}"
+                                        Content="{DynamicResource 最小}"/>
                                     <DatePicker 
-                                        VerticalAlignment="Center" 
+                                        Style="{DynamicResource 日期样式}"
                                         DisplayDate="{Binding Source={StaticResource Settings}, Path=Default.BirthdayMin,Mode=TwoWay}" 
                                         Text="{Binding Source={StaticResource Settings}, Path=Default.BirthdayMin,Mode=TwoWay}" 
                                         IsEnabled="{Binding Source={StaticResource Settings}, Path=Default.IsCreateBirthday,Mode=OneWay}" Margin="0,0,5,0"/>
                                 </DockPanel>
                                 <DockPanel>
                                     <Label 
-                                        Style="{DynamicResource 一级自由标签}"
-                                        Content="{DynamicResource 最大}"
-                                        Width="60"/>
+                                        Style="{DynamicResource 二级标签}"
+                                        Content="{DynamicResource 最大}"/>
                                     <DatePicker 
-                                        VerticalAlignment="Center"
+                                        Style="{DynamicResource 日期样式}"
                                         DisplayDate="{Binding Source={StaticResource Settings}, Path=Default.BirthdayMax,Mode=TwoWay}" 
                                         Text="{Binding Source={StaticResource Settings}, Path=Default.BirthdayMax,Mode=TwoWay}"
                                         IsEnabled="{Binding Source={StaticResource Settings}, Path=Default.IsCreateBirthday,Mode=OneWay}" Margin="0,0,5,0"/>
@@ -245,7 +241,7 @@
                             </StackPanel>
 
                             <StackPanel>
-                                <DockPanel>
+                                <DockPanel Margin="5">
                                     <CheckBox
                                         x:Name="CcbIsCreateGender"
                                         Style="{DynamicResource 检查框样式}" 
@@ -254,7 +250,7 @@
                                     <Label
                                         Content="{DynamicResource 性别}"
                                         Style="{DynamicResource 一级标签}"
-                                        Margin="5,0"/>
+                                        Margin="0"/>
                                 </DockPanel>
                                 <ComboBox 
                                     x:Name="CbbGenderType"
@@ -266,7 +262,7 @@
                             </StackPanel>
 
                             <StackPanel>
-                                <DockPanel>
+                                <DockPanel Margin="5">
                                     <CheckBox 
                                         x:Name="CcbIsCreateHeight"
                                         Style="{DynamicResource 检查框样式}"
@@ -275,17 +271,15 @@
                                     <Label 
                                         Content="{DynamicResource 身高}" 
                                         Style="{DynamicResource 一级标签}"
-                                        Margin="5,0"/>
+                                        Margin="0"/>
                                 </DockPanel>
                                 <DockPanel>
                                     <Label
-                                        Style="{DynamicResource 一级自由标签}"
-                                        Content="{DynamicResource 最小}"
-                                        Width="60"/>
+                                        Style="{DynamicResource 二级标签}"
+                                        Content="{DynamicResource 最小}"/>
                                     <TextBlock 
-                                        Style="{DynamicResource 文本显示框样式}"
+                                        Style="{DynamicResource 二级文本显示框}"
                                         DockPanel.Dock="Right"
-                                        Width="30"
                                         Text="{Binding Source={StaticResource Settings}, Path=Default.HeightMin,Mode=OneWay}"/>
                                     <Slider 
                                         x:Name="TxtHeightMin"
@@ -298,13 +292,11 @@
                                 </DockPanel>
                                 <DockPanel>
                                     <Label 
-                                        Style="{DynamicResource 一级自由标签}"
-                                        Content="{DynamicResource 最大}"
-                                        Width="60"/>
+                                        Style="{DynamicResource 二级标签}"
+                                        Content="{DynamicResource 最大}"/>
                                     <TextBlock 
-                                        Style="{DynamicResource 文本显示框样式}" 
+                                        Style="{DynamicResource 二级文本显示框}" 
                                         DockPanel.Dock="Right"
-                                        Width="30"
                                         Text="{Binding Source={StaticResource Settings}, Path=Default.HeightMax,Mode=OneWay}"/>
                                     <Slider 
                                         x:Name="TxtHeightMax" 
@@ -318,7 +310,7 @@
                             </StackPanel>
 
                             <StackPanel>
-                                <DockPanel>
+                                <DockPanel Margin="5">
                                     <CheckBox
                                         x:Name="CcbIsCreateWeight"
                                         Style="{DynamicResource 检查框样式}"
@@ -327,17 +319,15 @@
                                     <Label 
                                         Content="{DynamicResource 体重}" 
                                         Style="{DynamicResource 一级标签}"
-                                        Margin="5,0"/>
+                                        Margin="0"/>
                                 </DockPanel>
                                 <DockPanel>
                                     <Label
-                                        Style="{DynamicResource 一级自由标签}"
-                                        Content="{DynamicResource 最小}"
-                                        Width="60"/>
+                                        Style="{DynamicResource 二级标签}"
+                                        Content="{DynamicResource 最小}"/>
                                     <TextBlock
-                                        Style="{DynamicResource 文本显示框样式}"
+                                        Style="{DynamicResource 二级文本显示框}"
                                         DockPanel.Dock="Right"
-                                        Width="30"
                                         Text="{Binding Source={StaticResource Settings}, Path=Default.WeightMin,Mode=OneWay}"/>
                                     <Slider 
                                         x:Name="TxtWeightMin" 
@@ -350,13 +340,11 @@
                                 </DockPanel>
                                 <DockPanel>
                                     <Label 
-                                        Style="{DynamicResource 一级自由标签}"
-                                        Content="{DynamicResource 最大}"
-                                        Width="60"/>
+                                        Style="{DynamicResource 二级标签}"
+                                        Content="{DynamicResource 最大}"/>
                                     <TextBlock
-                                        Style="{DynamicResource 文本显示框样式}"
+                                        Style="{DynamicResource 二级文本显示框}"
                                         DockPanel.Dock="Right"
-                                        Width="30"
                                         Text="{Binding Source={StaticResource Settings}, Path=Default.WeightMax,Mode=OneWay}"/>
                                     <Slider
                                         x:Name="TxtWeightMax"
@@ -391,12 +379,11 @@
                 x:Name="PanAbout" 
                 Style="{DynamicResource 工具栏}" 
                 Visibility="Collapsed">
-                <Grid Style="{DynamicResource 工具栏}">
-                    <ScrollViewer>
-                        <StackPanel DockPanel.Dock="Top">
-                            <StackPanel>
-                                <DockPanel>
-                                    <Button 
+                <ScrollViewer>
+                    <StackPanel DockPanel.Dock="Top">
+                        <StackPanel>
+                            <DockPanel>
+                                <Button 
                                     x:Name="BtnHomePage"
                                     Style="{DynamicResource 二级按钮}"
                                     Content="{DynamicResource 前往}"
@@ -404,19 +391,18 @@
                                     Click="BtnHomePage_Click"
                                     DockPanel.Dock="Right"
                                     Width="80"/>
-                                    <Label
+                                <Label
                                     Style="{DynamicResource 一级标签}"
                                     Content="{DynamicResource 官网}"/>
-                                </DockPanel>
-                                <TextBlock 
+                            </DockPanel>
+                            <TextBlock 
                                 x:Name="TxtHomePage"
-                                Style="{DynamicResource 文本显示框样式}"
-                                Text="?"/>
-                            </StackPanel>
+                                Style="{DynamicResource 一级文本显示框}"/>
+                        </StackPanel>
 
-                            <StackPanel>
-                                <DockPanel>
-                                    <Button 
+                        <StackPanel>
+                            <DockPanel>
+                                <Button 
                                     x:Name="BtnGitHubPage"
                                     Style="{DynamicResource 二级按钮}"
                                     Content="{DynamicResource 前往}"
@@ -424,19 +410,18 @@
                                     Click="BtnGitHubPage_Click"
                                     DockPanel.Dock="Right"
                                     Width="80"/>
-                                    <Label 
+                                <Label 
                                     Style="{DynamicResource 一级标签}"
                                     Content="{DynamicResource 开源}" />
-                                </DockPanel>
-                                <TextBlock 
+                            </DockPanel>
+                            <TextBlock 
                                 x:Name="TxtGitHubPage"
-                                Style="{DynamicResource 文本显示框样式}"
-                                Text="?"/>
-                            </StackPanel>
+                                Style="{DynamicResource 一级文本显示框}"/>
+                        </StackPanel>
 
-                            <StackPanel>
-                                <DockPanel>
-                                    <Button
+                        <StackPanel>
+                            <DockPanel>
+                                <Button
                                     x:Name="BtnQQGroup"
                                     Style="{DynamicResource 二级按钮}"
                                     Content="{DynamicResource 前往}"
@@ -444,89 +429,79 @@
                                     Click="BtnQQGroup_Click"
                                     DockPanel.Dock="Right"
                                     Width="80"/>
-                                    <Label 
+                                <Label 
                                     Style="{DynamicResource 一级标签}"
                                     Content="{DynamicResource 讨论}"/>
-                                </DockPanel>
-                                <TextBlock 
+                            </DockPanel>
+                            <TextBlock 
                                 x:Name="TxtQQGroup"
-                                Style="{DynamicResource 文本显示框样式}"
-                                Text="?"/>
-                            </StackPanel>
+                                Style="{DynamicResource 一级文本显示框}"/>
+                        </StackPanel>
 
-                            <StackPanel>
-                                <DockPanel>
-                                    <Button 
+                        <StackPanel>
+                            <DockPanel>
+                                <Button 
                                     x:Name="BtnBitCoinAddress"
                                     Style="{DynamicResource 二级按钮}"
                                     Content="{DynamicResource 复制}"
                                     Click="BtnBitCoinAddress_Click"
                                     DockPanel.Dock="Right"
                                     Width="80"/>
-                                    <Label
+                                <Label
                                     Style="{DynamicResource 一级标签}"
                                     Content="{DynamicResource 赞助}"/>
-                                </DockPanel>
-                                <TextBlock 
+                            </DockPanel>
+                            <TextBlock 
                                 x:Name="TxtBitCoinAddress"
-                                Style="{DynamicResource 文本显示框样式}"
-                                Text="?"/>
-                            </StackPanel>
+                                Style="{DynamicResource 一级文本显示框}"/>
+                        </StackPanel>
 
-                            <StackPanel>
-                                <Label
+                        <StackPanel>
+                            <Label
                                 Style="{DynamicResource 一级标签}"
                                 Content="{DynamicResource 名称}"/>
-                                <TextBlock
+                            <TextBlock
                                 x:Name="TxtThisName"
-                                Style="{DynamicResource 文本显示框样式}"
-                                Text="?" />
-                            </StackPanel>
+                                Style="{DynamicResource 一级文本显示框}"/>
+                        </StackPanel>
 
-                            <StackPanel>
-                                <Label 
+                        <StackPanel>
+                            <Label 
                                 Style="{DynamicResource 一级标签}"
                                 Content="{DynamicResource 说明}"/>
-                                <TextBlock 
+                            <TextBlock 
                                 x:Name="TxtDescription"
-                                Style="{DynamicResource 文本显示框样式}"
-                                Text="?" />
-                            </StackPanel>
+                                Style="{DynamicResource 一级文本显示框}"/>
+                        </StackPanel>
 
-                            <StackPanel>
-                                <Label
+                        <StackPanel>
+                            <Label
                                 Style="{DynamicResource 一级标签}"
                                 Content="{DynamicResource 作者}"/>
-                                <TextBlock 
+                            <TextBlock 
                                 x:Name="TxtDeveloper"
-                                Text="?"
-                                Style="{DynamicResource 文本显示框样式}"/>
-                            </StackPanel>
+                                Style="{DynamicResource 一级文本显示框}"/>
+                        </StackPanel>
 
-                            <StackPanel>
-                                <Label 
+                        <StackPanel>
+                            <Label 
                                 Style="{DynamicResource 一级标签}"
                                 Content="{DynamicResource 版本}"/>
-                                <TextBlock 
+                            <TextBlock 
                                 x:Name="TxtVersion"
-                                Style="{DynamicResource 文本显示框样式}"
-                                Text="?"/>
-                            </StackPanel>
+                                Style="{DynamicResource 一级文本显示框}"/>
+                        </StackPanel>
 
-                            <StackPanel>
-                                <Label 
+                        <StackPanel>
+                            <Label 
                                 Style="{DynamicResource 一级标签}"
                                 Content="{DynamicResource 发行}"/>
-                                <TextBlock
+                            <TextBlock
                                 x:Name="TxtUpdateNote"
-                                Style="{DynamicResource 文本显示框样式}"
-                                Text="?"
-                                TextWrapping="Wrap"/>
-                            </StackPanel>
+                                Style="{DynamicResource 一级文本显示框}"/>
                         </StackPanel>
-                    </ScrollViewer>
-                </Grid>
-
+                    </StackPanel>
+                </ScrollViewer>
             </Grid>
             <!--#endregion-->
 

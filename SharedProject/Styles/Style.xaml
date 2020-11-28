@@ -263,6 +263,15 @@
         <Setter Property="Foreground" Value="{DynamicResource 一级前景色}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Height" Value="20"/>
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+    <Style x:Key="二级标签缩进" TargetType="Label">
+        <Setter Property="Foreground" Value="{DynamicResource 一级前景色}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Height" Value="20"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="Padding" Value="30,0,0,0"/>
         <Setter Property="FontSize" Value="12"/>
@@ -297,11 +306,21 @@
     <!--#endregion-->
 
     <!--#region 文本框-->
-    <Style x:Key="文本显示框样式" TargetType="TextBlock">
+    <Style x:Key="一级文本显示框" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{DynamicResource 二级前景色}"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="5"/>
+        <Setter Property="Text" Value="?"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+    <Style x:Key="二级文本显示框" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource 二级前景色}"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Width" Value="30"/>
+        <Setter Property="Text" Value="?"/>
     </Style>
     <Style x:Key="一级文本输入框" TargetType="TextBox">
         <Setter Property="Foreground" Value="{DynamicResource 一级前景色}"/>
@@ -341,10 +360,10 @@
     <Style x:Key="下拉框样式" TargetType="{x:Type ComboBox}">
         <Setter Property="Background" Value="{DynamicResource 一级背景色}"/>
         <Setter Property="Foreground" Value="{DynamicResource 一级前景色}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Height" Value="30"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="Padding" Value="5"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Focusable" Value="False"/>
         <Setter Property="IsTabStop" Value="False"/>
@@ -518,10 +537,10 @@
                 <ControlTemplate TargetType="ComboBoxItem">
                     <Border Name="Back" BorderThickness="0,0,0,0">
                         <ContentPresenter 
-                            ContentSource="{Binding Source}"
                             HorizontalAlignment="Stretch" 
                             VerticalAlignment="Center">
                         </ContentPresenter>
+                        <!--ContentSource="{Binding Source}"-->
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsHighlighted" Value="True">
@@ -825,6 +844,12 @@
         <Setter Property="IsMoveToPointEnabled" Value="True"/>
     </Style>
     <!--#endregion-->
+
+    <Style x:Key="日期样式" TargetType="DatePicker">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="5, 0"/>
+        <!--<Setter Property="Height" Value="30"/>-->
+    </Style>
 
     <!--#region 树状图-->
     <Style x:Key="树状图样式" TargetType="TreeView">

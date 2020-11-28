@@ -141,9 +141,9 @@
     <sys:String x:Key="自动打开书籍">Open last book</sys:String>
     <sys:String x:Key="自动补全">Auto Complementy</sys:String>
     <sys:String x:Key="自动缩进">Auto Indentation</sys:String>
-    <sys:String x:Key="间隔时间自动保存">Auto save every timespan</sys:String>
+    <sys:String x:Key="间隔时间自动保存">Auto save every timespan (minute)</sys:String>
     <sys:String x:Key="文章切换时自动保存">Auto save when swich file</sys:String>
-    <sys:String x:Key="间隔时间自动备份">Auto backup every timespan</sys:String>
+    <sys:String x:Key="间隔时间自动备份">Auto backup every timespan (minute)</sys:String>
     <sys:String x:Key="启动次数">Start up counts</sys:String>
     <sys:String x:Key="请选择一本书籍">Please select a book</sys:String>
     <sys:String x:Key="已自动打开书籍">Book opened automatically</sys:String>

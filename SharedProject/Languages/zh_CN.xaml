@@ -142,9 +142,9 @@
     <sys:String x:Key="自动打开书籍">打开上次关闭的书籍</sys:String>
     <sys:String x:Key="自动补全">输入时补全引号、括号</sys:String>
     <sys:String x:Key="自动缩进">换行时补全缩进</sys:String>
-    <sys:String x:Key="间隔时间自动保存">间隔时间自动保存</sys:String>
+    <sys:String x:Key="间隔时间自动保存">间隔时间自动保存（分钟）</sys:String>
     <sys:String x:Key="文章切换时自动保存">文章切换时自动保存</sys:String>
-    <sys:String x:Key="间隔时间自动备份">间隔时间自动备份</sys:String>
+    <sys:String x:Key="间隔时间自动备份">间隔时间自动备份（分钟）</sys:String>
     <sys:String x:Key="启动次数">启动次数</sys:String>
     <sys:String x:Key="请选择一本书籍">请选择一本书籍</sys:String>
     <sys:String x:Key="已自动打开书籍">已打开书籍</sys:String>

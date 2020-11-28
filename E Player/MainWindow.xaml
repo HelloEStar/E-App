@@ -39,21 +39,25 @@
                         Style="{DynamicResource 一级按钮}"
                         Background="{DynamicResource 二级背景色}"
                         Content="{DynamicResource 文件}"
+                        ToolTip="{DynamicResource 文件}"
                         Click="BtnFile_Click"/>
                     <Button 
                         x:Name="BtnEdit"
                         Style="{DynamicResource 一级按钮}"
                         Content="{DynamicResource 编辑}"
+                        ToolTip="{DynamicResource 编辑}"
                         Click="BtnEdit_Click"/>
                     <Button
                         x:Name="BtnSetting"
                         Style="{DynamicResource 一级按钮}"
                         Content="{DynamicResource 设置}"
+                        ToolTip="{DynamicResource 设置}" 
                         Click="BtnSetting_Click"/>
                     <Button 
                         x:Name="BtnAbout"
                         Style="{DynamicResource 一级按钮}"
                         Content="{DynamicResource 关于}"
+                        ToolTip="{DynamicResource 关于}" 
                         Click="BtnAbout_Click"/>
                 </StackPanel>
             </Grid>
@@ -238,7 +242,7 @@
                                 <DockPanel>
                                 <TextBlock 
                                     x:Name="TxtJumpTime"
-                                    Style="{DynamicResource 文本显示框样式}"
+                                    Style="{DynamicResource 一级文本显示框}"
                                     DockPanel.Dock="Right"
                                     Width="40"/>
                                 <Label
@@ -377,7 +381,7 @@
                             </DockPanel>
                             <TextBlock 
                                 x:Name="TxtHomePage"
-                                Style="{DynamicResource 文本显示框样式}"
+                                Style="{DynamicResource 一级文本显示框}"
                                 Text="?"/>
                         </StackPanel>
 
@@ -397,7 +401,7 @@
                             </DockPanel>
                             <TextBlock 
                                 x:Name="TxtGitHubPage"
-                                Style="{DynamicResource 文本显示框样式}"
+                                Style="{DynamicResource 一级文本显示框}"
                                 Text="?"/>
                         </StackPanel>
 
@@ -417,7 +421,7 @@
                             </DockPanel>
                             <TextBlock 
                                 x:Name="TxtQQGroup"
-                                Style="{DynamicResource 文本显示框样式}"
+                                Style="{DynamicResource 一级文本显示框}"
                                 Text="?"/>
                         </StackPanel>
 
@@ -436,7 +440,7 @@
                             </DockPanel>
                             <TextBlock 
                                 x:Name="TxtBitCoinAddress"
-                                Style="{DynamicResource 文本显示框样式}"
+                                Style="{DynamicResource 一级文本显示框}"
                                 Text="?"/>
                         </StackPanel>
 
@@ -446,7 +450,7 @@
                                 Content="{DynamicResource 名称}"/>
                             <TextBlock
                                 x:Name="TxtThisName"
-                                Style="{DynamicResource 文本显示框样式}"
+                                Style="{DynamicResource 一级文本显示框}"
                                 Text="?" />
                         </StackPanel>
 
@@ -456,7 +460,7 @@
                                 Content="{DynamicResource 说明}"/>
                             <TextBlock 
                                 x:Name="TxtDescription"
-                                Style="{DynamicResource 文本显示框样式}"
+                                Style="{DynamicResource 一级文本显示框}"
                                 Text="?" />
                         </StackPanel>
 
@@ -467,7 +471,7 @@
                             <TextBlock 
                                 x:Name="TxtDeveloper"
                                 Text="?"
-                                Style="{DynamicResource 文本显示框样式}"/>
+                                Style="{DynamicResource 一级文本显示框}"/>
                         </StackPanel>
 
                         <StackPanel>
@@ -476,7 +480,7 @@
                                 Content="{DynamicResource 版本}"/>
                             <TextBlock 
                                 x:Name="TxtVersion"
-                                Style="{DynamicResource 文本显示框样式}"
+                                Style="{DynamicResource 一级文本显示框}"
                                 Text="?"/>
                         </StackPanel>
 
@@ -486,7 +490,7 @@
                                 Content="{DynamicResource 发行}"/>
                             <TextBlock
                                 x:Name="TxtUpdateNote"
-                                Style="{DynamicResource 文本显示框样式}"
+                                Style="{DynamicResource 一级文本显示框}"
                                 Text="?"
                                 TextWrapping="Wrap"/>
                         </StackPanel>
