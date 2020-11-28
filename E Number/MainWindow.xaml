@@ -39,7 +39,7 @@
                         x:Name="BtnSetting" 
                         Content="{DynamicResource 设置}" 
                         Style="{DynamicResource 一级按钮}" 
-                        Click="BtnSetting_Click"/>
+                        Click="BtnSetting_Click" Cursor="Hand"/>
                     <Button 
                         x:Name="BtnAbout"
                         Content="{DynamicResource 关于}"
@@ -74,13 +74,10 @@
                         Style="{DynamicResource 列表样式}"/>
                 </DockPanel>
             </Grid>
-            <!--<Grid x:Name="PanEdit" Style="{DynamicResource 工具栏}" >
-            </Grid>-->
             <Grid 
                 x:Name="PanSetting"
                 Style="{DynamicResource 工具栏}" 
                 Visibility="Collapsed">
-
                 <DockPanel>
                     <WrapPanel 
                         Style="{DynamicResource 单行水平流式面板}" 
@@ -88,13 +85,13 @@
                         ItemWidth="120">
                         <Button 
                             x:Name="BtnSaveSettings"
-                            Content="{DynamicResource 保存}"
                             Style="{DynamicResource 二级按钮}"
+                            Content="{DynamicResource 保存}"
                             Click="BtnSaveSettings_Click"/>
                         <Button
                             x:Name="BtnResetSettings"
-                            Content="{DynamicResource 重置}" 
                             Style="{DynamicResource 二级按钮}"
+                            Content="{DynamicResource 重置}" 
                             Click="BtnResetSettings_Click"/>
                     </WrapPanel>
 

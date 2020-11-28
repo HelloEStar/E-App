@@ -821,11 +821,8 @@
         <Setter Property="Value" Value="127"/>
         <Setter Property="SmallChange" Value="1"/>
         <Setter Property="IsTabStop" Value="False"/>
-        <!--SmallChange用来当Slider有焦点时，使用键盘的左右箭头来改变值的大小-->
         <Setter Property="LargeChange" Value="1"/>
-        <!--LargeChange是点击Slider条的空白部分造成值的改变大小（和滚动条类似）-->
         <Setter Property="IsMoveToPointEnabled" Value="True"/>
-        <!--点击空白处是否直接移动到此处-->
     </Style>
     <!--#endregion-->
 

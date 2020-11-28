@@ -116,6 +116,12 @@ namespace E.Role
                 Settings.Default.Record = str;
             }
 
+            if (Settings.Default.Theme == 2)
+            {
+                string content = GetPanColors(PanColors);
+                Settings.Default.ThemeCustomize = content;
+            }
+
             Settings.Default.Save();
             ShowMessage(FindResource("已保存").ToString());
         }
@@ -580,7 +586,7 @@ namespace E.Role
         }
         private void LtbRoles_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ClickCount == 2)
+            if (e.ClickCount == 1)
             {
                 ShowRole((ListBoxItem)sender);
             }
@@ -618,9 +624,13 @@ namespace E.Role
                     if (string.IsNullOrEmpty(Settings.Default.ThemeCustomize))
                     {
                         Settings.Default.ThemeCustomize = ThemeItems[0].Value;
-                        Settings.Default.Save();
                     }
                     content = Settings.Default.ThemeCustomize;
+                    PanColors.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    PanColors.Visibility = Visibility.Collapsed;
                 }
 
                 if (string.IsNullOrEmpty(content))
@@ -631,6 +641,7 @@ namespace E.Role
                 }
                 else
                 {
+                    SetPanColors(PanColors, content);
                     ColorHelper.SetColors(Resources, content);
                 }
                 //立即刷新按钮样式
