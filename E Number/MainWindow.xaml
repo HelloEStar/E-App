@@ -14,7 +14,8 @@
     Loaded="EWindow_Loaded" 
     KeyUp="EWindow_KeyUp" 
     Closing="EWindow_Closing" 
-    Icon="/Resources/E Number.ico" >
+    Icon="/Resources/E Number.ico"
+    WindowStartupLocation="CenterScreen" >
 
     <Window.Resources>
         <local:Settings x:Key="Settings" />

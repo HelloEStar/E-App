@@ -677,6 +677,23 @@
         <Setter Property="IsMoveToPointEnabled" Value="True"/>
         <!--点击空白处是否直接移动到此处-->
     </Style>
+    <Style x:Key="颜色滑块" TargetType="Slider">
+        <Setter Property="Margin" Value="5, 0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="TickPlacement" Value="Both"/>
+        <Setter Property="Ticks" Value="0, 0.25, 0.5, 0.75, 1"/>
+        <Setter Property="Minimum" Value="0"/>
+        <Setter Property="Maximum" Value="255"/>
+        <Setter Property="Value" Value="127"/>
+        <Setter Property="SmallChange" Value="1"/>
+        <Setter Property="IsTabStop" Value="False"/>
+        <!--SmallChange用来当Slider有焦点时，使用键盘的左右箭头来改变值的大小-->
+        <Setter Property="LargeChange" Value="1"/>
+        <!--LargeChange是点击Slider条的空白部分造成值的改变大小（和滚动条类似）-->
+        <Setter Property="IsMoveToPointEnabled" Value="True"/>
+        <!--点击空白处是否直接移动到此处-->
+    </Style>
 
     <!--树状图-->
     <Style x:Key="树状图样式" TargetType="TreeView">

@@ -20,6 +20,9 @@ namespace SharedProject
     /// </summary>
     public partial class ColorPicker : UserControl
     {
+        public EWindow Owner;
+        public ResourceDictionary RD;
+
         public ColorPicker()
         {
             InitializeComponent();
@@ -49,6 +52,12 @@ namespace SharedProject
             set { SetValue(ColorTargetProperty, value); }
         }
 
+        public void SetColor(Color color)
+        {
+            Color = color.ToString();
+            ColorHelper.SetColor(RD, ColorTarget, color);
+        }
+
         private static void OnColorTargetChanged(object sender, DependencyPropertyChangedEventArgs args)
         {
             ColorPicker source = (ColorPicker)sender;
@@ -59,17 +68,14 @@ namespace SharedProject
             ColorPicker source = (ColorPicker)sender;
             string str = (string)args.NewValue;
             source.TxtColor.Content = str;
-            Brush brush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(str));
+            Brush brush = new SolidColorBrush(ColorHelper.Get(str));
             source.BtnColor.Background = brush;
         }
 
-        private void PanColorPicker_Loaded(object sender, RoutedEventArgs e)
-        {
-        }
         private void BtnColor_Click(object sender, RoutedEventArgs e)
         {
-            GetColor getColor = new GetColor();
-            getColor.Show();
+            GetColor getColor = new GetColor(this);
+            getColor.ShowDialog();
         }
     }
 }

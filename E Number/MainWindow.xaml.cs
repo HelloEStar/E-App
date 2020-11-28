@@ -49,6 +49,12 @@ namespace E.Number
             }
             Settings.Default.Record = string.Join("///", strs);
 
+            if (Settings.Default.Theme == 2)
+            {
+                string content = GetPanColors(PanColors);
+                Settings.Default.ThemeCustomize = content;
+            }
+
             Settings.Default.Save();
             ShowMessage(FindResource("已保存").ToString());
         }
@@ -244,7 +250,6 @@ namespace E.Number
                     if (string.IsNullOrEmpty(Settings.Default.ThemeCustomize))
                     {
                         Settings.Default.ThemeCustomize = ThemeItems[0].Value;
-                        Settings.Default.Save();
                     }
                     content = Settings.Default.ThemeCustomize;
                     PanColors.Visibility = Visibility.Visible;
@@ -262,8 +267,8 @@ namespace E.Number
                 }
                 else
                 {
-                    ColorHelper.SetColors(Resources, content);
                     SetPanColors(PanColors, content);
+                    ColorHelper.SetColors(Resources, content);
                 }
                 //立即刷新按钮样式
                 SetMenuTool(CurrentMenuTool);

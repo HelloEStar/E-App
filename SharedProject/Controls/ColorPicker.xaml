@@ -11,8 +11,7 @@
         x:Name="PanColorPicker" 
         Orientation="Horizontal"
         Margin="5" 
-        Height="20" 
-        Loaded="PanColorPicker_Loaded">
+        Height="20" >
         <Label
             x:Name="TxtName" 
             Style="{DynamicResource 二级自由标签}"

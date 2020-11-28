@@ -11,11 +11,6 @@ namespace SharedProject
     /// </summary>
     public class ColorHelper
     {
-        /// <summary>
-        /// 创建颜色
-        /// </summary>
-        /// <param name="text">ARGB色值，以点号分隔，0-255</param>
-        /// <returns></returns>
         public static Color Create(string text)
         {
             try
@@ -33,6 +28,10 @@ namespace SharedProject
                 Color color = Color.FromArgb(255, 125, 125, 125);
                 return color;
             }
+        }
+        public static Color Get(string text)
+        {
+            return (Color)ColorConverter.ConvertFromString(text);
         }
 
         /// <summary>
@@ -59,7 +58,7 @@ namespace SharedProject
                 string[] pair = item.Split('=');
                 if (pair.Length != 2) continue;
 
-                SetColor(resource, pair[0], Create(pair[1]));
+                SetColor(resource, pair[0], Get(pair[1]));
             }
         }
     }

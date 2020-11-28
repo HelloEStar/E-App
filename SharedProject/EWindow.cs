@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 
 namespace SharedProject
-{
+{ 
     public class EWindow : Window
     {
         /// <summary>
@@ -149,10 +150,34 @@ namespace SharedProject
             for (int i = 0; i < sp.Children.Count; i++)
             {
                 ColorPicker cp = (ColorPicker)sp.Children[i];
-                Color cl = ColorHelper.Create(keyValuePairs[cp.ColorTarget]);
+                Color cl = ColorHelper.Get(keyValuePairs[cp.ColorTarget]);
                 cp.Color = cl.ToString();
+                cp.Owner = this;
+                cp.RD = Resources;
             }
         }
+
+        protected string GetPanColors(StackPanel sp)
+        {
+            List<string> strs = new List<string>();
+            for (int i = 0; i < sp.Children.Count; i++)
+            {
+                ColorPicker cp = (ColorPicker)sp.Children[i];
+                string name = cp.ColorTarget;
+                string value = cp.Color;
+                strs.Add(name + "=" + value);
+            }
+
+            string colors = "";
+            foreach (string item in strs)
+            {
+                colors += item + "\n";
+            }
+            colors.TrimEnd('\n');
+            return colors;
+        }
+
+
 
         /// <summary>
         /// 重置设置
