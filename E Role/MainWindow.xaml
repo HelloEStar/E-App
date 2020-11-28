@@ -35,18 +35,18 @@
                         <Button
                             x:Name="BtnFile"
                             Content="{DynamicResource 记录}"
-                            Style="{DynamicResource 菜单按钮}"
+                            Style="{DynamicResource 一级按钮}"
                             Background="{DynamicResource 二级背景色}"
                             Click="BtnFile_Click"/>
                         <Button 
                             x:Name="BtnSetting"
                             Content="{DynamicResource 设置}"
-                            Style="{DynamicResource 菜单按钮}"
+                            Style="{DynamicResource 一级按钮}"
                             Click="BtnSetting_Click"/>
                         <Button 
                             x:Name="BtnAbout"
                             Content="{DynamicResource 关于}"
-                            Style="{DynamicResource 菜单按钮}"
+                            Style="{DynamicResource 一级按钮}"
                             Click="BtnAbout_Click"/>
                     </StackPanel>
                 </DockPanel>
@@ -66,25 +66,25 @@
                         <Button
                             x:Name="BtnRemove"
                             Content="{DynamicResource 移除}"
-                            Style="{DynamicResource 自由按钮}" 
+                            Style="{DynamicResource 二级按钮}" 
                             Click="BtnRemove_Click"
                             Width="120" />
                         <Button 
                             x:Name="BtnClear"
                             Content="{DynamicResource 清空}"
-                            Style="{DynamicResource 自由按钮}"
+                            Style="{DynamicResource 二级按钮}"
                             Click="BtnClear_Click"
                             Width="120"/>
                         <Button 
                             x:Name="BtnExport"
                             Content="{DynamicResource 导出当前}"
-                            Style="{DynamicResource 自由按钮}"
+                            Style="{DynamicResource 二级按钮}"
                             Click="BtnExport_Click"
                             Width="120" />
                         <Button
                             x:Name="BtnExportAll"
                             Content="{DynamicResource 导出全部}"
-                            Style="{DynamicResource 自由按钮}"
+                            Style="{DynamicResource 二级按钮}"
                             Click="BtnExportAll_Click"
                             Width="120" />
                     </WrapPanel>
@@ -110,12 +110,12 @@
                         ItemWidth="120">
                         <Button
                             x:Name="BtnSaveSettings"
-                            Style="{DynamicResource 自由按钮}"
+                            Style="{DynamicResource 二级按钮}"
                             Content="{DynamicResource 保存}"
                             Click="BtnSaveSettings_Click"/>
                         <Button 
                             x:Name="BtnResetSettings"
-                            Style="{DynamicResource 自由按钮}"
+                            Style="{DynamicResource 二级按钮}"
                             Content="{DynamicResource 重置}"
                             Click="BtnResetSettings_Click"/>
                     </WrapPanel>
@@ -388,7 +388,7 @@
                         <DockPanel>
                             <Button
                                 x:Name="BtnHomePage" 
-                                Style="{DynamicResource 自由按钮}" 
+                                Style="{DynamicResource 二级按钮}" 
                                 Content="{DynamicResource 前往}" 
                                 ToolTip="F1"
                                 Click="BtnHomePage_Click"
@@ -406,7 +406,7 @@
                         <DockPanel>
                             <Button
                                 x:Name="BtnGitHubPage"
-                                Style="{DynamicResource 自由按钮}"
+                                Style="{DynamicResource 二级按钮}"
                                 Content="{DynamicResource 前往}"
                                 ToolTip="F2" 
                                 Click="BtnGitHubPage_Click"
@@ -424,7 +424,7 @@
                         <DockPanel>
                             <Button 
                                 x:Name="BtnQQGroup"
-                                Style="{DynamicResource 自由按钮}"
+                                Style="{DynamicResource 二级按钮}"
                                 Content="{DynamicResource 前往}"
                                 ToolTip="F3" 
                                 Click="BtnQQGroup_Click" 
@@ -442,7 +442,7 @@
                         <DockPanel>
                             <Button 
                                 x:Name="BtnBitCoinAddress" 
-                                Style="{DynamicResource 自由按钮}"
+                                Style="{DynamicResource 二级按钮}"
                                 Content="{DynamicResource 复制}" 
                                 Click="BtnBitCoinAddress_Click"
                                 DockPanel.Dock="Right"
@@ -611,7 +611,7 @@
                     VerticalAlignment="Bottom"/>
                 <Button
                     x:Name="BtnCreate"
-                    Style="{DynamicResource 自由按钮}"
+                    Style="{DynamicResource 二级按钮}"
                     Content="{DynamicResource 生成}"
                     Height="60" 
                     VerticalAlignment="Bottom"

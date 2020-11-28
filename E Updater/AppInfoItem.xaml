@@ -34,32 +34,32 @@
                 <Button
                     x:Name="BtnInstall"
                     Content="{DynamicResource 安装}"
-                    Style="{DynamicResource 自由按钮浅色}"
+                    Style="{DynamicResource 三级按钮}"
                     Click="BtnInstall_Click"/>
                 <Button
                     x:Name="BtnUnInstall"
                     Content="{DynamicResource 卸载}"
-                    Style="{DynamicResource 自由按钮浅色}"
+                    Style="{DynamicResource 三级按钮}"
                     Click="BtnUnInstall_Click"/>
                 <Button
                     x:Name="BtnUpdate"
                     Content="{DynamicResource 更新}"
-                    Style="{DynamicResource 自由按钮浅色}"
+                    Style="{DynamicResource 三级按钮}"
                     Click="BtnUpdate_Click"/>
                 <Button 
                     x:Name="BtnBrowse"
                     Content="{DynamicResource 浏览}"
-                    Style="{DynamicResource 自由按钮浅色}"
+                    Style="{DynamicResource 三级按钮}"
                     Click="BtnBrowse_Click"/>
                 <Button 
                     x:Name="BtnRun"
                     Content="{DynamicResource 启动}"
-                    Style="{DynamicResource 自由按钮浅色}"
+                    Style="{DynamicResource 三级按钮}"
                     Click="BtnRun_Click"/>
                 <Button 
                     x:Name="BtnKill"
                     Content="{DynamicResource 停止}"
-                    Style="{DynamicResource 自由按钮浅色}"
+                    Style="{DynamicResource 三级按钮}"
                     Click="BtnKill_Click"/>
             </WrapPanel>
             <DockPanel>

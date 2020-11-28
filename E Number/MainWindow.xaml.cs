@@ -277,6 +277,7 @@ namespace E.Number
                 SetMenuTool(CurrentMenuTool);
             }
         }
+
         private void TxtMinValue_Loaded(object sender, RoutedEventArgs e)
         {
             TxtMinValue.Text = Settings.Default.Min.ToString();
