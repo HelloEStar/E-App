@@ -153,7 +153,7 @@ namespace SharedProject
                 Color cl = ColorHelper.Get(keyValuePairs[cp.ColorTarget]);
                 cp.Color = cl.ToString();
                 cp.Owner = this;
-                cp.RD = Resources;
+                cp.Resources = Resources;
             }
         }
 
@@ -318,6 +318,10 @@ namespace SharedProject
             }
         }
 
+
+        protected virtual void EWindow_GotFocus(object sender, RoutedEventArgs e)
+        {
+        }
         protected virtual void EWindow_Loaded(object sender, RoutedEventArgs e)
         {
         }

@@ -21,7 +21,6 @@ namespace SharedProject
     public partial class ColorPicker : UserControl
     {
         public EWindow Owner;
-        public ResourceDictionary RD;
 
         public ColorPicker()
         {
@@ -55,7 +54,7 @@ namespace SharedProject
         public void SetColor(Color color)
         {
             Color = color.ToString();
-            ColorHelper.SetColor(RD, ColorTarget, color);
+            ColorHelper.SetColor(Resources, ColorTarget, color);
         }
 
         private static void OnColorTargetChanged(object sender, DependencyPropertyChangedEventArgs args)
@@ -75,6 +74,7 @@ namespace SharedProject
         private void BtnColor_Click(object sender, RoutedEventArgs e)
         {
             GetColor getColor = new GetColor(this);
+            getColor.Resources = Resources;
             getColor.ShowDialog();
         }
     }

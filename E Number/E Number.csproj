@@ -9,7 +9,7 @@
     <Company>浮泽工作室</Company>
     <Authors>E Star</Authors>
     <ApplicationIcon>Resources\E Number.ico</ApplicationIcon>
-    <FileVersion>1.2.0.1124</FileVersion>
+    <FileVersion>1.3.0.1128</FileVersion>
     <Description>随机数生成器</Description>
     <NoWin32Manifest>true</NoWin32Manifest>
     <PackageId>ENumber</PackageId>

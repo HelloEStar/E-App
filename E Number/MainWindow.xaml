@@ -11,11 +11,12 @@
     Title="MainWindow" 
     Height="500" 
     Width="800"
+    Icon="/Resources/E Number.ico"
+    WindowStartupLocation="CenterScreen"
     Loaded="EWindow_Loaded" 
     KeyUp="EWindow_KeyUp" 
     Closing="EWindow_Closing" 
-    Icon="/Resources/E Number.ico"
-    WindowStartupLocation="CenterScreen" >
+    GotFocus="EWindow_GotFocus" >
 
     <Window.Resources>
         <local:Settings x:Key="Settings" />
@@ -83,8 +84,9 @@
             <Grid 
                 x:Name="PanSetting"
                 Style="{DynamicResource 工具栏}" 
+                Visibility="Collapsed"
                 >
-                <!--Visibility="Collapsed"-->
+                
                 <DockPanel>
                     <WrapPanel 
                         Style="{DynamicResource 单行水平流式面板}" 
@@ -123,7 +125,8 @@
                                     x:Name="CbbThemes"
                                     Style="{DynamicResource 下拉框样式}" 
                                     SelectionChanged="CbbThemes_SelectionChanged"
-                                    SelectedIndex="{Binding Source={StaticResource Settings}, Path=Default.Theme,Mode=TwoWay}"/>
+                                    SelectedIndex="{Binding Source={StaticResource Settings}, Path=Default.Theme,Mode=TwoWay}" 
+                                    />
 
                                 <StackPanel x:Name="PanColors">
                                     <share:ColorPicker x:Name="ClrFG01" ColorTarget="一级前景色" Color="#FFCF2727" />

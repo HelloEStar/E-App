@@ -161,6 +161,9 @@ namespace E.Number
         }
 
         //主窗口
+        protected override void EWindow_GotFocus(object sender, RoutedEventArgs e)
+        {
+        }
         protected override void EWindow_Loaded(object sender, RoutedEventArgs e)
         {
             //载入
