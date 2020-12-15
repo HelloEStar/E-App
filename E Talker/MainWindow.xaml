@@ -129,28 +129,6 @@
                                     <share:ColorPicker x:Name="ClrHL03" ColorTarget="三级高亮色" Color="#FFCF2727" />
                                 </StackPanel>
                             </StackPanel>
-
-                            <StackPanel>
-                                <Label 
-                                    Style="{DynamicResource 一级标签}"
-                                    Content="{DynamicResource 最小}"/>
-                                <TextBox
-                                    x:Name="TxtMinValue" 
-                                    Style="{DynamicResource 一级文本输入框}"
-                                    TextChanged="TxtMinValue_TextChanged" 
-                                    Loaded="TxtMinValue_Loaded"/>
-                            </StackPanel>
-
-                            <StackPanel>
-                                <Label 
-                                    Style="{DynamicResource 一级标签}"
-                                    Content="{DynamicResource 最大}"/>
-                                <TextBox 
-                                    x:Name="TxtMaxValue" 
-                                    Style="{DynamicResource 一级文本输入框}" 
-                                    TextChanged="TxtMaxValue_TextChanged"
-                                    Loaded="TxtMaxValue_Loaded"/>
-                            </StackPanel>
                         </StackPanel>
                     </ScrollViewer>
                 </DockPanel>
@@ -303,38 +281,35 @@
                 x:Name="PanWorkArea" 
                 Style="{DynamicResource 工作区}">
                 <DockPanel>
-                    <Button 
-                        x:Name="BtnCreate" 
-                        Content="生成" 
-                        Style="{DynamicResource 二级按钮}"
-                        Margin="0" 
-                        Height="60" 
-                        Click="BtnCreate_Click" 
-                        DockPanel.Dock="Bottom"
-                        FontSize="30" 
-                        VerticalAlignment="Bottom"/>
+                    <DockPanel DockPanel.Dock="Bottom" >
+                        <Button 
+                            x:Name="BtnInput" 
+                            Content="发送" 
+                            Style="{DynamicResource 二级按钮}"
+                            Margin="0,5,5,5" 
+                            Height="30" 
+                            Width="60" 
+                            Click="BtnInput_Click" 
+                            DockPanel.Dock="Right"
+                            VerticalAlignment="Bottom"/>
+                        <TextBox
+                            x:Name="TxtInput" 
+                            Style="{DynamicResource 一级文本输入框}"
+                            />
+                    </DockPanel>
+                    <Separator DockPanel.Dock="Bottom" />
                     <Label 
                         x:Name="LblMessage" 
                         Content="帮助消息" 
                         Style="{DynamicResource 一级自由标签}" 
-                        DockPanel.Dock="Top" 
+                        DockPanel.Dock="Bottom" 
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center" 
                         Margin="10,0"/>
-                    <TextBox 
-                        x:Name="TxtValue" 
-                        Style="{DynamicResource 一级文本输入框}" 
-                        FontSize="200" 
-                        IsReadOnly="True" 
-                        SelectionBrush="{DynamicResource 一级高亮色}" 
-                        Text="0"
-                        SizeChanged="TxtValue_SizeChanged" 
-                        Margin="10" 
-                        HorizontalScrollBarVisibility="Auto"
-                        HorizontalContentAlignment="Center" 
-                        VerticalContentAlignment="Center" 
-                        Height="Auto"
-                        BorderThickness="0"/>
+                    <ScrollViewer>
+                        <StackPanel x:Name="PanContent" >
+                        </StackPanel>
+                    </ScrollViewer>
                 </DockPanel>
             </Grid>
             <!--#endregion-->

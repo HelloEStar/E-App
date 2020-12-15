@@ -14,12 +14,6 @@
     <Setting Name="Theme" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="Min" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="Max" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">100</Value>
-    </Setting>
     <Setting Name="RunCount" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>

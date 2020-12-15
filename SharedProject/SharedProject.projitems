@@ -14,6 +14,7 @@
       <DependentUpon>ColorPicker.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)EWindow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\LogHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SharedClass.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BoolToVisibility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\CornerRadiusToDouble.cs" />

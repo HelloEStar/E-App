@@ -19,9 +19,117 @@ namespace E_Talker
 {
     public partial class MainWindow : EWindow
     {
+        public static string selfIP = "127.0.0.1";
+        public static int port = 50000;
+        public static string cmdQuit = "\\q";
+        public static string cmdHelp = "\\h";
+        public static string sj = "        ";
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        static void Mains(string[] args)
+        {
+            Console.Title = "E Talker";
+
+            bool isStart = false;
+            string str0 = sj + "0 客户端模式（仅客户端）";
+            string str1 = sj + "1 服务器模式（仅服务器）";
+            string str2 = sj + "2 主机模式（客户端+服务端）";
+            string str = string.Format("选择运行模式：\r\n{0}\r\n{1}\r\n{2}", str0, str1, str2);
+            LogHelper.System(str);
+            while (!isStart)
+            {
+                string mode = Console.ReadLine();
+                switch (mode)
+                {
+                    case "0":
+                        isStart = true;
+                        LogHelper.System("已作为客户端启动");
+                        StartClient();
+                        break;
+                    case "1":
+                        isStart = true;
+                        LogHelper.System("已作为服务器启动");
+                        StartServer();
+                        break;
+                    case "2":
+                        isStart = true;
+                        LogHelper.System("已作为主机启动");
+                        StartHost();
+                        break;
+                    default:
+                        LogHelper.SystemError("请输入有效回答");
+                        break;
+                }
+            }
+
+            LogHelper.System("按回车键结束进程");
+            Console.ReadLine();
+        }
+        public static void StartServer()
+        {
+            Server ss = new Server();
+            ss.Start(port);
+        }
+        public static void StartClient()
+        {
+            Client client = new Client();
+            do
+            {
+                selfIP = GetServerIP();
+            }
+            while (!client.Connected(selfIP, port));
+
+            string str = Console.ReadLine();
+            while (true)
+            {
+                if (string.IsNullOrEmpty(str))
+                {
+                    LogHelper.System("请输入字符串");
+                    str = Console.ReadLine();
+                    continue;
+                }
+                if (str.Equals(cmdQuit))
+                {
+                    break;
+                }
+                if (str.Equals(cmdHelp))
+                {
+                    LogHelper.System("命令列表");
+                    LogHelper.System(sj + cmdHelp + "  显示帮助", false);
+                    LogHelper.System(sj + cmdQuit + "  退出聊天", false);
+                    str = Console.ReadLine();
+                    continue;
+                }
+
+                client.SendMessage(str);
+                str = Console.ReadLine();
+            }
+            LogHelper.System("已退出聊天");
+        }
+        public static void StartHost()
+        {
+            StartServer();
+            StartClient();
+        }
+        private static string GetServerIP()
+        {
+            LogHelper.System("客户端准备连接，请输入正确格式的服务器IP地址，如 127.0.0.1");
+            string ip = Console.ReadLine();
+            while (true)
+            {
+                if (string.IsNullOrEmpty(ip))
+                {
+                    LogHelper.SystemError("请输入IP地址");
+                    ip = Console.ReadLine();
+                    continue;
+                }
+                break;
+            }
+            return ip;
         }
 
         //载入
@@ -32,7 +140,7 @@ namespace E_Talker
                 string[] _myB = Regex.Split(Settings.Default.Record, "///");
                 foreach (string b in _myB)
                 {
-                    AddRecordItem(b);
+                    //AddMessageItem(b);
                 }
             }
         }
@@ -59,15 +167,14 @@ namespace E_Talker
         }
 
         //添加
-        private void AddRecordItem(string content)
+        private void AddMessageItem(string content)
         {
-            ListBoxItem item = new ListBoxItem
+            TextBlock item = new TextBlock
             {
-                FontSize = 20,
-                Content = content,
-                Style = (Style)FindResource("列表子项样式")
+                Text = content,
+                //Style = (Style)FindResource("列表子项样式")
             };
-            LtbRecord.Items.Add(item);
+            PanContent.Children.Add(item);
         }
 
         //设置
@@ -169,8 +276,6 @@ namespace E_Talker
             LoadLanguageItems(CbbLanguages);
             LoadThemeItems(CbbThemes);
             LoadRecordItems();
-            //Uri iconUri = new Uri("pack://application:,,,/Resources/E Number.ico", UriKind.RelativeOrAbsolute);
-            //Icon = BitmapFrame.Create(iconUri);
             //刷新
             RefreshAppInfo();
             RefreshTitle();
@@ -214,10 +319,6 @@ namespace E_Talker
                 Clipboard.SetDataObject(str, true);
                 ShowMessage(FindResource("已复制").ToString());
             }
-        }
-        private void TxtValue_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            TxtValue.FontSize = TxtValue.ActualHeight / 1.25f;
         }
         private void CbbLanguages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -277,51 +378,20 @@ namespace E_Talker
             }
         }
 
-        private void TxtMinValue_Loaded(object sender, RoutedEventArgs e)
-        {
-            TxtMinValue.Text = Settings.Default.Min.ToString();
-        }
-        private void TxtMaxValue_Loaded(object sender, RoutedEventArgs e)
-        {
-            TxtMaxValue.Text = Settings.Default.Max.ToString();
-        }
-        private void TxtMinValue_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (int.TryParse(TxtMinValue.Text, out int min))
-            {
-                Settings.Default.Min = min;
-            }
-            else
-            {
-                TxtMinValue.Text = Settings.Default.Min.ToString();
-            }
-        }
-        private void TxtMaxValue_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (int.TryParse(TxtMaxValue.Text, out int max))
-            {
-                Settings.Default.Max = max;
-            }
-            else
-            {
-                TxtMaxValue.Text = Settings.Default.Max.ToString();
-            }
-        }
 
         //工作区
-        private void BtnCreate_Click(object sender, RoutedEventArgs e)
+        private void BtnInput_Click(object sender, RoutedEventArgs e)
         {
-            if (Settings.Default.Min < Settings.Default.Max)
+            if (string.IsNullOrEmpty(TxtInput.Text))
             {
-                Random rd = new Random();
-                int value = rd.Next(Settings.Default.Min, Settings.Default.Max);
-                TxtValue.Text = value.ToString();
-                AddRecordItem(LtbRecord.Items.Count + 1 + ".    " + value);
+                ShowMessage("不能为空");
             }
             else
             {
-                ShowMessage(FindResource("范围错误").ToString());
+                AddMessageItem(TxtInput.Text);
+                TxtInput.Text = "";
             }
         }
     }
+
 }
