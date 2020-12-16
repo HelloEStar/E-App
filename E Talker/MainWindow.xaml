@@ -56,7 +56,8 @@
                     <WrapPanel 
                         Style="{DynamicResource 单行水平流式面板}"
                         DockPanel.Dock="Bottom" 
-                        ItemWidth="120">
+                        ItemWidth="120"
+                        Visibility="Collapsed">
                         <Button 
                             x:Name="BtnClear" 
                             Style="{DynamicResource 二级按钮}" 
@@ -68,6 +69,37 @@
                             Content="{DynamicResource 导出}"
                             Click="BtnExport_Click"/>
                     </WrapPanel>
+                    <WrapPanel
+                        x:Name="PanRunMode"
+                        Style="{DynamicResource 单行水平流式面板}"
+                        DockPanel.Dock="Bottom" 
+                        ItemWidth="80"
+                        Visibility="Collapsed">
+                        <Button
+                        x:Name="BtnHost"
+                        Style="{DynamicResource 二级按钮}" 
+                        Content="主机模式" Click="BtnHost_Click" />
+                        <Button
+                        x:Name="BtnServer"
+                        Style="{DynamicResource 二级按钮}" 
+                        Content="服务端模式" Click="BtnServer_Click" />
+                        <Button
+                        x:Name="BtnClient"
+                        Style="{DynamicResource 二级按钮}" 
+                        Content="客户端模式" Click="BtnClient_Click" />
+                    </WrapPanel>
+
+                    <WrapPanel
+                        x:Name="PanIP"
+                        Style="{DynamicResource 单行水平流式面板}"
+                        DockPanel.Dock="Bottom" 
+                        ItemWidth="80"
+                        Visibility="Collapsed">
+                        
+                        
+                    </WrapPanel>
+                    
+                    
                     <ListBox
                         x:Name="LtbRecord" 
                         Style="{DynamicResource 列表样式}"/>

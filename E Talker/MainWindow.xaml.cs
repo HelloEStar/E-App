@@ -19,62 +19,48 @@ namespace E_Talker
 {
     public partial class MainWindow : EWindow
     {
-        public static string selfIP = "127.0.0.1";
-        public static int port = 50000;
-        public static string cmdQuit = "\\q";
-        public static string cmdHelp = "\\h";
-        public static string sj = "        ";
+        public string selfIP = "127.0.0.1";
+        public int port = 50000;
+        public string cmdQuit = "\\q";
+        public string cmdHelp = "\\h";
+        public string sj = "        ";
+
+        
+        public bool isStart;
+        public Mode mode = Mode.客户端;
+        public State state = State.未连接至任何服务器;
+
+        public enum Mode
+        {
+            客户端,
+            服务器,
+            主机
+        }
+        public enum State
+        {
+            未连接到网络,
+            客户端_未连接至任何服务器,
+            客户端_已连接至本地服务器,
+            客户端_已连接至其它服务器,
+            服务器_等待其他客户端连接,
+            服务器_已连接若干客户端,
+            主机_未连接至任何服务器,
+            主机_已连接至本地服务器,
+            主机_已连接至其它服务器,
+            
+        }
 
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        static void Mains(string[] args)
-        {
-            Console.Title = "E Talker";
-
-            bool isStart = false;
-            string str0 = sj + "0 客户端模式（仅客户端）";
-            string str1 = sj + "1 服务器模式（仅服务器）";
-            string str2 = sj + "2 主机模式（客户端+服务端）";
-            string str = string.Format("选择运行模式：\r\n{0}\r\n{1}\r\n{2}", str0, str1, str2);
-            LogHelper.System(str);
-            while (!isStart)
-            {
-                string mode = Console.ReadLine();
-                switch (mode)
-                {
-                    case "0":
-                        isStart = true;
-                        LogHelper.System("已作为客户端启动");
-                        StartClient();
-                        break;
-                    case "1":
-                        isStart = true;
-                        LogHelper.System("已作为服务器启动");
-                        StartServer();
-                        break;
-                    case "2":
-                        isStart = true;
-                        LogHelper.System("已作为主机启动");
-                        StartHost();
-                        break;
-                    default:
-                        LogHelper.SystemError("请输入有效回答");
-                        break;
-                }
-            }
-
-            LogHelper.System("按回车键结束进程");
-            Console.ReadLine();
-        }
-        public static void StartServer()
+        public void StartServer()
         {
             Server ss = new Server();
             ss.Start(port);
         }
-        public static void StartClient()
+        public void StartClient()
         {
             Client client = new Client();
             do
@@ -88,7 +74,7 @@ namespace E_Talker
             {
                 if (string.IsNullOrEmpty(str))
                 {
-                    LogHelper.System("请输入字符串");
+                    AddMessageItem("请输入字符串");
                     str = Console.ReadLine();
                     continue;
                 }
@@ -98,9 +84,9 @@ namespace E_Talker
                 }
                 if (str.Equals(cmdHelp))
                 {
-                    LogHelper.System("命令列表");
-                    LogHelper.System(sj + cmdHelp + "  显示帮助", false);
-                    LogHelper.System(sj + cmdQuit + "  退出聊天", false);
+                    AddMessageItem("命令列表");
+                    AddMessageItem(sj + cmdHelp + "  显示帮助");
+                    AddMessageItem(sj + cmdQuit + "  退出聊天");
                     str = Console.ReadLine();
                     continue;
                 }
@@ -110,14 +96,14 @@ namespace E_Talker
             }
             LogHelper.System("已退出聊天");
         }
-        public static void StartHost()
+        public void StartHost()
         {
             StartServer();
             StartClient();
         }
-        private static string GetServerIP()
+        private string GetServerIP()
         {
-            LogHelper.System("客户端准备连接，请输入正确格式的服务器IP地址，如 127.0.0.1");
+            // LogHelper.System("客户端准备连接，请输入正确格式的服务器IP地址，如 127.0.0.1");
             string ip = Console.ReadLine();
             while (true)
             {
@@ -286,6 +272,8 @@ namespace E_Talker
             {
                 Settings.Default.RunCount += 1;
             }
+
+            AddMessageItem("输入运行模式");
         }
         protected override void EWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -391,6 +379,19 @@ namespace E_Talker
                 AddMessageItem(TxtInput.Text);
                 TxtInput.Text = "";
             }
+        }
+
+        private void BtnHost_Click(object sender, RoutedEventArgs e)
+        {
+            StartHost();
+        }
+        private void BtnServer_Click(object sender, RoutedEventArgs e)
+        {
+            StartServer();
+        }
+        private void BtnClient_Click(object sender, RoutedEventArgs e)
+        {
+            StartClient();
         }
     }
 
